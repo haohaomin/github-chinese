@@ -437,9 +437,9 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       ['True, Template', '是，模板'],
       ['This month, Created', '本月，创建日期'],
       ['More than 10, Total forks', '多于 10，复刻总数'],
-      // 语言名、许可证名、组织名是数据，保留原文
+      // 语言名、组织名是数据，保留原文；许可证名按 code/licenses 译出（同可见文字）
       ['TypeScript, Language', 'TypeScript，语言'],
-      ['MIT License, License', 'MIT License，许可证'],
+      ['MIT License, License', 'MIT 许可证，许可证'],
       ['octo-org, Organization', 'octo-org，组织'],
       ['Property: team, Custom properties', '属性：team，自定义属性']
     ],
@@ -888,8 +888,12 @@ describe('存储库列表与筛选框（完整语言包）', () => {
     expect(full.translate(input, REPOS)).toBe(full.translate(input, scope))
   })
 
-  it.each(['MIT License', 'TypeScript', '+ 2'])('数据与技术词不收录：%s', input => {
+  it.each(['TypeScript', '+ 2'])('数据与技术词不收录：%s', input => {
     expect(full.translate(input, REPOS)).toBeUndefined()
+  })
+
+  it('筛选取值中的许可证名按 code/licenses 译出（全局 static）', () => {
+    expect(full.translate('MIT License', REPOS)).toBe('MIT 许可证')
   })
 
   it('筛选取值 README（in:readme）译作自述文件', () => {

@@ -226,3 +226,35 @@ describe('设置备份', () => {
     })
   })
 })
+
+describe('下载次数设置的备份（令牌）', () => {
+  /** 占位令牌（运行时拼出，不是真实令牌） */
+  const TOKEN = `ghp_${'x'.repeat(36)}`
+
+  it('解析：令牌去掉首尾空白；格式不符、不是字符串时丢弃', () => {
+    expect(
+      parseBackup(
+        file({
+          githubToken: ` ${TOKEN}
+`
+        })
+      )
+    ).toEqual({ githubToken: TOKEN })
+    expect(parseBackup(file({ githubToken: 'not a token' }))).toEqual({})
+    expect(parseBackup(file({ githubToken: 42 }))).toEqual({})
+  })
+
+  it('范围：下载次数设置只取开关与令牌；全部不含令牌；其他范围不含令牌', () => {
+    const data: BackupData = { settings: { downloadCount: true, accelerate: true }, githubToken: TOKEN, customEntries: { Code: '代码' } }
+    expect(scopeBackup(data, 'downloads')).toEqual({ settings: { downloadCount: true }, githubToken: TOKEN })
+    expect(scopeBackup(data, 'all')).toEqual({ settings: { downloadCount: true, accelerate: true }, customEntries: { Code: '代码' } })
+    expect(scopeBackup(data, 'accelerate')).toEqual({ settings: { accelerate: true } })
+    expect(scopeBackup({ githubToken: TOKEN }, 'enterprise')).toEqual({})
+  })
+
+  it('只有令牌也可导入；导出的设置项与文件名', () => {
+    expect(isEmptyBackup({ githubToken: TOKEN })).toBe(false)
+    expect(settingsOfScope({ ...DEFAULT_SETTINGS, downloadCount: true }, 'downloads')).toEqual({ downloadCount: true })
+    expect(backupFileName('downloads', new Date(2026, 10, 7))).toBe('github-chinese-downloads-2026-11-07.json')
+  })
+})

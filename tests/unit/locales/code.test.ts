@@ -7,6 +7,7 @@ import code from '../../../src/locales/zh-CN/code'
 import banners from '../../../src/locales/zh-CN/code/banners'
 import blob from '../../../src/locales/zh-CN/code/blob'
 import edit from '../../../src/locales/zh-CN/code/edit'
+import licenses from '../../../src/locales/zh-CN/code/licenses'
 import templates from '../../../src/locales/zh-CN/code/templates'
 import tree from '../../../src/locales/zh-CN/code/tree'
 import checkSummary from '../../../src/locales/zh-CN/commits/check-summary'
@@ -44,7 +45,7 @@ interface RegExpCase {
   readonly misses: readonly string[]
 }
 
-/** 与 code.regexp 一一对应（tree → blob → banners → edit → templates → commits/check-summary → commits/checks 的合并顺序） */
+/** 与 code.regexp 一一对应（tree → blob → banners → licenses（无正则）→ edit → templates → commits/check-summary → commits/checks 的合并顺序） */
 const REGEXP_CASES: readonly RegExpCase[] = [
   // tree：页面标题分段（原文无标点，引用名不加括号）
   {
@@ -1375,14 +1376,14 @@ describe('code 含链接的许可证说明（许可证选择页 div.VerifiedHTML
 
   it.each([
     [
-      'BSD 3-Clause：链接后的中文与英文名隔空格',
+      'BSD 3-Clause：链接文字（许可证名）译出，以中文结尾，其后不留空格',
       'A permissive license similar to the <a href="/licenses/bsd-2-clause/">BSD 2-Clause License</a>, but with a 3rd clause that prohibits others from using the name of the copyright holder or its contributors to promote derived products without written consent.',
-      '一种类似于 BSD 2-Clause License 的宽松许可证，但增加的第三条禁止他人未经书面同意使用版权所有者或其贡献者的名义推广衍生产品。'
+      '一种类似于 BSD 2-Clause 许可证的宽松许可证，但增加的第三条禁止他人未经书面同意使用版权所有者或其贡献者的名义推广衍生产品。'
     ],
     [
       'BSD 3-Clause Clear：定语提到链接之前，不加逗号',
       'A variant of the <a href="/licenses/bsd-3-clause/">BSD 3-Clause License</a> that explicitly does not grant any patent rights.',
-      '一种明确不授予任何专利权的 BSD 3-Clause License 变体。'
+      '一种明确不授予任何专利权的 BSD 3-Clause 许可证变体。'
     ],
     [
       'EUPL 1.2：不加逗号，链接后的中文不留空格',
@@ -1420,7 +1421,7 @@ describe('code 含链接的许可证说明（许可证选择页 div.VerifiedHTML
 })
 
 describe('code 标点随原文、产品名译中文（本组各子文件）', () => {
-  const OWN: readonly PageDictionary[] = [tree, blob, banners, edit, templates]
+  const OWN: readonly PageDictionary[] = [tree, blob, banners, licenses, edit, templates]
 
   /** [名称, 原文中的该类标点, 译文中的该类标点]：原文没有的，译文也不加 */
   const KINDS: readonly (readonly [string, RegExp, RegExp])[] = [
@@ -1438,7 +1439,7 @@ describe('code 标点随原文、产品名译中文（本组各子文件）', ()
    */
   const EXCEPTIONS: ReadonlySet<string> = new Set(['from your commit and commit history.'])
 
-  /** REGEXP_CASES 中本组规则的正例（合并顺序 tree → blob → banners → edit → templates 在前，commits 的规则在后） */
+  /** REGEXP_CASES 中本组规则的正例（合并顺序 tree → blob → banners → licenses（无正则）→ edit → templates 在前，commits 的规则在后） */
   const OWN_HITS = REGEXP_CASES.slice(
     0,
     OWN.reduce((count, part) => count + (part.regexp?.length ?? 0), 0)

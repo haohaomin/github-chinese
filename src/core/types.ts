@@ -147,7 +147,9 @@ export const PAGE_KEYS = [
   'education',
   'mcp',
   // GitHub 状态页（www.githubstatus.com）
-  'status'
+  'status',
+  // GitHub 支持站点（help.github.com、support.github.com）
+  'support'
 ] as const
 
 export type PageKey = (typeof PAGE_KEYS)[number]

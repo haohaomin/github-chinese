@@ -1,12 +1,12 @@
-import type { FetchLike } from './folder-files'
+import type { ReleaseCountsResult, ReleaseRef } from '../shared/github-api'
 import { isPrivatePage } from './private-page'
 
 /**
  * 发行版附件的下载次数：发行版列表、单个发行版页面的附件行，在附件名一侧靠右显示下载次数
  * （行右侧的摘要列可收缩，放在大小之前会把摘要挤没）。
- * 次数取自 GitHub REST API（api.github.com）：不带 Cookie 与来源页、不用令牌，每个 IP 每小时限 60 次。
+ * 次数由后台向 GitHub REST API 请求（见 shared/github-api：设置了个人访问令牌时带上，令牌不进内容脚本）。
  * 每个发行版请求一次，同时只发一个（限额用尽时不白发其余的），结果在页面内缓存 CACHE_TTL_MS；
- * 限额用尽后到重置时间之前不再请求。
+ * 限额用尽时到重置时间之前不再请求，其间每隔 LIMIT_RECHECK_MS 问一次后台（填了令牌后不用等到重置）。
  * 只处理 github.com 上的公开存储库（企业版的 API 地址、访问方式各不相同）
  */
 export interface ReleaseDownloadsDeps {
@@ -16,8 +16,8 @@ export interface ReleaseDownloadsDeps {
   readonly lang: () => string
   /** 读屏与提示的文字；count 为按语言分组的完整次数 */
   readonly label: (count: string) => string
-  /** 取回；不给时用全局 fetch */
-  readonly fetch?: FetchLike
+  /** 请后台取一个发行版各附件的下载次数 */
+  readonly request: (release: ReleaseRef) => Promise<ReleaseCountsResult>
   /** 当前时间（毫秒时间戳）；不给时用 Date.now */
   readonly now?: () => number
 }
@@ -25,7 +25,7 @@ export interface ReleaseDownloadsDeps {
 export interface ReleaseDownloads {
   /** 设置、界面语言变化后：关闭时移除，开启时补上并按新语言重写 */
   refresh(): void
-  /** 停止：取消进行中的请求，移除显示 */
+  /** 停止：移除显示，不再请求（进行中的请求结果丢弃） */
   stop(): void
 }
 
@@ -33,12 +33,9 @@ export interface ReleaseDownloads {
 export const COUNT_ATTRIBUTE = 'data-gcn-downloads'
 /** 结果的有效期：过期后再遇到该发行版的附件时重新请求 */
 export const CACHE_TTL_MS = 10 * 60 * 1000
-/** 限额用尽、响应没有给出重置时间时暂停的时长 */
-export const DEFAULT_BLOCK_MS = 10 * 60 * 1000
-/** 单次请求的时限 */
-export const REQUEST_TIMEOUT_MS = 10_000
+/** 限额用尽期间再问后台的间隔 */
+export const LIMIT_RECHECK_MS = 60 * 1000
 
-const API_ORIGIN = 'https://api.github.com'
 const SITE_HOST = 'github.com'
 const STYLE_ID = 'gcn-downloads-style'
 /** 附件的下载地址：/<所有者>/<存储库>/releases/download/<标签>/<文件名>（标签可含 /，文件名是最后一段） */
@@ -77,13 +74,6 @@ const STYLE = `
 }
 `
 
-/** 发行版：所有者、存储库、标签（均已解码） */
-interface ReleaseRef {
-  readonly owner: string
-  readonly repo: string
-  readonly tag: string
-}
-
 /** 页面上的附件行 */
 interface AssetRow {
   /** 放次数的元素：行的左侧，没有时为链接所在的元素 */
@@ -98,13 +88,6 @@ interface AssetRow {
 interface CacheEntry {
   readonly at: number
   readonly counts: ReadonlyMap<string, number> | null | undefined
-}
-
-/** 限额用尽 */
-class RateLimitError extends Error {
-  constructor(readonly until: number) {
-    super('GitHub API 限额已用尽')
-  }
 }
 
 /** 页面的主机名；没有地址时为空串 */
@@ -155,43 +138,6 @@ function releaseKey(release: ReleaseRef): string {
   return `${release.owner.toLowerCase()}/${release.repo.toLowerCase()}\n${release.tag}`
 }
 
-/** 地址的最后一段（已解码） */
-function lastSegment(url: string): string | undefined {
-  try {
-    const segment = new URL(url).pathname.split('/').pop()
-    return segment ? safeDecode(segment) : undefined
-  } catch {
-    return undefined
-  }
-}
-
-/** API 返回的发行版 → 文件名 → 次数；格式不符时为 undefined */
-export function parseReleaseCounts(data: unknown): ReadonlyMap<string, number> | undefined {
-  if (typeof data !== 'object' || data === null) return undefined
-  const assets: unknown = (data as { readonly assets?: unknown }).assets
-  if (!Array.isArray(assets)) return undefined
-  const counts = new Map<string, number>()
-  for (const asset of assets as unknown[]) {
-    if (typeof asset !== 'object' || asset === null) continue
-    const { browser_download_url: url, download_count: count, name } = asset as Readonly<Record<string, unknown>>
-    if (typeof count !== 'number' || !Number.isSafeInteger(count) || count < 0) continue
-    const file = (typeof url === 'string' ? lastSegment(url) : undefined) ?? (typeof name === 'string' ? name : undefined)
-    if (file) counts.set(file, count)
-  }
-  return counts
-}
-
-/** 限额用尽时到何时为止（毫秒时间戳）；没有用尽时为 undefined */
-function rateLimitedUntil(response: Response, now: number): number | undefined {
-  const retryAfter = Number(response.headers.get('retry-after'))
-  if ((response.status === 403 || response.status === 429) && Number.isFinite(retryAfter) && retryAfter > 0) {
-    return now + retryAfter * 1000
-  }
-  if (response.headers.get('x-ratelimit-remaining') !== '0') return undefined
-  const reset = Number(response.headers.get('x-ratelimit-reset'))
-  return Number.isFinite(reset) && reset > 0 ? reset * 1000 : now + DEFAULT_BLOCK_MS
-}
-
 function createIcon(doc: Document): SVGSVGElement {
   const svg = doc.createElementNS(SVG_NS, 'svg')
   svg.setAttribute('class', 'octicon octicon-download')
@@ -208,10 +154,10 @@ function createIcon(doc: Document): SVGSVGElement {
 }
 
 export function createReleaseDownloads(doc: Document, deps: ReleaseDownloadsDeps): ReleaseDownloads {
-  const fetcher: FetchLike = deps.fetch ?? ((url, init) => fetch(url, init))
   const now = deps.now ?? (() => Date.now())
   const cache = new Map<string, CacheEntry>()
-  const requests = new Set<AbortController>()
+  /** 有请求在进行：同时只发一个 */
+  let inFlight = false
   /** 限额用尽：到此时间（毫秒时间戳）之前不请求 */
   let blockedUntil = 0
   /** 页面上有没有加过：没有时关闭状态下的变动不用查找移除 */
@@ -292,52 +238,41 @@ export function createReleaseDownloads(doc: Document, deps: ReleaseDownloadsDeps
     }
   }
 
-  async function fetchCounts(release: ReleaseRef, signal: AbortSignal): Promise<ReadonlyMap<string, number>> {
-    const path = [release.owner, release.repo].map(encodeURIComponent).join('/')
-    const response = await fetcher(`${API_ORIGIN}/repos/${path}/releases/tags/${encodeURIComponent(release.tag)}`, {
-      credentials: 'omit',
-      referrerPolicy: 'no-referrer',
-      headers: { Accept: 'application/vnd.github+json' },
-      signal
-    })
-    const until = rateLimitedUntil(response, now())
-    if (!response.ok) {
-      if (until !== undefined) throw new RateLimitError(until)
-      throw new Error(`取回下载次数失败：${response.status}`)
+  /** 限额用尽到 until 为止：其间不请求，但最多隔 LIMIT_RECHECK_MS 再问后台 */
+  function block(until: number): void {
+    blockedUntil = Math.max(blockedUntil, Math.min(until, now() + LIMIT_RECHECK_MS))
+  }
+
+  function apply(key: string, result: ReleaseCountsResult): void {
+    if (result.kind === 'ok') {
+      cache.set(key, { at: now(), counts: result.counts })
+      // 本次成功但限额已用完：之后的先不请求
+      if (result.limitedUntil !== undefined) block(result.limitedUntil)
+      return
     }
-    // 本次成功但限额已用完：之后的先不请求
-    if (until !== undefined) blockedUntil = Math.max(blockedUntil, until)
-    const counts = parseReleaseCounts(await response.json())
-    if (!counts) throw new Error('下载次数的格式不符')
-    return counts
+    if (result.kind === 'limited') {
+      // 限额恢复后可再请求：不记为失败
+      cache.delete(key)
+      block(result.until)
+      return
+    }
+    cache.set(key, { at: now(), counts: null })
   }
 
   function request(key: string, release: ReleaseRef): void {
-    const controller = new AbortController()
-    const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
-    requests.add(controller)
+    inFlight = true
     cache.set(key, { at: now(), counts: undefined })
-    fetchCounts(release, controller.signal)
-      .then(
-        counts => {
-          cache.set(key, { at: now(), counts })
-        },
-        (error: unknown) => {
-          if (error instanceof RateLimitError) {
-            // 限额重置后可再请求：不记为失败
-            blockedUntil = Math.max(blockedUntil, error.until)
-            cache.delete(key)
-            return
-          }
-          cache.set(key, { at: now(), counts: null })
-        }
-      )
-      .finally(() => {
-        clearTimeout(timer)
-        requests.delete(controller)
+    deps
+      .request(release)
+      .catch((): ReleaseCountsResult => ({ kind: 'failed' }))
+      .then(result => {
+        inFlight = false
+        if (stopped) return
+        apply(key, result)
         // 显示结果，接着请求下一个发行版
         schedule()
       })
+      .catch(() => undefined)
   }
 
   function scan(): void {
@@ -353,7 +288,7 @@ export function createReleaseDownloads(doc: Document, deps: ReleaseDownloadsDeps
         if (entry.counts) render(rows, entry.counts)
         continue
       }
-      if (requests.size > 0 || now() < blockedUntil) continue
+      if (inFlight || now() < blockedUntil) continue
       request(key, release)
     }
   }
@@ -377,8 +312,6 @@ export function createReleaseDownloads(doc: Document, deps: ReleaseDownloadsDeps
     stop() {
       stopped = true
       observer.disconnect()
-      for (const controller of requests) controller.abort()
-      requests.clear()
       removeAll()
     }
   }

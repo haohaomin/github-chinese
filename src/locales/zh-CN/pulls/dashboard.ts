@@ -206,12 +206,12 @@ export default {
   ],
   attributeRules: [
     // 选择存储库筛选框中取值的 aria-label：<值>, <键>（同 organization 词典），只改该对话框的建议项。
-    // 许可证名、语言名、组织名是数据，保留原文；Has / No 开头的建议项（该筛选框不出）留给 list.ts
+    // 语言名、组织名是数据，保留原文；许可证名按 code/licenses 译出（同可见文字）；Has / No 开头的建议项（该筛选框不出）留给 list.ts
     [
       PICKER_OPTION,
       'aria-label',
       /^(?!(?:Has|No) )([^,]+), (License|Language|Organization)$/,
-      (_, value: string, key: string) => `${value}，${keyName(key)}`
+      (_, value: string, key: string) => `${key === 'License' ? valueName(value) : value}，${keyName(key)}`
     ],
     // 其余取值限于表中的；KEPT_VALUES 保留原文
     [

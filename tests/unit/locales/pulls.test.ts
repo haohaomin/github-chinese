@@ -2976,7 +2976,7 @@ describe('选择存储库筛选框（全局 /pulls，DOM）', () => {
         ['value', '是', '是，属性：team'],
         ['readme', 'README', 'README，范围'],
         ['size', 'Size', 'Size，排序'],
-        ['license', 'MIT License', 'MIT License，许可证']
+        ['license', 'MIT 许可证', 'MIT 许可证，许可证']
       ]
     ],
     [
@@ -2990,11 +2990,11 @@ describe('选择存储库筛选框（全局 /pulls，DOM）', () => {
         ['value', '是', '是，屬性：team'],
         ['readme', 'README', 'README，範圍'],
         ['size', 'Size', 'Size，排序'],
-        ['license', 'MIT License', 'MIT License，授權條款']
+        ['license', 'MIT 授權條款', 'MIT 授權條款，授權條款']
       ]
     ]
   ] as const)(
-    '%s：排序取值、可见性取值、自定义属性子键的文字与 aria-label；README、Size 的文字与 aria-label 都保留原文',
+    '%s：排序取值、可见性取值、自定义属性子键、许可证名的文字与 aria-label；README、Size 的文字与 aria-label 都保留原文',
     (_, using, expected) => {
       document.body.innerHTML = PICKER_HTML
       translator = createTranslator({ matcher: using, host: window, resolvePages: () => ['common', 'pulls'] })

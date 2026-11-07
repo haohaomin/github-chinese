@@ -3,8 +3,9 @@ import { createImageViewer, type ImageViewer, type ViewerImage, type ViewerLabel
 /**
  * 图片预览：开启后，单击正文（自述文件、议题与拉取请求的评论、发行说明、维基、讨论等渲染后的 Markdown）里的图片，
  * 或文件页显示的图片文件，在页面内预览（见 image-viewer），页面上其余正文图片可左右切换。
- * 图片链到别处（作者加的链接，如横幅链到网站）时同样预览，预览中可打开链接；
- * 徽章（链到 CI 等）、图标大小的链接图片、链接不是 http(s) 的照常打开链接（见 isBadge）。
+ * 图片链到别处（作者加的链接，如横幅链到网站）时同样预览，预览中可打开链接；链接不是 http(s) 的照常打开链接。
+ * 徽章、图标（见 isBadge）不论有没有链接都不预览，也不在切换之列：单击照常（链到别处时打开链接，
+ * 没有链接时 GitHub 给图片加的链接在新标签页打开图片）。
  * 表情、头像、加载失败的图片不处理；中键、带修饰键的单击照常处理
  */
 export interface ImagePreviewOptions {
@@ -38,8 +39,8 @@ const IMAGE_HOSTS: ReadonlySet<string> = new Set([
 const IMAGE_EXTENSION_RE = /\.(?:apng|avif|bmp|gif|ico|jpe?g|png|svg|webp)$/i
 /** 徽章的地址：主机或路径含 badge、shields（img.shields.io、…/badge.svg、badgen.net 等） */
 const BADGE_RE = /badge|shields/i
-/** 图标大小：显示的宽、高都不超过这么多（CSS 像素） */
-const ICON_MAX_SIZE = 32
+/** 图标、徽章的尺寸上限（CSS 像素），见 isBadge */
+const SMALL_MAX_SIZE = 32
 /** 下载文件的扩展名 */
 const MIME_EXTENSIONS: Readonly<Record<string, string>> = {
   'image/apng': 'apng',
@@ -83,14 +84,18 @@ function isHttp(url: URL): boolean {
 }
 
 /**
- * 徽章或图标：照常打开链接，不预览。图片地址（图片代理看原地址 data-canonical-src）的主机或路径含 badge、shields，
- * 或显示的宽、高都不超过 32px
+ * 徽章或图标：不预览，单击照常。符合其一：
+ * - 图片地址（图片代理看原地址 data-canonical-src）的主机或路径含 badge、shields；
+ * - 显示的宽、高都不超过 32px（图标）；
+ * - 显示的高度不超过 32px，原图不超过显示的两倍高（地址里没有 badge 的徽章，如 Travis CI、AppVeyor、Packagist，
+ *   以及按钮条、分隔线：没怎么缩小，预览看不到更多）
  */
 export function isBadge(img: HTMLImageElement): boolean {
   const url = parseUrl(img.getAttribute('data-canonical-src') || img.currentSrc || img.src)
   if (url && BADGE_RE.test(url.hostname + url.pathname)) return true
   const { width, height } = img.getBoundingClientRect()
-  return width > 0 && height > 0 && width <= ICON_MAX_SIZE && height <= ICON_MAX_SIZE
+  if (width <= 0 || height <= 0 || height > SMALL_MAX_SIZE) return false
+  return width <= SMALL_MAX_SIZE || (img.naturalHeight > 0 && img.naturalHeight <= height * 2)
 }
 
 /** 图片所在的链接 */
@@ -110,15 +115,16 @@ function isHttpLink(anchor: HTMLAnchorElement): boolean {
   return url !== undefined && isHttp(url)
 }
 
-/** 可预览的图片：在正文里，不是表情、头像；链到别处时是 http(s) 链接，图片不是徽章、图标。另有文件页显示的图片文件 */
+/**
+ * 可预览的图片：在正文里，不是表情、头像、徽章、图标；有链接时是 http(s) 链接（链到图片自身或别处）。
+ * 另有文件页显示的图片文件
+ */
 export function isPreviewable(img: HTMLImageElement): boolean {
   if (img.matches(EXCLUDED_SELECTOR)) return false
   if (!img.closest(CONTENT_SELECTOR)) return isFileImage(img)
-  const src = imageSource(img)
-  if (!src) return false
+  if (!imageSource(img) || isBadge(img)) return false
   const anchor = anchorOf(img)
-  if (!anchor || isImageLink(anchor.href, src)) return true
-  return isHttpLink(anchor) && !isBadge(img)
+  return !anchor || isHttpLink(anchor)
 }
 
 /**

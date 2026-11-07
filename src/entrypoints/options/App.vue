@@ -7,13 +7,17 @@
         <span v-if="version" class="options-version" data-test="version">v{{ version }}</span>
         <UpdateBadge />
       </div>
-      <TransferTools
-        class="options-backup"
-        :import-label="t('importBackup')"
-        :export-label="t('exportBackup')"
-        @import="importScope($event, 'all')"
-        @export="exportScope('all')"
-      />
+      <div class="options-actions">
+        <TransferTools
+          :import-label="t('importBackup')"
+          :export-label="t('exportBackup')"
+          @import="importScope($event, 'all')"
+          @export="exportScope('all')"
+        />
+        <UiButton size="sm" :href="FEEDBACK_URL" target="_blank" rel="noopener noreferrer" data-test="feedback">
+          {{ t('feedback') }}
+        </UiButton>
+      </div>
     </header>
 
     <main class="options-main">
@@ -31,6 +35,7 @@
         <template #accelerate><AccelerateSection /></template>
         <template #purify><SearchBlockSection /></template>
         <template #auto-load><AutoLoadSection /></template>
+        <template #downloads><DownloadCountSection :active="tab === 'downloads'" /></template>
         <template #new-tab><NewTabSection /></template>
         <template #enterprise><EnterpriseSection /></template>
       </UiTabs>
@@ -56,15 +61,17 @@
   import { computed, ref } from 'vue'
   import ToastHost from '../../components/ToastHost.vue'
   import type { UiTab } from '../../components/ui/types'
+  import UiButton from '../../components/ui/UiButton.vue'
   import UiTabs from '../../components/ui/UiTabs.vue'
   import { useI18n, useUiPreferencesSync } from '../../components/ui-preferences'
   import UpdateBadge from '../../components/UpdateBadge.vue'
   import type { MessageKey } from '../../i18n'
-  import { getExtensionVersion, REPOSITORY_URL } from '../../shared/extension'
+  import { FEEDBACK_URL, getExtensionVersion, REPOSITORY_URL } from '../../shared/extension'
   import AccelerateSection from './AccelerateSection.vue'
   import AutoLoadSection from './AutoLoadSection.vue'
   import CustomEntriesSection from './CustomEntriesSection.vue'
   import DictionarySection from './DictionarySection.vue'
+  import DownloadCountSection from './DownloadCountSection.vue'
   import EnterpriseSection from './EnterpriseSection.vue'
   import ExcludedPathsSection from './ExcludedPathsSection.vue'
   import NewTabSection from './NewTabSection.vue'
@@ -80,13 +87,14 @@
 
   /**
    * 按功能分标签页：汉化（排除路径；自定义词库、内置词库分两个标签）、加速、净化（搜索结果）、自动加载、
-   * 新标签页打开（图片预览只在弹出页开关）、企业版站点。值是 UiTabs 的插槽名
+   * 下载次数（个人访问令牌）、新标签页打开（图片预览只在弹出页开关）、企业版站点。值是 UiTabs 的插槽名
    */
   const TABS: readonly { readonly value: string; readonly label: MessageKey }[] = [
     { value: 'translation', label: 'translationSection' },
     { value: 'accelerate', label: 'accelerateSection' },
     { value: 'purify', label: 'purifySection' },
     { value: 'auto-load', label: 'autoLoadSection' },
+    { value: 'downloads', label: 'downloadCountSection' },
     { value: 'new-tab', label: 'newTabSection' },
     { value: 'enterprise', label: 'enterpriseSection' }
   ]
@@ -143,9 +151,11 @@
     font-weight: 600;
   }
 
-  /* 备份：靠右；窄屏时换到下一行 */
-  .options-backup {
+  /* 备份与反馈：靠右；窄屏时换到下一行 */
+  .options-actions {
+    display: flex;
     flex-wrap: wrap;
+    gap: 8px;
     margin-left: auto;
   }
 

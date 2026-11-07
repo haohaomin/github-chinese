@@ -6,12 +6,15 @@ import {
   findChineseReadme,
   isChineseText,
   isReadmeArticle,
+  matchesEmbeddedRef,
   MAX_CACHED,
   NATIVE_ATTRIBUTE,
+  parseEmbeddedRef,
   parseRichText,
   README_ATTRIBUTE,
   readmeLocale,
   readmePage,
+  sanitizeContent,
   tagLocale,
   type ChineseReadme,
   type ChineseReadmeOptions
@@ -212,10 +215,31 @@ describe('readmeLocale', () => {
 
 describe('readmePage', () => {
   it('存储库首页、目录页：存储库小写，目录去掉引用', () => {
-    expect(readmePage(new URL('https://github.com/Octo-Org/Hello-World'))).toEqual({ repo: '/octo-org/hello-world', directory: [] })
+    expect(readmePage(new URL('https://github.com/Octo-Org/Hello-World'))).toEqual({
+      repo: '/octo-org/hello-world',
+      directory: [],
+      refs: []
+    })
     expect(readmePage(new URL(`https://github.com${REPO}/tree/main`))?.directory).toEqual([])
     expect(readmePage(new URL(`https://github.com${REPO}/tree/main/packages/%E4%B8%AD%E6%96%87/`))?.directory).toEqual(['packages', '中文'])
     expect(readmePage(new URL(`https://github.example.com${REPO}`))?.repo).toBe(REPO)
+  })
+
+  it('引用含 /：取已知引用中最长的、与开头各段相同的；没有对得上的按一段算', () => {
+    const refs = new Map([[REPO, ['feature', 'feature/x', 'release/1.0/rc']]])
+    const page = (path: string): readonly string[] | undefined =>
+      readmePage(new URL(`https://github.com${REPO}/tree/${path}`), refs)?.directory
+    expect(page('feature/x/docs/zh')).toEqual(['docs', 'zh'])
+    expect(page('feature/x')).toEqual([])
+    expect(page('feature/y/docs')).toEqual(['y', 'docs'])
+    expect(page('release/1.0/rc/docs')).toEqual(['docs'])
+    expect(page('release/2.0/docs')).toEqual(['2.0', 'docs'])
+    expect(readmePage(new URL(`https://github.com${REPO}/tree/feature/x/docs`), refs)?.refs).toEqual([
+      'feature',
+      'feature/x',
+      'release/1.0/rc'
+    ])
+    expect(readmePage(new URL(`https://github.com/octocat/other/tree/feature/x/docs`), refs)?.directory).toEqual(['x', 'docs'])
   })
 
   it.each([
@@ -231,6 +255,68 @@ describe('readmePage', () => {
     'https://www.githubstatus.com/'
   ])('其他页面：%s', url => {
     expect(readmePage(new URL(url))).toBeUndefined()
+  })
+})
+
+describe('页面数据中的引用', () => {
+  /** 目录页、文件页的页面数据（codeViewLayoutRoute） */
+  const layout = (ref: unknown, path?: unknown): unknown => ({ payload: { codeViewLayoutRoute: { refInfo: { name: ref }, path } } })
+
+  it('parseEmbeddedRef：payload 下第一个带 refInfo.name 的路由；路径缺省为空串', () => {
+    expect(parseEmbeddedRef(layout('feature/x', 'docs/zh'))).toEqual({ ref: 'feature/x', path: 'docs/zh' })
+    expect(parseEmbeddedRef(layout('main'))).toEqual({ ref: 'main', path: '' })
+    expect(
+      parseEmbeddedRef({ payload: { codeViewBlobRoute: { richText: '' }, codeViewLayoutRoute: { refInfo: { name: 'dev' } } } })
+    ).toEqual({
+      ref: 'dev',
+      path: ''
+    })
+  })
+
+  it.each([null, 'text', {}, { payload: [] }, layout(''), layout(1), { payload: { route: { refInfo: 'main' } } }])(
+    'parseEmbeddedRef 格式不符：%j',
+    data => {
+      expect(parseEmbeddedRef(data)).toBeUndefined()
+    }
+  )
+
+  it('matchesEmbeddedRef：首页时路径为空；目录页、文件页时引用与路径拼起来就是地址里的各段', () => {
+    expect(matchesEmbeddedRef(REPO, { ref: 'main', path: '' })).toBe(true)
+    expect(matchesEmbeddedRef(REPO, { ref: 'main', path: 'docs' })).toBe(false)
+    expect(matchesEmbeddedRef(`${REPO}/tree/feature/x/docs/%E4%B8%AD%E6%96%87`, { ref: 'feature/x', path: 'docs/中文' })).toBe(true)
+    expect(matchesEmbeddedRef(`${REPO}/blob/feature/x/README.md`, { ref: 'feature/x', path: 'README.md' })).toBe(true)
+    // 软导航后页面数据还是之前页面的
+    expect(matchesEmbeddedRef(`${REPO}/tree/feature/x/docs`, { ref: 'feature/x', path: '' })).toBe(false)
+    expect(matchesEmbeddedRef(`${REPO}/tree/feature/x/docs`, { ref: 'feature', path: 'x' })).toBe(false)
+    expect(matchesEmbeddedRef(`${REPO}/issues/1`, { ref: 'issues', path: '1' })).toBe(false)
+  })
+})
+
+describe('sanitizeContent', () => {
+  it('去掉脚本、样式、内嵌框架等元素，事件属性与 javascript:、vbscript:、data: 地址；其余保留', () => {
+    const root = document.createElement('div')
+    root.innerHTML = [
+      '<p id="p" onclick="alert(1)" ONMOUSEOVER="alert(2)" class="x">text</p>',
+      '<a id="safe" href="https://github.com/octocat" title="t">ok</a>',
+      '<a id="js" href=" java\tscript:alert(1)">js</a>',
+      '<a id="vb" href="VBScript:msgbox">vb</a>',
+      '<img id="data" src="data:image/svg+xml;base64,PHN2Zz4=" srcset="a.png 1x, javascript:alert(1) 2x" alt="a">',
+      '<img id="img" src="/octocat.png" srcset="/a.png 1x, /b.png 2x">',
+      '<svg><a id="svg" xlink:href="javascript:alert(1)"><text>x</text></a></svg>',
+      '<form action="javascript:alert(1)"><button formaction="javascript:alert(1)">b</button></form>',
+      '<script>window.injected = true</script><style>body { display: none }</style>',
+      '<iframe src="https://example.com"></iframe><object data="x.swf"></object><embed src="x.swf"><base href="https://example.com/"><meta http-equiv="refresh" content="0"><link rel="stylesheet" href="x.css">'
+    ].join('')
+    sanitizeContent(root)
+    expect(root.querySelector('#p')?.getAttributeNames()).toEqual(['id', 'class'])
+    expect(root.querySelector('#safe')?.getAttribute('href')).toBe('https://github.com/octocat')
+    expect(root.querySelector('#js')?.hasAttribute('href')).toBe(false)
+    expect(root.querySelector('#vb')?.hasAttribute('href')).toBe(false)
+    expect(root.querySelector('#data')?.getAttributeNames()).toEqual(['id', 'alt'])
+    expect(root.querySelector('#img')?.getAttribute('srcset')).toBe('/a.png 1x, /b.png 2x')
+    expect(root.querySelector('#svg')?.hasAttribute('xlink:href')).toBe(false)
+    expect(root.querySelector('form, button, script, style, iframe, object, embed, base, meta, link')).toBeNull()
+    expect(root.textContent).toContain('text')
   })
 })
 
@@ -481,6 +567,64 @@ describe('createChineseReadme', () => {
     expect(content()).not.toBeNull()
   })
 
+  it('页面还在加载时第一次扫描就找到的自述文件（刚解析出来）：取回之前隐藏', async () => {
+    Object.defineProperty(document, 'readyState', { value: 'loading', configurable: true })
+    try {
+      document.body.innerHTML = overview(SWITCHER + ENGLISH)
+      const pending = pendingFetch()
+      create({ fetch: pending.fetch })
+      expect(native().getAttribute(NATIVE_ATTRIBUTE)).toBe('loading')
+      pending.resolve(respond(blobData(CHINESE)))
+      await flush()
+      expect(native().getAttribute(NATIVE_ATTRIBUTE)).toBe('hidden')
+    } finally {
+      delete (document as unknown as Record<string, unknown>).readyState
+    }
+  })
+
+  it('引用含 /：按与地址对得上的页面数据认目录，同一目录里链接文字不是语言名的中文版也算；软导航后同一引用下照样认', async () => {
+    const data = (path: string): string =>
+      `<script type="application/json" data-target="react-app.embeddedData">${JSON.stringify({
+        payload: { codeViewLayoutRoute: { refInfo: { name: 'feature/x' }, path } }
+      })}</script>`
+    const link = (dir: string): string => `<p><a href="${REPO}/blob/feature/x/${dir}/README.zh-CN.md">Docs</a></p>`
+    const docs = `https://github.com${REPO}/blob/feature/x/docs/README.zh-CN.md`
+    const guide = `https://github.com${REPO}/blob/feature/x/docs/guide/README.zh-CN.md`
+    history.replaceState(null, '', `${REPO}/tree/feature/x/docs`)
+    document.body.innerHTML = data('docs') + directoryReadme(link('docs') + ENGLISH)
+    const fetch = mockFetch({ [docs]: blobData(CHINESE), [guide]: blobData(CHINESE) })
+    create({ fetch })
+    await flush()
+    expect(fetch).toHaveBeenCalledWith(docs, expect.any(Object))
+    expect(notice()?.querySelector('a')?.textContent).toBe('docs/README.zh-CN.md')
+    // 软导航到子目录：页面数据没更新（还是 docs 的），引用已记下
+    history.replaceState(null, '', `${REPO}/tree/feature/x/docs/guide`)
+    document.body.innerHTML = data('docs') + directoryReadme(link('docs/guide') + ENGLISH)
+    await flush()
+    expect(fetch).toHaveBeenLastCalledWith(guide, expect.any(Object))
+    expect(content()).not.toBeNull()
+  })
+
+  it('默认分支含 /（存储库首页）：有页面数据时同一目录里链接文字不是语言名的中文版也算，没有时不算', async () => {
+    const url = `https://github.com${REPO}/blob/feature/x/README.zh-CN.md`
+    const body = overview(`<p><a href="${REPO}/blob/feature/x/README.zh-CN.md">Docs</a></p>${ENGLISH}`)
+    const data = `<script type="application/json" data-target="react-app.embeddedData">${JSON.stringify({
+      payload: { codeViewLayoutRoute: { refInfo: { name: 'feature/x' }, path: '' } }
+    })}</script>`
+    document.body.innerHTML = body
+    const without = mockFetch({ [url]: blobData(CHINESE) })
+    create({ fetch: without })
+    await flush()
+    expect(without).not.toHaveBeenCalled()
+    readme?.stop()
+    document.body.innerHTML = data + body
+    const fetch = mockFetch({ [url]: blobData(CHINESE) })
+    create({ fetch })
+    await flush()
+    expect(fetch).toHaveBeenCalledWith(url, expect.any(Object))
+    expect(notice()?.querySelector('a')?.textContent).toBe('README.zh-CN.md')
+  })
+
   it('开启后第一次扫描时已在页面上的自述文件（可能已显示）不隐藏', async () => {
     document.body.innerHTML = overview(SWITCHER + ENGLISH)
     const pending = pendingFetch()
@@ -635,12 +779,13 @@ describe('createChineseReadme', () => {
     expect(notice()?.textContent).toBe('Switched to the Chinese versionREADME.zh-CN.md·Show original')
   })
 
-  it('中文版正文去掉脚本', async () => {
+  it('中文版正文去掉脚本、事件属性与 javascript: 地址', async () => {
     document.body.innerHTML = overview(SWITCHER + ENGLISH)
-    create({ fetch: mockFetch({ [ZH_URL]: blobData(`${CHINESE}<script>window.injected = true</script>`) }) })
+    const html = `${CHINESE}<script>window.injected = true</script><p onclick="alert(1)"><a href="javascript:alert(1)">x</a></p>`
+    create({ fetch: mockFetch({ [ZH_URL]: blobData(html) }) })
     await flush()
     expect(content()?.querySelector('h1')).not.toBeNull()
-    expect(content()?.querySelector('script')).toBeNull()
+    expect(content()?.querySelector('script, [onclick], [href^="javascript"]')).toBeNull()
   })
 
   it('没有中文版：页面加载完后记下结果，不再随页面变动反复找；正文内容换了再找', async () => {

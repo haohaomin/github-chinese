@@ -5,6 +5,7 @@ import { BUILTIN_SOURCES } from '../../src/shared/accelerate'
 import { enterpriseOrigins } from '../../src/shared/enterprise'
 import { ENTERPRISE_BRIDGE_ID, ENTERPRISE_CONTENT_ID } from '../../src/shared/enterprise-scripts'
 import { GITHUB_ORIGINS } from '../../src/shared/github'
+import { githubTokenItem } from '../../src/shared/github-api'
 import { DEFAULT_SETTINGS, settingsItem, updateSettings } from '../../src/shared/settings'
 import { LOCALE_SCRIPT_ID } from '../../src/shared/locale-script'
 import { removeApi } from './shared/fake-api'
@@ -793,6 +794,112 @@ describe('图片加速的取回', () => {
     vi.stubGlobal('fetch', fetch)
     await updateSettings({ accelerateImages: true })
     expect(await deliver(FETCH_IMAGE, enterpriseTab())).toEqual({ handled: true, response: { ok: false } })
+    expect(fetch).not.toHaveBeenCalled()
+  })
+})
+
+describe('下载次数', () => {
+  const RELEASE = { type: 'gcn:release-counts', owner: 'vuejs', repo: 'core', tag: 'v3.5.0' }
+  const API = 'https://api.github.com/repos/vuejs/core/releases/tags/v3.5.0'
+  /** 占位令牌（运行时拼出，不是真实令牌） */
+  const TOKEN = `ghp_${'x'.repeat(36)}`
+
+  function release(count: number, headers: Record<string, string> = {}): Response {
+    const assets = [
+      {
+        name: 'vue.global.js',
+        browser_download_url: `https://github.com/vuejs/core/releases/download/v3.5.0/vue.global.js`,
+        download_count: count
+      }
+    ]
+    return new Response(JSON.stringify({ assets }), { headers: { 'content-type': 'application/json', ...headers } })
+  }
+
+  beforeEach(() => {
+    background.main()
+  })
+
+  it('未开启下载次数：应答 ok: false，不请求', async () => {
+    const fetch = vi.fn()
+    vi.stubGlobal('fetch', fetch)
+    await updateSettings({ downloadCount: false })
+    expect(await deliver(RELEASE, githubTab())).toEqual({ handled: true, response: { ok: false } })
+    expect(fetch).not.toHaveBeenCalled()
+  })
+
+  it('开启时请求 GitHub API（不带 Cookie），应答 [文件名, 次数]；有效期内各标签页共用结果', async () => {
+    const fetch = vi.fn(async () => release(12_345))
+    vi.stubGlobal('fetch', fetch)
+    await updateSettings({ downloadCount: true })
+    expect(await deliver(RELEASE, githubTab())).toEqual({ handled: true, response: { ok: true, counts: [['vue.global.js', 12_345]] } })
+    expect(fetch).toHaveBeenCalledExactlyOnceWith(
+      API,
+      expect.objectContaining({ credentials: 'omit', headers: { Accept: 'application/vnd.github+json' } })
+    )
+    expect(await deliver(RELEASE, { ...githubTab(), tab: { id: 8, incognito: false } as Browser.tabs.Tab })).toMatchObject({
+      response: { ok: true }
+    })
+    expect(fetch).toHaveBeenCalledOnce()
+  })
+
+  it('填了令牌：带 Authorization（令牌只在后台读取）', async () => {
+    const fetch = vi.fn(async () => release(1))
+    vi.stubGlobal('fetch', fetch)
+    await updateSettings({ downloadCount: true })
+    await githubTokenItem.setValue(TOKEN)
+    await deliver(RELEASE, githubTab())
+    expect(fetch).toHaveBeenCalledWith(
+      API,
+      expect.objectContaining({ headers: { Accept: 'application/vnd.github+json', Authorization: `Bearer ${TOKEN}` } })
+    )
+  })
+
+  it('限额用尽：应答到何时为止，之后不请求；改了令牌后照常请求', async () => {
+    const reset = 1_800_000_600
+    const fetch = vi.fn(
+      async () => new Response('{}', { status: 403, headers: { 'x-ratelimit-remaining': '0', 'x-ratelimit-reset': String(reset) } })
+    )
+    vi.stubGlobal('fetch', fetch)
+    vi.spyOn(Date, 'now').mockReturnValue(1_800_000_000_000)
+    await updateSettings({ downloadCount: true })
+    expect(await deliver(RELEASE, githubTab())).toEqual({ handled: true, response: { ok: false, limitedUntil: reset * 1000 } })
+    expect(await deliver({ ...RELEASE, tag: 'v3.4.0' }, githubTab())).toEqual({
+      handled: true,
+      response: { ok: false, limitedUntil: reset * 1000 }
+    })
+    expect(fetch).toHaveBeenCalledOnce()
+    fetch.mockImplementation(async () => release(2))
+    await githubTokenItem.setValue(TOKEN)
+    expect(await deliver({ ...RELEASE, tag: 'v3.4.0' }, githubTab())).toEqual({
+      handled: true,
+      response: { ok: true, counts: [['vue.global.js', 2]] }
+    })
+  })
+
+  it('读取设置失败：应答 ok: false 并记录错误', async () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined)
+    vi.spyOn(fakeBrowser.storage.sync, 'get').mockRejectedValue(new Error('storage unavailable'))
+    expect(await deliver(RELEASE, githubTab())).toEqual({ handled: true, response: { ok: false } })
+    expect(consoleError).toHaveBeenCalled()
+  })
+
+  it.each([
+    ['扩展页面', { id: fakeBrowser.runtime.id, url: fakeBrowser.runtime.getURL('/popup.html') }],
+    ['其他扩展（发送方 id 不符）', { ...githubTab(), id: 'other-extension' }]
+  ] as const)('%s → 不处理', async (_name, sender) => {
+    expect(await deliver(RELEASE, sender as Sender)).toEqual({ handled: false })
+  })
+
+  it('格式不符的请求 → 不处理', async () => {
+    expect(await deliver({ ...RELEASE, owner: '../octocat' }, githubTab())).toEqual({ handled: false })
+  })
+
+  it('其他网站、未授权的企业版站点 → 应答 ok: false，不请求', async () => {
+    const fetch = vi.fn()
+    vi.stubGlobal('fetch', fetch)
+    await updateSettings({ downloadCount: true })
+    expect(await deliver(RELEASE, otherSite())).toEqual({ handled: true, response: { ok: false } })
+    expect(await deliver(RELEASE, enterpriseTab())).toEqual({ handled: true, response: { ok: false } })
     expect(fetch).not.toHaveBeenCalled()
   })
 })

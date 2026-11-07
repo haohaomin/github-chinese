@@ -33,6 +33,7 @@ import settingsAccount from './settings-account'
 import settingsDeveloper from './settings-developer'
 import sponsors from './sponsors'
 import status from './status'
+import support from './support'
 import wiki from './wiki'
 
 /** 繁体中文语言包；结构与简体相同（check:parity 对照） */
@@ -71,5 +72,6 @@ export const zhTW: LocaleBundle = [
   ['sponsors', sponsors],
   ['education', education],
   ['mcp', mcp],
-  ['status', status]
+  ['status', status],
+  ['support', support]
 ]

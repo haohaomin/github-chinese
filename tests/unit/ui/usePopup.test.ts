@@ -308,7 +308,13 @@ describe('授权', () => {
     const pending = popup.authorize()
     // 首个 await 之前同步调用，保证处于用户手势内
     expect(request).toHaveBeenCalledWith({
-      origins: ['https://github.com/*', 'https://gist.github.com/*', 'https://www.githubstatus.com/*']
+      origins: [
+        'https://github.com/*',
+        'https://gist.github.com/*',
+        'https://www.githubstatus.com/*',
+        'https://help.github.com/*',
+        'https://support.github.com/*'
+      ]
     })
     await pending
     await settle()

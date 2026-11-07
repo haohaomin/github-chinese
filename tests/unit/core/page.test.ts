@@ -59,6 +59,10 @@ describe('detectPages', () => {
     ['https://www.githubstatus.com/', ['common', 'status']],
     ['https://www.githubstatus.com/history', ['common', 'status']],
     ['https://www.githubstatus.com/incidents/abc123', ['common', 'status']],
+    // GitHub 支持站点：各路径同一作用域
+    ['https://help.github.com/', ['common', 'support']],
+    ['https://help.github.com/contact/report-abuse', ['common', 'support']],
+    ['https://support.github.com/contact/report-abuse', ['common', 'support']],
     // GitHub 自有的顶级页面，不是用户主页或仓库
     ['https://github.com/mcp', ['common', 'mcp']],
     ['https://github.com/mcp/vuejs/server', ['common', 'mcp']],
@@ -186,6 +190,8 @@ describe('pageSite', () => {
     ['https://github.com/vuejs/core', 'github', '/vuejs/core'],
     ['https://gist.github.com/octocat', 'gist', '/octocat'],
     ['https://www.githubstatus.com/history', 'status', '/history'],
+    ['https://help.github.com/contact/report-abuse', 'support', '/contact/report-abuse'],
+    ['https://SUPPORT.github.com/', 'support', '/'],
     ['https://github.example.com/vuejs/core', 'github', '/vuejs/core'],
     ['https://GIST.github.example.com/octocat', 'gist', '/octocat'],
     ['https://github.example.com/gist/octocat/1', 'gist', '/octocat/1'],

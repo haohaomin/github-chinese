@@ -57,7 +57,7 @@ async function openTab(wrapper: VueWrapper, label: string): Promise<void> {
 
 /** 页面顶部的导入备份、导出备份 */
 function header(wrapper: VueWrapper): DOMWrapper<Element> {
-  return wrapper.get('.options-header .options-backup') as DOMWrapper<Element>
+  return wrapper.get('.options-header .options-actions') as DOMWrapper<Element>
 }
 
 /** 标签页里的导入、导出（汉化设置为排除路径的，加速设置为加速源的） */
@@ -131,7 +131,7 @@ describe.skipIf(!App)('设置页：备份与导入导出', () => {
     vi.restoreAllMocks()
   })
 
-  it('顶部为导入备份、导出备份；净化、新标签页、企业版标签页最上方，排除路径、加速源标题右侧为导入、导出；只选 JSON 文件', async () => {
+  it('顶部为导入备份、导出备份；净化、下载次数、新标签页、企业版标签页最上方，排除路径、加速源标题右侧为导入、导出；只选 JSON 文件', async () => {
     const wrapper = await render()
     expect(
       header(wrapper)
@@ -139,13 +139,13 @@ describe.skipIf(!App)('设置页：备份与导入导出', () => {
         .map(item => item.text())
     ).toEqual(['导入备份', '导出备份'])
     expect(header(wrapper).get('[data-test="backup-file"]').attributes('accept')).toBe('.json,application/json')
-    for (const label of ['净化设置', '新标签页设置', '企业版设置']) {
+    for (const label of ['净化设置', '下载次数设置', '新标签页设置', '企业版设置']) {
       const content = panel(wrapper, label).get('.section').element
       expect(content.firstElementChild?.classList.contains('transfer-tools'), label).toBe(true)
     }
     expect(tools(wrapper, '汉化设置').element.closest('.section-head')?.querySelector('h2')?.textContent).toBe('排除路径')
     expect(tools(wrapper, '加速设置').element.closest('.section-head')?.querySelector('h2')?.textContent).toBe('加速源')
-    for (const label of ['汉化设置', '加速设置', '净化设置', '新标签页设置', '企业版设置']) {
+    for (const label of ['汉化设置', '加速设置', '净化设置', '下载次数设置', '新标签页设置', '企业版设置']) {
       expect(
         tools(wrapper, label)
           .findAll('button')

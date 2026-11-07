@@ -13,9 +13,12 @@ import { pageSite, repositoryName } from './page'
  *   （简体中文、中文、Chinese、zh-CN 等）：单仓多包的自述文件链到各包的中文版时不换。
  * - 显示的自述文件本来就是中文时不换。
  * 中文版是 GitHub 渲染好的正文：向同站请求文件页的页面数据（JSON，带 Cookie，同在页面上浏览），不经第三方；
+ * 插入前再去掉脚本、内嵌框架、事件属性与 javascript: 等地址（见 sanitizeContent）。
  * 本页面内（含软导航）最近取过的 MAX_CACHED 个不再取。原自述文件（React 管理）隐藏，不移除；中文版放在它之前，
  * 上方的提示可切回原文、再切回中文版，选了原文的存储库在本页面内保持原文。
- * 页面上新出现的自述文件在中文版取回之前先隐藏（最多 CLOAK_MS），不先显示原文再换
+ * 页面上新出现的自述文件在中文版取回之前先隐藏（最多 CLOAK_MS），不先显示原文再换。
+ * 引用（分支、标签）可含 /：地址里分不出引用与路径，按页面数据（react-app.embeddedData）里的引用名认；
+ * 页面数据与当前地址对得上时记下，软导航后同一引用下的目录照样认得出，没记下的引用按一段算
  */
 export interface ChineseReadmeOptions {
   /** 是否换成中文版：总开关与「中文自述文件」都开启 */
@@ -39,8 +42,16 @@ export interface ChineseReadme {
 export interface ReadmePage {
   /** 存储库（/所有者/存储库，小写）：记下选了原文的存储库；文件页地址的前缀 */
   readonly repo: string
-  /** 页面所在的目录：存储库首页为根目录；目录页为 tree/ 之后去掉引用（按一段算）的各段 */
+  /** 页面所在的目录：存储库首页为根目录；目录页为 tree/ 之后去掉引用的各段 */
   readonly directory: readonly string[]
+  /** 本存储库已知的引用名（来自页面数据）：地址里去掉的引用取其中最长的、与开头各段相同的，都不是时按一段算 */
+  readonly refs: readonly string[]
+}
+
+/** 页面数据中的引用名与路径（存储库中的路径，根目录为空串） */
+export interface EmbeddedRef {
+  readonly ref: string
+  readonly path: string
 }
 
 /** 中文版自述文件 */
@@ -77,6 +88,27 @@ const README_TAB_SELECTOR = '[aria-current="page"] svg.octicon-book'
 const DIRECTORY_README_SELECTOR = '#readme'
 /** 文件列表里的文件、目录链接 */
 const FILE_LINK_SELECTOR = '.react-directory-filename-cell a[href]'
+/** React 应用嵌入的页面数据（JSON） */
+const EMBEDDED_DATA_SELECTOR = 'script[type="application/json"][data-target="react-app.embeddedData"]'
+/** 插入前去掉的元素：脚本、样式、内嵌框架与插件、改变页面行为的元素 */
+const UNSAFE_ELEMENTS = 'script, style, iframe, frame, frameset, object, embed, applet, base, meta, link, form, portal'
+/** 带地址的属性：值是 javascript:、vbscript:、data: 地址时去掉 */
+const URL_ATTRIBUTES: ReadonlySet<string> = new Set([
+  'href',
+  'src',
+  'srcset',
+  'action',
+  'formaction',
+  'xlink:href',
+  'poster',
+  'background',
+  'cite',
+  'longdesc',
+  'data',
+  'codebase'
+])
+/** 地址（去掉空白与控制字符后）以危险的协议开头；srcset 里逗号之后的每个地址都看 */
+const UNSAFE_URL_RE = /(?:^|,)(?:javascript|vbscript|data):/i
 const STYLE_ID = 'gcn-readme-style'
 
 /** GitHub 渲染的标记语言的扩展名：其他文件（纯文本、图片等）取不到渲染好的正文 */
@@ -178,13 +210,60 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
 
-/** 存储库首页（/所有者/存储库）、目录页（/所有者/存储库/tree/引用[/路径]）；其他页面为 undefined */
-export function readmePage(url: Pick<URL, 'hostname' | 'pathname'>): ReadmePage | undefined {
+/** 地址路径的各段（已解码） */
+function segmentsOf(pathname: string): string[] {
+  return pathname.split('/').filter(Boolean).map(decode)
+}
+
+/** 去掉开头的引用：已知引用中最长的、与开头各段相同的；都不是时按一段算 */
+function stripRef(segments: readonly string[], refs: readonly string[]): string[] {
+  let size = 1
+  for (const ref of refs) {
+    const parts = ref.split('/')
+    if (parts.length > size && parts.length <= segments.length && parts.every((part, index) => segments[index] === part))
+      size = parts.length
+  }
+  return segments.slice(size)
+}
+
+/**
+ * 存储库首页（/所有者/存储库）、目录页（/所有者/存储库/tree/引用[/路径]）；其他页面为 undefined。
+ * refs 为各存储库（键同 ReadmePage.repo）已知的引用名
+ */
+export function readmePage(
+  url: Pick<URL, 'hostname' | 'pathname'>,
+  refs: ReadonlyMap<string, readonly string[]> = new Map()
+): ReadmePage | undefined {
   const site = pageSite(url)
   if (site.kind !== 'github' || repositoryName(site.pathname) === undefined) return undefined
-  const [owner = '', repo = '', section, ref, ...path] = site.pathname.split('/').filter(Boolean)
-  if (section !== undefined && (section !== 'tree' || ref === undefined)) return undefined
-  return { repo: `/${owner}/${repo}`.toLowerCase(), directory: path.map(decode) }
+  const [owner = '', name = '', section, ...rest] = segmentsOf(site.pathname)
+  if (section !== undefined && (section !== 'tree' || rest.length === 0)) return undefined
+  const repo = `/${owner}/${name}`.toLowerCase()
+  const known = refs.get(repo) ?? []
+  return { repo, directory: section === undefined ? [] : stripRef(rest, known), refs: known }
+}
+
+/** 页面数据中的引用名与路径：payload 下第一个带 refInfo.name 的路由（codeViewLayoutRoute 等）；没有时为 undefined */
+export function parseEmbeddedRef(json: unknown): EmbeddedRef | undefined {
+  const payload = isRecord(json) && isRecord(json.payload) ? json.payload : undefined
+  for (const route of Object.values(payload ?? {})) {
+    if (!isRecord(route) || !isRecord(route.refInfo)) continue
+    const { name } = route.refInfo
+    if (typeof name === 'string' && name !== '') return { ref: name, path: typeof route.path === 'string' ? route.path : '' }
+  }
+  return undefined
+}
+
+/**
+ * 页面数据与地址对得上：存储库首页时路径为空，目录页、文件页（tree / blob）时地址里引用之后的各段就是引用名与路径。
+ * 软导航后页面数据可能还是之前页面的，对不上时不用
+ */
+export function matchesEmbeddedRef(pathname: string, embedded: EmbeddedRef): boolean {
+  const [, , section, ...rest] = segmentsOf(pathname)
+  if (section === undefined) return embedded.path === ''
+  if (section !== 'tree' && section !== 'blob') return false
+  const parts = [...embedded.ref.split('/'), ...embedded.path.split('/').filter(Boolean)]
+  return parts.length === rest.length && parts.every((part, index) => rest[index] === part)
 }
 
 /**
@@ -267,7 +346,7 @@ function repoFile(anchor: Element, page: ReadmePage): Omit<ChineseReadmeFile, 'l
   const url = anchor instanceof HTMLAnchorElement ? parseWebUrl(anchor.href) : undefined
   const prefix = `${page.repo}/blob/`
   if (!url || url.origin !== anchor.ownerDocument.location.origin || !url.pathname.toLowerCase().startsWith(prefix)) return undefined
-  const path = url.pathname.slice(prefix.length).split('/').filter(Boolean).slice(1).map(decode)
+  const path = stripRef(segmentsOf(url.pathname.slice(prefix.length)), page.refs)
   // 编码的斜杠（%2F）解出的段不是真的路径
   if (path.length === 0 || path.some(segment => segment.includes('/'))) return undefined
   url.search = ''
@@ -307,12 +386,28 @@ export function findChineseReadme(doc: Document, article: Element, page: ReadmeP
   return best?.file
 }
 
-/** 中文版正文：类名同原文；节点收进当前文档，去掉脚本（DOMParser 解析的脚本不执行，再保险一次） */
+/**
+ * 插入页面前清理（GitHub 渲染时已清理过，再保险一次）：去掉脚本、样式、内嵌框架等元素，
+ * 事件属性（on 开头），值是 javascript:、vbscript:、data: 地址的地址属性
+ */
+export function sanitizeContent(root: ParentNode): void {
+  for (const element of root.querySelectorAll(UNSAFE_ELEMENTS)) element.remove()
+  for (const element of root.querySelectorAll('*')) {
+    for (const { name, value } of [...element.attributes]) {
+      const lower = name.toLowerCase()
+      // eslint-disable-next-line no-control-regex -- 浏览器解析地址时忽略空白与控制字符
+      const unsafeUrl = URL_ATTRIBUTES.has(lower) && UNSAFE_URL_RE.test(value.replace(/[\s\u0000-\u001f]+/g, ''))
+      if (lower.startsWith('on') || unsafeUrl) element.removeAttribute(name)
+    }
+  }
+}
+
+/** 中文版正文：类名同原文；清理后节点收进当前文档（DOMParser 解析的脚本不执行） */
 function createContent(native: Element, html: string): HTMLElement {
   const doc = native.ownerDocument
   const parsed = new DOMParser().parseFromString(html, 'text/html')
   const source = parsed.querySelector('article.markdown-body') ?? parsed.body
-  for (const script of source.querySelectorAll('script')) script.remove()
+  sanitizeContent(source)
   const content = doc.createElement('article')
   content.className = native.className
   content.setAttribute(README_ATTRIBUTE, 'content')
@@ -326,9 +421,16 @@ export function createChineseReadme(doc: Document, options: ChineseReadmeOptions
   const cache = new Map<string, Promise<string | undefined>>()
   /** 选了原文的存储库 */
   const originals = new Set<string>()
+  /** 各存储库已知的引用名（来自与地址对得上的页面数据） */
+  const refs = new Map<string, readonly string[]>()
+  /** 读过的页面数据：同一元素不重复解析 */
+  const parsedData = new WeakSet<Element>()
   let state: State | undefined
-  /** 可先隐藏新出现的自述文件：开启后第一次扫描时已在页面上的（可能已显示）不隐藏 */
-  let cloakable = false
+  /**
+   * 可先隐藏新出现的自述文件。开启后第一次扫描时已在页面上的可能已显示，不隐藏；
+   * 页面还在加载时例外：内容脚本在页面开始加载时启动，这时找到的自述文件刚解析出来
+   */
+  let cloakable = doc.readyState === 'loading'
   let scheduled = false
   let observing = false
   let stopped = false
@@ -453,9 +555,31 @@ export function createChineseReadme(doc: Document, options: ChineseReadmeOptions
     state = undefined
   }
 
+  /** 记下页面数据里与当前地址对得上的引用名 */
+  function learnRefs(): void {
+    const pathname = doc.location.pathname
+    const [owner, name] = segmentsOf(pathname)
+    if (!owner || !name) return
+    const repo = `/${owner}/${name}`.toLowerCase()
+    for (const script of doc.querySelectorAll(EMBEDDED_DATA_SELECTOR)) {
+      if (parsedData.has(script)) continue
+      parsedData.add(script)
+      let embedded: EmbeddedRef | undefined
+      try {
+        embedded = parseEmbeddedRef(JSON.parse(script.textContent ?? ''))
+      } catch {
+        continue
+      }
+      if (!embedded || !matchesEmbeddedRef(pathname, embedded)) continue
+      const known = refs.get(repo) ?? []
+      if (!known.includes(embedded.ref)) refs.set(repo, [...known, embedded.ref])
+    }
+  }
+
   /** 页面上显示着的自述文件正文 */
   function findReadme(): { readonly native: Element; readonly page: ReadmePage } | undefined {
-    const page = readmePage(doc.location)
+    learnRefs()
+    const page = readmePage(doc.location, refs)
     if (!page) return undefined
     for (const article of doc.querySelectorAll(ARTICLE_SELECTOR)) {
       if (isReadmeArticle(article)) return { native: article, page }

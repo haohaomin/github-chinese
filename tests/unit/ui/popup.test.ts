@@ -227,7 +227,13 @@ describe.skipIf(!App)('弹出页组件', () => {
 
     await button(wrapper, '授权').trigger('click')
     expect(request).toHaveBeenCalledWith({
-      origins: ['https://github.com/*', 'https://gist.github.com/*', 'https://www.githubstatus.com/*']
+      origins: [
+        'https://github.com/*',
+        'https://gist.github.com/*',
+        'https://www.githubstatus.com/*',
+        'https://help.github.com/*',
+        'https://support.github.com/*'
+      ]
     })
   })
 

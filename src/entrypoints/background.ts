@@ -8,12 +8,13 @@ import { enterpriseMatches, grantedOrigins, isEnterpriseUrl } from '../shared/en
 import { BRIDGE_SCRIPT_FILE, CONTENT_SCRIPT_FILE, syncEnterpriseScripts } from '../shared/enterprise-scripts'
 import { isFirefoxBuild } from '../shared/extension'
 import { parseGitHubUrl, parseWebUrl } from '../shared/github'
+import { API_DEPS, createReleaseCountsService, fetchReleaseCounts, readGitHubToken } from '../shared/github-api'
 import { fetchImage, IMAGE_FETCH_DEPS } from '../shared/image-fetcher'
 import { applyLegacySettingValues, removeLegacyUntranslated } from '../shared/legacy-storage'
 import type { PageLocale } from '../shared/locale'
 import { LOCALE_SCRIPT_FILES } from '../shared/locale-loader'
 import { syncLocaleScript } from '../shared/locale-script'
-import { isBackgroundMessage, isContentStatus, type ContentMessage } from '../shared/messages'
+import { isBackgroundMessage, isContentStatus, toReleaseCountsResponse, type ContentMessage } from '../shared/messages'
 import { getSettings, watchSettings, type Settings } from '../shared/settings'
 import { createSourceHealthMonitor, SESSION_HEALTH_STORE } from '../shared/source-health'
 
@@ -164,6 +165,12 @@ async function injectIntoGrantedTabs(origins: readonly string[]): Promise<void> 
 export default defineBackground(() => {
   // 加速源的探测：结果在有效期内缓存，并存入会话存储（Service Worker 重启后照用）
   const sourceHealth = createSourceHealthMonitor(PROBE_DEPS, SESSION_HEALTH_STORE)
+  // 下载次数：各标签页共用缓存与限额状态；令牌每次请求前读取，只在后台使用（见 shared/github-api）
+  const releaseCounts = createReleaseCountsService({
+    fetchCounts: (release, token) => fetchReleaseCounts(release, token, API_DEPS),
+    token: readGitHubToken,
+    now: API_DEPS.now
+  })
   // 事件监听须在顶层同步注册，Service Worker 被唤醒时才能收到事件
   // 自定义词条、屏蔽规则由设置页保存后发消息，这里转发给各 GitHub 标签页
   browser.runtime.onMessage.addListener((message: unknown, sender: MessageSender, sendResponse) => {
@@ -198,6 +205,14 @@ export default defineBackground(() => {
         return answerGitHubTab(sender, sendResponse, async () => {
           const url = await fetchImage(message.url, await getSettings(), { ...IMAGE_FETCH_DEPS, rank: sourceHealth.rank })
           return url ? { ok: true, url } : { ok: false }
+        })
+      case 'gcn:release-counts':
+        if (!fromOwnTab(sender)) return undefined
+        return answerGitHubTab(sender, sendResponse, async () => {
+          const settings = await getSettings()
+          // 只在开启下载次数时请求
+          if (!settings.enabled || !settings.downloadCount) return { ok: false }
+          return toReleaseCountsResponse(await releaseCounts.get({ owner: message.owner, repo: message.repo, tag: message.tag }))
         })
     }
   })

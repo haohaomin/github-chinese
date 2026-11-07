@@ -99,10 +99,10 @@ describe('syncLocaleScript', () => {
   })
 
   it('浏览器返回的站点列表顺序不同、有重复：视为相同，不更新', async () => {
-    const [github, gist, status] = GITHUB_ORIGINS
+    const [first, ...rest] = GITHUB_ORIGINS
     registered.push(localeScript())
     vi.mocked(fakeBrowser.scripting.getRegisteredContentScripts).mockResolvedValueOnce([
-      { ...localeScript(), matches: [status!, github!, gist!, github!] }
+      { ...localeScript(), matches: [...rest.reverse(), first!, first!] }
     ] as never)
     await syncLocaleScript(settings({ language: 'zh-CN' }))
     expect(fakeBrowser.scripting.updateContentScripts).not.toHaveBeenCalled()

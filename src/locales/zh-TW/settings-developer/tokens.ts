@@ -295,6 +295,7 @@ export default {
     'Custom…': '自訂…',
     'between 1 and 366 days': '介於 1 到 366 天之間',
     'Public repositories': '公開儲存庫',
+    'Repository access': '儲存庫存取權',
     'Select at least one repository.': '至少選取一個儲存庫。',
     'No repositories found.': '找不到儲存庫。',
     'User permissions': '使用者權限',

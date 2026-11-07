@@ -9,8 +9,14 @@ const GECKO_ID = '{3e156188-2ae6-4a69-8821-16410eba6e18}'
 /** Firefox（桌面、Android）的最低版本 */
 const FIREFOX_MIN_VERSION = '128.0'
 
-/** 扩展生效的站点（含 GitHub 状态页），与 src/shared/github.ts 保持一致 */
-export const GITHUB_ORIGINS = ['https://github.com/*', 'https://gist.github.com/*', 'https://www.githubstatus.com/*']
+/** 扩展生效的站点（含 GitHub 状态页、支持站点），与 src/shared/github.ts 保持一致（tests/unit/shared/github.test.ts 核对） */
+export const GITHUB_ORIGINS = [
+  'https://github.com/*',
+  'https://gist.github.com/*',
+  'https://www.githubstatus.com/*',
+  'https://help.github.com/*',
+  'https://support.github.com/*'
+]
 
 /** 企业版站点（自有域名）按需申请的主机权限：用户在弹出页、设置页启用某个站点时只申请该站点（见 src/shared/enterprise.ts） */
 export const OPTIONAL_ORIGINS = ['*://*/*']

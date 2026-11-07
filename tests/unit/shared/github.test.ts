@@ -5,7 +5,9 @@ describe('parseGitHubUrl', () => {
     'https://github.com/',
     'https://github.com/vuejs/core/issues?q=is%3Aopen#top',
     'https://gist.github.com/octocat/123',
-    'https://www.githubstatus.com/incidents/abc123'
+    'https://www.githubstatus.com/incidents/abc123',
+    'https://help.github.com/contact/report-abuse',
+    'https://support.github.com/'
   ])('%s 是 GitHub 页面', url => {
     expect(parseGitHubUrl(url)?.href).toBe(new URL(url).href)
   })
@@ -25,8 +27,16 @@ describe('parseGitHubUrl', () => {
     expect(parseGitHubUrl(url)).toBeUndefined()
   })
 
-  it('站点列表与 host_permissions 一致', () => {
-    expect(GITHUB_ORIGINS).toEqual(['https://github.com/*', 'https://gist.github.com/*', 'https://www.githubstatus.com/*'])
+  it('站点列表与 host_permissions（wxt.config.ts）一致', async () => {
+    expect(GITHUB_ORIGINS).toEqual([
+      'https://github.com/*',
+      'https://gist.github.com/*',
+      'https://www.githubstatus.com/*',
+      'https://help.github.com/*',
+      'https://support.github.com/*'
+    ])
+    const config = await import('../../../wxt.config')
+    expect(config.GITHUB_ORIGINS).toEqual(GITHUB_ORIGINS)
   })
 })
 

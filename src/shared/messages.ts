@@ -1,5 +1,6 @@
 import type { PageKey } from '../core/types'
 import type { SourceHealth } from './accelerate-categories'
+import type { ReleaseCountsResult } from './github-api'
 import { isPageLocale, type PageLocale } from './locale'
 
 /** popup、后台 → content script 的消息 */
@@ -36,6 +37,8 @@ export type BackgroundMessage =
   | { readonly type: 'gcn:probe-sources' }
   /** 图片加载失败（开启图片加速时）：请后台经加速源取回，应答 data: 地址（见 FetchedImage） */
   | { readonly type: 'gcn:fetch-image'; readonly url: string }
+  /** 页面上有发行版附件（开启下载次数时）：请后台向 GitHub API 取各附件的下载次数（见 ReleaseCountsResponse） */
+  | { readonly type: 'gcn:release-counts'; readonly owner: string; readonly repo: string; readonly tag: string }
 
 /** 后台应答：处理成功为 ok */
 export interface BackgroundAck {
@@ -54,6 +57,22 @@ export interface FetchedImage {
   /** data: 地址 */
   readonly url: string
 }
+
+/**
+ * 后台对 gcn:release-counts 的应答：成功时为 [附件文件名, 次数] 列表，限额已用完时另给重置时间；
+ * 失败为 ok: false，限额用尽时给出到何时为止（毫秒时间戳）
+ */
+export type ReleaseCountsResponse =
+  | { readonly ok: true; readonly counts: readonly (readonly [string, number])[]; readonly limitedUntil?: number }
+  | { readonly ok: false; readonly limitedUntil?: number }
+
+/** 所有者、存储库名：字母、数字、连字符、下划线、点 */
+const REPO_NAME_RE = /^[\w.-]{1,100}$/
+/** 标签名的长度上限 */
+const MAX_TAG_LENGTH = 255
+/** 一个发行版的附件数上限（GitHub 为 1000）与文件名的长度上限 */
+const MAX_ASSETS = 1000
+const MAX_FILE_LENGTH = 1024
 
 /** 图片的 data: 地址 */
 const DATA_IMAGE_RE = /^data:image\/[a-z0-9.+-]+;base64,/
@@ -106,6 +125,16 @@ export function isBackgroundMessage(value: unknown): value is BackgroundMessage 
       return true
     case 'gcn:fetch-image':
       return typeof value.url === 'string' && value.url.length <= MAX_URL_LENGTH
+    case 'gcn:release-counts':
+      return (
+        typeof value.owner === 'string' &&
+        REPO_NAME_RE.test(value.owner) &&
+        typeof value.repo === 'string' &&
+        REPO_NAME_RE.test(value.repo) &&
+        typeof value.tag === 'string' &&
+        value.tag.length > 0 &&
+        value.tag.length <= MAX_TAG_LENGTH
+      )
     default:
       return false
   }
@@ -129,4 +158,39 @@ export function isProbedSources(value: unknown): value is ProbedSources {
 /** 校验后台对 gcn:fetch-image 的应答：base64 编码的图片 data: 地址 */
 export function isFetchedImage(value: unknown): value is FetchedImage {
   return isRecord(value) && value.ok === true && typeof value.url === 'string' && DATA_IMAGE_RE.test(value.url)
+}
+
+/** 后台：取下载次数的结果 → 应答 */
+export function toReleaseCountsResponse(result: ReleaseCountsResult): ReleaseCountsResponse {
+  if (result.kind === 'ok') {
+    const counts = [...result.counts]
+    return result.limitedUntil === undefined ? { ok: true, counts } : { ok: true, counts, limitedUntil: result.limitedUntil }
+  }
+  return result.kind === 'limited' ? { ok: false, limitedUntil: result.until } : { ok: false }
+}
+
+function isTimestamp(value: unknown): value is number {
+  return typeof value === 'number' && Number.isFinite(value) && value > 0
+}
+
+function isCountPair(value: unknown): value is readonly [string, number] {
+  return (
+    Array.isArray(value) &&
+    value.length === 2 &&
+    typeof value[0] === 'string' &&
+    value[0].length > 0 &&
+    value[0].length <= MAX_FILE_LENGTH &&
+    isCount(value[1])
+  )
+}
+
+/** 内容脚本：校验后台对 gcn:release-counts 的应答，转回结果；格式不符时为失败 */
+export function fromReleaseCountsResponse(value: unknown): ReleaseCountsResult {
+  if (!isRecord(value)) return { kind: 'failed' }
+  const until = isTimestamp(value.limitedUntil) ? value.limitedUntil : undefined
+  if (value.ok !== true) return until === undefined ? { kind: 'failed' } : { kind: 'limited', until }
+  const { counts } = value
+  if (!Array.isArray(counts) || counts.length > MAX_ASSETS || !counts.every(isCountPair)) return { kind: 'failed' }
+  const map = new Map(counts as readonly (readonly [string, number])[])
+  return until === undefined ? { kind: 'ok', counts: map } : { kind: 'ok', counts: map, limitedUntil: until }
 }

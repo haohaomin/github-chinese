@@ -289,6 +289,7 @@ export default {
     'Custom…': '自定义…',
     'between 1 and 366 days': '介于 1 到 366 天之间',
     'Public repositories': '公共存储库',
+    'Repository access': '存储库访问权限',
     'Select at least one repository.': '至少选择一个存储库。',
     'No repositories found.': '未找到存储库。',
     'User permissions': '用户权限',

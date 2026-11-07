@@ -101,7 +101,7 @@ describe.skipIf(!App)('设置页：自动加载、新标签页打开', () => {
         .get('[role="tablist"]')
         .findAll('[role="tab"]')
         .map(item => item.text())
-    ).toEqual(['汉化设置', '加速设置', '净化设置', '自动加载设置', '新标签页设置', '企业版设置'])
+    ).toEqual(['汉化设置', '加速设置', '净化设置', '自动加载设置', '下载次数设置', '新标签页设置', '企业版设置'])
     expect(wrapper.findAll('label').map(item => item.text())).not.toContain('图片预览')
   })
 

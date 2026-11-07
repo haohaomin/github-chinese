@@ -312,7 +312,13 @@ afterEach(() => {
 describe('content script', () => {
   it('声明匹配地址与运行时机', async () => {
     const definition = await load()
-    expect(definition.matches).toEqual(['https://github.com/*', 'https://gist.github.com/*', 'https://www.githubstatus.com/*'])
+    expect(definition.matches).toEqual([
+      'https://github.com/*',
+      'https://gist.github.com/*',
+      'https://www.githubstatus.com/*',
+      'https://help.github.com/*',
+      'https://support.github.com/*'
+    ])
     expect(definition.runAt).toBe('document_start')
     expect(definition.noScriptStartedPostMessage).toBe(true)
   })

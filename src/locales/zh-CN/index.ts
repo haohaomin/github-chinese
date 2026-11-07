@@ -33,6 +33,7 @@ import settingsAccount from './settings-account'
 import settingsDeveloper from './settings-developer'
 import sponsors from './sponsors'
 import status from './status'
+import support from './support'
 import wiki from './wiki'
 
 /** 简体中文语言包；common 在前，页面词典按页面类型排列 */
@@ -71,5 +72,6 @@ export const zhCN: LocaleBundle = [
   ['sponsors', sponsors],
   ['education', education],
   ['mcp', mcp],
-  ['status', status]
+  ['status', status],
+  ['support', support]
 ]

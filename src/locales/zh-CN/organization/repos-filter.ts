@@ -1,11 +1,12 @@
 import type { PageDictionary } from '../../../core/types'
+import { LICENSE_NAMES } from '../code/licenses'
 import { joinCjk } from '../helpers'
 import { sortDirection } from './repos-list'
 
 /**
  * React 存储库列表的筛选框（/repos 与 /orgs/<组织>/repositories 共用）：建议列表的筛选键、说明、取值及其 aria-label，
  * 自定义属性子键，校验横幅，高级筛选对话框。与 issues/filter.ts 是同一套筛选组件，同句同译。
- * 语言名、许可证名、组织名、自定义属性名与组织自定义的属性取值是数据，保留原文。
+ * 语言名、组织名、自定义属性名与组织自定义的属性取值是数据，保留原文；许可证名按 code/licenses 译出（可见文字由其 static 处理）。
  */
 
 /** 筛选键名称（建议列表的 displayName）；全局 /pulls 的选择存储库筛选框是同一组件，由 pulls/dashboard.ts 取用 */
@@ -164,9 +165,9 @@ function sortValue(field: string, order: string): string {
   return `${pick(FILTER_VALUE, field) ?? field}（${sortDirection(order)}）`
 }
 
-/** 筛选取值译名：查表、带方向的排序取值、自定义属性子键；未收录的保留原文（pulls/dashboard.ts 同样取用） */
+/** 筛选取值译名：查表（含许可证名）、带方向的排序取值、自定义属性子键；未收录的保留原文（pulls/dashboard.ts 同样取用） */
 export function valueName(value: string): string {
-  const known = pick(FILTER_VALUE, value)
+  const known = pick(FILTER_VALUE, value) ?? pick(LICENSE_NAMES, value)
   if (known !== undefined) return known
   const sort = SORT_VALUE_RE.exec(value)
   if (sort) return sortValue(sort[1]!, sort[2]!)

@@ -40,18 +40,28 @@ const fetchImage = vi.fn(async (): Promise<Blob> => new Blob(['x'], { type: 'ima
 let active = true
 let preview: ImagePreview
 
-/** 放进页面；除标了 data-broken 的都已加载（有固有尺寸），标了 data-hidden 的不显示，标了 data-size（宽x高）的按该尺寸显示 */
+/** 宽x高；没写时为 [0, 0] */
+function parseSize(value: string | undefined): [number, number] {
+  const [width = 0, height = 0] = (value ?? '').split('x').map(Number)
+  return [width, height]
+}
+
+/**
+ * 放进页面；除标了 data-broken 的都已加载（固有尺寸 640x480，标了 data-natural（宽x高）的按该尺寸），
+ * 标了 data-hidden 的不显示，标了 data-size（宽x高）的按该尺寸显示
+ */
 function render(html: string): void {
   document.body.innerHTML = html
   for (const img of document.querySelectorAll('img')) {
     if (!img.hasAttribute('data-broken')) {
-      Object.defineProperty(img, 'naturalWidth', { value: 640, configurable: true })
-      Object.defineProperty(img, 'naturalHeight', { value: 480, configurable: true })
+      const [naturalWidth, naturalHeight] = img.dataset.natural ? parseSize(img.dataset.natural) : [640, 480]
+      Object.defineProperty(img, 'naturalWidth', { value: naturalWidth, configurable: true })
+      Object.defineProperty(img, 'naturalHeight', { value: naturalHeight, configurable: true })
     }
     if (img.hasAttribute('data-hidden')) {
       Object.defineProperty(img, 'getClientRects', { value: () => [], configurable: true })
     }
-    const [width = 0, height = 0] = (img.dataset.size ?? '').split('x').map(Number)
+    const [width, height] = parseSize(img.dataset.size)
     if (width > 0 && height > 0) {
       Object.defineProperty(img, 'getBoundingClientRect', { value: () => new DOMRect(0, 0, width, height), configurable: true })
     }
@@ -227,6 +237,74 @@ describe('链到别处的图片', () => {
     render('<div class="markdown-body"><a href="https://example.com/a.png"><img id="self" src="https://example.com/a.png"></a></div>')
     click(img('self'))
     expect(viewerPart<HTMLButtonElement>('button[data-action="link"]')?.hidden).toBe(true)
+  })
+})
+
+/** GitHub 给没有链接的图片包上的链接：新标签页打开图片自身（图片代理的地址） */
+function selfLink(id: string, src: string, attributes = ''): string {
+  return `<a target="_blank" rel="noopener noreferrer nofollow" href="${src}"><img id="${id}" src="${src}" ${attributes}></a>`
+}
+
+/**
+ * 徽章、图标：不论有没有链接都不预览，也不在切换之列。可预览（按文档顺序）：photo、strip、last
+ */
+const BADGES = `
+<div class="markdown-body">
+  <p><img id="photo" src="https://example.com/photo.png" alt="Sample text A"></p>
+  <p>
+    ${selfLink('stars', CAMO, 'data-canonical-src="https://img.shields.io/github/stars/vuejs/core.svg" alt="GitHub stars"')}
+    ${selfLink('workflow', 'https://github.com/vuejs/core/actions/workflows/ci.yml/badge.svg', 'alt="CI"')}
+    <a href="https://ci.example.com/vuejs/core"><img id="status" data-size="90x20" data-natural="90x20" src="https://ci.example.com/vuejs/core.svg" alt="Build"></a>
+    ${selfLink('plain', 'https://ci.example.com/vuejs/core.svg?branch=main', 'data-size="90x20" data-natural="90x20" alt="Build"')}
+  </p>
+  <p>${selfLink('icon', 'https://example.com/icon.svg', 'data-size="16x16" alt="Sample text B"')}</p>
+  <p>${selfLink('hidpi', 'https://example.com/button.png', 'data-size="120x20" data-natural="240x40" alt="Sample text C"')}</p>
+  <p>${selfLink('strip', 'https://example.com/strip.png', 'data-size="900x28" data-natural="1920x60" alt="Sample text D"')}</p>
+  <p><img id="last" src="https://example.com/last.png" alt="Sample text E"></p>
+</div>`
+
+describe('徽章、图标', () => {
+  beforeEach(() => render(BADGES))
+
+  it.each([
+    ['photo', true],
+    ['stars', false],
+    ['workflow', false],
+    ['status', false],
+    ['plain', false],
+    ['icon', false],
+    ['hidpi', false],
+    ['strip', true],
+    ['last', true]
+  ])('%s → %s', (id, expected) => {
+    expect(isPreviewable(img(id))).toBe(expected)
+  })
+
+  it.each(['stars', 'workflow', 'plain', 'icon', 'hidpi'])('%s（没有链接）：不预览，照常打开 GitHub 加的链接', id => {
+    expect(click(img(id))).toBe(false)
+    expect(viewerPart('.viewer')).toBeNull()
+  })
+
+  it('链到别处、地址里没有 badge 的徽章：照常打开链接', () => {
+    expect(click(img('status'))).toBe(false)
+    expect(viewerPart('.viewer')).toBeNull()
+  })
+
+  it('不在切换之列；缩小一半以上的窄长图照常预览', () => {
+    expect(click(img('photo'))).toBe(true)
+    expect(viewerPart('.counter')?.textContent).toBe('1 / 3')
+    preview.close()
+    expect(click(img('strip'))).toBe(true)
+    expect(viewerPart('.counter')?.textContent).toBe('2 / 3')
+    expect(viewerPart<HTMLImageElement>('.image')?.getAttribute('src')).toBe('https://example.com/strip.png')
+  })
+
+  it('未加载完（没有固有尺寸）的：只按地址、显示大小判断', () => {
+    render(
+      `<div class="markdown-body">${selfLink('loading', 'https://example.com/loading.png', 'data-size="90x20" data-natural="0x0"')}</div>`
+    )
+    Object.defineProperty(img('loading'), 'complete', { value: false, configurable: true })
+    expect(isPreviewable(img('loading'))).toBe(true)
   })
 })
 

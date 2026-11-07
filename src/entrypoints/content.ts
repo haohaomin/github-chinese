@@ -20,12 +20,14 @@ import type { LocaleBundle } from '../core/types'
 import { translateMessage, type MessageKey, type MessageParams } from '../i18n'
 import { PROBE_TIMEOUT_MS } from '../shared/accelerate'
 import type { SourceHealth } from '../shared/accelerate-categories'
+import type { ReleaseCountsResult, ReleaseRef } from '../shared/github-api'
 import { pageLanguageEnvironment } from '../shared/language-env'
 import { resolvePageLocale, resolveUiLanguage, type PageLocale } from '../shared/locale'
 import { createLocaleLoader, TIME_LANGS, waitForRegistration } from '../shared/locale-loader'
 import { compileSearchBlockRules, type SearchBlockList } from '../shared/search-block'
 import { BUILTIN_BLOCK_RULES } from '../shared/search-block-builtin'
 import {
+  fromReleaseCountsResponse,
   isAcknowledged,
   isContentMessage,
   isFetchedImage,
@@ -95,6 +97,9 @@ const PROBE_WAIT_MS = PROBE_TIMEOUT_MS + 2000
 /** 图片加速：等后台取回的时限（故障转移开启、自动选择时后台依次试各加速源） */
 const FETCH_IMAGE_TIMEOUT_MS = 30_000
 
+/** 下载次数：等后台请求 GitHub API 的时限（后台单次请求最多 10 秒，令牌无效时不带令牌再请求一次） */
+const RELEASE_COUNTS_WAIT_MS = 25_000
+
 /** 图片预览浮层上的文字 → 界面文案 */
 const VIEWER_MESSAGES: Readonly<Record<ViewerLabel, MessageKey>> = {
   dialog: 'imagePreview',
@@ -139,6 +144,12 @@ async function fetchImage(url: string): Promise<string> {
   return response.url
 }
 
+/** 请后台取发行版各附件的下载次数（令牌在后台，不经内容脚本） */
+async function requestReleaseCounts(release: ReleaseRef): Promise<ReleaseCountsResult> {
+  const message: BackgroundMessage = { type: 'gcn:release-counts', owner: release.owner, repo: release.repo, tag: release.tag }
+  return fromReleaseCountsResponse(await sendToBackground(message, RELEASE_COUNTS_WAIT_MS))
+}
+
 /** 消息入口：启动完成前收到的消息排队 */
 function createMessageGate(): MessageGate {
   let handle: MessageHandler | undefined
@@ -158,7 +169,13 @@ function createMessageGate(): MessageGate {
 }
 
 export default defineContentScript({
-  matches: ['https://github.com/*', 'https://gist.github.com/*', 'https://www.githubstatus.com/*'],
+  matches: [
+    'https://github.com/*',
+    'https://gist.github.com/*',
+    'https://www.githubstatus.com/*',
+    'https://help.github.com/*',
+    'https://support.github.com/*'
+  ],
   runAt: 'document_start',
   // 新实例只用 document 上的自定义事件让旧实例失效，不经 window.postMessage 把事件名广播给页面脚本
   noScriptStartedPostMessage: true,
@@ -194,6 +211,13 @@ export default defineContentScript({
       active: () => current.enabled && current.purifySearch,
       rules: () => blockList
     })
+    // 中文自述文件：存储库首页、目录页的自述文件有中文版时换成中文版（见 core/chinese-readme）。
+    // 不等语言包：自述文件出现时就隐藏原文、开始取中文版，不先显示原文再换
+    const readme = createChineseReadme(document, {
+      active: () => current.enabled && current.chineseReadme,
+      locale: () => resolvePageLocale(current.language, languages),
+      label: key => translateMessage(resolveUiLanguage(current.uiLanguage, languages), key)
+    })
     const locale: PageLocale = resolvePageLocale(settings.language, languages)
     // 总开关关闭时不加载语言包，开启时再加载（见 syncLocale）
     const bundle: LocaleBundle | undefined =
@@ -201,6 +225,7 @@ export default defineContentScript({
     // 不再启动（已失效，或开启时语言包加载失败）。排队的查询不应答：页面上有新实例时由它应答
     if (ctx.isInvalid || (settings.enabled && !bundle)) {
       purifier.stop()
+      readme.stop()
       removeMessageListener()
       return
     }
@@ -312,7 +337,8 @@ export default defineContentScript({
     const downloads = createReleaseDownloads(document, {
       active: () => current.enabled && current.downloadCount,
       lang: () => resolveUiLanguage(current.uiLanguage, languages),
-      label: count => message('downloadTimes', { count })
+      label: count => message('downloadTimes', { count }),
+      request: requestReleaseCounts
     })
     // 自动加载：「加载更多」与分页列表的下一页（见 core/auto-load）
     const autoLoader = createAutoLoader(document, {
@@ -326,12 +352,6 @@ export default defineContentScript({
       active: () => current.enabled && current.imagePreview,
       label: key => message(VIEWER_MESSAGES[key]),
       open: url => openInNewTab(url)
-    })
-    // 中文自述文件：存储库首页、目录页的自述文件有中文版时换成中文版（见 core/chinese-readme）
-    const readme = createChineseReadme(document, {
-      active: () => current.enabled && current.chineseReadme,
-      locale: () => resolvePageLocale(current.language, languages),
-      label: key => message(key)
     })
 
     const applySettings = (next: Settings): void => {

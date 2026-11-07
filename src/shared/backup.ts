@@ -1,11 +1,14 @@
 /**
- * 设置备份：设置页顶部的导出、导入（全部），与排除路径、加速源、净化设置、新标签页设置、企业版设置各自的导出、导入（只含该部分）。
+ * 设置备份：设置页顶部的导出、导入（全部），与排除路径、加速源、净化设置、下载次数设置、新标签页设置、企业版设置
+ * 各自的导出、导入（只含该部分）。
  * 文件是同一格式的 JSON：各部分都可缺省，导入时只用当前范围内的部分（在加速源处导入完整备份时只导入加速源）。
  * 导入：设置项按文件覆盖（只覆盖文件中有的项）；排除路径、新标签页的自定义页面、自定义词条、屏蔽规则与现有的合并；
- * 企业版站点要授权，由企业版设置另行处理
+ * 企业版站点要授权，由企业版设置另行处理。
+ * 个人访问令牌只在下载次数设置处导出、导入：全部的导出不含令牌，导入全部时忽略文件中的令牌
  */
 import { mergeEntries, normalizeEntry } from './custom-entries'
 import { normalizeEnterpriseHost } from './enterprise'
+import { normalizeToken } from './github-api'
 import { normalizeRule, ruleKeyOf } from './search-block'
 import {
   DEFAULT_SETTINGS,
@@ -16,8 +19,8 @@ import {
   type Settings
 } from './settings'
 
-/** 备份的范围：全部，或设置页的一部分（排除路径、加速源、净化设置、新标签页设置、企业版设置） */
-export type BackupScope = 'all' | 'excluded' | 'accelerate' | 'purify' | 'new-tab' | 'enterprise'
+/** 备份的范围：全部，或设置页的一部分（排除路径、加速源、净化设置、下载次数设置、新标签页设置、企业版设置） */
+export type BackupScope = 'all' | 'excluded' | 'accelerate' | 'purify' | 'downloads' | 'new-tab' | 'enterprise'
 
 export const BACKUP_FORMAT = 'github-chinese-backup'
 export const BACKUP_VERSION = 1
@@ -28,6 +31,8 @@ export interface BackupData {
   readonly customEntries?: CustomEntries
   readonly searchBlockRules?: readonly string[]
   readonly enterpriseSites?: readonly string[]
+  /** 个人访问令牌（只在下载次数设置的范围内） */
+  readonly githubToken?: string
 }
 
 /** 分类、分类的顺序、加速源与替换原链接：互相关联，文件中有其中一项时一并导入 */
@@ -49,6 +54,7 @@ export const ACCELERATE_KEYS = [
 ] as const satisfies readonly (keyof Settings)[]
 
 const PURIFY_KEYS: readonly (keyof Settings)[] = ['purifySearch', 'purifyBuiltin']
+const DOWNLOADS_KEYS: readonly (keyof Settings)[] = ['downloadCount']
 const EXCLUDED_KEYS: readonly (keyof Settings)[] = ['excludedPaths']
 const NEW_TAB_KEYS: readonly (keyof Settings)[] = ['newTab', 'newTabScopes', 'newTabPaths']
 /** 各范围的设置项；全部为 undefined（取全部设置），企业版设置没有设置项 */
@@ -56,6 +62,7 @@ const SCOPE_KEYS: Readonly<Record<Exclude<BackupScope, 'all'>, readonly (keyof S
   excluded: EXCLUDED_KEYS,
   accelerate: ACCELERATE_KEYS,
   purify: PURIFY_KEYS,
+  downloads: DOWNLOADS_KEYS,
   'new-tab': NEW_TAB_KEYS,
   enterprise: []
 }
@@ -126,29 +133,36 @@ export function parseBackup(text: string): BackupData | undefined {
   }
   if (!isRecord(parsed) || parsed.format !== BACKUP_FORMAT) return undefined
   if (typeof parsed.version !== 'number' || parsed.version > BACKUP_VERSION) return undefined
-  const { settings, customEntries, searchBlockRules, enterpriseSites } = parsed
+  const { settings, customEntries, searchBlockRules, enterpriseSites, githubToken } = parsed
+  const token = typeof githubToken === 'string' ? normalizeToken(githubToken) : undefined
   return {
     ...(isRecord(settings) ? { settings: sanitizeSettingsPart(settings) } : {}),
     ...(isRecord(customEntries) ? { customEntries: sanitizeEntriesPart(customEntries) } : {}),
     ...(Array.isArray(searchBlockRules) ? { searchBlockRules: sanitizeList(searchBlockRules, normalizeRule, ruleKeyOf) } : {}),
-    ...(Array.isArray(enterpriseSites) ? { enterpriseSites: sanitizeList(enterpriseSites, normalizeEnterpriseHost, host => host) } : {})
+    ...(Array.isArray(enterpriseSites) ? { enterpriseSites: sanitizeList(enterpriseSites, normalizeEnterpriseHost, host => host) } : {}),
+    ...(token ? { githubToken: token } : {})
   }
 }
 
-/** 范围内的部分：设置中该范围的项；净化设置另有屏蔽规则，企业版设置只有站点 */
+/** 范围内的部分：设置中该范围的项；净化设置另有屏蔽规则，下载次数设置另有令牌，企业版设置只有站点；全部不含令牌 */
 export function scopeBackup(data: BackupData, scope: BackupScope): BackupData {
-  if (scope === 'all') return data
+  if (scope === 'all') {
+    if (data.githubToken === undefined) return data
+    const { githubToken: _token, ...rest } = data
+    return rest
+  }
   if (scope === 'enterprise') return data.enterpriseSites ? { enterpriseSites: data.enterpriseSites } : {}
   return {
     ...(data.settings ? { settings: pick(data.settings, SCOPE_KEYS[scope]) } : {}),
-    ...(scope === 'purify' && data.searchBlockRules ? { searchBlockRules: data.searchBlockRules } : {})
+    ...(scope === 'purify' && data.searchBlockRules ? { searchBlockRules: data.searchBlockRules } : {}),
+    ...(scope === 'downloads' && data.githubToken ? { githubToken: data.githubToken } : {})
   }
 }
 
 /** 没有可导入的内容 */
 export function isEmptyBackup(data: BackupData): boolean {
   const settings = data.settings ? Object.keys(data.settings).length : 0
-  return settings === 0 && !data.customEntries && !data.searchBlockRules && !data.enterpriseSites
+  return settings === 0 && !data.customEntries && !data.searchBlockRules && !data.enterpriseSites && !data.githubToken
 }
 
 /** 导出的文件内容 */

@@ -290,8 +290,8 @@ export function repositoryName(pathname: string): string | undefined {
   return isSitePath(first) ? undefined : second
 }
 
-/** 页面所在的站点：github 为 github.com 与企业版主站，gist 为代码片段站点，status 为 GitHub 状态页 */
-export type SiteKind = 'github' | 'gist' | 'status'
+/** 页面所在的站点：github 为 github.com 与企业版主站，gist 为代码片段站点，status 为 GitHub 状态页，support 为 GitHub 支持站点 */
+export type SiteKind = 'github' | 'gist' | 'status' | 'support'
 
 export interface PageSite {
   readonly kind: SiteKind
@@ -302,6 +302,8 @@ export interface PageSite {
 const GITHUB_HOST = 'github.com'
 const GIST_HOST = 'gist.github.com'
 const STATUS_HOST = 'www.githubstatus.com'
+/** 支持站点：support.github.com 跳转到 help.github.com */
+const SUPPORT_HOSTS: ReadonlySet<string> = new Set(['help.github.com', 'support.github.com'])
 /** 企业版主站上代码片段页的路径前缀（未开启子域名隔离时） */
 const ENTERPRISE_GIST_PATH_RE = /^\/gist(?=\/|$)/i
 
@@ -313,6 +315,7 @@ export function pageSite(url: Pick<URL, 'hostname' | 'pathname'>): PageSite {
   const host = url.hostname.toLowerCase()
   const { pathname } = url
   if (host === STATUS_HOST) return { kind: 'status', pathname }
+  if (SUPPORT_HOSTS.has(host)) return { kind: 'support', pathname }
   if (host === GITHUB_HOST) return { kind: 'github', pathname }
   if (host === GIST_HOST || host.startsWith('gist.')) return { kind: 'gist', pathname }
   if (ENTERPRISE_GIST_PATH_RE.test(pathname)) return { kind: 'gist', pathname: pathname.replace(ENTERPRISE_GIST_PATH_RE, '') || '/' }
@@ -327,6 +330,7 @@ export function detectPages(url: UrlLike): PageKey[] {
   const site = pageSite(url).kind
   if (site === 'gist') return ['common', 'gist']
   if (site === 'status') return ['common', 'status']
+  if (site === 'support') return ['common', 'support']
 
   const parts = pathSegments(url.pathname)
   const [first = '', second, third = ''] = parts

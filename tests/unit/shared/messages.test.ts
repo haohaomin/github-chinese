@@ -1,10 +1,12 @@
 import {
+  fromReleaseCountsResponse,
   isAcknowledged,
   isBackgroundMessage,
   isContentMessage,
   isContentStatus,
   isFetchedImage,
-  isProbedSources
+  isProbedSources,
+  toReleaseCountsResponse
 } from '../../../src/shared/messages'
 
 const STATUS = {
@@ -130,5 +132,47 @@ describe('isAcknowledged', () => {
     expect(isAcknowledged({ ok: 'true' })).toBe(false)
     expect(isAcknowledged(undefined)).toBe(false)
     expect(isAcknowledged(true)).toBe(false)
+  })
+})
+
+describe('下载次数', () => {
+  const RELEASE = { type: 'gcn:release-counts', owner: 'vuejs', repo: 'core', tag: 'v3.5.0' }
+
+  it('请求：所有者、存储库为合法名称，标签非空且不超过上限', () => {
+    expect(isBackgroundMessage(RELEASE)).toBe(true)
+    expect(isBackgroundMessage({ ...RELEASE, tag: 'release/1.0 中文' })).toBe(true)
+    expect(isBackgroundMessage({ ...RELEASE, owner: '../octocat' })).toBe(false)
+    expect(isBackgroundMessage({ ...RELEASE, repo: 'a'.repeat(101) })).toBe(false)
+    expect(isBackgroundMessage({ ...RELEASE, repo: 1 })).toBe(false)
+    expect(isBackgroundMessage({ ...RELEASE, tag: '' })).toBe(false)
+    expect(isBackgroundMessage({ ...RELEASE, tag: 'a'.repeat(256) })).toBe(false)
+    expect(isBackgroundMessage({ type: 'gcn:release-counts', owner: 'vuejs', repo: 'core' })).toBe(false)
+  })
+
+  it('应答与结果互转', () => {
+    const counts = new Map([['vue.global.js', 3]])
+    for (const result of [
+      { kind: 'ok', counts },
+      { kind: 'ok', counts, limitedUntil: 1_800_000_600_000 },
+      { kind: 'limited', until: 1_800_000_600_000 },
+      { kind: 'failed' }
+    ] as const) {
+      expect(fromReleaseCountsResponse(structuredClone(toReleaseCountsResponse(result)))).toEqual(result)
+    }
+    expect(toReleaseCountsResponse({ kind: 'ok', counts })).toEqual({ ok: true, counts: [['vue.global.js', 3]] })
+    expect(toReleaseCountsResponse({ kind: 'limited', until: 1 })).toEqual({ ok: false, limitedUntil: 1 })
+  })
+
+  it.each([
+    ['不是对象', undefined],
+    ['ok 为 false', { ok: false }],
+    ['重置时间无效', { ok: false, limitedUntil: -1 }],
+    ['counts 不是数组', { ok: true, counts: {} }],
+    ['次数无效', { ok: true, counts: [['a.zip', -1]] }],
+    ['文件名为空', { ok: true, counts: [['', 1]] }],
+    ['条目格式不符', { ok: true, counts: [['a.zip', 1, 2]] }],
+    ['条目过多', { ok: true, counts: Array.from({ length: 1001 }, (_, index) => [`${index}.zip`, 1]) }]
+  ] as const)('应答格式不符（%s）：失败', (_name, value) => {
+    expect(fromReleaseCountsResponse(value)).toEqual({ kind: 'failed' })
   })
 })

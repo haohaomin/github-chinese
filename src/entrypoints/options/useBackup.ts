@@ -16,6 +16,7 @@ import {
   type BackupScope
 } from '../../shared/backup'
 import { enterpriseHosts } from '../../shared/enterprise'
+import { githubTokenItem, normalizeToken } from '../../shared/github-api'
 import {
   getCustomEntries,
   getSearchBlockRules,
@@ -38,6 +39,12 @@ async function grantedHosts(): Promise<readonly string[]> {
   return enterpriseHosts((await browser.permissions.getAll()).origins ?? [])
 }
 
+/** 已保存的令牌（下载次数设置）；没有时不写入文件 */
+async function tokenPart(): Promise<Pick<BackupData, 'githubToken'>> {
+  const token = normalizeToken(await githubTokenItem.getValue())
+  return token ? { githubToken: token } : {}
+}
+
 /** 读取范围内的设置 */
 async function collect(scope: BackupScope): Promise<BackupData> {
   const withSettings = scope !== 'enterprise'
@@ -46,7 +53,8 @@ async function collect(scope: BackupScope): Promise<BackupData> {
     ...(settings ? { settings } : {}),
     ...(scope === 'all' ? { customEntries: await getCustomEntries() } : {}),
     ...(scope === 'all' || scope === 'purify' ? { searchBlockRules: await getSearchBlockRules() } : {}),
-    ...(scope === 'all' || scope === 'enterprise' ? { enterpriseSites: await grantedHosts() } : {})
+    ...(scope === 'all' || scope === 'enterprise' ? { enterpriseSites: await grantedHosts() } : {}),
+    ...(scope === 'downloads' ? await tokenPart() : {})
   }
 }
 
@@ -92,6 +100,7 @@ export function useBackup(): UseBackup {
         const added = data.enterpriseSites.filter(host => !granted.includes(host) && !pending.includes(host))
         if (added.length > 0) await pendingSitesItem.setValue([...pending, ...added])
       }
+      if (data.githubToken) await githubTokenItem.setValue(data.githubToken)
       return true
     } catch {
       return false
