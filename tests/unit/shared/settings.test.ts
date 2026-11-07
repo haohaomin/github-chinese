@@ -233,6 +233,14 @@ describe('自动加载、图片预览、新标签页打开', () => {
   })
 })
 
+describe('中文自述文件', () => {
+  it('默认关闭；保留布尔值，其余用默认值', () => {
+    expect(DEFAULT_SETTINGS.chineseReadme).toBe(false)
+    expect(mergeSettings({ chineseReadme: true })).toEqual({ ...DEFAULT_SETTINGS, chineseReadme: true })
+    expect(mergeSettings({ chineseReadme: 'yes' }).chineseReadme).toBe(false)
+  })
+})
+
 describe('matchesPathPattern', () => {
   it('* 匹配单段，** 匹配任意多段，含下级路径，不分大小写；不以 / 开头的规则无效', () => {
     expect(matchesPathPattern('/vuejs/core/releases', ['/*/*/releases'])).toBe(true)

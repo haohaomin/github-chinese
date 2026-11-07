@@ -8,6 +8,7 @@ export const SHOW_ELEMENT = 0x1
 export const SHOW_TEXT = 0x4
 export const FILTER_ACCEPT = 1
 export const FILTER_REJECT = 2
+export const DOCUMENT_POSITION_FOLLOWING = 0x4
 
 /** GitHub 时间元素：用 Intl 在 shadow DOM 渲染，light DOM 为后备文本 */
 export const TIME_TAGS: ReadonlySet<string> = new Set(['relative-time', 'time-ago', 'local-time', 'time-until'])

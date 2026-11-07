@@ -65,6 +65,8 @@ export interface Settings extends AccelerateSettings {
   readonly newTabScopes: readonly NewTabScope[]
   /** 新标签页打开的自定义页面：这些页面上的链接都在新标签页打开，写法同排除路径 */
   readonly newTabPaths: readonly string[]
+  /** 中文自述文件：存储库首页、目录页的自述文件有中文版时换成中文版（见 core/chinese-readme） */
+  readonly chineseReadme: boolean
 }
 
 /**
@@ -96,6 +98,7 @@ export const DEFAULT_SETTINGS: Settings = {
   newTab: false,
   newTabScopes: DEFAULT_NEW_TAB_SCOPES,
   newTabPaths: [],
+  chineseReadme: false,
   categories: [],
   categoryOrder: [],
   removedCategories: [],
@@ -167,6 +170,7 @@ export function mergeSettings(stored: unknown): Settings {
     newTab: pickBoolean('newTab', DEFAULT_SETTINGS.newTab),
     newTabScopes: sanitizeNewTabScopes(value.newTabScopes),
     newTabPaths: isStringArray(value.newTabPaths) ? value.newTabPaths : DEFAULT_SETTINGS.newTabPaths,
+    chineseReadme: pickBoolean('chineseReadme', DEFAULT_SETTINGS.chineseReadme),
     ...sanitizeAccelerateSettings(value)
   }
   return merged

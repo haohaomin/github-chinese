@@ -361,7 +361,7 @@ describe.skipIf(!App)('弹出页组件', () => {
       mockContent(contentWith())
       const wrapper = await render()
       expect(wrapper.findAll('label').filter(item => item.text() === '启用')).toHaveLength(1)
-      expect(wrapper.findAll('[role="switch"]')).toHaveLength(10)
+      expect(wrapper.findAll('[role="switch"]')).toHaveLength(11)
       expect(wrapper.findAll('[role="combobox"]').map(item => item.attributes('data-test'))).toEqual(['ui-language', 'page-language'])
       // 下拉是自绘的：没有原生 select（其弹出列表的样式改不了）
       expect(wrapper.find('select').exists()).toBe(false)
@@ -377,9 +377,9 @@ describe.skipIf(!App)('弹出页组件', () => {
         wrapper
           .findAll('[role="switch"], [data-test="theme-toggle"], [role="combobox"]')
           .map(item => (item.element as HTMLButtonElement).disabled)
-      expect(disabled()).toEqual(Array.from({ length: 13 }, () => true))
+      expect(disabled()).toEqual(Array.from({ length: 14 }, () => true))
       await settle()
-      expect(disabled()).toEqual(Array.from({ length: 13 }, () => false))
+      expect(disabled()).toEqual(Array.from({ length: 14 }, () => false))
     })
 
     it.each([
@@ -401,14 +401,25 @@ describe.skipIf(!App)('弹出页组件', () => {
   })
 
   describe('常规', () => {
-    it('只有时间本地化、翻译标题、加速下载、净化搜索、自动加载、图片预览、下载文件夹、新标签页打开', async () => {
+    it('只有时间本地化、翻译标题、加速下载、净化搜索、自动加载、图片预览、下载次数、下载文件夹、新标签页打开、中文自述文件', async () => {
       mockContent(contentWith())
       const wrapper = await render()
       expect(
         section(wrapper, '常规')
           .findAll('label')
           .map(item => item.text())
-      ).toEqual(['时间本地化', '翻译标题', '加速下载', '净化搜索', '自动加载', '图片预览', '下载次数', '下载文件夹', '新标签页打开'])
+      ).toEqual([
+        '时间本地化',
+        '翻译标题',
+        '加速下载',
+        '净化搜索',
+        '自动加载',
+        '图片预览',
+        '下载次数',
+        '下载文件夹',
+        '新标签页打开',
+        '中文自述文件'
+      ])
     })
 
     it('下载次数默认关闭，开关即时保存', async () => {
@@ -419,6 +430,17 @@ describe.skipIf(!App)('弹出页组件', () => {
       await toggle.trigger('click')
       await settle()
       expect((await getSettings()).downloadCount).toBe(true)
+      expect(toggle.attributes('aria-checked')).toBe('true')
+    })
+
+    it('中文自述文件默认关闭，开关即时保存', async () => {
+      mockContent(contentWith())
+      const wrapper = await render()
+      const toggle = switchOf(section(wrapper, '常规'), '中文自述文件')
+      expect(toggle.attributes('aria-checked')).toBe('false')
+      await toggle.trigger('click')
+      await settle()
+      expect((await getSettings()).chineseReadme).toBe(true)
       expect(toggle.attributes('aria-checked')).toBe('true')
     })
 
@@ -460,7 +482,7 @@ describe.skipIf(!App)('弹出页组件', () => {
       mockContent(contentWith())
       const wrapper = await render()
       const tiles = (): DOMWrapper<Element>[] => section(wrapper, '常规').findAll('.toggle-grid > .toggle-tile')
-      expect(tiles()).toHaveLength(9)
+      expect(tiles()).toHaveLength(10)
       expect(tiles().every(tile => tile.get('.ui-switch').classes().includes('ui-switch-compact'))).toBe(true)
       const on = (): boolean[] => tiles().map(tile => tile.classes().includes('is-on'))
       const checked = (): boolean[] => tiles().map(tile => tile.get('[role="switch"]').attributes('aria-checked') === 'true')

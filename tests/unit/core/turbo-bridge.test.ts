@@ -1662,6 +1662,7 @@ describe('与控制器一起：排除路径', () => {
         newTab: false,
         newTabScopes: ['external', 'search'],
         newTabPaths: [],
+        chineseReadme: false,
         categories: [],
         categoryOrder: [],
         removedCategories: [],

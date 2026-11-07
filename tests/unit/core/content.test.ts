@@ -45,7 +45,8 @@ const state = vi.hoisted(() => ({
     downloadCount: false,
     newTab: false,
     newTabScopes: ['external', 'search'] as readonly string[],
-    newTabPaths: [] as readonly string[]
+    newTabPaths: [] as readonly string[],
+    chineseReadme: false
   },
   failSettings: false,
   /** 设置后读取设置要等它落定（模拟读存储较慢） */
@@ -284,7 +285,8 @@ beforeEach(() => {
     downloadCount: false,
     newTab: false,
     newTabScopes: ['external', 'search'],
-    newTabPaths: []
+    newTabPaths: [],
+    chineseReadme: false
   }
   locales.load.mockReset()
   locales.load.mockImplementation(async locale => (locale === 'zh-TW' ? TW_BUNDLE : TEST_BUNDLE))
@@ -1773,6 +1775,52 @@ describe('增强功能', () => {
       state.settingsListener?.({ ...state.settings, autoLoadScopes: ['releases'] })
       await flushTasks()
       expect(observed.map(entry => entry.element)).toContain(document.querySelector('.paginate-container'))
+    })
+  })
+
+  describe('中文自述文件', () => {
+    const README_ZH = 'https://github.com/vuejs/core/blob/main/README.zh-CN.md'
+    /** 中文版文件页的页面数据 */
+    const BLOB_DATA = JSON.stringify({
+      payload: { codeViewBlobRoute: { richText: '<article class="markdown-body"><p>中文说明</p></article>' } }
+    })
+    let fetchMock: ReturnType<typeof vi.fn>
+
+    async function settleReadme(): Promise<void> {
+      for (let i = 0; i < 3; i += 1) await flushTasks()
+    }
+
+    beforeEach(() => {
+      fetchMock = vi.fn(async () => Object.defineProperty(new Response(BLOB_DATA, { status: 200 }), 'url', { value: README_ZH }))
+      vi.stubGlobal('fetch', fetchMock)
+      history.replaceState(null, '', '/vuejs/core')
+      document.body.innerHTML =
+        '<div><div itemscope itemtype="https://schema.org/abstract"><nav><a href="#" aria-current="page"><svg class="octicon octicon-book"></svg>README</a></nav></div>' +
+        `<div><article class="markdown-body" itemprop="text"><p><a href="${README_ZH}">简体中文</a></p><p>Sample text</p></article></div></div>`
+    })
+
+    it('开启时换成中文版，提示用扩展界面语言；关闭功能、失效时还原', async () => {
+      state.settings = { ...state.settings, chineseReadme: true, uiLanguage: 'zh-CN' }
+      await start()
+      await settleReadme()
+      expect(fetchMock).toHaveBeenCalledExactlyOnceWith(README_ZH, { credentials: 'same-origin', headers: { Accept: 'application/json' } })
+      expect($('[data-gcn-readme="content"]').textContent).toBe('中文说明')
+      expect($('[data-gcn-readme="notice"] button').textContent).toBe('显示原文')
+      state.settingsListener?.({ ...state.settings, chineseReadme: false })
+      expect(document.querySelector('[data-gcn-readme]')).toBeNull()
+      state.settingsListener?.({ ...state.settings, chineseReadme: true })
+      await settleReadme()
+      expect(document.querySelector('[data-gcn-readme="content"]')).not.toBeNull()
+      context?.invalidate()
+      expect(document.querySelector('[data-gcn-readme]')).toBeNull()
+      expect($('article[itemprop="text"]').hasAttribute('data-gcn-readme-native')).toBe(false)
+    })
+
+    it('未开启时不取', async () => {
+      await start()
+      await settleReadme()
+      expect(fetchMock).not.toHaveBeenCalled()
+      expect(document.querySelector('[data-gcn-readme]')).toBeNull()
     })
   })
 })
