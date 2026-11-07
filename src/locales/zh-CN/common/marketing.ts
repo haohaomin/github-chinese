@@ -177,6 +177,9 @@ export default {
     // 新版导航（信息架构改版）。分组标题 Build 与 Actions 作业名等用户内容同形，不收录
     Products: '产品',
     'AI coding agent for tasks, projects and automated work': '面向任务、项目和自动化工作的 AI 编码代理',
+    'AI coding agent for tasks, projects, and automated work': '面向任务、项目和自动化工作的 AI 编码代理',
+    'Developer articles': '开发人员文章',
+    'Copilot for business': 'Copilot 商业版',
     'Cloud development environments': '云端开发环境',
     'Repository hosting, code review, and collaboration': '存储库托管、代码审查与协作',
     'Build & Ship': '构建与交付',

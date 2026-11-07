@@ -104,6 +104,8 @@ export default {
   otherCategory: 'Other',
   customCategory: 'Custom',
   downloadFolder: 'Download folder',
+  downloadCount: 'Download counts',
+  downloadTimes: '{count} downloads',
   directDownload: 'Direct',
   packing: 'Packing',
   completed: 'Done',

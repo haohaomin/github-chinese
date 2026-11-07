@@ -242,7 +242,9 @@ export default {
     'Collapse comments': '折叠评论',
     'Expand comments': '展开评论',
     'Selection Cleared': '已清除选择',
-    'Return to code': '返回代码'
+    'Return to code': '返回代码',
+    // 新版差异全部加载、滚动到底时（两只章鱼猫击掌动画下方）
+    'You made it to the end!': '你已看到最后！'
   },
   scoped: {
     // 工具栏与面板（短词）

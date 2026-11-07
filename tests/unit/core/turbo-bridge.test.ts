@@ -1658,6 +1658,7 @@ describe('与控制器一起：排除路径', () => {
         autoLoadScopes: DEFAULT_AUTO_LOAD_SCOPES,
         imagePreview: false,
         folderDownload: true,
+        downloadCount: false,
         newTab: false,
         newTabScopes: ['external', 'search'],
         newTabPaths: [],

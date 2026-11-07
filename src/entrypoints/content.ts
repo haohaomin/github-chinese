@@ -12,6 +12,7 @@ import { createImagePreview } from '../core/image-preview'
 import type { ViewerLabel } from '../core/image-viewer'
 import { createInstanceMark } from '../core/instance-mark'
 import { createNewTabClickHandler } from '../core/new-tab'
+import { createReleaseDownloads } from '../core/release-downloads'
 import { createSearchPurifier } from '../core/search-purify'
 import { TURBO_RESET_EVENT, TURBO_REVISIT_EVENT, TURBO_TRANSLATING_EVENT } from '../core/turbo-bridge'
 import type { LocaleBundle } from '../core/types'
@@ -306,6 +307,12 @@ export default defineContentScript({
       health: sourceHealth,
       label: key => message(key)
     })
+    // 下载次数：发行版附件行显示下载次数（见 core/release-downloads）
+    const downloads = createReleaseDownloads(document, {
+      active: () => current.enabled && current.downloadCount,
+      lang: () => resolveUiLanguage(current.uiLanguage, languages),
+      label: count => message('downloadTimes', { count })
+    })
     // 自动加载：「加载更多」与分页列表的下一页（见 core/auto-load）
     const autoLoader = createAutoLoader(document, {
       active: () => current.enabled && current.autoLoad,
@@ -331,6 +338,7 @@ export default defineContentScript({
       cloneUrls.refresh()
       accelerateOptions.refresh()
       folders.refresh()
+      downloads.refresh()
       autoLoader.refresh()
       purifier.refresh()
       if (!next.enabled || !next.imagePreview) preview.close()
@@ -344,6 +352,7 @@ export default defineContentScript({
       const next = await pageLanguageEnvironment()
       if (request !== languagesRequest || ctx.isInvalid) return
       languages = next
+      downloads.refresh()
       requestLocale()
     }
 
@@ -454,6 +463,7 @@ export default defineContentScript({
       cloneUrls.stop()
       accelerateOptions.stop()
       folders.stop()
+      downloads.stop()
       autoLoader.stop()
       preview.close()
       purifier.stop()

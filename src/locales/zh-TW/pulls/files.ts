@@ -243,7 +243,9 @@ export default {
     'Collapse comments': '摺疊留言',
     'Expand comments': '展開留言',
     'Selection Cleared': '已清除選取範圍',
-    'Return to code': '返回程式碼'
+    'Return to code': '返回程式碼',
+    // 新版差异全部加载、滚动到底时（两只章鱼猫击掌动画下方）
+    'You made it to the end!': '你已經看到最後了！'
   },
   scoped: {
     // 工具栏与面板（短词）

@@ -53,6 +53,7 @@ export const DEFAULT_SETTINGS: Settings = {
   autoLoadScopes: DEFAULT_AUTO_LOAD_SCOPES,
   imagePreview: false,
   folderDownload: true,
+  downloadCount: false,
   newTab: false,
   newTabScopes: ['external', 'search'],
   newTabPaths: [],

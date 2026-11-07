@@ -36,6 +36,7 @@
     { key: 'purifySearch', label: 'purifySearch' },
     { key: 'autoLoad', label: 'autoLoad' },
     { key: 'imagePreview', label: 'imagePreview' },
+    { key: 'downloadCount', label: 'downloadCount' },
     { key: 'folderDownload', label: 'downloadFolder' },
     { key: 'newTab', label: 'newTab' }
   ]

@@ -77,12 +77,13 @@ describe('mergeSettings', () => {
 })
 
 describe('加速设置', () => {
-  it('默认关闭，不替换原链接，没有改动；下载文件夹默认开启', () => {
+  it('默认关闭，不替换原链接，没有改动；下载文件夹默认开启，下载次数默认关闭', () => {
     expect(DEFAULT_SETTINGS).toMatchObject({
       accelerate: false,
       accelerateImages: false,
       failover: false,
       folderDownload: true,
+      downloadCount: false,
       categories: [],
       removedCategories: [],
       customSources: [],
@@ -99,6 +100,7 @@ describe('加速设置', () => {
         accelerateImages: true,
         failover: 'yes',
         folderDownload: false,
+        downloadCount: true,
         categories: [{ id: 'category-1', name: 'Team' }, { id: 'category-2' }],
         removedCategories: ['wget-la', 'category-1'],
         customSources: [mirror, { id: 'custom-2', name: 'HTTP', template: 'http://insecure.example/{url}' }],
@@ -110,6 +112,7 @@ describe('加速设置', () => {
       accelerate: true,
       accelerateImages: true,
       folderDownload: false,
+      downloadCount: true,
       categories: [{ id: 'category-1', name: 'Team' }],
       removedCategories: ['wget-la'],
       customSources: [mirror],
@@ -120,6 +123,7 @@ describe('加速设置', () => {
       mergeSettings({
         accelerateImages: 'yes',
         folderDownload: 0,
+        downloadCount: 'yes',
         categories: 'x',
         removedCategories: {},
         customSources: 'x',

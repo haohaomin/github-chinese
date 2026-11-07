@@ -57,6 +57,8 @@ export interface Settings extends AccelerateSettings {
   readonly imagePreview: boolean
   /** 下载文件夹：目录页「…」菜单加下载文件夹（见 core/folder-download） */
   readonly folderDownload: boolean
+  /** 下载次数：发行版附件行显示下载次数，取自 GitHub REST API（见 core/release-downloads） */
+  readonly downloadCount: boolean
   /** 新标签页打开：总开关（范围见 newTabScopes、newTabPaths，处理见 core/new-tab） */
   readonly newTab: boolean
   /** 新标签页打开的范围（见 shared/new-tab） */
@@ -90,6 +92,7 @@ export const DEFAULT_SETTINGS: Settings = {
   autoLoadScopes: DEFAULT_AUTO_LOAD_SCOPES,
   imagePreview: false,
   folderDownload: true,
+  downloadCount: false,
   newTab: false,
   newTabScopes: DEFAULT_NEW_TAB_SCOPES,
   newTabPaths: [],
@@ -160,6 +163,7 @@ export function mergeSettings(stored: unknown): Settings {
     autoLoadScopes: sanitizeAutoLoadScopes(value.autoLoadScopes),
     imagePreview: pickBoolean('imagePreview', DEFAULT_SETTINGS.imagePreview),
     folderDownload: pickBoolean('folderDownload', DEFAULT_SETTINGS.folderDownload),
+    downloadCount: pickBoolean('downloadCount', DEFAULT_SETTINGS.downloadCount),
     newTab: pickBoolean('newTab', DEFAULT_SETTINGS.newTab),
     newTabScopes: sanitizeNewTabScopes(value.newTabScopes),
     newTabPaths: isStringArray(value.newTabPaths) ? value.newTabPaths : DEFAULT_SETTINGS.newTabPaths,

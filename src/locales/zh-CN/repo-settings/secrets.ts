@@ -75,7 +75,10 @@ export default {
     'to this repository? Deploy keys always have pull access.': '到此存储库？部署密钥始终拥有拉取权限。',
     'Add key': '添加密钥',
 
-    // 自定义属性
+    // 自定义属性（新版页面标题与说明在前）
+    'Repository custom properties': '存储库自定义属性',
+    'Add metadata to your repositories, such as compliance frameworks, data sensitivity, or project details.':
+      '为存储库添加元数据，如合规框架、数据敏感性或项目详细信息。',
     'Custom properties allow you to decorate your repository with information such as compliance frameworks, data sensitivity, or project details.':
       '自定义属性可为存储库添加合规框架、数据敏感性或项目详细信息等内容。',
     'No custom properties have been set for this repository': '此存储库尚未设置自定义属性',

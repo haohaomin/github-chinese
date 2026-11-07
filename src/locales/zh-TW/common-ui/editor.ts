@@ -52,8 +52,10 @@ export default {
     'Error rendering preview': '轉譯預覽時發生錯誤',
     'Markdown preview unavailable': 'Markdown 預覽無法使用',
 
-    // 工具栏
+    // 工具栏；窄时收起的按钮在溢出菜单里（Primer ActionBar：More <名称> items）
     'Formatting tools': '格式設定工具',
+    'Markdown toolbar': 'Markdown 工具列',
+    'More Markdown toolbar items': '更多 Markdown 工具列項目',
     Heading: '標題',
     'Increase heading level': '提高標題層級',
     'Decrease heading level': '降低標題層級',

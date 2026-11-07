@@ -42,6 +42,7 @@ const state = vi.hoisted(() => ({
     autoLoadScopes: [] as readonly string[],
     imagePreview: false,
     folderDownload: true,
+    downloadCount: false,
     newTab: false,
     newTabScopes: ['external', 'search'] as readonly string[],
     newTabPaths: [] as readonly string[]
@@ -280,6 +281,7 @@ beforeEach(() => {
     autoLoadScopes: DEFAULT_AUTO_LOAD_SCOPES,
     imagePreview: false,
     folderDownload: true,
+    downloadCount: false,
     newTab: false,
     newTabScopes: ['external', 'search'],
     newTabPaths: []

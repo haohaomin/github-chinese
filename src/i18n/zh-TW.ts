@@ -104,6 +104,8 @@ export default {
   otherCategory: '其他',
   customCategory: '自訂',
   downloadFolder: '下載資料夾',
+  downloadCount: '下載次數',
+  downloadTimes: '下載 {count} 次',
   directDownload: '直連',
   packing: '打包中',
   completed: '已完成',

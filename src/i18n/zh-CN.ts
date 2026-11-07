@@ -102,6 +102,8 @@ const zhCN = {
   otherCategory: '其他',
   customCategory: '自定义',
   downloadFolder: '下载文件夹',
+  downloadCount: '下载次数',
+  downloadTimes: '下载 {count} 次',
   directDownload: '直连',
   packing: '打包中',
   completed: '已完成',
