@@ -6,14 +6,15 @@ import { BACKUP_FORMAT, BACKUP_VERSION } from '../../../src/shared/backup'
 import { FEEDBACK_URL } from '../../../src/shared/extension'
 import { githubTokenItem, NEW_TOKEN_URL } from '../../../src/shared/github-api'
 import { getSettings, settingsItem } from '../../../src/shared/settings'
-import { mockVersion, seedChineseUi, settle, ZH_SETTINGS } from './helpers'
+import { mockVersion, openOptionsTab, optionsPanel, seedChineseUi, settle, ZH_SETTINGS } from './helpers'
 import { importSfc, required } from './sfc'
 
 const App = await importSfc(() => import('../../../src/entrypoints/options/App.vue'))
 
 enableAutoUnmount(afterEach)
 
-const TAB = '下载次数设置'
+/** 增强设置里的子标签 */
+const TAB = '下载次数'
 const RATE_LIMIT = 'https://api.github.com/rate_limit'
 /** 占位令牌（运行时拼出，不是真实令牌） */
 const TOKEN = `github_pat_${'x'.repeat(82)}`
@@ -30,22 +31,13 @@ async function render(): Promise<VueWrapper> {
   return wrapper
 }
 
-function pageTab(wrapper: VueWrapper, label: string): DOMWrapper<Element> {
-  const found = wrapper
-    .get('[role="tablist"]')
-    .findAll('[role="tab"]')
-    .find(item => item.text() === label)
-  if (!found) throw new Error(`未找到标签：${label}`)
-  return found
-}
-
 function panel(wrapper: VueWrapper): DOMWrapper<Element> {
-  return wrapper.get(`#${CSS.escape(pageTab(wrapper, TAB).attributes('aria-controls') ?? '')}`) as DOMWrapper<Element>
+  return optionsPanel(wrapper, TAB)
 }
 
+/** 切到标签（默认下载次数：先切到增强设置） */
 async function openTab(wrapper: VueWrapper, label = TAB): Promise<void> {
-  await pageTab(wrapper, label).trigger('click')
-  await settle()
+  await openOptionsTab(wrapper, label)
 }
 
 function tokenInput(wrapper: VueWrapper): DOMWrapper<HTMLInputElement> {
@@ -142,7 +134,7 @@ async function readDownload(download: Download | undefined): Promise<Record<stri
   return JSON.parse(await download.blob.text()) as Record<string, unknown>
 }
 
-describe.skipIf(!App)('设置页：下载次数设置', () => {
+describe.skipIf(!App)('设置页：下载次数', () => {
   beforeEach(async () => {
     fakeBrowser.reset()
     await seedChineseUi()
@@ -230,11 +222,13 @@ describe.skipIf(!App)('设置页：下载次数设置', () => {
     expect(toggle.attributes('aria-checked')).toBe('true')
   })
 
-  it('标签页显示时才查询限额（每次显示都查）；没有令牌时不带 Authorization', async () => {
+  it('下载次数显示时才查询限额（每次显示都查：切到其他标签页、其他子标签再回来也查）；没有令牌时不带 Authorization', async () => {
     const fetch = mockRateLimit(() => rate(60, 57))
     const wrapper = await render()
     expect(rateCalls(fetch)).toHaveLength(0)
     expect(status(wrapper)).toBe('')
+    await openTab(wrapper, '增强设置')
+    expect(rateCalls(fetch)).toHaveLength(0)
     await openTab(wrapper)
     expect(status(wrapper)).toBe('剩余额度 57 / 60')
     const [, init] = rateCalls(fetch)[0] as [string, RequestInit]
@@ -242,6 +236,10 @@ describe.skipIf(!App)('设置页：下载次数设置', () => {
     await openTab(wrapper, '汉化设置')
     await openTab(wrapper)
     expect(rateCalls(fetch)).toHaveLength(2)
+    await openTab(wrapper, '自动加载')
+    expect(rateCalls(fetch)).toHaveLength(2)
+    await openTab(wrapper)
+    expect(rateCalls(fetch)).toHaveLength(3)
   })
 
   it('填写令牌：失去焦点时保存到 storage.local（去掉首尾空白），按新令牌查询限额', async () => {

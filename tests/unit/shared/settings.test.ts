@@ -241,6 +241,27 @@ describe('中文自述文件', () => {
   })
 })
 
+describe('更新时间着色', () => {
+  it('默认关闭；保留布尔值，其余用默认值', () => {
+    expect(DEFAULT_SETTINGS.freshness).toBe(false)
+    expect(mergeSettings({ freshness: true })).toEqual({ ...DEFAULT_SETTINGS, freshness: true })
+    expect(mergeSettings({ freshness: 1 }).freshness).toBe(false)
+  })
+
+  it('颜色：默认都为空；存储值逐项校验（见 shared/freshness）', () => {
+    expect(DEFAULT_SETTINGS.freshnessColors).toEqual({
+      fresh: { light: '', dark: '' },
+      recent: { light: '', dark: '' },
+      stale: { light: '', dark: '' }
+    })
+    expect(mergeSettings({ freshnessColors: { fresh: { light: '#CF222E', dark: 'red' } } }).freshnessColors).toEqual({
+      ...DEFAULT_SETTINGS.freshnessColors,
+      fresh: { light: '#cf222e', dark: '' }
+    })
+    expect(mergeSettings({ freshnessColors: 'Sample text' }).freshnessColors).toEqual(DEFAULT_SETTINGS.freshnessColors)
+  })
+})
+
 describe('matchesPathPattern', () => {
   it('* 匹配单段，** 匹配任意多段，含下级路径，不分大小写；不以 / 开头的规则无效', () => {
     expect(matchesPathPattern('/vuejs/core/releases', ['/*/*/releases'])).toBe(true)

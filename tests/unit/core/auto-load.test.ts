@@ -8,6 +8,7 @@ import {
   MAX_AUTO_PAGES,
   PAGE_NAV_ATTRIBUTE,
   RECLICK_DELAY_MS,
+  TIMELINE_LOAD_MORE_SELECTOR,
   type AutoLoader
 } from '../../../src/core/auto-load'
 import { PAGE_BREAK_CLASS } from '../../../src/core/page-break'
@@ -33,10 +34,14 @@ function releasesPage(versions: readonly string[], page: number, next?: string):
 /** 接近视口的回调：测试里手动触发 */
 const watchers = new Map<Element, () => void>()
 const cancelled: Element[] = []
-function watch(element: Element, onNear: () => void): () => void {
+/** 按「进入视口」监听的元素 */
+const visibleWatched = new Set<Element>()
+function watch(element: Element, onNear: () => void, visible = false): () => void {
   watchers.set(element, onNear)
+  if (visible) visibleWatched.add(element)
   return () => {
     watchers.delete(element)
+    visibleWatched.delete(element)
     cancelled.push(element)
   }
 }
@@ -102,6 +107,7 @@ afterEach(() => {
   loader?.stop()
   loader = undefined
   watchers.clear()
+  visibleWatched.clear()
   cancelled.length = 0
   fetchPage.mockClear()
   onError.mockClear()
@@ -294,6 +300,137 @@ describe('「加载更多」按钮', () => {
       await flush()
       expect(scrollTo).not.toHaveBeenCalled()
     })
+  })
+})
+
+describe('贡献动态（个人主页的 Show more activity）', () => {
+  /** 页面滚动位置 */
+  let scrollY = 0
+  /** 页面高度：大于视口高度时可以滚动 */
+  let pageHeight = 5000
+
+  beforeEach(() => {
+    history.replaceState(null, '', '/octocat')
+    scrollY = 0
+    pageHeight = 5000
+    vi.spyOn(window, 'scrollY', 'get').mockImplementation(() => scrollY)
+    vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(720)
+    vi.spyOn(document.documentElement, 'scrollHeight', 'get').mockImplementation(() => pageHeight)
+  })
+
+  /** 同 GitHub：贡献动态末尾的表单；top 为按钮在视口中的位置 */
+  function addTimelineButton(top = 600): HTMLButtonElement {
+    const form = document.createElement('form')
+    form.className = 'ajax-pagination-form js-ajax-pagination js-show-more-timeline-form'
+    const button = document.createElement('button')
+    button.type = 'submit'
+    button.textContent = 'Show more activity'
+    form.append(button)
+    document.body.append(form)
+    placeAt(button, top)
+    return button
+  }
+
+  function placeAt(button: HTMLButtonElement, top: number): void {
+    vi.spyOn(button, 'getBoundingClientRect').mockReturnValue(new DOMRect(0, top, 200, 32))
+  }
+
+  function scrollTo(y: number): void {
+    scrollY = y
+    window.dispatchEvent(new Event('scroll'))
+  }
+
+  /** 每次点击都换上下一个月的按钮（同 GitHub：表单换成加载的内容与新的表单） */
+  function clicksOf(...buttons: HTMLButtonElement[]): ReturnType<typeof vi.fn> {
+    const onClick = vi.fn()
+    for (const button of buttons) button.addEventListener('click', onClick)
+    return onClick
+  }
+
+  it('进入视口才点（不看视口下方一屏）；其他「加载更多」照旧', () => {
+    const timeline = addTimelineButton()
+    const form = document.createElement('form')
+    form.className = 'ajax-pagination-form js-ajax-pagination'
+    const other = document.createElement('button')
+    form.append(other)
+    document.body.append(form)
+    start()
+    expect(timeline.matches(TIMELINE_LOAD_MORE_SELECTOR)).toBe(true)
+    expect(visibleWatched.has(timeline)).toBe(true)
+    expect(visibleWatched.has(other)).toBe(false)
+  })
+
+  it('点过之后：页面没往下滚就不再点；往下滚过上次点击的位置、按钮在视口里时再点', async () => {
+    const first = addTimelineButton()
+    start()
+    near(first)
+    const second = addTimelineButton(650)
+    const onClick = clicksOf(first, second)
+    await flush()
+    near(second)
+    expect(onClick).not.toHaveBeenCalled()
+    scrollTo(0)
+    expect(onClick).not.toHaveBeenCalled()
+    scrollTo(40)
+    expect(onClick).toHaveBeenCalledOnce()
+    expect(cancelled).toContain(second)
+  })
+
+  it('往下滚了但按钮不在视口里：不点，回到视口时点；往上滚不算', async () => {
+    const first = addTimelineButton()
+    start()
+    scrollY = 300
+    near(first)
+    const second = addTimelineButton(900)
+    const onClick = clicksOf(second)
+    await flush()
+    near(second)
+    scrollTo(200)
+    placeAt(second, 500)
+    scrollTo(250)
+    expect(onClick).not.toHaveBeenCalled()
+    placeAt(second, 900)
+    scrollTo(320)
+    expect(onClick).not.toHaveBeenCalled()
+    near(second)
+    expect(onClick).toHaveBeenCalledOnce()
+  })
+
+  it('页面不能滚动：不必滚动', async () => {
+    pageHeight = 700
+    const first = addTimelineButton()
+    start()
+    near(first)
+    const second = addTimelineButton()
+    const onClick = clicksOf(second)
+    await flush()
+    near(second)
+    expect(onClick).toHaveBeenCalledOnce()
+  })
+
+  it('换了路径（软导航到别的个人主页）：重新开始', async () => {
+    const first = addTimelineButton()
+    start()
+    near(first)
+    history.replaceState(null, '', '/vuejs')
+    const next = addTimelineButton()
+    const onClick = clicksOf(next)
+    loader!.refresh()
+    near(next)
+    expect(onClick).toHaveBeenCalledOnce()
+  })
+
+  it('停止后不再响应滚动', async () => {
+    const first = addTimelineButton()
+    start()
+    near(first)
+    const second = addTimelineButton()
+    const onClick = clicksOf(second)
+    await flush()
+    near(second)
+    loader!.stop()
+    scrollTo(100)
+    expect(onClick).not.toHaveBeenCalled()
   })
 })
 

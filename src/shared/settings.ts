@@ -1,6 +1,7 @@
 import { storage } from 'wxt/utils/storage'
 import { sanitizeAccelerateSettings, type AccelerateSettings } from './accelerate-categories'
 import { DEFAULT_AUTO_LOAD_SCOPES, sanitizeAutoLoadScopes, type AutoLoadScope } from './auto-load'
+import { DEFAULT_FRESHNESS_COLORS, sanitizeFreshnessColors, type FreshnessColors } from './freshness'
 import { isPageLocalePreference, isUiLanguagePreference, type PageLocalePreference, type UiLanguagePreference } from './locale'
 import { DEFAULT_NEW_TAB_SCOPES, sanitizeNewTabScopes, type NewTabScope } from './new-tab'
 import { DEFAULT_CUSTOM_TIME_FORMAT, isTimeFormatMode, sanitizeTimeFormat, type TimeFormatMode } from './time-format'
@@ -67,6 +68,10 @@ export interface Settings extends AccelerateSettings {
   readonly newTabPaths: readonly string[]
   /** 中文自述文件：存储库首页、目录页的自述文件有中文版时换成中文版（见 core/chinese-readme） */
   readonly chineseReadme: boolean
+  /** 更新时间着色：文件列表与最近提交的时间按距今远近改颜色（见 core/freshness） */
+  readonly freshness: boolean
+  /** 更新时间着色的颜色：各时段在 GitHub 浅色、深色主题下的颜色，空为默认（见 shared/freshness） */
+  readonly freshnessColors: FreshnessColors
 }
 
 /**
@@ -99,6 +104,8 @@ export const DEFAULT_SETTINGS: Settings = {
   newTabScopes: DEFAULT_NEW_TAB_SCOPES,
   newTabPaths: [],
   chineseReadme: false,
+  freshness: false,
+  freshnessColors: DEFAULT_FRESHNESS_COLORS,
   categories: [],
   categoryOrder: [],
   removedCategories: [],
@@ -171,6 +178,8 @@ export function mergeSettings(stored: unknown): Settings {
     newTabScopes: sanitizeNewTabScopes(value.newTabScopes),
     newTabPaths: isStringArray(value.newTabPaths) ? value.newTabPaths : DEFAULT_SETTINGS.newTabPaths,
     chineseReadme: pickBoolean('chineseReadme', DEFAULT_SETTINGS.chineseReadme),
+    freshness: pickBoolean('freshness', DEFAULT_SETTINGS.freshness),
+    freshnessColors: sanitizeFreshnessColors(value.freshnessColors),
     ...sanitizeAccelerateSettings(value)
   }
   return merged

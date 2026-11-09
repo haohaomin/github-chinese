@@ -1,6 +1,6 @@
 {
   "name": "github-chinese",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "private": true,
   "type": "module",
   "description": "GitHub 界面中文化浏览器扩展（Chrome / Edge / Firefox / Safari）",

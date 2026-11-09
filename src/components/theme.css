@@ -21,7 +21,14 @@
   --gcn-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --gcn-duration-fast: 80ms;
   --gcn-duration-base: 200ms;
+}
 
+/*
+ * 颜色变量：light-dark() 随 color-scheme 取浅色或深色值，在声明变量的元素上算出（Chromium）。
+ * 局部固定外观的区域（data-gcn-scheme，如设置页按 GitHub 浅色、深色主题显示的两组颜色）在该元素上重新声明
+ */
+:root,
+[data-gcn-scheme] {
   /* 文字与背景 */
   --gcn-fg: light-dark(#1f2328, #f0f6fc);
   --gcn-fg-muted: light-dark(#59636e, #9198a1);
@@ -100,8 +107,18 @@
   color-scheme: dark;
 }
 
+/* 局部固定的外观：区域内的控件也按该外观显示 */
+[data-gcn-scheme='light'] {
+  color-scheme: light;
+}
+
+[data-gcn-scheme='dark'] {
+  color-scheme: dark;
+}
+
 /* 浏览器自带的表面（选中文字、原生控件）也取主题色；滚动条见下方 */
-:root {
+:root,
+[data-gcn-scheme] {
   accent-color: var(--gcn-accent);
 }
 

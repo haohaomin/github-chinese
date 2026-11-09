@@ -127,7 +127,7 @@ describe('设置备份', () => {
       })
     })
 
-    it('新标签页设置：开关、范围与自定义页面', () => {
+    it('新标签页打开：开关、范围与自定义页面', () => {
       const withNewTab: BackupData = {
         ...data,
         settings: { ...data.settings, newTab: true, newTabScopes: ['search'], newTabPaths: ['/*/*/releases'] }
@@ -227,7 +227,7 @@ describe('设置备份', () => {
   })
 })
 
-describe('下载次数设置的备份（令牌）', () => {
+describe('下载次数的备份（令牌）', () => {
   /** 占位令牌（运行时拼出，不是真实令牌） */
   const TOKEN = `ghp_${'x'.repeat(36)}`
 
@@ -244,7 +244,7 @@ describe('下载次数设置的备份（令牌）', () => {
     expect(parseBackup(file({ githubToken: 42 }))).toEqual({})
   })
 
-  it('范围：下载次数设置只取开关与令牌；全部不含令牌；其他范围不含令牌', () => {
+  it('范围：下载次数只取开关与令牌；全部不含令牌；其他范围不含令牌', () => {
     const data: BackupData = { settings: { downloadCount: true, accelerate: true }, githubToken: TOKEN, customEntries: { Code: '代码' } }
     expect(scopeBackup(data, 'downloads')).toEqual({ settings: { downloadCount: true }, githubToken: TOKEN })
     expect(scopeBackup(data, 'all')).toEqual({ settings: { downloadCount: true, accelerate: true }, customEntries: { Code: '代码' } })

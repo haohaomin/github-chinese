@@ -34,9 +34,14 @@
         </template>
         <template #accelerate><AccelerateSection /></template>
         <template #purify><SearchBlockSection /></template>
-        <template #auto-load><AutoLoadSection /></template>
-        <template #downloads><DownloadCountSection :active="tab === 'downloads'" /></template>
-        <template #new-tab><NewTabSection /></template>
+        <template #enhance>
+          <UiTabs v-model="enhanceTab" :tabs="enhanceTabs" :label="t('enhanceSection')" variant="pill">
+            <template #auto-load><AutoLoadSection /></template>
+            <template #downloads><DownloadCountSection :active="tab === 'enhance' && enhanceTab === 'downloads'" /></template>
+            <template #new-tab><NewTabSection /></template>
+            <template #freshness><FreshnessSection /></template>
+          </UiTabs>
+        </template>
         <template #enterprise><EnterpriseSection /></template>
       </UiTabs>
 
@@ -74,6 +79,7 @@
   import DownloadCountSection from './DownloadCountSection.vue'
   import EnterpriseSection from './EnterpriseSection.vue'
   import ExcludedPathsSection from './ExcludedPathsSection.vue'
+  import FreshnessSection from './FreshnessSection.vue'
   import NewTabSection from './NewTabSection.vue'
   import SearchBlockSection from './SearchBlockSection.vue'
   import TimeFormatSection from './TimeFormatSection.vue'
@@ -85,33 +91,47 @@
   /** 显示的存储库地址：省略协议 */
   const REPOSITORY_LABEL = REPOSITORY_URL.replace(/^https:\/\//, '')
 
-  /**
-   * 按功能分标签页：汉化（排除路径；自定义词库、内置词库分两个标签）、加速、净化（搜索结果）、自动加载、
-   * 下载次数（个人访问令牌）、新标签页打开（图片预览只在弹出页开关）、企业版站点。值是 UiTabs 的插槽名
-   */
-  const TABS: readonly { readonly value: string; readonly label: MessageKey }[] = [
+  /** 标签：值是 UiTabs 的插槽名，文字取自界面文案 */
+  interface TabDef {
+    readonly value: string
+    readonly label: MessageKey
+  }
+
+  /** 按功能分标签页：汉化、加速、净化（搜索结果）、增强、企业版站点。值是 UiTabs 的插槽名 */
+  const TABS: readonly TabDef[] = [
     { value: 'translation', label: 'translationSection' },
     { value: 'accelerate', label: 'accelerateSection' },
     { value: 'purify', label: 'purifySection' },
-    { value: 'auto-load', label: 'autoLoadSection' },
-    { value: 'downloads', label: 'downloadCountSection' },
-    { value: 'new-tab', label: 'newTabSection' },
+    { value: 'enhance', label: 'enhanceSection' },
     { value: 'enterprise', label: 'enterpriseSection' }
   ]
   /** 汉化设置里的词库：自定义词库、内置词库 */
-  const DICTIONARY_TABS: readonly { readonly value: string; readonly label: MessageKey }[] = [
+  const DICTIONARY_TABS: readonly TabDef[] = [
     { value: 'custom', label: 'customEntries' },
     { value: 'builtin', label: 'builtinDictionary' }
+  ]
+  /**
+   * 增强设置里的各功能：自动加载、下载次数（个人访问令牌）、新标签页打开、更新时间着色（颜色）；
+   * 图片预览、下载文件夹、中文自述文件只在弹出页开关
+   */
+  const ENHANCE_TABS: readonly TabDef[] = [
+    { value: 'auto-load', label: 'autoLoad' },
+    { value: 'downloads', label: 'downloadCount' },
+    { value: 'new-tab', label: 'newTab' },
+    { value: 'freshness', label: 'freshness' }
   ]
 
   useUiPreferencesSync()
   const { t } = useI18n()
   const version = getExtensionVersion()
   const { exportScope, importScope } = useBackup()
+  const labelled = (defs: readonly TabDef[]): UiTab[] => defs.map(({ value, label }) => ({ value, label: t(label) }))
   const tab = ref('translation')
-  const tabs = computed<UiTab[]>(() => TABS.map(({ value, label }) => ({ value, label: t(label) })))
+  const tabs = computed(() => labelled(TABS))
   const dictionaryTab = ref('custom')
-  const dictionaryTabs = computed<UiTab[]>(() => DICTIONARY_TABS.map(({ value, label }) => ({ value, label: t(label) })))
+  const dictionaryTabs = computed(() => labelled(DICTIONARY_TABS))
+  const enhanceTab = ref('auto-load')
+  const enhanceTabs = computed(() => labelled(ENHANCE_TABS))
 </script>
 
 <style scoped>

@@ -90,10 +90,10 @@
   import { useSettingsSave } from './useSettingsSave'
 
   /**
-   * 下载次数设置：开关、说明（次数来源、更新、限额、令牌的用处）、个人访问令牌（存 storage.local，见 shared/github-api）、
+   * 下载次数（增强设置里的标签）：开关、说明（次数来源、更新、限额、令牌的用处）、个人访问令牌（存 storage.local，见 shared/github-api）、
    * 创建令牌的步骤、隐私说明。
    * 令牌在失去焦点、按 Enter 时保存；格式不符时不保存。
-   * 标签页显示时查询当前的 API 限额（不计入限额）：没有令牌时为每个 IP 的额度，令牌无效时提示
+   * 显示时（active）查询当前的 API 限额（不计入限额）：没有令牌时为每个 IP 的额度，令牌无效时提示
    */
 
   const props = defineProps<{

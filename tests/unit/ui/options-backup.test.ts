@@ -14,7 +14,7 @@ import {
   settingsItem
 } from '../../../src/shared/settings'
 import { fakePermissions } from '../shared/fake-permissions'
-import { mockVersion, seedChineseUi, settle, ZH_SETTINGS } from './helpers'
+import { mockVersion, openOptionsTab, optionsPanel, seedChineseUi, settle, ZH_SETTINGS } from './helpers'
 import { importSfc, required } from './sfc'
 
 const App = await importSfc(() => import('../../../src/entrypoints/options/App.vue'))
@@ -36,24 +36,10 @@ async function render(): Promise<VueWrapper> {
   return wrapper
 }
 
-/** 设置页的标签（第一个标签栏） */
-function pageTab(wrapper: VueWrapper, label: string): DOMWrapper<Element> {
-  const found = wrapper
-    .get('[role="tablist"]')
-    .findAll('[role="tab"]')
-    .find(item => item.text() === label)
-  if (!found) throw new Error(`未找到标签：${label}`)
-  return found
-}
-
-function panel(wrapper: VueWrapper, label: string): DOMWrapper<Element> {
-  return wrapper.get(`#${CSS.escape(pageTab(wrapper, label).attributes('aria-controls') ?? '')}`) as DOMWrapper<Element>
-}
-
-async function openTab(wrapper: VueWrapper, label: string): Promise<void> {
-  await pageTab(wrapper, label).trigger('click')
-  await settle()
-}
+/** 标签（含增强设置里的子标签）对应的面板 */
+const panel = optionsPanel
+/** 切到标签：子标签先切到增强设置 */
+const openTab = openOptionsTab
 
 /** 页面顶部的导入备份、导出备份 */
 function header(wrapper: VueWrapper): DOMWrapper<Element> {
@@ -131,7 +117,7 @@ describe.skipIf(!App)('设置页：备份与导入导出', () => {
     vi.restoreAllMocks()
   })
 
-  it('顶部为导入备份、导出备份；净化、下载次数、新标签页、企业版标签页最上方，排除路径、加速源标题右侧为导入、导出；只选 JSON 文件', async () => {
+  it('顶部为导入备份、导出备份；净化设置、下载次数、新标签页打开、企业版设置最上方，排除路径、加速源标题右侧为导入、导出；只选 JSON 文件', async () => {
     const wrapper = await render()
     expect(
       header(wrapper)
@@ -139,13 +125,13 @@ describe.skipIf(!App)('设置页：备份与导入导出', () => {
         .map(item => item.text())
     ).toEqual(['导入备份', '导出备份'])
     expect(header(wrapper).get('[data-test="backup-file"]').attributes('accept')).toBe('.json,application/json')
-    for (const label of ['净化设置', '下载次数设置', '新标签页设置', '企业版设置']) {
+    for (const label of ['净化设置', '下载次数', '新标签页打开', '企业版设置']) {
       const content = panel(wrapper, label).get('.section').element
       expect(content.firstElementChild?.classList.contains('transfer-tools'), label).toBe(true)
     }
     expect(tools(wrapper, '汉化设置').element.closest('.section-head')?.querySelector('h2')?.textContent).toBe('排除路径')
     expect(tools(wrapper, '加速设置').element.closest('.section-head')?.querySelector('h2')?.textContent).toBe('加速源')
-    for (const label of ['汉化设置', '加速设置', '净化设置', '下载次数设置', '新标签页设置', '企业版设置']) {
+    for (const label of ['汉化设置', '加速设置', '净化设置', '下载次数', '新标签页打开', '企业版设置']) {
       expect(
         tools(wrapper, label)
           .findAll('button')
@@ -180,18 +166,18 @@ describe.skipIf(!App)('设置页：备份与导入导出', () => {
     ).toEqual(['/*/*/wiki', '/settings'])
   })
 
-  it('新标签页设置：导出开关、范围与自定义页面；导入时开关、范围按文件，自定义页面合并，不导入其他部分', async () => {
+  it('新标签页打开：导出开关、范围与自定义页面；导入时开关、范围按文件，自定义页面合并，不导入其他部分', async () => {
     await settingsItem.setValue({ ...ZH_SETTINGS, newTab: true, newTabScopes: ['search'], newTabPaths: ['/*/*/releases'] })
     const downloads = captureDownloads()
     const wrapper = await render()
-    await openTab(wrapper, '新标签页设置')
-    await button(tools(wrapper, '新标签页设置'), '导出').trigger('click')
+    await openTab(wrapper, '新标签页打开')
+    await button(tools(wrapper, '新标签页打开'), '导出').trigger('click')
     await settle()
     expect(downloads[0]!.name.replace('github-chinese-new-tab-', '')).toMatch(DATED)
     const content = await readDownload(downloads[0])
     expect(content.settings).toEqual({ newTab: true, newTabScopes: ['search'], newTabPaths: ['/*/*/releases'] })
     await chooseBackup(
-      tools(wrapper, '新标签页设置'),
+      tools(wrapper, '新标签页打开'),
       file({ settings: { newTab: false, newTabScopes: ['external'], newTabPaths: ['/orgs/*/repositories'], accelerate: true } })
     )
     expect(toastTexts(wrapper)).toEqual(['已导入'])

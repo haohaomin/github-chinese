@@ -1,4 +1,4 @@
-import { flushPromises, type DOMWrapper } from '@vue/test-utils'
+import { flushPromises, type DOMWrapper, type VueWrapper } from '@vue/test-utils'
 import { effectScope } from 'vue'
 import { fakeBrowser } from 'wxt/testing/fake-browser'
 import { useToasts, type Toast } from '../../../src/components/toast'
@@ -47,6 +47,27 @@ export function withScope<T>(factory: () => T): Scoped<T> {
 export async function settle(): Promise<void> {
   await flushPromises()
   await flushPromises()
+}
+
+/** 设置页的标签：页面的标签与标签页里的子标签（增强设置里的各功能、汉化设置里的词库等），按文字找 */
+export function optionsTab(wrapper: VueWrapper, label: string): DOMWrapper<Element> {
+  const found = wrapper.findAll('[role="tab"]').find(item => item.text() === label)
+  if (!found) throw new Error(`未找到标签：${label}`)
+  return found
+}
+
+/** 设置页标签对应的面板 */
+export function optionsPanel(wrapper: VueWrapper, label: string): DOMWrapper<Element> {
+  return wrapper.get(`#${CSS.escape(optionsTab(wrapper, label).attributes('aria-controls') ?? '')}`) as DOMWrapper<Element>
+}
+
+/** 切到设置页的标签：子标签先切到所在的标签页 */
+export async function openOptionsTab(wrapper: VueWrapper, label: string): Promise<void> {
+  const target = optionsTab(wrapper, label)
+  const parent = target.element.closest('[role="tabpanel"]')?.getAttribute('aria-labelledby')
+  if (parent) await wrapper.get(`#${CSS.escape(parent)}`).trigger('click')
+  await target.trigger('click')
+  await settle()
 }
 
 /** 删除所选：点表头的删除所选（先聚焦，同键盘操作），在打开的确认框中点删除 */

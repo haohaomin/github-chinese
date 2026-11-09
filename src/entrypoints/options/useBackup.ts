@@ -39,7 +39,7 @@ async function grantedHosts(): Promise<readonly string[]> {
   return enterpriseHosts((await browser.permissions.getAll()).origins ?? [])
 }
 
-/** 已保存的令牌（下载次数设置）；没有时不写入文件 */
+/** 已保存的令牌（下载次数）；没有时不写入文件 */
 async function tokenPart(): Promise<Pick<BackupData, 'githubToken'>> {
   const token = normalizeToken(await githubTokenItem.getValue())
   return token ? { githubToken: token } : {}

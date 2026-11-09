@@ -8,10 +8,12 @@ import { createCloneUrlRewriter } from '../core/clone-url'
 import { createController } from '../core/controller'
 import { createDownloadClickHandler } from '../core/download-click'
 import { createFolderDownload } from '../core/folder-download'
+import { createFreshness } from '../core/freshness'
 import { createImageAccelerator } from '../core/image-accelerate'
 import { createImagePreview } from '../core/image-preview'
 import type { ViewerLabel } from '../core/image-viewer'
 import { createInstanceMark } from '../core/instance-mark'
+import { createLayoutFix } from '../core/layout-fix'
 import { createNewTabClickHandler } from '../core/new-tab'
 import { createReleaseDownloads } from '../core/release-downloads'
 import { createSearchPurifier } from '../core/search-purify'
@@ -236,6 +238,8 @@ export default defineContentScript({
 
     // 翻译中在 <html> 上留标记（见 core/instance-mark）：重置时发现别的实例的标记，说明它已失效、旧译文没有还原
     const mark = createInstanceMark(document)
+    // 译文的排版修正（见 core/layout-fix）：随翻译启停
+    const layoutFix = createLayoutFix(document)
     // 关闭时启动也创建（用空语言包）：状态查询、后台探测、桥接询问都靠它应答
     const controller = createController({
       bundle: bundle ?? EMPTY_BUNDLE,
@@ -243,7 +247,10 @@ export default defineContentScript({
       settings: effective(settings),
       customEntries,
       isPathExcluded,
-      onActiveChange: active => mark.update(active),
+      onActiveChange: active => {
+        mark.update(active)
+        layoutFix.update(active)
+      },
       // 交给主世界的 turbo-bridge 处理 Turbo 缓存克隆体；有已失效实例的标记时强制重新访问。
       // 失效时只做普通重置：新实例此时可能已写入标记
       onReset: reason => {
@@ -340,6 +347,11 @@ export default defineContentScript({
       label: count => message('downloadTimes', { count }),
       request: requestReleaseCounts
     })
+    // 更新时间着色：文件列表与最近提交的时间按距今远近改颜色（见 core/freshness）
+    const freshness = createFreshness(document, {
+      active: () => current.enabled && current.freshness,
+      colors: () => current.freshnessColors
+    })
     // 自动加载：「加载更多」与分页列表的下一页（见 core/auto-load）
     const autoLoader = createAutoLoader(document, {
       active: () => current.enabled && current.autoLoad,
@@ -366,6 +378,7 @@ export default defineContentScript({
       accelerateOptions.refresh()
       folders.refresh()
       downloads.refresh()
+      freshness.refresh()
       autoLoader.refresh()
       purifier.refresh()
       readme.refresh()
@@ -478,6 +491,7 @@ export default defineContentScript({
     ctx.addEventListener(window, 'wxt:locationchange', () => {
       if (!ctx.isValid) return
       controller.checkLocation()
+      layoutFix.refresh()
       purifier.refresh()
       autoLoader.refresh()
       readme.refresh()
@@ -494,6 +508,7 @@ export default defineContentScript({
       accelerateOptions.stop()
       folders.stop()
       downloads.stop()
+      freshness.stop()
       autoLoader.stop()
       preview.close()
       readme.stop()

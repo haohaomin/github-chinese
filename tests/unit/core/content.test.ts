@@ -4,6 +4,8 @@ import type { ContentScriptDefinition } from 'wxt'
 import type { LocaleBundle } from '../../../src/core/types'
 import type { LocaleLoaderDeps } from '../../../src/shared/locale-loader'
 import { INSTANCE_MARK_PREFIX } from '../../../src/core/instance-mark'
+import { FRESHNESS_ATTRIBUTE } from '../../../src/core/freshness'
+import { LAYOUT_FIX_STYLE_ID } from '../../../src/core/layout-fix'
 import {
   installTurboBridge,
   TURBO_RESET_EVENT,
@@ -46,7 +48,12 @@ const state = vi.hoisted(() => ({
     newTab: false,
     newTabScopes: ['external', 'search'] as readonly string[],
     newTabPaths: [] as readonly string[],
-    chineseReadme: false
+    chineseReadme: false,
+    freshness: false,
+    freshnessColors: { fresh: { light: '', dark: '' }, recent: { light: '', dark: '' }, stale: { light: '', dark: '' } } as Record<
+      string,
+      Record<string, string>
+    >
   },
   failSettings: false,
   /** 设置后读取设置要等它落定（模拟读存储较慢） */
@@ -286,7 +293,9 @@ beforeEach(() => {
     newTab: false,
     newTabScopes: ['external', 'search'],
     newTabPaths: [],
-    chineseReadme: false
+    chineseReadme: false,
+    freshness: false,
+    freshnessColors: { fresh: { light: '', dark: '' }, recent: { light: '', dark: '' }, stale: { light: '', dark: '' } }
   }
   locales.load.mockReset()
   locales.load.mockImplementation(async locale => (locale === 'zh-TW' ? TW_BUNDLE : TEST_BUNDLE))
@@ -1156,6 +1165,20 @@ describe('重置事件与实例标记', () => {
     expect(marks()).toEqual([])
   })
 
+  it('翻译中页面上有排版修正样式（见 core/layout-fix）：停用后移除，启用后加回，失效后移除', async () => {
+    const layoutStyle = (): Element | null => document.getElementById(LAYOUT_FIX_STYLE_ID)
+    const definition = await load()
+    context = createContext()
+    await definition.main(context as never)
+    expect(layoutStyle()).not.toBeNull()
+    state.settingsListener!({ ...state.settings, enabled: false })
+    expect(layoutStyle()).toBeNull()
+    state.settingsListener!({ ...state.settings })
+    expect(layoutStyle()).not.toBeNull()
+    context.invalidate()
+    expect(layoutStyle()).toBeNull()
+  })
+
   it('失效后不再维护本实例的标记', async () => {
     const definition = await load()
     context = createContext()
@@ -1636,6 +1659,53 @@ describe('增强功能', () => {
       document.body.innerHTML = `<a href="${RELEASE}">vue.global.js</a>`
       expect(click($('a'))).toBe(true)
       expect(open).toHaveBeenCalledExactlyOnceWith(`https://ghfast.top/${RELEASE}`, '_self', '')
+    })
+  })
+
+  describe('更新时间着色', () => {
+    /** 文件列表的一行：最近提交在 2 天前 */
+    function addFileRow(): Element {
+      const time = document.createElement('relative-time')
+      time.setAttribute('datetime', new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString())
+      const cell = document.createElement('div')
+      cell.className = 'react-directory-commit-age'
+      cell.append(time)
+      document.body.append(cell)
+      return time
+    }
+
+    it('开启时文件列表的时间按距今远近标记；关闭、失效时移除', async () => {
+      state.settings = { ...state.settings, freshness: true }
+      const time = addFileRow()
+      await start()
+      expect(time.getAttribute(FRESHNESS_ATTRIBUTE)).toBe('fresh')
+      state.settingsListener?.({ ...state.settings, freshness: false })
+      expect(time.hasAttribute(FRESHNESS_ATTRIBUTE)).toBe(false)
+      state.settingsListener?.({ ...state.settings, freshness: true })
+      expect(time.getAttribute(FRESHNESS_ATTRIBUTE)).toBe('fresh')
+      context?.invalidate()
+      expect(time.hasAttribute(FRESHNESS_ATTRIBUTE)).toBe(false)
+    })
+
+    it('未开启、总开关关闭时不处理', async () => {
+      state.settings = { ...state.settings, freshness: true, enabled: false }
+      const time = addFileRow()
+      await start()
+      expect(time.hasAttribute(FRESHNESS_ATTRIBUTE)).toBe(false)
+      state.settingsListener?.({ ...state.settings, enabled: true, freshness: false })
+      expect(time.hasAttribute(FRESHNESS_ATTRIBUTE)).toBe(false)
+    })
+
+    it('颜色随设置：改过的按 GitHub 当前主题取浅色或深色的值，改了即换', async () => {
+      state.settings = { ...state.settings, freshness: true }
+      addFileRow()
+      await start()
+      const style = (): string => document.getElementById('gcn-freshness-style')?.textContent ?? ''
+      expect(style()).not.toContain('light-dark')
+      const colors = { ...state.settings.freshnessColors, fresh: { light: '#cf222e', dark: '' } }
+      state.settingsListener?.({ ...state.settings, freshnessColors: colors })
+      expect(style()).toContain('light-dark(#cf222e, var(--fgColor-success')
+      expect(document.querySelectorAll('#gcn-freshness-style')).toHaveLength(1)
     })
   })
 

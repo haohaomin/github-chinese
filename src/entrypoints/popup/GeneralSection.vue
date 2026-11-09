@@ -39,7 +39,8 @@
     { key: 'downloadCount', label: 'downloadCount' },
     { key: 'folderDownload', label: 'downloadFolder' },
     { key: 'newTab', label: 'newTab' },
-    { key: 'chineseReadme', label: 'chineseReadme' }
+    { key: 'chineseReadme', label: 'chineseReadme' },
+    { key: 'freshness', label: 'freshness' }
   ]
 
   const { t } = useI18n()

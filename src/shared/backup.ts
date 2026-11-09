@@ -1,10 +1,10 @@
 /**
- * 设置备份：设置页顶部的导出、导入（全部），与排除路径、加速源、净化设置、下载次数设置、新标签页设置、企业版设置
+ * 设置备份：设置页顶部的导出、导入（全部），与排除路径、加速源、净化设置、下载次数、新标签页打开、企业版设置
  * 各自的导出、导入（只含该部分）。
  * 文件是同一格式的 JSON：各部分都可缺省，导入时只用当前范围内的部分（在加速源处导入完整备份时只导入加速源）。
  * 导入：设置项按文件覆盖（只覆盖文件中有的项）；排除路径、新标签页的自定义页面、自定义词条、屏蔽规则与现有的合并；
  * 企业版站点要授权，由企业版设置另行处理。
- * 个人访问令牌只在下载次数设置处导出、导入：全部的导出不含令牌，导入全部时忽略文件中的令牌
+ * 个人访问令牌只在下载次数处导出、导入：全部的导出不含令牌，导入全部时忽略文件中的令牌
  */
 import { mergeEntries, normalizeEntry } from './custom-entries'
 import { normalizeEnterpriseHost } from './enterprise'
@@ -19,7 +19,7 @@ import {
   type Settings
 } from './settings'
 
-/** 备份的范围：全部，或设置页的一部分（排除路径、加速源、净化设置、下载次数设置、新标签页设置、企业版设置） */
+/** 备份的范围：全部，或设置页的一部分（排除路径、加速源、净化设置、下载次数、新标签页打开、企业版设置） */
 export type BackupScope = 'all' | 'excluded' | 'accelerate' | 'purify' | 'downloads' | 'new-tab' | 'enterprise'
 
 export const BACKUP_FORMAT = 'github-chinese-backup'
@@ -31,7 +31,7 @@ export interface BackupData {
   readonly customEntries?: CustomEntries
   readonly searchBlockRules?: readonly string[]
   readonly enterpriseSites?: readonly string[]
-  /** 个人访问令牌（只在下载次数设置的范围内） */
+  /** 个人访问令牌（只在下载次数的范围内） */
   readonly githubToken?: string
 }
 
@@ -144,7 +144,7 @@ export function parseBackup(text: string): BackupData | undefined {
   }
 }
 
-/** 范围内的部分：设置中该范围的项；净化设置另有屏蔽规则，下载次数设置另有令牌，企业版设置只有站点；全部不含令牌 */
+/** 范围内的部分：设置中该范围的项；净化设置另有屏蔽规则，下载次数另有令牌，企业版设置只有站点；全部不含令牌 */
 export function scopeBackup(data: BackupData, scope: BackupScope): BackupData {
   if (scope === 'all') {
     if (data.githubToken === undefined) return data

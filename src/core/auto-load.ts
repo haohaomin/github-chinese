@@ -24,7 +24,9 @@ import {
  * 自动加载：开启后，
  * 1. 「加载更多」按钮（首页动态与侧栏、贡献动态、主题页、拉取请求与议题里折叠的时间线、全局导航侧栏的常用存储库等）
  *    接近视口时自动点击；点击后页面把焦点移到加载的内容时，位置留在原处、焦点还回去
- *    （不然页面随焦点滚到新内容，按钮一直在视口附近，加载不停）；
+ *    （不然页面随焦点滚到新内容，按钮一直在视口附近，加载不停）。
+ *    贡献动态的按钮每次只加一个月，空的月份很短，按钮总在视口附近：进入视口才点，且两次之间页面要往下滚过
+ *    （页面不能滚动时不必），不滚动时不接连加载；
  * 2. 有分页的列表（议题、拉取请求、搜索结果、讨论、操作、发行版、标签、提交等，见 core/page-list），
  *    列表下方的分页接近视口时取回下一页，把列表项接在当前列表之后，直到最后一页。
  *    取回的是同站页面（带 Cookie，同手动翻页），不经第三方。
@@ -40,8 +42,11 @@ export interface AutoLoadOptions {
   readonly fetchPage: (url: string) => Promise<string>
   /** 页码分隔的文字（第 N 页） */
   readonly pageLabel?: (page: number) => string
-  /** 元素接近视口（视口下方一屏内）时回调；返回取消函数。默认用 IntersectionObserver */
-  readonly watch?: (element: Element, onNear: () => void) => () => void
+  /**
+   * 元素接近视口（视口下方一屏内；visible 为 true 时为进入视口）时回调；返回取消函数。
+   * 默认用 IntersectionObserver
+   */
+  readonly watch?: (element: Element, onNear: () => void, visible?: boolean) => () => void
   /** 当前时间（毫秒）；测试用 */
   readonly now?: () => number
   /** 取回或接上失败时回调（该列表不再自动加载） */
@@ -66,6 +71,8 @@ const SIDE_PANEL_LOAD_MORE_SELECTOR = 'button[data-testid="dynamic-side-panel-it
 const REACT_LOAD_MORE_SELECTOR = `button[data-testid^="issue-timeline-load-more"], ${SIDE_PANEL_LOAD_MORE_SELECTOR}`
 /** 「加载更多」按钮 */
 export const LOAD_MORE_SELECTOR = `${AJAX_LOAD_MORE_SELECTOR}, ${REACT_LOAD_MORE_SELECTOR}`
+/** 个人主页贡献动态的「Show more activity」：进入视口才点，两次之间页面要往下滚过 */
+export const TIMELINE_LOAD_MORE_SELECTOR = 'form.js-show-more-timeline-form button'
 /** 同一页面最多自动取回的页数，同一类「加载更多」在同一路径上最多点的次数：防止异常页面无限加载 */
 export const MAX_AUTO_PAGES = 30
 /** 点过的 React 按钮多久后仍在原处才再点 */
@@ -108,16 +115,22 @@ interface ListState {
   readonly hidden: Element[]
 }
 
-/** 默认的接近视口判断：视口下方一屏内 */
-function watchNear(element: Element, onNear: () => void): () => void {
+/** 默认的接近视口判断：视口下方一屏内；visible 时进入视口 */
+function watchNear(element: Element, onNear: () => void, visible = false): () => void {
   const observer = new IntersectionObserver(
     entries => {
       if (entries.some(entry => entry.isIntersecting)) onNear()
     },
-    { rootMargin: '0px 0px 100% 0px' }
+    { rootMargin: visible ? '0px' : '0px 0px 100% 0px' }
   )
   observer.observe(element)
   return () => observer.disconnect()
+}
+
+/** 元素在视口里（显示着，有一部分在视口内） */
+function inViewport(element: Element, view: Window): boolean {
+  const rect = element.getBoundingClientRect()
+  return rect.width > 0 && rect.height > 0 && rect.bottom > 0 && rect.top < view.innerHeight
 }
 
 /** 取回的节点：去掉脚本（DOMParser 解析的脚本不执行，再保险一次），收进当前文档 */
@@ -199,6 +212,10 @@ export function createAutoLoader(doc: Document, options: AutoLoadOptions): AutoL
   let focusGuard: { readonly until: number; readonly previous: Element | null } | undefined
   /** 自动点击之后加进页面的节点（到页面聚焦或时限为止） */
   let addedSinceClick: Node[] = []
+  /** 上次自动点贡献动态按钮时页面的滚动位置：之后页面往下滚过这里才再点 */
+  let timelineScrollY: number | undefined
+  /** 进入了视口、等页面往下滚的贡献动态按钮 */
+  let waitingTimeline: HTMLButtonElement | undefined
 
   function currentUrl(): URL {
     return new URL(doc.location.href)
@@ -240,6 +257,8 @@ export function createAutoLoader(doc: Document, options: AutoLoadOptions): AutoL
     if (path !== pathKey) {
       pathKey = path
       clicksByKind = new Map()
+      timelineScrollY = undefined
+      waitingTimeline = undefined
     }
     const key = `${path}${url.search}`
     if (key === pageKey) return
@@ -257,10 +276,43 @@ export function createAutoLoader(doc: Document, options: AutoLoadOptions): AutoL
     if (count >= MAX_AUTO_PAGES) return
     clicksByKind.set(kind, count + 1)
     clickedAt.set(button, now())
+    if (button.matches(TIMELINE_LOAD_MORE_SELECTOR)) timelineScrollY = doc.defaultView?.scrollY ?? 0
     focusGuard = { until: now() + FOCUS_GUARD_MS, previous: doc.activeElement }
     addedSinceClick = []
     button.click()
     if (button.matches(REACT_LOAD_MORE_SELECTOR)) scheduleRetry(RECLICK_DELAY_MS)
+  }
+
+  /** 贡献动态的按钮可以再点：还没点过，页面往下滚过了上次点击时的位置，或页面不能滚动 */
+  function timelineReady(): boolean {
+    const view = doc.defaultView
+    if (timelineScrollY === undefined || !view) return true
+    const scrollable = doc.documentElement.scrollHeight > view.innerHeight
+    return !scrollable || view.scrollY > timelineScrollY
+  }
+
+  /** 贡献动态的按钮进入视口：可以再点时点，否则等页面往下滚（见 onScroll） */
+  function onTimelineVisible(button: HTMLButtonElement): void {
+    if (!timelineReady()) {
+      waitingTimeline = button
+      return
+    }
+    waitingTimeline = undefined
+    clickLoadMore(button)
+  }
+
+  /** 页面滚动：等着的贡献动态按钮仍在视口里、页面往下滚过了上次点击时的位置时点 */
+  function onScroll(): void {
+    const button = waitingTimeline
+    const view = doc.defaultView
+    if (!button || !view) return
+    if (!button.isConnected || !watched.has(button)) {
+      waitingTimeline = undefined
+      return
+    }
+    if (!timelineReady() || !inViewport(button, view)) return
+    waitingTimeline = undefined
+    clickLoadMore(button)
   }
 
   /** 记下自动点击之后加进页面的节点 */
@@ -312,9 +364,10 @@ export function createAutoLoader(doc: Document, options: AutoLoadOptions): AutoL
   function watchButtons(): void {
     for (const button of doc.querySelectorAll<HTMLButtonElement>(LOAD_MORE_SELECTOR)) {
       if (watched.has(button) || !canClick(button) || !inScope(button)) continue
+      const timeline = button.matches(TIMELINE_LOAD_MORE_SELECTOR)
       watched.set(
         button,
-        watch(button, () => clickLoadMore(button))
+        watch(button, () => (timeline ? onTimelineVisible(button) : clickLoadMore(button)), timeline)
       )
     }
   }
@@ -568,6 +621,7 @@ export function createAutoLoader(doc: Document, options: AutoLoadOptions): AutoL
   }
 
   doc.addEventListener('focusin', onFocusIn, true)
+  doc.defaultView?.addEventListener('scroll', onScroll, { passive: true })
   scan()
 
   return {
@@ -578,7 +632,9 @@ export function createAutoLoader(doc: Document, options: AutoLoadOptions): AutoL
       retryTimer = undefined
       focusGuard = undefined
       addedSinceClick = []
+      waitingTimeline = undefined
       doc.removeEventListener('focusin', onFocusIn, true)
+      doc.defaultView?.removeEventListener('scroll', onScroll)
       setObserving(false)
       for (const element of [...watched.keys()]) unwatch(element)
     }
