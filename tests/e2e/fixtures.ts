@@ -37,6 +37,7 @@ export const FIXTURE_URL = {
 /** 与 src/shared/settings.ts 的 DEFAULT_SETTINGS 一致（该模块依赖扩展运行时，不能在 Node 中导入） */
 export const DEFAULT_SETTINGS: Settings = {
   enabled: true,
+  translation: true,
   translateTime: true,
   timeFormat: 'default',
   customTimeFormat: 'YYYY-MM-DD HH:mm',

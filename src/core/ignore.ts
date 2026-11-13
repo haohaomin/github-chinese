@@ -375,6 +375,20 @@ export const TRANSLATABLE_ATTRIBUTES: readonly string[] = [
 ]
 
 /**
+ * 保持原文的属性：其他扩展按英文属性值选择元素，找不到时会隐藏或改动页面。
+ * [元素选择器, 属性名, 原文]：元素命中选择器、属性原文（规范化后）相同时不翻译，已翻译的还原。
+ * 只收不显示在页面上的属性
+ */
+export const KEEP_ORIGINAL_ATTRIBUTES: readonly (readonly [selector: string, attribute: string, source: string])[] = [
+  // Refined GitHub（clean-repo-sidebar）：About 标题里没有这个按钮时隐藏整个标题，编辑按钮随之消失
+  ['button', 'aria-label', 'Edit repository metadata'],
+  // Refined GitHub（show-names）：首页动态卡片里的用户名不加全名
+  ['*', 'aria-label', 'card content'],
+  // Refined GitHub（no-self-reference）：议题、拉取请求事件区里指向本页的链接不停用
+  ['section', 'aria-label', 'Events']
+]
+
+/**
  * 镜像文字属性：Primer 用隐藏的粗体伪元素按其值预留宽度，值须随元素文字一起变。
  * 这两个属性另有非界面用途（JSON 数据、表情建议的筛选键），只处理白名单内、值与文字原文相同的元素。
  */

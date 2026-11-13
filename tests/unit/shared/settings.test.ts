@@ -9,6 +9,7 @@ import {
   getSearchBlockRules,
   getSettings,
   isPathExcluded,
+  isTranslationOn,
   matchesPathPattern,
   normalizeExcludedPath,
   mergeSettings,
@@ -230,6 +231,20 @@ describe('自动加载、图片预览、新标签页打开', () => {
     ).toEqual(DEFAULT_SETTINGS)
     expect(mergeSettings({ newTabScopes: [] }).newTabScopes).toEqual([])
     expect(mergeSettings({ autoLoadScopes: [] }).autoLoadScopes).toEqual([])
+  })
+})
+
+describe('汉化', () => {
+  it('默认开启；保留布尔值，其余用默认值', () => {
+    expect(DEFAULT_SETTINGS.translation).toBe(true)
+    expect(mergeSettings({ translation: false })).toEqual({ ...DEFAULT_SETTINGS, translation: false })
+    expect(mergeSettings({ translation: 'no' }).translation).toBe(true)
+  })
+
+  it('总开关与汉化都开启才翻译', () => {
+    expect(isTranslationOn({ enabled: true, translation: true })).toBe(true)
+    expect(isTranslationOn({ enabled: true, translation: false })).toBe(false)
+    expect(isTranslationOn({ enabled: false, translation: true })).toBe(false)
   })
 })
 

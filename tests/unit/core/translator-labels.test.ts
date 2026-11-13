@@ -570,6 +570,7 @@ describe('停用、换词典、切换语言、排除页面', () => {
   it('控制器：总开关关闭、切换语言、进入排除路径时还原或重译', async () => {
     const settings: Settings = {
       enabled: true,
+      translation: true,
       translateTime: true,
       timeFormat: 'default',
       customTimeFormat: 'YYYY-MM-DD HH:mm',

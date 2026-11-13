@@ -1642,6 +1642,7 @@ describe('与控制器一起：排除路径', () => {
       bundle: TEST_BUNDLE,
       settings: {
         enabled: true,
+        translation: true,
         translateTime: true,
         timeFormat: 'default',
         customTimeFormat: 'YYYY-MM-DD HH:mm',

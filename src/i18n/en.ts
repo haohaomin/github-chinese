@@ -14,6 +14,7 @@ export default {
   stateNotReady: 'Not ready',
   stateTranslated: 'Translated',
   stateExcluded: 'Excluded',
+  stateTranslationOff: 'Not translated',
   stateDisabled: 'Disabled',
   reload: 'Reload',
   authorize: 'Authorize',
@@ -31,6 +32,7 @@ export default {
   themeDark: 'Dark',
 
   general: 'General',
+  translation: 'Translate pages',
   translateTime: 'Localize times',
   translateTitle: 'Translate titles',
   languageSection: 'Language',

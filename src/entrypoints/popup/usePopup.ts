@@ -1,4 +1,4 @@
-import { computed, onScopeDispose, ref, shallowRef, type ComputedRef, type Ref } from 'vue'
+import { computed, onScopeDispose, ref, shallowRef, watch, type ComputedRef, type Ref } from 'vue'
 import { browser } from 'wxt/browser'
 import { createToastSource } from '../../components/toast'
 import { useSettings } from '../../components/useSettings'
@@ -17,8 +17,9 @@ import {
 } from '../../shared/settings'
 import { sendToTab } from '../../shared/tab-messages'
 
-/** 当前标签页状态 */
-export type PageState = 'loading' | 'unauthorized' | 'unavailable' | 'not-ready' | 'translated' | 'excluded' | 'disabled'
+/** 当前标签页状态；translation-off：总开关开着、汉化关闭（其他功能照常） */
+export type PageState =
+  'loading' | 'unauthorized' | 'unavailable' | 'not-ready' | 'translated' | 'excluded' | 'translation-off' | 'disabled'
 
 /** 各状态的文案 */
 export const PAGE_STATE_MESSAGE: Readonly<Record<PageState, MessageKey>> = {
@@ -28,6 +29,7 @@ export const PAGE_STATE_MESSAGE: Readonly<Record<PageState, MessageKey>> = {
   'not-ready': 'stateNotReady',
   translated: 'stateTranslated',
   excluded: 'stateExcluded',
+  'translation-off': 'stateTranslationOff',
   disabled: 'stateDisabled'
 }
 
@@ -145,7 +147,8 @@ export function usePopup(): UsePopup {
     if (!tab.value) return 'unavailable'
     if (!status.value) return 'not-ready'
     if (status.value.active) return 'translated'
-    return status.value.excluded ? 'excluded' : 'disabled'
+    if (status.value.excluded) return 'excluded'
+    return settings.value.enabled && !settings.value.translation ? 'translation-off' : 'disabled'
   })
 
   const excluded = computed(() => tab.value !== undefined && isPathExcluded(tab.value.url.pathname, settings.value.excludedPaths))
@@ -233,6 +236,11 @@ export function usePopup(): UsePopup {
     }
   }
 
+  // 汉化开关在常规区（GeneralSection）：切换后立即查询页面状态，不等下一次轮询
+  watch(
+    () => settings.value.translation,
+    () => void refreshStatus()
+  )
   const pollTimer = setInterval(() => void refreshStatus(), STATUS_POLL_MS)
   onScopeDispose(() => {
     clearInterval(pollTimer)

@@ -78,6 +78,45 @@ describe('属性', () => {
     expect(link.getAttribute('data-foo')).toBe('Search')
     expect(link.getAttribute('alt')).toBe('Search')
   })
+
+  describe('其他扩展按英文值选择元素的属性（Refined GitHub）', () => {
+    const custom = { 'Edit repository metadata': '编辑存储库元数据', 'card content': '卡片内容', Events: '事件' }
+
+    it('保持原文；选择器以外的元素照常翻译', () => {
+      start(
+        `<h2><span>Sample text</span><button id="edit" aria-label="Edit repository metadata"></button></h2>
+        <div id="card" aria-label="card content"><a href="/octocat">octocat</a></div>
+        <section id="events" aria-label="Events"></section>
+        <nav id="nav" aria-label="Events"></nav><a id="link" aria-label="Edit repository metadata" href="/vuejs/core"></a>`,
+        { matcher: testMatcher({ custom }) }
+      )
+      expect($('#edit').getAttribute('aria-label')).toBe('Edit repository metadata')
+      expect($('#card').getAttribute('aria-label')).toBe('card content')
+      expect($('#events').getAttribute('aria-label')).toBe('Events')
+      expect($('#nav').getAttribute('aria-label')).toBe('事件')
+      expect($('#link').getAttribute('aria-label')).toBe('编辑存储库元数据')
+    })
+
+    it('不记未翻译', () => {
+      const t = start('<button aria-label="Edit repository metadata"></button><button aria-label="Sample text"></button>', {
+        collectUntranslated: true
+      })
+      const missed = t.drainUntranslated().map(([text]) => text)
+      expect(missed).toContain('Sample text')
+      expect(missed).not.toContain('Edit repository metadata')
+    })
+
+    it('页面改写成这些值时还原为原文；改成其他值照常翻译', async () => {
+      start('<main><button id="edit" aria-label="Copy"></button></main>', { matcher: testMatcher({ custom }) })
+      expect($('#edit').getAttribute('aria-label')).toBe('复制')
+      $('#edit').setAttribute('aria-label', 'Edit repository metadata')
+      await settle()
+      expect($('#edit').getAttribute('aria-label')).toBe('Edit repository metadata')
+      $('#edit').setAttribute('aria-label', 'Copy')
+      await settle()
+      expect($('#edit').getAttribute('aria-label')).toBe('复制')
+    })
+  })
 })
 
 describe('提示框可见文字 data-visible-text', () => {

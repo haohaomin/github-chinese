@@ -18,6 +18,8 @@ export function isThemePreference(value: unknown): value is ThemePreference {
 export interface Settings extends AccelerateSettings {
   /** 总开关 */
   readonly enabled: boolean
+  /** 汉化：翻译页面的界面文字（时间本地化、翻译标题随之）；关闭时其他功能照常（见 isTranslationOn） */
+  readonly translation: boolean
   /** 时间本地化：<relative-time> 等元素改用中文格式 */
   readonly translateTime: boolean
   /** 时间格式：default 为元素按翻译语言渲染；custom 按 customTimeFormat 显示具体时刻（见 shared/time-format） */
@@ -82,6 +84,7 @@ export type CustomEntries = Readonly<Record<string, string>>
 
 export const DEFAULT_SETTINGS: Settings = {
   enabled: true,
+  translation: true,
   translateTime: true,
   timeFormat: 'default',
   customTimeFormat: DEFAULT_CUSTOM_TIME_FORMAT,
@@ -156,6 +159,7 @@ export function mergeSettings(stored: unknown): Settings {
     typeof value[key] === 'boolean' ? (value[key] as boolean) : fallback
   const merged: Settings = {
     enabled: pickBoolean('enabled', DEFAULT_SETTINGS.enabled),
+    translation: pickBoolean('translation', DEFAULT_SETTINGS.translation),
     translateTime: pickBoolean('translateTime', DEFAULT_SETTINGS.translateTime),
     timeFormat: isTimeFormatMode(value.timeFormat) ? value.timeFormat : DEFAULT_SETTINGS.timeFormat,
     customTimeFormat: sanitizeTimeFormat(value.customTimeFormat),
@@ -245,6 +249,11 @@ export function matchesPathPattern(pathname: string, patterns: readonly string[]
 /** 路径是否被排除规则命中 */
 export function isPathExcluded(pathname: string, patterns: readonly string[]): boolean {
   return matchesPathPattern(pathname, patterns)
+}
+
+/** 在翻译页面：总开关与汉化都开启（排除路径另由内容脚本的控制器判断） */
+export function isTranslationOn(settings: Pick<Settings, 'enabled' | 'translation'>): boolean {
+  return settings.enabled && settings.translation
 }
 
 /** 值为布尔的设置项 */

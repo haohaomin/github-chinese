@@ -43,6 +43,7 @@ import {
   getSearchBlockRules,
   getSettings,
   isPathExcluded,
+  isTranslationOn,
   watchSettings,
   type Settings
 } from '../shared/settings'
@@ -81,7 +82,7 @@ const locales = createLocaleLoader({
     : { importScript: (url: string) => import(/* @vite-ignore */ url) })
 })
 
-/** 总开关关闭时启动用的空语言包：开启后加载完成才换上真实语言包 */
+/** 不翻译（总开关或汉化关闭）时启动用的空语言包：开启后加载完成才换上真实语言包 */
 const EMPTY_BUNDLE: LocaleBundle = []
 
 /** 开启后语言包加载期间收到状态查询：等加载落定再应答，最多等这么久（须短于 popup 的应答超时，见 shared/tab-messages） */
@@ -221,17 +222,17 @@ export default defineContentScript({
       label: key => translateMessage(resolveUiLanguage(current.uiLanguage, languages), key)
     })
     const locale: PageLocale = resolvePageLocale(settings.language, languages)
-    // 总开关关闭时不加载语言包，开启时再加载（见 syncLocale）
+    // 不翻译（总开关或汉化关闭）时不加载语言包，开启时再加载（见 syncLocale）
     const bundle: LocaleBundle | undefined =
-      ctx.isInvalid || !settings.enabled ? undefined : await locales.load(locale).catch(() => undefined)
+      ctx.isInvalid || !isTranslationOn(settings) ? undefined : await locales.load(locale).catch(() => undefined)
     // 不再启动（已失效，或开启时语言包加载失败）。排队的查询不应答：页面上有新实例时由它应答
-    if (ctx.isInvalid || (settings.enabled && !bundle)) {
+    if (ctx.isInvalid || (isTranslationOn(settings) && !bundle)) {
       purifier.stop()
       readme.stop()
       removeMessageListener()
       return
     }
-    /** 已换上的语言包的语言：关闭时启动的为 undefined，开启后加载完成才换上 */
+    /** 已换上的语言包的语言：不翻译时启动的为 undefined，开启后加载完成才换上 */
     let loadedLocale: PageLocale | undefined = bundle ? locale : undefined
     /** 交给控制器的设置：语言包换上之前一律停止（空语言包没有译文，不算在翻译） */
     const effective = (next: Settings): Settings => (loadedLocale === undefined ? { ...next, enabled: false } : next)
@@ -240,7 +241,7 @@ export default defineContentScript({
     const mark = createInstanceMark(document)
     // 译文的排版修正（见 core/layout-fix）：随翻译启停
     const layoutFix = createLayoutFix(document)
-    // 关闭时启动也创建（用空语言包）：状态查询、后台探测、桥接询问都靠它应答
+    // 不翻译时启动也创建（用空语言包）：状态查询、后台探测、桥接询问都靠它应答
     const controller = createController({
       bundle: bundle ?? EMPTY_BUNDLE,
       timeLang: TIME_LANGS[locale],
@@ -261,10 +262,10 @@ export default defineContentScript({
     /** 最近一次加载请求的序号：加载期间又有变化（关闭、语言再变）时，旧请求的结果丢弃 */
     let localeRequest = 0
 
-    /** 开启时加载当前语言的语言包并换上；关闭期间不加载 */
+    /** 翻译时加载当前语言的语言包并换上；总开关或汉化关闭期间不加载 */
     const syncLocale = async (): Promise<void> => {
       const request = ++localeRequest
-      if (!current.enabled) return
+      if (!isTranslationOn(current)) return
       const target = resolvePageLocale(current.language, languages)
       if (target === loadedLocale) return
       let next: LocaleBundle
@@ -461,7 +462,7 @@ export default defineContentScript({
         case 'gcn:get-status':
           // 开启后语言包还在加载：保持消息通道，等加载落定再应答（popup 开启后立即查询，得到换上之后的状态）。
           // 期间失效时不应答
-          if (current.enabled && loadedLocale === undefined && localeTask) {
+          if (isTranslationOn(current) && loadedLocale === undefined && localeTask) {
             void waitForLocale(localeTask).then(() => {
               if (ctx.isValid) sendResponse(controller.getStatus())
             })

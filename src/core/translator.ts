@@ -28,6 +28,7 @@ import {
   IGNORE_SELECTORS,
   IGNORE_TAGS,
   ISSUE_TYPE_NAME_SELECTORS,
+  KEEP_ORIGINAL_ATTRIBUTES,
   LABEL_DESCRIPTION_SELECTORS,
   LABEL_SELECTORS,
   LIST_NAME_SELECTORS,
@@ -166,6 +167,8 @@ const LABEL_SELECTOR = LABEL_SELECTORS.join(', ')
 /** 标签区域里逐层包装的层数上限（标签页的标签链接里，文字套在三层元素里） */
 const MAX_LABEL_DEPTH = 6
 const TRANSLATABLE: ReadonlySet<string> = new Set(TRANSLATABLE_ATTRIBUTES)
+/** 保持原文的属性（见 ignore 的 KEEP_ORIGINAL_ATTRIBUTES）：属性名 → 原文 → 元素选择器 */
+const KEEP_ORIGINAL: ReadonlyMap<string, ReadonlyMap<string, string>> = groupKeepOriginal(KEEP_ORIGINAL_ATTRIBUTES)
 /** 合并区域内不能有的元素：链接、按钮、表单控件、时间元素、跳过标签（含 kbd） */
 const UNMERGEABLE_TAGS: ReadonlySet<string> = new Set(['a', 'button', 'input', 'select', ...SKIP_TAGS, ...TIME_TAGS])
 const MIRROR: ReadonlySet<string> = new Set(MIRROR_ATTRIBUTES)
@@ -202,6 +205,26 @@ type ParentState = 'covered' | 'open' | 'closed' | 'search'
 /** 非按钮 input 的 value、disabled 变化：交给 syncInputValue（只按属性规则改写 value） */
 function isInputValueChange(element: Element, name: string): boolean {
   return (name === 'value' || name === 'disabled') && element.localName === 'input' && !isButtonInput(element)
+}
+
+/** 按属性名、原文分组；同一原文的选择器合并 */
+function groupKeepOriginal(
+  entries: readonly (readonly [selector: string, attribute: string, source: string])[]
+): ReadonlyMap<string, ReadonlyMap<string, string>> {
+  const groups = new Map<string, Map<string, string>>()
+  for (const [selector, attribute, source] of entries) {
+    const sources = groups.get(attribute) ?? new Map<string, string>()
+    const existing = sources.get(source)
+    sources.set(source, existing === undefined ? selector : `${existing}, ${selector}`)
+    groups.set(attribute, sources)
+  }
+  return groups
+}
+
+/** 属性要保持原文：原文在 KEEP_ORIGINAL 中、元素命中对应的选择器 */
+function keepsOriginal(element: Element, name: string, source: string): boolean {
+  const selector = KEEP_ORIGINAL.get(name)?.get(normalizeText(source))
+  return selector !== undefined && safeMatches(element, selector)
 }
 
 /** 镜像文字属性白名单内的元素 */
@@ -691,6 +714,11 @@ export function createTranslator(options: TranslatorOptions): Translator {
     if (current === null) return
     const source = records.attributeSource(element, name, current)
     if (source === CONTESTED || source === null) return
+    // 其他扩展按英文值选择元素的属性：保持原文（已翻译的还原），不记未翻译
+    if (keepsOriginal(element, name, source)) {
+      if (current !== source) records.writeAttribute(element, name, current, source, source)
+      return
+    }
     // 属性规则命中时不查词典、不记未翻译
     const translated = applyAttributeRules(attributeRules, element, name, source) ?? translate(source)
     if (translated !== undefined || current !== source) {

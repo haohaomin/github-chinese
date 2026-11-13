@@ -45,7 +45,7 @@ export interface Controller {
   updateCustomEntries(entries: CustomEntries): void
   /** 更换语言包（页面翻译语言变化）：基于原文重译 */
   updateLocale(bundle: LocaleBundle, timeLang: string): void
-  /** 重新判断开关、排除路径与页面类型 */
+  /** 重新判断开关（总开关、汉化）、排除路径与页面类型 */
   checkLocation(): void
   /** 当前页面状态（popup 查询） */
   getStatus(): ContentStatus
@@ -105,10 +105,13 @@ export function createController(options: ControllerOptions): Controller {
     options.onReset?.(reason)
   }
 
-  /** 按开关与排除路径启停；仍在翻译时检查页面类型 */
+  /**
+   * 按开关与排除路径启停；仍在翻译时检查页面类型。
+   * 总开关、汉化都开启才翻译（同 shared/settings 的 isTranslationOn：那里引入存储，本模块不依赖扩展 API）
+   */
   function sync(): void {
     if (disposed) return
-    if (!settings.enabled) {
+    if (!settings.enabled || !settings.translation) {
       watcher.stop()
       stopTranslator()
       return

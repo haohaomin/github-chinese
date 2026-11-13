@@ -121,8 +121,7 @@ export default {
     'Visit profile': '造訪個人檔案'
   },
   scoped: {
-    // About（Activity 由 common-ui 收录）
-    'Edit repository metadata': '編輯儲存庫中繼資料',
+    // About（Activity 由 common-ui 收录；编辑按钮的 aria-label 保持原文，见 core/ignore 的 KEEP_ORIGINAL_ATTRIBUTES）
     Website: '網站',
     'Custom properties': '自訂屬性',
     // 计数：<strong>2.4k</strong> stars

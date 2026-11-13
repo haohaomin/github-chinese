@@ -14,6 +14,7 @@ export default {
   stateNotReady: '未就緒',
   stateTranslated: '已翻譯',
   stateExcluded: '已排除',
+  stateTranslationOff: '未翻譯',
   stateDisabled: '已停用',
   reload: '重新整理',
   authorize: '授權',
@@ -31,6 +32,7 @@ export default {
   themeDark: '深色',
 
   general: '一般',
+  translation: '中文化',
   translateTime: '時間在地化',
   translateTitle: '翻譯標題',
   languageSection: '語言',

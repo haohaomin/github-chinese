@@ -12,6 +12,7 @@ const zhCN = {
   stateNotReady: '未就绪',
   stateTranslated: '已翻译',
   stateExcluded: '已排除',
+  stateTranslationOff: '未翻译',
   stateDisabled: '已停用',
   reload: '刷新',
   authorize: '授权',
@@ -29,6 +30,7 @@ const zhCN = {
   themeDark: '深色',
 
   general: '常规',
+  translation: '汉化',
   translateTime: '时间本地化',
   translateTitle: '翻译标题',
   languageSection: '语言',

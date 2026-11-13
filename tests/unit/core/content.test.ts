@@ -22,6 +22,7 @@ type Listener = (message: unknown, sender: unknown, sendResponse: (response?: un
 const state = vi.hoisted(() => ({
   settings: {
     enabled: true,
+    translation: true,
     translateTime: true,
     translateTitle: true,
     excludedPaths: [] as readonly string[],
@@ -114,6 +115,7 @@ vi.mock('../../../src/shared/settings', () => ({
     return state.unwatchSettings
   }),
   isPathExcluded: (pathname: string, patterns: readonly string[]) => patterns.some(p => pathname.startsWith(p)),
+  isTranslationOn: (settings: { readonly enabled: boolean; readonly translation: boolean }) => settings.enabled && settings.translation,
   matchesPathPattern: (pathname: string, patterns: readonly string[]) => patterns.some(p => pathname.startsWith(p))
 }))
 
@@ -271,6 +273,7 @@ beforeEach(() => {
   state.settings = {
     ...state.settings,
     enabled: true,
+    translation: true,
     excludedPaths: [],
     language: 'auto',
     uiLanguage: 'auto',
@@ -981,6 +984,71 @@ describe('总开关关闭时启动', () => {
     await flushTasks()
     expect($('p').textContent).toBe('Issues')
     expect(marks()).toEqual([])
+  })
+})
+
+describe('汉化关闭（总开关开着）', () => {
+  /** 以给定设置启动，等启动时的补读完成 */
+  async function startWith(patch: Partial<typeof state.settings>): Promise<void> {
+    state.settings = { ...state.settings, ...patch }
+    const definition = await load()
+    context = createContext()
+    await definition.main(context as never)
+    await flushTasks()
+  }
+
+  /** 主世界桥接的询问：被取消即为在翻译 */
+  function askTranslating(): boolean {
+    return !window.dispatchEvent(new Event(TURBO_TRANSLATING_EVENT, { cancelable: true }))
+  }
+
+  /** 文件列表的一行，最近提交在 2 天前（更新时间着色照常标记） */
+  function addFileRow(): Element {
+    const time = document.createElement('relative-time')
+    time.setAttribute('datetime', new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString())
+    const cell = document.createElement('div')
+    cell.className = 'react-directory-commit-age'
+    cell.append(time)
+    document.body.append(cell)
+    return time
+  }
+
+  it('启动时不加载语言包，正文、标题保持原文，状态查询未在翻译；其他功能照常', async () => {
+    const time = addFileRow()
+    await startWith({ translation: false, freshness: true })
+    expect(locales.load).not.toHaveBeenCalled()
+    expect($('p').textContent).toBe('Issues')
+    expect(document.title).toBe('Issues · vuejs/core')
+    expect(send({ type: 'gcn:get-status' })).toMatchObject({ active: false, excluded: false, translatedCount: 0 })
+    expect(askTranslating()).toBe(false)
+    expect(time.getAttribute(FRESHNESS_ATTRIBUTE)).toBe('fresh')
+  })
+
+  it('翻译中关闭：还原原文，其他功能照常；再开启时照常翻译，不重复加载语言包', async () => {
+    const time = addFileRow()
+    await startWith({ freshness: true })
+    expect($('p').textContent).toBe('议题')
+    state.settingsListener!({ ...state.settings, translation: false })
+    await flushTasks()
+    expect($('p').textContent).toBe('Issues')
+    expect(document.title).toBe('Issues · vuejs/core')
+    expect(send({ type: 'gcn:get-status' })).toMatchObject({ active: false })
+    expect(askTranslating()).toBe(false)
+    expect(time.getAttribute(FRESHNESS_ATTRIBUTE)).toBe('fresh')
+    state.settingsListener!({ ...state.settings, translation: true })
+    await flushTasks()
+    expect($('p').textContent).toBe('议题')
+    expect(askTranslating()).toBe(true)
+    expect(locales.load).toHaveBeenCalledTimes(1)
+  })
+
+  it('关闭时启动，开启后加载语言包并翻译', async () => {
+    await startWith({ translation: false })
+    state.settingsListener!({ ...state.settings, translation: true })
+    await flushTasks()
+    expect(locales.load.mock.calls).toEqual([['zh-CN']])
+    expect($('p').textContent).toBe('议题')
+    expect(send({ type: 'gcn:get-status' })).toMatchObject({ active: true })
   })
 })
 

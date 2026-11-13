@@ -12,6 +12,7 @@ import { defineFakeRelativeTime, settleTime } from './time-element'
 const HOME = '/vuejs/core/issues'
 const SETTINGS: Settings = {
   enabled: true,
+  translation: true,
   translateTime: true,
   timeFormat: 'default',
   customTimeFormat: 'YYYY-MM-DD HH:mm',
@@ -98,6 +99,19 @@ describe('createController', () => {
     c.updateSettings({ ...SETTINGS })
     expect($('p').textContent).toBe('议题')
     c.updateSettings({ ...SETTINGS, enabled: false })
+    expect($('p').textContent).toBe('Issues')
+    expect(document.title).toBe('Issues · vuejs/core')
+  })
+
+  it('汉化关闭时不翻译（正文、标题保持原文），再开启时重译', () => {
+    const c = create('<p>Issues</p>', { translation: false })
+    expect(c.translator.active).toBe(false)
+    expect($('p').textContent).toBe('Issues')
+    expect(c.getStatus()).toMatchObject({ active: false, translatedCount: 0 })
+    c.updateSettings({ ...SETTINGS })
+    expect($('p').textContent).toBe('议题')
+    c.updateSettings({ ...SETTINGS, translation: false })
+    expect(c.translator.active).toBe(false)
     expect($('p').textContent).toBe('Issues')
     expect(document.title).toBe('Issues · vuejs/core')
   })

@@ -127,7 +127,7 @@ describe.skipIf(!App)('设置页组件', () => {
   })
 
   describe('布局', () => {
-    it('先是汉化设置（时间格式、排除路径；自定义词库、内置词库两个标签）、加速设置、净化设置、增强设置（自动加载、下载次数、新标签页打开、更新时间着色四个标签）、企业版设置五个标签页，再是关于；常规开关、语言下拉、快捷键都不在这里', async () => {
+    it('先是汉化设置（汉化开关、时间格式、排除路径；自定义词库、内置词库两个标签）、加速设置、净化设置、增强设置（自动加载、下载次数、新标签页打开、更新时间着色四个标签）、企业版设置五个标签页，再是关于；常规开关、语言下拉、快捷键都不在这里', async () => {
       const wrapper = await render()
       expect(wrapper.get('h1').text()).toBe('GitHub 中文化')
       expect(wrapper.get('[role="tablist"]').attributes('aria-label')).toBe('设置')
@@ -167,8 +167,9 @@ describe.skipIf(!App)('设置页组件', () => {
       expect(section(wrapper, '关于').element.closest('[role="tabpanel"]')).toBeNull()
       const main = wrapper.get('main').element
       expect(main.firstElementChild?.contains(wrapper.get('[role="tablist"]').element)).toBe(true)
-      // 开关只有加速的三个与各分类的自动隐藏、净化搜索，以及自动加载、下载次数、新标签页打开及其范围、更新时间着色（图片预览、下载文件夹只在弹出页）
+      // 开关只有汉化、加速的三个与各分类的自动隐藏、净化搜索，以及自动加载、下载次数、新标签页打开及其范围、更新时间着色（图片预览、下载文件夹只在弹出页）
       expect(wrapper.findAll('.ui-switch-label').map(item => item.text())).toEqual([
+        '汉化',
         '加速下载',
         '加速图片',
         '故障转移',
@@ -207,6 +208,19 @@ describe.skipIf(!App)('设置页组件', () => {
         'replace-category'
       ])
       expect(wrapper.text()).not.toContain('快捷键')
+    })
+
+    it('汉化开关在汉化设置顶部，默认开启，改动即时保存', async () => {
+      const wrapper = await render()
+      const toggle = wrapper.get('[data-test="translation"] [role="switch"]')
+      const panel = toggle.element.closest('.options-main > .ui-tabs > [role="tabpanel"]')
+      expect(panel?.getAttribute('aria-labelledby')).toBe(tab(wrapper, '汉化设置').attributes('id'))
+      expect(panel?.querySelector('[role="switch"]')).toBe(toggle.element)
+      expect(toggle.attributes('aria-checked')).toBe('true')
+      await toggle.trigger('click')
+      await settle()
+      expect((await getSettings()).translation).toBe(false)
+      expect(toggle.attributes('aria-checked')).toBe('false')
     })
 
     it('默认显示汉化设置；点标签切换面板，其他面板里未提交的输入保留', async () => {

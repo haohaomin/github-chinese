@@ -101,13 +101,12 @@ export default {
     'Show less activity like this': '減少顯示此類活動',
     'Unfollow this user': '取消追蹤此使用者',
 
-    // 旧版首页动态卡片：“不感兴趣”菜单、筛选状态、卡片区域的无障碍名称
+    // 旧版首页动态卡片：“不感兴趣”菜单、筛选状态；卡片区域的无障碍名称（card content）保持原文，见 core/ignore 的 KEEP_ORIGINAL_ATTRIBUTES
     // preferences 指想看的内容（喜好），不是设置义的“偏好設定”；名词 filter → 筛选器
     'Tell us more about your preferences': '進一步告訴我們你的喜好',
     'Filters are loading': '正在載入篩選器',
     'Failed to apply filters. Resetting your feed.': '無法套用篩選器。正在重設你的動態。',
     'feed item heading menu': '動態項目標題選單',
-    'card content': '卡片內容',
     'Repo Details': '儲存庫詳細資料'
   },
   scoped: {

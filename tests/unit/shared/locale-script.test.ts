@@ -157,6 +157,15 @@ describe('syncLocaleScript', () => {
     expect(registered).toEqual([])
   })
 
+  it('汉化关闭时注销（总开关开着，其他功能照常）；再开启时注册', async () => {
+    await syncLocaleScript(settings())
+    expect(registered).toHaveLength(1)
+    await syncLocaleScript(settings({ translation: false }))
+    expect(registered).toEqual([])
+    await syncLocaleScript(settings({ translation: true }))
+    expect(registered).toEqual([localeScript()])
+  })
+
   it('Firefox（申请 scripting，查询按注册时的顺序返回站点列表）：照常注册，相同设置不更新', async () => {
     vi.stubEnv('FIREFOX', 'true')
     vi.mocked(fakeBrowser.scripting.getRegisteredContentScripts).mockImplementation((async () =>

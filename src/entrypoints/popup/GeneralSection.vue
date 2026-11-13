@@ -2,12 +2,17 @@
   <section aria-labelledby="general-title">
     <h2 id="general-title" class="section-title">{{ t('general') }}</h2>
     <ul class="toggle-grid">
-      <li v-for="option in OPTIONS" :key="option.key" class="toggle-tile" :class="{ 'is-on': settings[option.key] }">
+      <li
+        v-for="option in OPTIONS"
+        :key="option.key"
+        class="toggle-tile"
+        :class="{ 'is-on': settings[option.key] && !blocked(option), 'is-blocked': blocked(option) }"
+      >
         <UiSwitch
           compact
           :label="t(option.label)"
           :checked="settings[option.key]"
-          :disabled="!ready"
+          :disabled="!ready || blocked(option)"
           @change="setOption(option.key, $event)"
         />
       </li>
@@ -26,12 +31,15 @@
   interface ToggleOption {
     readonly key: BooleanSettingKey
     readonly label: MessageKey
+    /** 所依赖的开关：它关闭时本开关不生效，显示为不可用 */
+    readonly requires?: BooleanSettingKey
   }
 
-  /** 总开关在弹出页顶部，这里不重复 */
+  /** 总开关在弹出页顶部，这里不重复；时间本地化、翻译标题随汉化 */
   const OPTIONS: readonly ToggleOption[] = [
-    { key: 'translateTime', label: 'translateTime' },
-    { key: 'translateTitle', label: 'translateTitle' },
+    { key: 'translation', label: 'translation' },
+    { key: 'translateTime', label: 'translateTime', requires: 'translation' },
+    { key: 'translateTitle', label: 'translateTitle', requires: 'translation' },
     { key: 'accelerate', label: 'accelerate' },
     { key: 'purifySearch', label: 'purifySearch' },
     { key: 'autoLoad', label: 'autoLoad' },
@@ -48,6 +56,11 @@
   const { settings, ready, update } = useSettings()
   // 保存失败时在页面顶部提示；再次保存成功时收起
   const toast = createToastSource()
+
+  /** 所依赖的开关已关闭 */
+  function blocked(option: ToggleOption): boolean {
+    return option.requires !== undefined && !settings.value[option.requires]
+  }
 
   async function setOption(key: BooleanSettingKey, value: boolean): Promise<void> {
     const patch: Partial<Settings> = { [key]: value }
@@ -91,6 +104,15 @@
   .toggle-tile.is-on {
     background: color-mix(in srgb, var(--gcn-accent) 6%, var(--gcn-bg));
     border-color: color-mix(in srgb, var(--gcn-accent) 45%, var(--gcn-border));
+  }
+
+  /* 所依赖的开关关闭：标签变灰，不可点 */
+  .toggle-tile.is-blocked {
+    color: var(--gcn-fg-muted);
+  }
+
+  .toggle-tile.is-blocked :deep(.ui-switch-label) {
+    cursor: not-allowed;
   }
 
   @media (prefers-reduced-motion: reduce) {

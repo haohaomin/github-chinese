@@ -116,6 +116,17 @@ describe('当前标签页状态', () => {
     expect((await setup()).state.value).toBe(expected)
   })
 
+  it.each([
+    [{ translation: false }, { ...STATUS, active: false, excluded: false }, 'translation-off'],
+    [{ translation: false }, { ...STATUS, active: false, excluded: true }, 'excluded'],
+    [{ enabled: false, translation: false }, { ...STATUS, active: false, excluded: false }, 'disabled']
+  ] as const)('设置 %j、状态 %j → %s', async (patch, status, expected) => {
+    await settingsItem.setValue({ ...DEFAULT_SETTINGS, ...patch })
+    await openTab(REPO_URL)
+    mockContent(contentWith(status))
+    expect((await setup()).state.value).toBe(expected)
+  })
+
   it('GitHub 状态页同样查询内容脚本状态', async () => {
     await openTab('https://www.githubstatus.com/history')
     mockContent(contentWith({ ...STATUS, active: true }))
@@ -473,6 +484,28 @@ describe('刷新与设置', () => {
     await popup.openOptions()
     expect(shownToasts()).toEqual([{ tone: 'danger', key: 'openFailed' }])
     expect(close).not.toHaveBeenCalled()
+  })
+})
+
+describe('汉化开关', () => {
+  it('常规区切换汉化后立即查询页面状态，不等轮询', async () => {
+    vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] })
+    await openTab(REPO_URL)
+    let active = true
+    const send = mockContent(message => (message.type === 'gcn:get-status' ? { ...STATUS, active } : undefined))
+    const both = withScope(() => ({ popup: usePopup(), section: useSettings() }))
+    try {
+      await settle()
+      const { popup, section } = both.result
+      expect(popup.state.value).toBe('translated')
+      active = false
+      expect(await section.update({ translation: false })).toBe(true)
+      await settle()
+      expect(popup.state.value).toBe('translation-off')
+      expect(messagesOf(send)).toEqual(['gcn:get-status', 'gcn:get-status'])
+    } finally {
+      both.stop()
+    }
   })
 })
 

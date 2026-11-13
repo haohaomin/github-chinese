@@ -216,6 +216,13 @@ describe.skipIf(!App)('弹出页组件', () => {
     expect(stateText(await render())).toBe(expected)
   })
 
+  it('总开关开着、汉化关闭 → 未翻译', async () => {
+    await settingsItem.setValue({ ...ZH_SETTINGS, translation: false })
+    await openTab(REPO_URL)
+    mockContent(contentWith({ ...STATUS, active: false, excluded: false }))
+    expect(stateText(await render())).toBe('未翻译')
+  })
+
   it('未授权 → 授权按钮在点击时请求权限', async () => {
     mockPermission(false)
     await focusWindow()
@@ -367,7 +374,7 @@ describe.skipIf(!App)('弹出页组件', () => {
       mockContent(contentWith())
       const wrapper = await render()
       expect(wrapper.findAll('label').filter(item => item.text() === '启用')).toHaveLength(1)
-      expect(wrapper.findAll('[role="switch"]')).toHaveLength(12)
+      expect(wrapper.findAll('[role="switch"]')).toHaveLength(13)
       expect(wrapper.findAll('[role="combobox"]').map(item => item.attributes('data-test'))).toEqual(['ui-language', 'page-language'])
       // 下拉是自绘的：没有原生 select（其弹出列表的样式改不了）
       expect(wrapper.find('select').exists()).toBe(false)
@@ -383,9 +390,9 @@ describe.skipIf(!App)('弹出页组件', () => {
         wrapper
           .findAll('[role="switch"], [data-test="theme-toggle"], [role="combobox"]')
           .map(item => (item.element as HTMLButtonElement).disabled)
-      expect(disabled()).toEqual(Array.from({ length: 15 }, () => true))
+      expect(disabled()).toEqual(Array.from({ length: 16 }, () => true))
       await settle()
-      expect(disabled()).toEqual(Array.from({ length: 15 }, () => false))
+      expect(disabled()).toEqual(Array.from({ length: 16 }, () => false))
     })
 
     it.each([
@@ -407,7 +414,7 @@ describe.skipIf(!App)('弹出页组件', () => {
   })
 
   describe('常规', () => {
-    it('只有时间本地化、翻译标题、加速下载、净化搜索、自动加载、图片预览、下载次数、下载文件夹、新标签页打开、中文自述文件、更新时间着色', async () => {
+    it('只有汉化、时间本地化、翻译标题、加速下载、净化搜索、自动加载、图片预览、下载次数、下载文件夹、新标签页打开、中文自述文件、更新时间着色', async () => {
       mockContent(contentWith())
       const wrapper = await render()
       expect(
@@ -415,6 +422,7 @@ describe.skipIf(!App)('弹出页组件', () => {
           .findAll('label')
           .map(item => item.text())
       ).toEqual([
+        '汉化',
         '时间本地化',
         '翻译标题',
         '加速下载',
@@ -474,6 +482,7 @@ describe.skipIf(!App)('弹出页组件', () => {
     })
 
     it.each([
+      ['汉化', 'translation'],
       ['时间本地化', 'translateTime'],
       ['翻译标题', 'translateTitle'],
       ['净化搜索', 'purifySearch'],
@@ -500,15 +509,45 @@ describe.skipIf(!App)('弹出页组件', () => {
       mockContent(contentWith())
       const wrapper = await render()
       const tiles = (): DOMWrapper<Element>[] => section(wrapper, '常规').findAll('.toggle-grid > .toggle-tile')
-      expect(tiles()).toHaveLength(11)
+      expect(tiles()).toHaveLength(12)
       expect(tiles().every(tile => tile.get('.ui-switch').classes().includes('ui-switch-compact'))).toBe(true)
       const on = (): boolean[] => tiles().map(tile => tile.classes().includes('is-on'))
       const checked = (): boolean[] => tiles().map(tile => tile.get('[role="switch"]').attributes('aria-checked') === 'true')
       expect(on()).toEqual(checked())
       await switchOf(section(wrapper, '常规'), '加速下载').trigger('click')
       await settle()
-      expect(tiles()[2]!.classes()).toContain('is-on')
+      expect(tiles()[3]!.classes()).toContain('is-on')
       expect(on()).toEqual(checked())
+    })
+
+    it('汉化关闭时时间本地化、翻译标题不可用，格子不标为开启；再开启时恢复', async () => {
+      mockContent(contentWith())
+      const wrapper = await render()
+      const general = section(wrapper, '常规')
+      const dependents = ['时间本地化', '翻译标题']
+      const tileOf = (label: string): DOMWrapper<Element> => {
+        const found = general.findAll('.toggle-tile').find(tile => tile.text() === label)
+        if (!found) throw new Error(`未找到格子：${label}`)
+        return found
+      }
+      const disabledOf = (label: string): boolean => (switchOf(general, label).element as HTMLButtonElement).disabled
+      await switchOf(general, '汉化').trigger('click')
+      await settle()
+      expect((await getSettings()).translation).toBe(false)
+      for (const label of dependents) {
+        expect(disabledOf(label)).toBe(true)
+        expect(switchOf(general, label).attributes('aria-checked')).toBe('true')
+        expect(tileOf(label).classes()).toContain('is-blocked')
+        expect(tileOf(label).classes()).not.toContain('is-on')
+      }
+      expect(disabledOf('加速下载')).toBe(false)
+      await switchOf(general, '汉化').trigger('click')
+      await settle()
+      for (const label of dependents) {
+        expect(disabledOf(label)).toBe(false)
+        expect(tileOf(label).classes()).toContain('is-on')
+        expect(tileOf(label).classes()).not.toContain('is-blocked')
+      }
     })
 
     it('保存失败时在页面顶部提示，开关不变；再次保存成功时收起', async () => {
