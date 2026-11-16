@@ -251,9 +251,13 @@ describe.each([
   ['zh-CN', zhCN],
   ['zh-TW', zhTW]
 ])('正式词典（%s）', (_, bundle) => {
-  it('占位文字在 common 作用域都有译文', () => {
+  it('占位文字在出现的页面都有译文：预览占位在 common 作用域，发行版表单标签按钮的值在发行版页', () => {
     const matcher = createMatcher(bundle)
-    for (const source of PLACEHOLDER_TEXTS) expect(matcher.translate(source, ['common']), source).toBeDefined()
+    const releaseForm = new Set(['Select tag', 'Auto'])
+    for (const source of PLACEHOLDER_TEXTS) {
+      const pages: PageKey[] = releaseForm.has(source) ? ['common', 'repository', 'releases'] : ['common']
+      expect(matcher.translate(source, pages), source).toBeDefined()
+    }
   })
 
   it('预览窗格的请求失败提示、经典预览区的加载中与出错段落都译出；stop 后还原', () => {

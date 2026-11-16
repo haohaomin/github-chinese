@@ -1031,7 +1031,24 @@ describe('repository 忽略选择器', () => {
         <li><span>Create branch</span><span class="RefActionText__buYlea">History</span><span>from</span><span class="RefActionText__buYlea">main</span></li>
       </ul>
       <div class="HighlightMatch__sV84Fj">src/Name</div>
-      <h2>Switch branches/tags</h2>`
+      <h2>Switch branches/tags</h2>
+      <button id="new-format" aria-label="Settings branch">
+        <div class="ref-selector-button-text-container RefSelectorAnchoredOverlay-module_zwGJlW_RefSelectorBtnTextContainer">
+          <span class="RefSelectorAnchoredOverlay-module_zwGJlW_RefSelectorText">Settings</span>
+        </div>
+      </button>
+      <ul role="menu">
+        <li><div class="HighlightedText-module_-IVSdq_Wrap"><div class="HighlightedText-module_-IVSdq_HighlightedText">Insights</div></div></li>
+        <li><span class="RefSelectorV1-module_dy9Ica_RefActionText">Wiki</span></li>
+        <li><a class="RefSelectorV1-module_dy9Ica_ViewAllRefsActionLink" href="/octo-org/hello-world/branches"><span class="RefSelectorV1-module_dy9Ica_ViewAllRefsActionText">View all branches</span></a></li>
+      </ul>
+      <div class="FileResultsList-module_ysudIa_HighlightMatch">docs/Guide</div>
+      <button id="ref-picker-releases-target">
+        <span class="RefSelectorText__DKi677"><span class="fgColor-muted">Target:</span><span>Code</span></span>
+      </button>
+      <button id="ref-picker-releases-tag">
+        <span class="RefSelectorAnchoredOverlay-module_zwGJlW_RefSelectorText"><span class="fgColor-muted">Tag:</span><span>Projects</span></span>
+      </button>`
 
     const selector = (dict.ignore ?? []).join(', ')
     const ignored = (text: string): boolean => {
@@ -1048,6 +1065,18 @@ describe('repository 忽略选择器', () => {
     expect(ignored('from')).toBe(false)
     expect(ignored('Switch branches/tags')).toBe(false)
     expect(document.querySelector('[data-testid="anchor-button"]')?.closest(selector)).toBeNull()
+    // 类名的另一种写法（模块-module_哈希_名称）
+    expect(ignored('Settings')).toBe(true)
+    expect(ignored('Insights')).toBe(true)
+    expect(ignored('Wiki')).toBe(true)
+    expect(ignored('docs/Guide')).toBe(true)
+    expect(ignored('View all branches')).toBe(false)
+    expect(document.getElementById('new-format')?.closest(selector)).toBeNull()
+    // 发行版表单：字段名照常翻译，其后的值忽略
+    expect(ignored('Target:')).toBe(false)
+    expect(ignored('Code')).toBe(true)
+    expect(ignored('Tag:')).toBe(false)
+    expect(ignored('Projects')).toBe(true)
   })
 
   it('侧栏软件包名被忽略，分节文字不被忽略', () => {

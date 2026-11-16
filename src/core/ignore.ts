@@ -326,19 +326,29 @@ export const IGNORE_SELECTORS: readonly string[] = [
  * - 经典评论框的预览区（CLASSIC_PREVIEW_SELECTOR）：脚本用 innerHTML 依次写入 <p>Loading preview…</p>、
  *   <p>Nothing to preview</p>，出错时写入 <p>Error rendering preview</p>。区域里只有这一个不带属性的段落
  *   （其余子节点只有空白文字）、段落里只有一个文本节点（用户内容的段落带 dir="auto"）。
+ * - 发行版表单的标签、上一个标签按钮里字段名之后的值（PLACEHOLDER_SELECTOR，见 repository 词典的忽略规则）：
+ *   未选择时是 Select tag、Auto，选择后是标签名。
  * 其他忽略区域（标题、描述、标签名等）里同样的文字是用户内容，保持原文
  */
 export const PLACEHOLDER_TEXTS: ReadonlySet<string> = new Set([
   'Nothing to preview',
   'Markdown preview unavailable',
   'Loading preview…',
-  'Error rendering preview'
+  'Error rendering preview',
+  'Select tag',
+  'Auto'
 ])
 
-/** 占位文字所在的区域根：Markdown 编辑器的预览窗格（带哈希类名，或屏幕阅读器播报区域）下的 .markdown-body */
-export const PLACEHOLDER_SELECTOR = ['[class*="previewViewerWrapper__"] > .markdown-body', '[aria-live="polite"] > .markdown-body'].join(
-  ', '
-)
+/**
+ * 占位文字所在的区域根：Markdown 编辑器的预览窗格（带哈希类名，或屏幕阅读器播报区域）下的 .markdown-body；
+ * 发行版表单的标签、上一个标签按钮里字段名（.fgColor-muted）之后的值（类名有 名称__哈希、模块-module_哈希_名称 两种写法）
+ */
+export const PLACEHOLDER_SELECTOR = [
+  '[class*="previewViewerWrapper__"] > .markdown-body',
+  '[aria-live="polite"] > .markdown-body',
+  '[id^="ref-picker-releases-"] [class*="RefSelectorText__"] > span:not(.fgColor-muted)',
+  '[id^="ref-picker-releases-"] [class*="_RefSelectorText"] > span:not(.fgColor-muted)'
+].join(', ')
 
 /** 占位段落所在的区域根：经典评论框（.js-previewable-comment-form）的预览区 .comment-body.markdown-body.js-preview-body */
 export const CLASSIC_PREVIEW_SELECTOR = '.js-preview-body'

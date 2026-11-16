@@ -56,6 +56,8 @@ const regexp: readonly RegExpRule[] = [
   // 编辑 / 删除按钮的无障碍名称
   [/^Edit: (\S.*)$/, '编辑：$1'],
   [/^Delete: (\S.*)$/, '删除：$1'],
+  // 编辑页标题：Edit <标签名>
+  [/^Edit (\S+)$/, '编辑 $1'],
   // 删除发行版确认
   [/^This will delete the information for the release (\S+)\.$/, '这将删除发行版 $1 的信息。'],
   // 搜索无结果

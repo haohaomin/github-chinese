@@ -1,5 +1,6 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
 import { createMatcher } from '../../../src/core/matcher'
+import { createTranslator, type Translator } from '../../../src/core/translator'
 import type { PageDictionary, PageKey } from '../../../src/core/types'
 import releases from '../../../src/locales/zh-CN/releases'
 import repository from '../../../src/locales/zh-CN/repository'
@@ -100,6 +101,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   // 编辑 / 删除按钮
   { hits: [['Edit: v1.0.0', '编辑：v1.0.0']], misses: ['Edit:'] },
   { hits: [['Delete: v1.0.0', '删除：v1.0.0']], misses: ['Delete:'] },
+  { hits: [['Edit v1.0.0', '编辑 v1.0.0']], misses: ['Edit v1.0.0 notes'] },
   {
     hits: [['This will delete the information for the release v1.0.0.', '这将删除发行版 v1.0.0 的信息。']],
     misses: ['This will delete the information for the release.']
@@ -335,6 +337,90 @@ describe('releases 页面词条', () => {
     expect(matcher.translate('octocat and hubot', ['common', 'repository'])).toBeUndefined()
     expect(matcher.translate('Release v3.5.0', ['common', 'repository', 'commits'])).toBeUndefined()
     expect(matcher.translate('Tag: v1.0.0', ['common', 'repository', 'commits'])).toBeUndefined()
+  })
+})
+
+describe('发行版表单：标签选择按钮与编辑页标题', () => {
+  let translator: Translator | undefined
+
+  afterEach(() => {
+    translator?.stop()
+    translator = undefined
+    document.body.innerHTML = ''
+  })
+
+  /** 标签选择按钮：灰色的字段名（React 渲染成「字段名」「:」两段文字）与值；textClass 为两种写法的类名之一 */
+  function refButton(id: string, field: string, value: string, textClass: string): string {
+    return `
+      <button id="${id}" type="button" aria-label="${field}: ${value}">
+        <span class="prc-Button-Label-FWkx3"><div class="ref-selector-button-text-container">
+          <span class="${textClass}"><span class="fgColor-muted">${field}:</span><span>${value}</span></span>
+        </div></span>
+      </button>`
+  }
+
+  function start(html: string): void {
+    document.body.innerHTML = html
+    for (const label of document.querySelectorAll('.fgColor-muted')) {
+      const text = label.firstChild as Text
+      text.splitText(text.data.length - 1)
+    }
+    translator = createTranslator({
+      matcher: createMatcher([
+        ['repository', repository],
+        ['releases', releases]
+      ]),
+      host: window,
+      resolvePages: () => ['repository', 'releases']
+    })
+    translator.start()
+  }
+
+  const field = (id: string): string | undefined => document.querySelector(`#${id} .fgColor-muted`)?.textContent ?? undefined
+  const value = (id: string): string | undefined => document.querySelector(`#${id} .fgColor-muted + span`)?.textContent ?? undefined
+
+  it.each(['RefSelectorText__DKi677', 'RefSelectorAnchoredOverlay-module_zwGJlW_RefSelectorText'])(
+    '新建页（%s）：字段名与未选择时的值译出',
+    textClass => {
+      start(
+        refButton('ref-picker-releases-tag', 'Tag', 'Select tag', textClass) +
+          refButton('ref-picker-releases-previous-tag', 'Previous tag', 'Auto', textClass)
+      )
+      expect(field('ref-picker-releases-tag')).toBe('标签：')
+      expect(value('ref-picker-releases-tag')).toBe('选择标签')
+      expect(field('ref-picker-releases-previous-tag')).toBe('上一个标签：')
+      expect(value('ref-picker-releases-previous-tag')).toBe('自动')
+      expect(document.getElementById('ref-picker-releases-tag')?.getAttribute('aria-label')).toBe('标签：选择标签')
+      expect(document.getElementById('ref-picker-releases-previous-tag')?.getAttribute('aria-label')).toBe('上一个标签：自动')
+    }
+  )
+
+  it.each(['RefSelectorText__DKi677', 'RefSelectorAnchoredOverlay-module_zwGJlW_RefSelectorText'])(
+    '编辑页（%s）：标题与字段名译出，标签名、目标分支名保持原文（与词条同形也不译）',
+    textClass => {
+      start(
+        `<div class="Subhead"><h1 class="Subhead-heading"><strong>Edit v1.0.0</strong></h1></div>` +
+          refButton('ref-picker-releases-tag', 'Tag', 'Latest', textClass) +
+          refButton('ref-picker-releases-target', 'Target', 'Latest', textClass) +
+          refButton('ref-picker-releases-previous-tag', 'Previous tag', 'v0.9.0', textClass)
+      )
+      expect(document.querySelector('h1')?.textContent).toBe('编辑 v1.0.0')
+      expect(field('ref-picker-releases-tag')).toBe('标签：')
+      expect(value('ref-picker-releases-tag')).toBe('Latest')
+      expect(field('ref-picker-releases-target')).toBe('目标：')
+      expect(value('ref-picker-releases-target')).toBe('Latest')
+      expect(field('ref-picker-releases-previous-tag')).toBe('上一个标签：')
+      expect(value('ref-picker-releases-previous-tag')).toBe('v0.9.0')
+    }
+  )
+
+  it('选择上一个标签后显示标签名，不再按占位文字翻译', async () => {
+    start(refButton('ref-picker-releases-previous-tag', 'Previous tag', 'Auto', 'RefSelectorText__DKi677'))
+    const node = document.querySelector('#ref-picker-releases-previous-tag .fgColor-muted + span')!.firstChild as Text
+    expect(node.data).toBe('自动')
+    node.data = 'Latest'
+    await new Promise(resolve => setTimeout(resolve, 0))
+    expect(value('ref-picker-releases-previous-tag')).toBe('Latest')
   })
 })
 

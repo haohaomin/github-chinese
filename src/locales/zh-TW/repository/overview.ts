@@ -341,11 +341,20 @@ export default {
     ]
   ],
   ignore: [
-    // 分支选择器按钮上的当前分支名、列表中的分支 / 标记名、新建分支的名称与来源
-    '[class*="RefSelectorText__"]',
+    // 类名有 名称__哈希、模块-module_哈希_名称 两种写法，各写一条
+    // 分支选择器按钮上的当前分支名；发行版表单的标记、目标、上一个标记按钮里，灰色的字段名（Tag: 等）照常翻译，
+    // 只忽略其后的值（未选择时的 Select tag、Auto 照常翻译，见 core/ignore 的 PLACEHOLDER_TEXTS）
+    '[class*="RefSelectorText__"]:not(:has(.fgColor-muted))',
+    '[class*="_RefSelectorText"]:not(:has(.fgColor-muted))',
+    '[class*="RefSelectorText__"] > span:not(.fgColor-muted)',
+    '[class*="_RefSelectorText"] > span:not(.fgColor-muted)',
+    // 列表中的分支 / 标记名、新建分支的名称与来源
     '[class*="HighlightedText__"]',
+    '[class*="_HighlightedText"]',
     '[class*="RefActionText__"]',
+    '[class*="_RefActionText"]',
     // 转到文件的搜索结果路径
-    '[class*="HighlightMatch__"]'
+    '[class*="HighlightMatch__"]',
+    '[class*="_HighlightMatch"]'
   ]
 } satisfies PageDictionary
