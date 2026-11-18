@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { test as base, chromium, expect, type BrowserContext, type Locator, type Page, type Worker } from '@playwright/test'
 import { DEFAULT_AUTO_LOAD_SCOPES } from '../../src/shared/auto-load'
-import { DEFAULT_FRESHNESS_COLORS } from '../../src/shared/freshness'
+import { DEFAULT_FRESHNESS_COLORS, DEFAULT_FRESHNESS_DAYS } from '../../src/shared/freshness'
 import type { CustomEntries, Settings } from '../../src/shared/settings'
 
 /** 被测扩展目录：默认构建产物 .output/chrome-mv3（bun run build）；E2E_EXTENSION 可指向其他解压目录 */
@@ -61,6 +61,7 @@ export const DEFAULT_SETTINGS: Settings = {
   newTabPaths: [],
   chineseReadme: false,
   freshness: false,
+  freshnessDays: DEFAULT_FRESHNESS_DAYS,
   freshnessColors: DEFAULT_FRESHNESS_COLORS,
   categories: [],
   categoryOrder: [],
@@ -83,7 +84,7 @@ export function extractJsonScripts(html: string): string[] {
   return [...html.matchAll(pattern)].map(match => match[1]!)
 }
 
-/** 夹具中 <title> 的文本（与 document.title 一样合并空白） */
+/** 夹具中 <title> 的文本（与document.title 一样合并空白） */
 export function extractTitle(html: string): string {
   return (/<title>([\s\S]*?)<\/title>/.exec(html)?.[1] ?? '').replace(/\s+/g, ' ').trim()
 }

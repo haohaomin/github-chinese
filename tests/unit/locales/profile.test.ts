@@ -52,14 +52,14 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [['Email: octocat@github.com', '电子邮件：octocat@github.com']], misses: ['Email: not provided'] },
   {
     hits: [
-      ['- 1h ahead', '- 快 1 小时'],
-      ['- 7h behind', '- 慢 7 小时'],
+      ['- 1h ahead', '- 快1小时'],
+      ['- 7h behind', '- 慢7小时'],
       // 脚本写入的半小时时区：时与分之间没有空格
-      ['- 2h30m behind', '- 慢 2 小时 30 分钟'],
-      ['- 5h30m ahead', '- 快 5 小时 30 分钟'],
-      ['- 5h 30m ahead', '- 快 5 小时 30 分钟'],
-      ['- 5.5h ahead', '- 快 5.5 小时'],
-      ['- 30m behind', '- 慢 30 分钟']
+      ['- 2h30m behind', '- 慢2小时 30分钟'],
+      ['- 5h30m ahead', '- 快5小时 30分钟'],
+      ['- 5h 30m ahead', '- 快5小时 30分钟'],
+      ['- 5.5h ahead', '- 快5.5小时'],
+      ['- 30m behind', '- 慢30分钟']
     ],
     // 时间相同时脚本整段写入「- same time」，不带前导 - 的写法不收录
     misses: ['- 1 hour ahead', '- 2h30 behind', 'same time']
@@ -93,25 +93,25 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [['12 contributions in the last year in vuejs', '过去一年在 vuejs 中共 12 次贡献']],
     misses: ['contributions in the last year in vuejs']
   },
-  { hits: [['4 contributions in 2011', '2011 年共 4 次贡献']], misses: ['4 contributions in 11'] },
+  { hits: [['4 contributions in 2011', '2011年共 4 次贡献']], misses: ['4 contributions in 11'] },
   {
-    hits: [['1 contribution in 2024 in octo-org', '2024 年在 octo-org 中共 1 次贡献']],
+    hits: [['1 contribution in 2024 in octo-org', '2024年在 octo-org 中共 1 次贡献']],
     misses: ['1 contribution in 2024 in the octo-org organization']
   },
   {
     hits: [
-      ['2 contributions on October 28th.', '10 月 28 日有 2 次贡献。'],
-      ['1 contribution on September 21st.', '9 月 21 日有 1 次贡献。'],
-      ['47 contributions on February 2nd.', '2 月 2 日有 47 次贡献。']
+      ['2 contributions on October 28th.', '10月28日有 2 次贡献。'],
+      ['1 contribution on September 21st.', '9月21日有 1 次贡献。'],
+      ['47 contributions on February 2nd.', '2月2日有 47 次贡献。']
     ],
     misses: ['2 contributions on Oct 28th.']
   },
   {
-    hits: [['No contributions on December 15th.', '12 月 15 日没有贡献。']],
+    hits: [['No contributions on December 15th.', '12月15日没有贡献。']],
     misses: ['No contributions on 15 December.']
   },
   {
-    hits: [['Contribution activity in 2026, 1 of 16', '2026 年贡献活动，16 项中的第 1 项']],
+    hits: [['Contribution activity in 2026, 1 of 16', '2026年贡献活动，16 项中的第 1 项']],
     misses: ['Contribution activity in 2026']
   },
 
@@ -188,7 +188,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [['1 task', '1 个任务']], misses: ['tasks'] },
   { hits: [['Progress: 0.0%', '进度：0.0%']], misses: ['Progress: done'] },
   {
-    hits: [['81% of commits in October were made to octo-org/hello-world', '10 月的提交中有 81% 提交到 octo-org/hello-world']],
+    hits: [['81% of commits in October were made to octo-org/hello-world', '10月的提交中有 81% 提交到 octo-org/hello-world']],
     misses: ['81% of commits were made to octo-org/hello-world']
   },
   {
@@ -219,15 +219,15 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ["octocat's activity is private"]
   },
   {
-    hits: [['This contribution was made on Oct 21', '此贡献发生于 10 月 21 日']],
+    hits: [['This contribution was made on Oct 21', '此贡献发生于 10月21日']],
     misses: ['This contribution was made yesterday']
   },
   {
-    hits: [['Oct 1 – Oct 25', '10 月 1 日 – 10 月 25 日']],
+    hits: [['Oct 1 – Oct 25', '10月1日 – 10月25日']],
     misses: ['Oct 1 - Oct 25']
   },
   {
-    hits: [['octocat (The Octocat) / September 2026', 'octocat (The Octocat) / 2026 年 9 月']],
+    hits: [['octocat (The Octocat) / September 2026', 'octocat (The Octocat) / 2026年9月']],
     misses: ['octocat / Sept 2026']
   },
 
@@ -306,11 +306,11 @@ const REGEXP_CASES: readonly RegExpCase[] = [
 
   // 赞助标签页
   {
-    hits: [['Sponsoring since January 31, 2022', '赞助始于 2022 年 1 月 31 日']],
+    hits: [['Sponsoring since January 31, 2022', '赞助始于 2022年1月31日']],
     misses: ['Sponsoring since last year']
   },
   {
-    hits: [['Sponsored on October 31, 2021', '赞助于 2021 年 10 月 31 日']],
+    hits: [['Sponsored on October 31, 2021', '赞助于 2021年10月31日']],
     misses: ['Sponsored yesterday']
   },
 
@@ -575,9 +575,9 @@ describe('profile 静态词条', () => {
 describe('profile 页面词条', () => {
   it.each([
     ['Less', '较少'],
-    ['January', '1 月'],
-    ['Jan', '1 月'],
-    ['Dec', '12 月'],
+    ['January', '1月'],
+    ['Jan', '1月'],
+    ['Dec', '12月'],
     ['Sunday', '星期日'],
     ['Mon', '周一'],
     ['merged', '个已合并的'],
@@ -713,9 +713,9 @@ describe('计数与日期交给 common-ui', () => {
     ['1 follower', '1 个关注者'],
     ['32 remaining', '剩余 32'],
     // 日期格式由 helpers 生成（中文与数字之间加空格）
-    ['Oct 18', '10 月 18 日'],
-    ['on Sep 19, 2025', '2025 年 9 月 19 日'],
-    ['October 2026', '2026 年 10 月']
+    ['Oct 18', '10月18日'],
+    ['on Sep 19, 2025', '2025年9月19日'],
+    ['October 2026', '2026年10月']
   ])('%s → %s', (input, expected) => {
     expect(withCommon.translate(input, ['common', 'profile'])).toBe(expected)
   })
@@ -883,7 +883,7 @@ describe('个人主页（DOM）', () => {
     expect(text(body.querySelector('div'))).toBe(`85.1k 个关注者 · ${expected}`)
   })
 
-  it('贡献时间线月份标题整段合并后翻译：October <span>2026</span> → 2026 年 10 月', () => {
+  it('贡献时间线月份标题整段合并后翻译：October <span>2026</span> → 2026年10月', () => {
     const body = start(`
       <div class="contribution-activity-listing float-left col-12">
         <div class="width-full tmp-pb-4">
@@ -892,7 +892,7 @@ describe('个人主页（DOM）', () => {
           </h3>
         </div>
       </div>`)
-    expect(text(body.querySelector('h3'))).toBe('2026 年 10 月')
+    expect(text(body.querySelector('h3'))).toBe('2026年10月')
   })
 
   it('侧栏赞助者列表标题译“赞助者”，其他页面的 Sponsors 仍作“赞助”', () => {
@@ -969,7 +969,7 @@ describe('个人主页（DOM）', () => {
           </div>
         </div>
       </turbo-frame>`)
-    expect(text(body.querySelector('.d-table-cell > div > span'))).toBe('赞助始于 2022 年 1 月 31 日')
+    expect(text(body.querySelector('.d-table-cell > div > span'))).toBe('赞助始于 2022年1月31日')
     expect(text(body.querySelector('a[data-hovercard-type="user"]'))).toBe('The Octocat octocat')
   })
 })

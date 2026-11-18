@@ -326,9 +326,9 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['Added Oct 1, 2024 | Last used Oct 26, 2025', '2024 年 10 月 1 日添加 | 2025 年 10 月 26 日使用'],
-      ['Added 3 days ago | Last used never', '3 天前添加 | 从未使用'],
-      ['Added on Jan 5, 2024 | Last used yesterday', '2024 年 1 月 5 日添加 | 昨天使用']
+      ['Added Oct 1, 2024 | Last used Oct 26, 2025', '2024年10月1日添加 | 2025年10月26日使用'],
+      ['Added 3 days ago | Last used never', '3天前添加 | 从未使用'],
+      ['Added on Jan 5, 2024 | Last used yesterday', '2024年1月5日添加 | 昨天使用']
     ],
     misses: ['Added Oct 1, 2024']
   },
@@ -368,7 +368,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       // 日期未被拆开时与拆开后的片段拼读一致：“…将从 <日期> 起需要启用…”
       [
         'Because of your contributions on GitHub, two-factor authentication will be required for your account starting Nov 15, 2025. Thank you for helping keep the ecosystem safe!',
-        '鉴于你在 GitHub 上的贡献，你的帐户将从 2025 年 11 月 15 日起需要启用双因素身份验证。感谢你帮助维护生态安全！'
+        '鉴于你在 GitHub 上的贡献，你的帐户将从 2025年11月15日起需要启用双因素身份验证。感谢你帮助维护生态安全！'
       ]
     ],
     misses: [
@@ -379,7 +379,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'to enable two-factor authentication as an additional security measure. Your activity on GitHub includes you in this requirement. You will need to re-enable two-factor authentication on your account before September 28, 2023, otherwise your account will be restricted on that date.',
-        '启用双因素身份验证作为额外的安全措施。你在 GitHub 上的活动使你也在此要求范围内。你需要在 2023 年 9 月 28 日之前为帐户重新启用双因素身份验证，否则你的帐户将在当天受到限制。'
+        '启用双因素身份验证作为额外的安全措施。你在 GitHub 上的活动使你也在此要求范围内。你需要在 2023年9月28日之前为帐户重新启用双因素身份验证，否则你的帐户将在当天受到限制。'
       ]
     ],
     misses: [
@@ -402,22 +402,22 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   {
     hits: [
       // 中文前缀接时间：数字开头补空格，中文开头不加
-      ['Last accessed on Oct 26, 2026', '上次访问于 2026 年 10 月 26 日'],
-      ['Last accessed - 2 hours ago', '上次访问于 2 小时前'],
+      ['Last accessed on Oct 26, 2026', '上次访问于 2026年10月26日'],
+      ['Last accessed - 2 hours ago', '上次访问于 2小时前'],
       ['Last accessed yesterday', '上次访问于昨天']
     ],
     misses: ['Last accessed on someday']
   },
   {
     hits: [
-      ['Registered - Oct 1, 2025', '注册于 2025 年 10 月 1 日'],
-      ['Registered - 2 years ago', '注册于 2 年前'],
+      ['Registered - Oct 1, 2025', '注册于 2025年10月1日'],
+      ['Registered - 2 years ago', '注册于 2年前'],
       ['Registered - yesterday', '注册于昨天']
     ],
     misses: ['Registered - unknown']
   },
   {
-    hits: [['Last used for authentication - 5 minutes ago', '上次身份验证于 5 分钟前']],
+    hits: [['Last used for authentication - 5 minutes ago', '上次身份验证于 5分钟前']],
     misses: ['Last used for authentication - never']
   },
   {
@@ -429,7 +429,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       // 国家/地区名沿用 common/regions 的译名
       [
         'View details of session from Hong Kong last accessed October 26, 2026',
-        '查看来自中国香港且上次访问于 2026 年 10 月 26 日的会话详细信息'
+        '查看来自中国香港且上次访问于 2026年10月26日的会话详细信息'
       ],
       ['View details of session from Atlantis last accessed 2 days ago', '查看来自 Atlantis 且上次访问于前天的会话详细信息']
     ],
@@ -460,19 +460,19 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       // 方案名译成「X 版」；未收录的（Marketplace 应用的计划名）保留原文
       [
         "You've cancelled your subscription to Copilot Pro. This plan change will take effect on Nov 1, 2025.",
-        '你已取消订阅 Copilot 专业版。此计划变更将于 2025 年 11 月 1 日生效。'
+        '你已取消订阅 Copilot 专业版。此计划变更将于 2025年11月1日生效。'
       ],
       [
         "You've cancelled your subscription to Codecov. This plan change will take effect on Nov 1, 2025.",
-        '你已取消订阅 Codecov。此计划变更将于 2025 年 11 月 1 日生效。'
+        '你已取消订阅 Codecov。此计划变更将于 2025年11月1日生效。'
       ]
     ],
     misses: ["You've cancelled your subscription to Copilot Pro."]
   },
   {
     hits: [
-      ['$4.00 off per month until Dec 31, 2026', '2026 年 12 月 31 日前每月减免 $4.00'],
-      ['$4.00 off per month until Dec 31, 2026.', '2026 年 12 月 31 日前每月减免 $4.00。']
+      ['$4.00 off per month until Dec 31, 2026', '2026年12月31日前每月减免 $4.00'],
+      ['$4.00 off per month until Dec 31, 2026.', '2026年12月31日前每月减免 $4.00。']
     ],
     misses: ['$4.00 off per month until further notice']
   },
@@ -485,8 +485,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['until Dec 31, 2026.', '至 2026 年 12 月 31 日。'],
-      ['until Jan 2027', '至 2027 年 1 月']
+      ['until Dec 31, 2026.', '至 2026年12月31日。'],
+      ['until Jan 2027', '至 2027年1月']
     ],
     misses: ['until further notice']
   },
@@ -499,19 +499,19 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['Submitted 3 days ago', '提交于 3 天前'],
+      ['Submitted 3 days ago', '提交于 3天前'],
       ['Submitted 2 days ago', '提交于前天'],
-      ['Submitted on Oct 1, 2025', '提交于 2025 年 10 月 1 日']
+      ['Submitted on Oct 1, 2025', '提交于 2025年10月1日']
     ],
     misses: ['Submitted']
   },
   {
     hits: [
-      ['Expires in 2 years', '2 年后过期'],
-      ['Expires in almost 3 months', '将近 3 个月后过期'],
-      ['Expires in about 2 months', '约 2 个月后过期'],
-      ['Expires in 3 days', '3 天后过期'],
-      ['Expires in 1 day', '1 天后过期']
+      ['Expires in 2 years', '2年后过期'],
+      ['Expires in almost 3 months', '将近 3个月后过期'],
+      ['Expires in about 2 months', '约 2个月后过期'],
+      ['Expires in 3 days', '3天后过期'],
+      ['Expires in 1 day', '1天后过期']
     ],
     misses: ['Expires in a week']
   },
@@ -586,10 +586,10 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   {
     hits: [
       // 与组织计费页一致
-      ['Gross metered usage for Oct 1 - Oct 31, 2025.', '10 月 1 日 - 2025 年 10 月 31 日的按流量计费的使用情况总额。'],
-      ['Included usage discounts for Oct 1 - Oct 31, 2025', '10 月 1 日 - 2025 年 10 月 31 日的包含的使用量折扣'],
+      ['Gross metered usage for Oct 1 - Oct 31, 2025.', '10月1日 - 2025年10月31日的按流量计费的使用情况总额。'],
+      ['Included usage discounts for Oct 1 - Oct 31, 2025', '10月1日 - 2025年10月31日的包含的使用量折扣'],
       // 采集到的写法：完整月份名（与组织计费页同为“…的按流量计费的使用情况总额”）
-      ['Gross metered usage for October 1 - October 30, 2026.', '10 月 1 日 - 2026 年 10 月 30 日的按流量计费的使用情况总额。']
+      ['Gross metered usage for October 1 - October 30, 2026.', '10月1日 - 2026年10月30日的按流量计费的使用情况总额。']
     ],
     misses: ['Gross metered usage for this month.']
   },
@@ -597,17 +597,17 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'Current usage for Oct 1 - Oct 31, 2025. Monthly quota resets in 5 day(s).',
-        '10 月 1 日 - 2025 年 10 月 31 日的当前使用情况。每月配额将在 5 天后重置。'
+        '10月1日 - 2025年10月31日的当前使用情况。每月配额将在 5天后重置。'
       ]
     ],
     misses: ['Current usage for Oct 1 - Oct 31, 2025.']
   },
   {
-    hits: [['Resets in 5 days on Nov 1, 2025', '5 天后于 2025 年 11 月 1 日重置']],
+    hits: [['Resets in 5 days on Nov 1, 2025', '5天后于 2025年11月1日重置']],
     misses: ['Resets in 5 days']
   },
   {
-    hits: [['Included usage limits reset in 5 days.', '包含的使用量限制将在 5 天后重置。']],
+    hits: [['Included usage limits reset in 5 days.', '包含的使用量限制将在 5天后重置。']],
     misses: ['Included usage limits reset soon']
   },
   {
@@ -626,7 +626,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['12.50 off']
   },
   {
-    hits: [['$4.00 off per month for 1 year', '1 年内每月减免 $4.00']],
+    hits: [['$4.00 off per month for 1 year', '1年内每月减免 $4.00']],
     misses: ['$4.00 off per month for a year']
   },
   {
@@ -763,14 +763,14 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['Top ten repositories this month']
   },
   {
-    hits: [['Oct 26, 2025 (All times in UTC)', '2025 年 10 月 26 日（UTC 时间）']],
+    hits: [['Oct 26, 2025 (All times in UTC)', '2025年10月26日（UTC 时间）']],
     misses: ['Today (All times in UTC)']
   },
   {
     hits: [
-      ['Usage for Oct 26, 2025', '2025 年 10 月 26 日的使用情况'],
-      ['Usage for Oct 26, 2025.', '2025 年 10 月 26 日的使用情况。'],
-      ['Usage for Oct 1 - Oct 31, 2026.', '10 月 1 日 - 2026 年 10 月 31 日的使用情况。']
+      ['Usage for Oct 26, 2025', '2025年10月26日的使用情况'],
+      ['Usage for Oct 26, 2025.', '2025年10月26日的使用情况。'],
+      ['Usage for Oct 1 - Oct 31, 2026.', '10月1日 - 2026年10月31日的使用情况。']
     ],
     misses: ['Usage for today', 'Usage for Oct 1 - later.']
   },
@@ -778,20 +778,20 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'Usage for Oct 1 - Oct 31, 2026. For license-based products, the price/unit is a prorated portion of the monthly price.',
-        '10 月 1 日 - 2026 年 10 月 31 日的使用情况。对于按许可证计费的产品，单价为月价按比例折算的部分。'
+        '10月1日 - 2026年10月31日的使用情况。对于按许可证计费的产品，单价为月价按比例折算的部分。'
       ]
     ],
     misses: ['Usage for today. For license-based products, the price/unit is a prorated portion of the monthly price.']
   },
   {
     hits: [
-      ['Oct 1 - Oct 31, 2025', '10 月 1 日 - 2025 年 10 月 31 日'],
-      ['Sep 1, 2025 - Sep 30, 2025', '2025 年 9 月 1 日 - 2025 年 9 月 30 日']
+      ['Oct 1 - Oct 31, 2025', '10月1日 - 2025年10月31日'],
+      ['Sep 1, 2025 - Sep 30, 2025', '2025年9月1日 - 2025年9月30日']
     ],
     misses: ['Oct 1 - later']
   },
   {
-    hits: [['Metered usage before the billing transition, until April 04, 2025', '计费过渡前按流量计费的使用情况，截至 2025 年 4 月 4 日']],
+    hits: [['Metered usage before the billing transition, until April 04, 2025', '计费过渡前按流量计费的使用情况，截至 2025年4月4日']],
     misses: ['Metered usage before the billing transition, until further notice']
   },
   // 使用情况图表的无障碍描述（原文无逗号、冒号，译文不加：“X 图表显示 Y 的数据。找到 N 个数据点。”）
@@ -803,7 +803,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       ],
       [
         'AI usage chart showing data for Oct 1 - Oct 31, 2026. 1 data point found.',
-        'AI 使用情况图表显示 10 月 1 日 - 2026 年 10 月 31 日的数据。找到 1 个数据点。'
+        'AI 使用情况图表显示 10月1日 - 2026年10月31日的数据。找到 1 个数据点。'
       ],
       [
         'Actions usage grouped by SKU chart showing data for Last month. 3 data points found.',
@@ -901,7 +901,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         "We're preparing your usage report. It may take ~30 minutes to see usage in your report. We'll send an email to mona@example.com when it's ready.",
-        '正在准备使用情况报告。使用情况可能约 30 分钟后才会出现在报告中。报告就绪后会发送电子邮件至 mona@example.com。'
+        '正在准备使用情况报告。使用情况可能约30分钟后才会出现在报告中。报告就绪后会发送电子邮件至 mona@example.com。'
       ]
     ],
     misses: ["We're preparing your usage report."]
@@ -984,7 +984,7 @@ describe('settings-account 正则词条', () => {
     expect(translate('will be used for account-related notifications as well as password resets.')).toBe('将用于帐户相关通知和重置密码。')
     // 计费卡片：Gross metered usage for <span>Oct 1 - Oct 31, 2025</span>.
     expect(translate('Gross metered usage for')).toBe('按流量计费的使用情况总额')
-    expect(translate('Oct 1 - Oct 31, 2025')).toBe('10 月 1 日 - 2025 年 10 月 31 日')
+    expect(translate('Oct 1 - Oct 31, 2025')).toBe('10月1日 - 2025年10月31日')
     // 教育福利：We require applicants of <strong>学校</strong> to use one of these …
     expect(translate('We require applicants of')).toBe('我们要求')
     expect(translate('to use one of these school-issues email addresses to apply:')).toBe('的申请人使用以下学校电子邮件地址之一进行申请：')
@@ -1081,7 +1081,7 @@ describe('settings-account 工具函数', () => {
   })
 
   it('joinCjk（helpers）拼接中文前缀：后接数字或英文时补空格，后接中文时直接相连', () => {
-    expect(joinCjk('提交于', '3 天前')).toBe('提交于 3 天前')
+    expect(joinCjk('提交于', '3天前')).toBe('提交于 3天前')
     expect(joinCjk('提交于', '昨天')).toBe('提交于昨天')
     expect(joinCjk('按产品分组的', 'Actions 使用情况')).toBe('按产品分组的 Actions 使用情况')
     expect(joinCjk('按', 'SKU')).toBe('按 SKU')
@@ -1201,7 +1201,7 @@ describe('settings-account 静态词条', () => {
     ['Alternative 2FA option:', '其他 2FA 方法：'],
     ['Jobs profile', '求职个人资料'],
     // 原文无冒号，译文不加
-    ['e.g. 2 hours ago', '例如 2 小时前'],
+    ['e.g. 2 hours ago', '例如 2小时前'],
     // 产品名、方案名按用户规定译成中文（Actions → 操作、Codespaces → 代码空间、Packages → 软件包、Pages → 页面、
     // Marketplace → 市场、GitHub Mobile → GitHub 移动版、Pro → 专业版、Free → 免费版、Business → 商业版）
     ['2,000 Actions minutes/month', '每月 2,000 操作分钟数'],

@@ -111,8 +111,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['Iteration: Iteration 3 (Oct 01 - Oct 14)', '迭代：Iteration 3（10 月 1 日 - 10 月 14 日）'],
-      ['Sprint: Sprint 9 (Dec 25, 2026 - Jan 07, 2027)', 'Sprint：Sprint 9（2026 年 12 月 25 日 - 2027 年 1 月 7 日）']
+      ['Iteration: Iteration 3 (Oct 01 - Oct 14)', '迭代：Iteration 3（10月1日 - 10月14日）'],
+      ['Sprint: Sprint 9 (Dec 25, 2026 - Jan 07, 2027)', 'Sprint：Sprint 9（2026年12月25日 - 2027年1月7日）']
     ],
     misses: ['Sprint 9 (Oct 01 - Oct 14)']
   },
@@ -121,7 +121,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       ['Status: Done', '状态：已完成'],
       ['Status: Blocked', '状态：Blocked'],
       ['Estimate: 0', '估算：0'],
-      ['Created: Oct 26, 2026', '创建时间：2026 年 10 月 26 日'],
+      ['Created: Oct 26, 2026', '创建时间：2026年10月26日'],
       ['Labels: bug', '标签：bug']
     ],
     misses: ['Story points: 3', 'Status Done']
@@ -267,36 +267,36 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['Today: Mon, Oct 26', '今天：10 月 26 日周一'],
-      ['Today: Mon, Oct 26 - Fri, Nov 6 [Iteration 3]', '今天：10 月 26 日周一 - 11 月 6 日周五 [Iteration 3]']
+      ['Today: Mon, Oct 26', '今天：10月26日周一'],
+      ['Today: Mon, Oct 26 - Fri, Nov 6 [Iteration 3]', '今天：10月26日周一 - 11月6日周五 [Iteration 3]']
     ],
     misses: ['Today: tomorrow']
   },
-  { hits: [['Scroll to: Fri, Jan 8 2027', '滚动到：2027 年 1 月 8 日周五']], misses: ['Scroll to: next week'] },
-  { hits: [['Add to today at Mon, Oct 26', '添加到今天 10 月 26 日周一']], misses: ['Add to today at noon'] },
+  { hits: [['Scroll to: Fri, Jan 8 2027', '滚动到：2027年1月8日周五']], misses: ['Scroll to: next week'] },
+  { hits: [['Add to today at Mon, Oct 26', '添加到今天 10月26日周一']], misses: ['Add to today at noon'] },
   {
-    hits: [['Add to Mon, Oct 26 - Fri, Nov 6 [Iteration 3]', '添加到 10 月 26 日周一 - 11 月 6 日周五 [Iteration 3]']],
+    hits: [['Add to Mon, Oct 26 - Fri, Nov 6 [Iteration 3]', '添加到 10月26日周一 - 11月6日周五 [Iteration 3]']],
     misses: ['Add to Monday']
   },
   {
-    hits: [['Create an iteration containing Tue, Dec 1 to add items here', '创建包含 12 月 1 日周二的迭代后才能在此添加项']],
+    hits: [['Create an iteration containing Tue, Dec 1 to add items here', '创建包含 12月1日周二的迭代后才能在此添加项']],
     misses: ['Create an iteration containing today to add items here']
   },
   {
     hits: [
-      ['Mon, Oct 26 - Fri, Nov 6', '10 月 26 日周一 - 11 月 6 日周五'],
+      ['Mon, Oct 26 - Fri, Nov 6', '10月26日周一 - 11月6日周五'],
       [
         'Mon, Oct 26 - Fri, Nov 6 [Iteration 3 start - Iteration 4 end]',
-        '10 月 26 日周一 - 11 月 6 日周五 [Iteration 3 开始 - Iteration 4 结束]'
+        '10月26日周一 - 11月6日周五 [Iteration 3 开始 - Iteration 4 结束]'
       ],
-      ['Mon, Oct 26 [Iteration 3 start - Oct 30]', '10 月 26 日周一 [Iteration 3 开始 - 10 月 30 日]']
+      ['Mon, Oct 26 [Iteration 3 start - Oct 30]', '10月26日周一 [Iteration 3 开始 - 10月30日]']
     ],
     misses: ['Mon, Oct 26 -']
   },
   {
     hits: [
-      ['Oct 01 - Oct 14', '10 月 1 日 - 10 月 14 日'],
-      ['Dec 25, 2026 - Jan 07, 2027', '2026 年 12 月 25 日 - 2027 年 1 月 7 日']
+      ['Oct 01 - Oct 14', '10月1日 - 10月14日'],
+      ['Dec 25, 2026 - Jan 07, 2027', '2026年12月25日 - 2027年1月7日']
     ],
     misses: ['Oct 01 - later']
   },
@@ -396,11 +396,11 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [['Unset Todo as default', '取消 Todo 的默认']], misses: ['Unset Todo'] },
   { hits: [['Maximum of 50 options reached', '已达到 50 个选项的上限']], misses: ['Maximum options reached'] },
   {
-    hits: [['Label text must be 100 characters or fewer', '标签文本不能超过 100 个字符']],
+    hits: [['Label text must be 100 characters or fewer', '标签文本不能超过100 个字符']],
     misses: ['Label text must be short']
   },
   {
-    hits: [['Description must be 256 characters or fewer', '描述不能超过 256 个字符']],
+    hits: [['Description must be 256 characters or fewer', '描述不能超过256 个字符']],
     misses: ['Description must be short']
   },
   // 迭代
@@ -409,7 +409,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['Iteration length must be positive']
   },
   {
-    hits: [['Iteration length must be 365 or less', '迭代时长不能超过 365']],
+    hits: [['Iteration length must be 365 or less', '迭代时长不能超过365']],
     misses: ['Iteration length must be 365 or fewer']
   },
   { hits: [['3 Active', '活动 3']], misses: ['Active 3'] },
@@ -628,7 +628,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'More than 100 cells are selected. Deselect some cells to perform bulk edits.',
-        '已选择超过 100 个单元格。取消选择部分单元格后才能批量编辑。'
+        '已选择超过100 个单元格。取消选择部分单元格后才能批量编辑。'
       ]
     ],
     misses: ['More than 100 cells are selected.']
@@ -710,30 +710,30 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   // 里程碑与状态更新
   {
     hits: [
-      ['Past due by 3 days', '已逾期 3 天'],
-      ['Past due by about 2 months', '已逾期约 2 个月'],
-      ['Past due by a day', '已逾期 1 天']
+      ['Past due by 3 days', '已逾期 3天'],
+      ['Past due by about 2 months', '已逾期约 2个月'],
+      ['Past due by a day', '已逾期 1天']
     ],
     misses: ['Past due by tomorrow']
   },
   {
     hits: [
-      ['Due by Oct 26, 2026', '截止于 2026 年 10 月 26 日'],
-      ['Due by Nov 3', '截止于 11 月 3 日']
+      ['Due by Oct 26, 2026', '截止于 2026年10月26日'],
+      ['Due by Nov 3', '截止于 11月3日']
     ],
     misses: ['Due by tomorrow']
   },
   {
     hits: [
-      ['View latest On track status updated Oct 20, 2026', '查看更新于 2026 年 10 月 20 日的最新进展顺利状态'],
-      ['View latest Blocked status updated Oct 20', '查看更新于 10 月 20 日的最新 Blocked 状态']
+      ['View latest On track status updated Oct 20, 2026', '查看更新于 2026年10月20日的最新进展顺利状态'],
+      ['View latest Blocked status updated Oct 20', '查看更新于 10月20日的最新Blocked 状态']
     ],
     misses: ['View latest status update']
   },
   {
     hits: [
-      ['Updated 3 days ago', '更新于 3 天前'],
-      ['Updated less than a minute ago', '更新于不到 1 分钟前'],
+      ['Updated 3 days ago', '更新于 3天前'],
+      ['Updated less than a minute ago', '更新于不到 1分钟前'],
       ['Updated yesterday', '更新于昨天']
     ],
     misses: ['Updated recently']
@@ -847,10 +847,10 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   // 日期选择器与日期
   { hits: [['Week 42', '第 42 周']], misses: ['Week'] },
-  { hits: [['Must be on or after Oct 1, 2026', '不能早于 2026 年 10 月 1 日']], misses: ['Must be on or after'] },
-  { hits: [['Must be on or before Dec 31, 2026', '不能晚于 2026 年 12 月 31 日']], misses: ['Must be after Oct 1'] },
+  { hits: [['Must be on or after Oct 1, 2026', '不能早于 2026年10月1日']], misses: ['Must be on or after'] },
+  { hits: [['Must be on or before Dec 31, 2026', '不能晚于 2026年12月31日']], misses: ['Must be after Oct 1'] },
   {
-    hits: [['Start date - Open date picker (currently selected: Oct 26, 2026)', '开始日期 - 打开日期选择器（当前：2026 年 10 月 26 日）']],
+    hits: [['Start date - Open date picker (currently selected: Oct 26, 2026)', '开始日期 - 打开日期选择器（当前：2026年10月26日）']],
     misses: ['Start date - Open date picker']
   },
   {
@@ -862,15 +862,15 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['Monday, October 26', '10 月 26 日星期一'],
-      ['Monday, October 26 (Today) (Start of selected range)', '10 月 26 日星期一（今天）（所选范围开始）']
+      ['Monday, October 26', '10月26日星期一'],
+      ['Monday, October 26 (Today) (Start of selected range)', '10月26日星期一（今天）（所选范围开始）']
     ],
     misses: ['Monday, October']
   },
   {
     hits: [
-      ['Oct 26, 2026', '2026 年 10 月 26 日'],
-      ['October 2026', '2026 年 10 月']
+      ['Oct 26, 2026', '2026年10月26日'],
+      ['October 2026', '2026年10月']
     ],
     misses: ['Oct 2026 release']
   },
@@ -1326,7 +1326,7 @@ describe('projects 页面词条', () => {
     ['Transfer issue', '转移议题'],
     ['milestone in the', '里程碑于'],
     ['Add items from', '从以下存储库添加项'],
-    ['7 or more days ago', '7 天前或更早'],
+    ['7 or more days ago', '7天前或更早'],
     ['Past 30 days', '过去 30 天'],
     ['Last 7 days', '最近 7 天'],
     ['3 months', '3 个月'],
@@ -1818,8 +1818,8 @@ describe('projects 被元素拆开的句子（DOM）', () => {
 
   it('路线图标记的读屏文本：(Starting on <time>) / (Due on <time>) 整句译出，括号改为全角', () => {
     render(ROADMAP_MARKER)
-    expect(text('sr')).toBe('（开始于 2026 年 10 月 26 日）')
-    expect(document.querySelector('#milestone .sr-only')?.textContent).toBe('（截止于 2026 年 11 月 6 日）')
+    expect(text('sr')).toBe('（开始于 2026年10月26日）')
+    expect(document.querySelector('#milestone .sr-only')?.textContent).toBe('（截止于 2026年11月6日）')
     expect(document.querySelector('#milestone')?.firstChild?.textContent).toBe('v1.0')
   })
 

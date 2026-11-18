@@ -48,7 +48,7 @@ const ATTESTATION_FIELDS: Readonly<Record<string, string>> = {
   'Workflow File': '工作流程檔案'
 }
 
-/** Created 的取值：Oct 23 (Fri, 23 Oct 2026 20:22:17 GMT) → 10 月 23 日 (Fri, 23 Oct 2026 20:22:17 GMT)；括号内的完整时间戳保留原文 */
+/** Created 的取值：Oct 23 (Fri, 23 Oct 2026 20:22:17 GMT) → 10月23日 (Fri, 23 Oct 2026 20:22:17 GMT)；括号内的完整时间戳保留原文 */
 const CREATED_VALUE_RE = new RegExp(`^(${TIME_SOURCE})( \\(.+\\))?$`)
 
 function attestationValue(field: string, value: string): string {

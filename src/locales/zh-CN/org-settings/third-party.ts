@@ -61,7 +61,7 @@ export default {
     'Receive webhooks for private events.': '接收私密事件的 Web 钩子。',
     'Restrict third-party application access': '限制第三方应用访问',
     'Restricting access will immediately block all unapproved applications and will disable SSH keys created before February 2014.':
-      '限制访问将立即阻止所有未批准的应用，并禁用 2014 年 2 月之前创建的 SSH 密钥。',
+      '限制访问将立即阻止所有未批准的应用，并禁用 2014年2月之前创建的 SSH 密钥。',
     // OAuth 应用访问申请详细信息（/orgs/<组织>/policies/applications/<id>，organization 页面类型）
     'Applications act on your behalf to access your data based on the permissions you grant them. Organizations control which applications are allowed to access their private data. Applications authorized by members will always have access to public data in your organization.':
       '应用会根据你授予的权限代表你访问数据。组织可以控制允许哪些应用访问其私密数据。成员授权的应用始终可以访问组织的公开数据。',

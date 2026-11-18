@@ -570,7 +570,7 @@ export default {
       (_, date: string, dot: string) => `${joinCjk('至', translateTime(date))}${dot ? '。' : ''}`
     ],
     [/^· (\d+) (day|month|year)s? remaining$/, (_, amount: string, unit: string) => `· 剩餘 ${amount} ${UNITS[unit] ?? unit}`],
-    // 申请的送出时间：3 天前送出、2025 年 10 月 1 日送出（submit 按术语表作「送出」）
+    // 申请的送出时间：3 天前送出、2025年10月1日送出（submit 按术语表作「送出」）
     [new RegExp(`^Submitted (${TIME_SOURCE})$`), (_, time: string) => joinCjk(translateTime(time), '送出')],
     // 未来的到期用「到期」（同 org-settings/third-party.ts 的 Expires on）
     [

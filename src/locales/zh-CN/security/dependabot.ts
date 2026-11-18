@@ -47,7 +47,7 @@ export default {
     'Reprocess your project’s current dependency files.': '重新处理项目当前的依赖文件。',
     'Refresh queued, it may take several minutes to see changes reflected in your alerts.':
       '已加入刷新队列，警报可能需要几分钟才会反映更改。',
-    'Refreshed recently, available again in about 1 hour.': '最近已刷新，约 1 小时后可再次刷新。',
+    'Refreshed recently, available again in about 1 hour.': '最近已刷新，约1小时后可再次刷新。',
     'Welcome to Dependabot alerts!': '欢迎使用 Dependabot 警报！',
     "Dependabot alerts track security vulnerabilities that apply to your repository's dependencies.":
       'Dependabot 警报跟踪影响存储库依赖项的安全漏洞。',

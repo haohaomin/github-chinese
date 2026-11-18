@@ -92,11 +92,11 @@ export default {
       '首次在存储库中搜索时，该存储库需要先建立索引。',
     'This process may take a few minutes.': '此过程可能需要几分钟。',
     'The index currently includes more than 70 million popular public repositories, plus all private repositories that users search for.':
-      '索引目前包含超过 7000 万个热门公共存储库，以及用户搜索过的全部专用存储库。',
+      '索引目前包含超过7000 万个热门公共存储库，以及用户搜索过的全部专用存储库。',
     "Beyond that, we also don't include all files in the search index:": '此外，搜索索引并不包含所有文件：',
     'Beyond that, we also don’t include all files in the search index:': '此外，搜索索引并不包含所有文件：',
     'Vendored and generated code is excluded': '排除内置的第三方代码和生成的代码',
-    'Empty files and files over 350 kiB are excluded': '排除空文件和超过 350 kiB 的文件',
+    'Empty files and files over 350 kiB are excluded': '排除空文件和超过350 kiB 的文件',
     'Only UTF-8 encoded files are indexed': '仅索引 UTF-8 编码的文件',
     'Very large repositories may not be indexed': '超大存储库可能不会被索引',
     'We intend to continue to increase the amount of code available in the index as much as possible. If we are missing files that are useful to you, feel free to':

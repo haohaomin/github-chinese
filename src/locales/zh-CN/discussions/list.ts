@@ -34,7 +34,7 @@ const NOT_REPO = '(?!(?:a|about|all|an|and|for|in|of|on|or|our|started|the|to|up
 export const COMMENT_TIME_SOURCE = `\\d{1,2}:\\d{2}[AP]M (?:today|yesterday|on ${DATE_SOURCE})`
 const COMMENT_TIME_RE = new RegExp(`^(\\d{1,2}):(\\d{2})([AP]M) (today|yesterday|on ${DATE_SOURCE})$`)
 
-/** 11:34PM on September 06 → 9 月 6 日 23:34；01:59AM today → 今天 1:59（小时不补零，与 Intl 输出一致） */
+/** 11:34PM on September 06 → 9月6日 23:34；01:59AM today → 今天 1:59（小时不补零，与 Intl 输出一致） */
 export function commentTime(text: string): string {
   const match = COMMENT_TIME_RE.exec(text)
   if (!match) return text

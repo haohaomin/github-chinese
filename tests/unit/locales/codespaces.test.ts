@@ -33,8 +33,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [['Owned by octo-org', '归属于 octo-org']], misses: ['Owned by you and others'] },
   {
     hits: [
-      ['Last used 3 days ago', '上次使用 3 天前'],
-      ['Last used on Jan 5, 2024', '上次使用 2024 年 1 月 5 日'],
+      ['Last used 3 days ago', '上次使用 3天前'],
+      ['Last used on Jan 5, 2024', '上次使用 2024年1月5日'],
       // 中文开头的时间不补空格
       ['Last used yesterday', '上次使用昨天']
     ],
@@ -42,16 +42,16 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['Auto-deletes in 30 days', '30 天后自动删除'],
-      ['Auto-delete on Feb 1', '2 月 1 日自动删除'],
+      ['Auto-deletes in 30 days', '30天后自动删除'],
+      ['Auto-delete on Feb 1', '2月1日自动删除'],
       ['Auto-deletes tomorrow', '明天自动删除']
     ],
     misses: ['Auto-deletes soon']
   },
   {
     hits: [
-      ['Created 2 hours ago', '2 小时前创建'],
-      ['Created on Mar 3', '3 月 3 日创建'],
+      ['Created 2 hours ago', '2小时前创建'],
+      ['Created on Mar 3', '3月3日创建'],
       ['Created yesterday', '昨天创建']
     ],
     misses: ['Created recently']
@@ -210,7 +210,7 @@ describe('codespaces 正则词条', () => {
   })
 
   it('React 拆分的相邻文本节点拼接后命中', () => {
-    expect(translate(normalizeText(['Last used ', '3 days ago'].join('')))).toBe('上次使用 3 天前')
+    expect(translate(normalizeText(['Last used ', '3 days ago'].join('')))).toBe('上次使用 3天前')
     expect(translate(normalizeText(['8', '-core', ' · ', '32', ' GB RAM', ' · ', '64', ' GB'].join('')))).toBe(
       '8 核 · 32 GB 内存 · 64 GB 存储'
     )

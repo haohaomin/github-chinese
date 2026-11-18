@@ -193,7 +193,7 @@ export default {
     // 「…You can learn more about the sunset in our」+ 链接「changelog」+「and can get started now by migrating to rulesets.」
     // （原文链接后无逗号，译文不加）
     'Protected tags are being deprecated. To continue protecting tags, please migrate to a tag ruleset by August 30th. You can learn more about the sunset in our':
-      '受保护标签即将弃用。如需继续保护标签，请在 8 月 30 日前迁移到标签规则集。你可以在',
+      '受保护标签即将弃用。如需继续保护标签，请在 8月30日前迁移到标签规则集。你可以在',
     'and can get started now by migrating to rulesets.': '中了解停用详情并立即开始迁移到规则集。',
     'Protected tags': '受保护标签',
     'Protected tags are available to Pro, Team, and Enterprise users': '专业版、团队版和企业版用户可以使用受保护标签',

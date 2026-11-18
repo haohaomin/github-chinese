@@ -552,7 +552,7 @@ export default {
     // 与开发人员设置的令牌有效期一致，用“过期”
     [
       /^Expires in (?:(about|almost|over) )?(\d+) (day|month|year)s?$/,
-      (_, qualifier: string, amount: string, unit: string) => `${QUALIFIERS[qualifier] ?? ''}${amount} ${UNITS[unit] ?? unit}后过期`
+      (_, qualifier: string, amount: string, unit: string) => `${QUALIFIERS[qualifier] ?? ''}${amount}${UNITS[unit] ?? unit}后过期`
     ],
     // 付款方式：卡片尾号与有效期
     [/^(Visa|Mastercard|MasterCard|American Express|Amex|Discover|JCB|Diners Club|UnionPay) ending in (\d{4})$/, '$1 尾号 $2'],

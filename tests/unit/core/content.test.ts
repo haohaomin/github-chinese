@@ -51,6 +51,7 @@ const state = vi.hoisted(() => ({
     newTabPaths: [] as readonly string[],
     chineseReadme: false,
     freshness: false,
+    freshnessDays: { fresh: 7, recent: 365 },
     freshnessColors: { fresh: { light: '', dark: '' }, recent: { light: '', dark: '' }, stale: { light: '', dark: '' } } as Record<
       string,
       Record<string, string>
@@ -193,7 +194,7 @@ function send(message: unknown): unknown {
   return response
 }
 
-/** 异步应答：handled 为监听器是否保持消息通道 */
+/** 异步应答：handled为监听器是否保持消息通道 */
 function sendAsync(message: unknown): { handled: boolean; response: Promise<unknown> } {
   let resolve: (value: unknown) => void = () => undefined
   const response = new Promise(done => {
@@ -298,6 +299,7 @@ beforeEach(() => {
     newTabPaths: [],
     chineseReadme: false,
     freshness: false,
+    freshnessDays: { fresh: 7, recent: 365 },
     freshnessColors: { fresh: { light: '', dark: '' }, recent: { light: '', dark: '' }, stale: { light: '', dark: '' } }
   }
   locales.load.mockReset()
@@ -1194,7 +1196,7 @@ describe('重置事件与实例标记', () => {
     expect(events).toEqual(['reset', 'reset', 'reset', 'reset'])
   })
 
-  it('重置事件是不带 detail 的普通 Event：跨世界读不到 detail', async () => {
+  it('重置事件是不带detail 的普通 Event：跨世界读不到detail', async () => {
     document.documentElement.setAttribute(`${INSTANCE_MARK_PREFIX}stale`, '')
     const seen: Event[] = []
     const listener = (event: Event): void => {
@@ -1319,7 +1321,7 @@ describe('重置事件与实例标记', () => {
 
   it('旧实例未还原就被销毁（Firefox 更新扩展）：新实例停用时强制重新访问，页面换回原文', async () => {
     const definition = await load()
-    // 旧实例：观察器随沙箱一起失效，不会调用 dispose
+    // 旧实例：观察器随沙箱一起失效，不会调用dispose
     let sandboxAlive = true
     class SandboxedObserver extends MutationObserver {
       constructor(callback: MutationCallback) {
@@ -1621,7 +1623,7 @@ describe('图片加速', () => {
     return img
   }
 
-  it('开启时图片加载失败：请后台取回，换上应答的 data: 地址', async () => {
+  it('开启时图片加载失败：请后台取回，换上应答的data: 地址', async () => {
     state.settings = { ...state.settings, accelerateImages: true }
     runtime.sendMessage.mockResolvedValue({ ok: true, url: DATA })
     await start()

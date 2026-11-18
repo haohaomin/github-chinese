@@ -109,8 +109,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['The job has exceeded the maximum execution time of 6h0m0s', '作业已超过最长执行时间 6 小时 0 分钟 0 秒'],
-      ['The job has exceeded the maximum execution time of 30m 0s', '作业已超过最长执行时间 30 分钟 0 秒']
+      ['The job has exceeded the maximum execution time of 6h0m0s', '作业已超过最长执行时间 6小时 0分钟 0秒'],
+      ['The job has exceeded the maximum execution time of 30m 0s', '作业已超过最长执行时间 30分钟 0秒']
     ],
     misses: ['The job has exceeded the maximum execution time']
   },
@@ -176,7 +176,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'This request was automatically failed because there were no enabled runners online to process the request for more than 1 days.',
-        '此请求因超过 1 天没有已启用的在线运行器处理而自动失败。'
+        '此请求因超过1 天没有已启用的在线运行器处理而自动失败。'
       ]
     ],
     misses: ['This request was automatically failed.']
@@ -200,16 +200,16 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['succeeded 5 minutes ago in 1m 41s', `成功于 ${ago(5, 'minute')} 用时 1 分钟 41 秒`],
-      ['failed Oct 26, 2026 in 54s', `失败于 ${day(2026, 10, 26)} 用时 54 秒`],
-      ['timed out 2 hours ago in 6h 0m 0s', `超时于 ${ago(2, 'hour')} 用时 6 小时 0 分钟 0 秒`],
-      ['succeeded yesterday in 54s', '成功于昨天 用时 54 秒']
+      ['succeeded 5 minutes ago in 1m 41s', `成功于 ${ago(5, 'minute')} 用时 1分钟 41秒`],
+      ['failed Oct 26, 2026 in 54s', `失败于 ${day(2026, 10, 26)} 用时 54秒`],
+      ['timed out 2 hours ago in 6h 0m 0s', `超时于 ${ago(2, 'hour')} 用时 6小时 0分钟 0秒`],
+      ['succeeded yesterday in 54s', '成功于昨天 用时 54秒']
     ],
     misses: ['succeeded 5 minutes ago', 'succeeded in 1m 41s']
   },
   {
     hits: [
-      ['Started 5m ago', '开始于 5 分钟前'],
+      ['Started 5m ago', '开始于 5分钟前'],
       ['Started 5 minutes ago', `开始于 ${ago(5, 'minute')}`],
       ['Started just now', '开始于刚刚']
     ],
@@ -217,8 +217,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['in 1m 41s', '用时 1 分钟 41 秒'],
-      ['in 54s', '用时 54 秒']
+      ['in 1m 41s', '用时 1分钟 41秒'],
+      ['in 54s', '用时 54秒']
     ],
     // in progress 是部署状态的页面词条，不作反例
     misses: ['in sync', 'in 1m 41']
@@ -252,11 +252,11 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [['2 more', '其他 2 个']], misses: ['more'] },
   {
     hits: [
-      ['1m 44s', '1 分钟 44 秒'],
-      ['9h 55m 51s', '9 小时 55 分钟 51 秒'],
-      ['2m 0s', '2 分钟 0 秒'],
-      ['45s', '45 秒'],
-      ['1d 2h 3m 4s', '1 天 2 小时 3 分钟 4 秒']
+      ['1m 44s', '1分钟 44秒'],
+      ['9h 55m 51s', '9小时 55分钟 51秒'],
+      ['2m 0s', '2分钟 0秒'],
+      ['45s', '45秒'],
+      ['1d 2h 3m 4s', '1天 2小时 3分钟 4秒']
     ],
     misses: ['1k', '1m44s']
   },
@@ -526,14 +526,14 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['Auto-refresh: 30s', '自动刷新：30 秒'],
-      ['Auto-refresh: 1m', '自动刷新：1 分钟'],
+      ['Auto-refresh: 30s', '自动刷新：30秒'],
+      ['Auto-refresh: 1m', '自动刷新：1分钟'],
       ['Auto-refresh: Off', '自动刷新：关闭']
     ],
     misses: ['Auto-refresh:']
   },
   {
-    hits: [['1m 44s. Show run duration details', '1 分钟 44 秒。显示运行时长详细信息']],
+    hits: [['1m 44s. Show run duration details', '1分钟 44秒。显示运行时长详细信息']],
     misses: ['Show run duration details']
   },
   {
@@ -969,7 +969,7 @@ describe('actions 页面词条', () => {
     // <span>Pull request</span><a>#16026</a><span>opened</span><span>by</span><a>octocat</a>（拉取请求动词 open → 创建）
     expect(['opened', 'by'].map(translate)).toEqual(['创建', '由'])
     // 作业标题：succeeded <relative-time> in 1m 41s
-    expect(['succeeded', 'in 1m 41s'].map(translate)).toEqual(['成功于', '用时 1 分钟 41 秒'])
+    expect(['succeeded', 'in 1m 41s'].map(translate)).toEqual(['成功于', '用时 1分钟 41秒'])
     // 等待批准：This workflow is <strong>awaiting approval</strong> from a maintainer in <a>#123</a>
     expect(['This workflow is', 'awaiting approval', 'from a maintainer in'].map(translate)).toEqual([
       '此工作流正在',
@@ -1049,11 +1049,11 @@ describe('actions 繁体词条（zh-TW）', () => {
 
 describe('actions 格式工具', () => {
   it.each([
-    ['45s', '45 秒'],
-    ['1m 44s', '1 分钟 44 秒'],
-    ['2m 0s', '2 分钟 0 秒'],
-    ['6h0m0s', '6 小时 0 分钟 0 秒'],
-    ['1d 2h 3m 4s', '1 天 2 小时 3 分钟 4 秒']
+    ['45s', '45秒'],
+    ['1m 44s', '1分钟 44秒'],
+    ['2m 0s', '2分钟 0秒'],
+    ['6h0m0s', '6小时 0分钟 0秒'],
+    ['1d 2h 3m 4s', '1天 2小时 3分钟 4秒']
   ])('时长 %s → %s', (input, expected) => {
     expect(formatDuration(input)).toBe(expected)
   })

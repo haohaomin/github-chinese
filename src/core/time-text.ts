@@ -10,9 +10,9 @@
  * 只留日期与时刻（2026 年 10 月 7 日 15:06）。元素设了其他时区时保留；元素按 lang 与选项缓存 Intl 格式、不随系统时区更新，
  * 改了系统时区后仍按旧时区生成的写法同样保留（2026 年 10 月 7 日 GMT+8 15:06）。
  *
- * title 由元素按 datetime、lang、小时制生成。改写后元素把它当作自定义 title，不再随 datetime、lang、小时制、时区更新：
- * 日期变了（React 复用元素只改 datetime）就移除改写过的 title，元素按新日期重新生成，渲染后再改写；
- * 显示文字不变（如“昨天”）时元素不派发事件，所以另外观察 datetime 属性。
+ * title 由元素按datetime、lang、小时制生成。改写后元素把它当作自定义 title，不再随datetime、lang、小时制、时区更新：
+ * 日期变了（React 复用元素只改datetime）就移除改写过的 title，元素按新日期重新生成，渲染后再改写；
+ * 显示文字不变（如“昨天”）时元素不派发事件，所以另外观察datetime 属性。
  * 改写过却没有记录的 title（失效的旧实例写入、克隆体带来）不知按哪个日期生成，同样移除后由元素重新生成。
  * 还原时移除 title，元素重新生成当前语言的 title。只处理含中文的 title：GitHub 自带的 title 是英文。
  *
@@ -35,9 +35,9 @@ const CJK_RE = /[一-鿿]/
 const DATETIME_OPTIONS: MutationObserverInit = { attributes: true, attributeFilter: ['datetime'] }
 const TIME_SELECTOR = [...TIME_TAGS].join(', ')
 
-/** 中文与数字相接处补空格：3天前 → 3 天前 */
+/** 保留用于兼容性，不再插入空格 */
 export function spaceDigits(text: string): string {
-  return text.replace(CJK_DIGIT_RE, ' ')
+  return text
 }
 
 /** en-US 给美洲时区用的缩写（zh-TW Intl 照写，夏威夷时间写作 HAST）→ 与 UTC 的偏移（分钟） */
@@ -91,8 +91,8 @@ export function stripLocalZone(text: string, time: number): string {
   return text.replace(ZONE_WORD_RE, (match, before: string, bracketed: string | undefined, bare: string | undefined, after: string) => {
     const offset = zoneOffset(bracketed ?? bare ?? '')
     if (offset === undefined || !isLocalOffset(offset, time)) return match
-    // 在中间时留下前面的空白，在首尾时一并去掉
-    return before && after ? before : ''
+    // 去掉时区词及其两侧空白；两侧都有空白时保留一个空格（日期与时刻之间）
+    return before && after ? ' ' : ''
   })
 }
 
@@ -165,7 +165,7 @@ export function createZoneWatcher(doc: Document, onChange: () => void): ZoneWatc
 }
 
 export interface TimeText {
-  /** 开始监听元素渲染与本地时区变化，并观察改写过 title 的元素的 datetime */
+  /** 开始监听元素渲染与本地时区变化，并观察改写过 title 的元素的datetime */
   attach(): void
   /** 停止监听 */
   detach(): void
@@ -194,7 +194,7 @@ interface WrittenTitle {
   readonly offset: number
 }
 
-/** 元素按 datetime 解析出的时刻（与元素自己解析日期的方式一致） */
+/** 元素按datetime 解析出的时刻（与元素自己解析日期的方式一致） */
 function timeOf(element: Element): number {
   return Date.parse(element.getAttribute('datetime') ?? '')
 }
@@ -210,18 +210,18 @@ function isCurrent(element: Element, written: WrittenTitle): boolean {
   return Object.is(time, written.time) && Object.is(offsetAt(time), written.offset)
 }
 
-/** 显示文字、title 的改写：去掉本地时区名（按元素的日期判断，datetime 无效时按当前时刻），中文与数字之间补空格 */
+/** 显示文字、title 的改写：去掉本地时区名（按元素的日期判断，datetime 无效时按当前时刻） */
 function rewrite(element: Element, text: string): string {
   const time = timeOf(element)
-  return spaceDigits(stripLocalZone(text, Number.isFinite(time) ? time : Date.now()))
+  return stripLocalZone(text, Number.isFinite(time) ? time : Date.now())
 }
 
 /**
- * 改写过的写法：中文与数字之间已有空格，元素生成的中文 title 没有。
- * 只看空格不看时区：旧版本改写的 title 还带着本地时区名，同样算改写过
+ * 改写过的写法：已去掉时区词（无 GMT/UTC 等）；元素生成的中文 title 总带时区缩写。
+ * 旧版本改写的 title 还带着本地时区名，含字母，视为未改写过，会被重新改写一次
  */
 function isRewritten(title: string): boolean {
-  return spaceDigits(title) === title
+  return CJK_RE.test(title) && !/GMT|UTC|[A-Z]{3,4}/.test(title)
 }
 
 export interface TimeTextOptions {
@@ -274,11 +274,11 @@ export function createTimeText(doc: Document, owns: (element: Element) => boolea
   const customTexts = new WeakMap<Element, CustomText>()
   /** 移除过别处 title 的元素：再遇到改写过而没有记录的 title 就直接认领，免得反复移除、渲染 */
   const cleared = new WeakSet<Element>()
-  /** 观察改写过 title 的元素的 datetime：日期变了就移除过时的改写 */
+  /** 观察改写过 title 的元素的datetime：日期变了就移除过时的改写 */
   const observer = new MutationObserver(records => {
     for (const record of records) resetStale(record.target as Element)
   })
-  /** 本次 attach 后已观察 datetime 的元素 */
+  /** 本次 attach 后已观察datetime 的元素 */
   let watched = new WeakSet<Element>()
   let attached = false
   /** 本地时区变了：没有定时刷新的元素不会再派发事件，逐个复位有记录的 */

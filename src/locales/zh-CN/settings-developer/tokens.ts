@@ -32,7 +32,7 @@ export const WEEKDAY_DATE_SOURCE = `(?:Sun|Mon|Tue|Wed|Thu|Fri|Sat), ${MONTH_SOU
 
 const WEEKDAY_DATE_RE = new RegExp(`^(Sun|Mon|Tue|Wed|Thu|Fri|Sat), (${MONTH_SOURCE}) (\\d{1,2}),? (\\d{4})$`)
 
-/** 令牌日期：带星期 → 2025 年 11 月 25 日周二；其余交给 translateTime */
+/** 令牌日期：带星期 → 2025年11月25日周二；其余交给 translateTime */
 export function translateTokenDate(text: string): string {
   const match = WEEKDAY_DATE_RE.exec(text)
   if (!match) return translateTime(text)
@@ -43,7 +43,7 @@ export function translateTokenDate(text: string): string {
 
 const ANY_DATE_SOURCE = `(?:${WEEKDAY_DATE_SOURCE}|${DATE_SOURCE})`
 
-/** 中文前后缀与令牌日期拼接：已于 + 2025 年 11 月 25 日 + 过期 → 已于 2025 年 11 月 25 日过期 */
+/** 中文前后缀与令牌日期拼接：已于 + 2025年11月25日 + 过期 → 已于 2025年11月25日过期 */
 function datePhrase(prefix: string, date: string, suffix = ''): string {
   return joinCjk(joinCjk(prefix, translateTokenDate(date)), suffix)
 }

@@ -172,7 +172,7 @@ export default {
     'to index your non-GitHub repositories in VSCode.': '在 VSCode 中为你的非 GitHub 存储库编制索引。',
     // 「You can use the <a>GitHub Copilot app</a>. Enforcement begins …」（原文只有日期里的逗号，译文不另加）
     '. Enforcement begins July 27th, 2026 in version 1.1 of the GitHub Copilot app. The Copilot CLI policy continues to govern the GitHub Copilot App until version 1.1':
-      '。GitHub Copilot 应用 1.1 版自 2026 年 7 月 27 日起强制实施此策略。Copilot CLI 策略在 1.1 版之前继续管控 GitHub Copilot 应用',
+      '。GitHub Copilot 应用 1.1 版自 2026年7月27日起强制实施此策略。Copilot CLI 策略在 1.1 版之前继续管控 GitHub Copilot 应用',
     // 「If enabled, you may be served <a>evaluation models</a> through <a>Copilot Auto model selection</a>」
     // 拼出「启用后，可能会将 评估模型 纳入 Copilot 自动模型选择」（through 见 scoped）
     'Evaluation models in Copilot auto model selection': 'Copilot 自动模型选择中的评估模型',
@@ -446,16 +446,16 @@ export default {
     // 计划状态
     [
       /^Upgrade for higher limits, premium models, AI reviews\. Free responses reset in (\d+) days?(\.?)$/,
-      (_, days: string, dot: string) => `升级以获得更高额度、高级模型和 AI 审查。免费额度将在 ${days} 天后重置${dot ? '。' : ''}`
+      (_, days: string, dot: string) => `升级以获得更高额度、高级模型和 AI 审查。免费额度将在 ${days}天后重置${dot ? '。' : ''}`
     ],
-    [/^Free responses reset in (\d+) days?\.$/, '免费额度将在 $1 天后重置。'],
+    [/^Free responses reset in (\d+) days?\.$/, '免费额度将在 $1天后重置。'],
     // 方案名译成中文：Copilot 免费版 / 专业版 / 专业增强版 / 学生版
     [
       /^GitHub Copilot (Free|Pro\+?|Student) is active for your account$/,
       (_, plan: string) => `你的帐户已启用 GitHub Copilot ${copilotPlan(plan)}`
     ],
     [/^Copilot (Free|Pro\+?|Student) subscription$/, (_, plan: string) => `Copilot ${copilotPlan(plan)}订阅`],
-    [/^Your GitHub Copilot subscription will renew in (\d+) days?\.$/, '你的 GitHub Copilot 订阅将在 $1 天后续订。'],
+    [/^Your GitHub Copilot subscription will renew in (\d+) days?\.$/, '你的 GitHub Copilot 订阅将在 $1天后续订。'],
 
     // 使用情况（措辞与 copilot/models 一致）
     [/^([\d,.]+) \/ ([\d,.]+) AI credits$/, '$1 / $2 AI 额度'],

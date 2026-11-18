@@ -443,7 +443,7 @@ describe('new 静态词条', () => {
         'Support for importing Mercurial, Subversion and Team Foundation Version Control (TFVC) repositories ended on April 12, 2024. For more details, see the'
       )
     ).toBe(
-      '已于 2024 年 4 月 12 日停止支持导入 Mercurial、Subversion 和 Team Foundation Version Control (TFVC) 存储库。有关详细信息，请参阅'
+      '已于 2024年4月12日停止支持导入 Mercurial、Subversion 和 Team Foundation Version Control (TFVC) 存储库。有关详细信息，请参阅'
     )
   })
 

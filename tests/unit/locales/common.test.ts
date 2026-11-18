@@ -36,8 +36,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['Day 1: Opening Keynote begins October 28 at 9 AM Pacific Time', '第 1 天：开幕主题演讲将于太平洋时间 10 月 28 日上午 9 点开始'],
-      ['Day 2: Opening Keynote begins Oct 29 at 1 PM Pacific Time', '第 2 天：开幕主题演讲将于太平洋时间 10 月 29 日下午 1 点开始']
+      ['Day 1: Opening Keynote begins October 28 at 9 AM Pacific Time', '第 1 天：开幕主题演讲将于太平洋时间 10月28日上午 9 点开始'],
+      ['Day 2: Opening Keynote begins Oct 29 at 1 PM Pacific Time', '第 2 天：开幕主题演讲将于太平洋时间 10月29日下午 1 点开始']
     ],
     misses: ['Day 1: Opening Keynote begins October 28 at 9 AM Eastern Time']
   },
@@ -168,9 +168,9 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   // 用户状态与功能预览对话框
   {
     hits: [
-      ['In 30 minutes', '30 分钟后'],
-      ['In 4 hours', '4 小时后'],
-      ['In 3 days', '3 天后']
+      ['In 30 minutes', '30分钟后'],
+      ['In 4 hours', '4小时后'],
+      ['In 3 days', '3天后']
     ],
     misses: ['In 2 years', 'In progress']
   },
@@ -220,7 +220,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'to enable two-factor authentication as an additional security measure. Your activity on GitHub includes you in this requirement. You will need to enable two-factor authentication on your account before March 15, 2027, or be restricted from account actions.',
-        '启用双因素身份验证作为额外的安全措施。你在 GitHub 上的活动使你也在此要求范围内。你需要在 2027 年 3 月 15 日之前为帐户启用双因素身份验证，否则帐户操作将受到限制。'
+        '启用双因素身份验证作为额外的安全措施。你在 GitHub 上的活动使你也在此要求范围内。你需要在 2027年3月15日之前为帐户启用双因素身份验证，否则帐户操作将受到限制。'
       ]
     ],
     misses: [
@@ -232,7 +232,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'has used all its AI credits. Access resumes on December 1. Contact your admins to increase it.',
-        '已用完全部 AI 额度。将于 12 月 1 日恢复使用。请联系你的管理员提高额度。'
+        '已用完全部 AI 额度。将于 12月1日恢复使用。请联系你的管理员提高额度。'
       ]
     ],
     misses: ['has used all its storage. Access resumes on December 1. Contact your admins to increase it.']
@@ -266,8 +266,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   // Copilot 预算申请审批卡片
   {
     hits: [
-      ['Requested 3 days ago', '3 天前申请'],
-      ['Requested about 1 hour ago', '约 1 小时前申请'],
+      ['Requested 3 days ago', '3天前申请'],
+      ['Requested about 1 hour ago', '约1小时前申请'],
       ['Requested yesterday', '昨天申请']
     ],
     misses: ['Requested changes', 'Requested 3 days']
@@ -319,13 +319,13 @@ describe('common 正则词条', () => {
     )
     expect(join(['Start a task with ', 'Copilot cloud agent'])).toBe('使用 Copilot 云代理开始任务')
     expect(join(['(', 'g then d', ')'])).toBe('（g 再按 d）')
-    expect(join(['Requested ', '3 days', ' ago'])).toBe('3 天前申请')
+    expect(join(['Requested ', '3 days', ' ago'])).toBe('3天前申请')
     // Copilot 预算横幅：<strong> 前后的文字各自拼接
     expect(join([' Your ', 'org admins', ' will be notified that you need additional', ' ', 'AI credits', '.'])).toBe(
       '你的组织管理员将收到你需要更多 AI 额度的通知。'
     )
     expect(join([' ', 'has used all its AI credits', '. Access resumes on ', 'Dec 1', '. Contact your admins to increase it.'])).toBe(
-      '已用完全部 AI 额度。将于 12 月 1 日恢复使用。请联系你的管理员提高额度。'
+      '已用完全部 AI 额度。将于 12月1日恢复使用。请联系你的管理员提高额度。'
     )
     expect(join(['Single sign-on to see results in ', 'the '])).toBe('单一登录以查看')
     expect(join([' ', 'and ', '2', ' other', ' ', 'organizations', '.'])).toBe('以及其他 2 个组织。')
@@ -812,7 +812,7 @@ describe('common 被链接、<strong> 拆开的横幅与提示（逐段翻译）
     [
       '强制 2FA',
       '<p>GitHub users are <strong>now required</strong> to enable two-factor authentication as an additional security measure. Your activity on GitHub includes you in this requirement. You will need to enable two-factor authentication on your account before March 15, 2027, or be restricted from account actions.</p>',
-      'GitHub 用户 现在必须 启用双因素身份验证作为额外的安全措施。你在 GitHub 上的活动使你也在此要求范围内。你需要在 2027 年 3 月 15 日之前为帐户启用双因素身份验证，否则帐户操作将受到限制。'
+      'GitHub 用户 现在必须 启用双因素身份验证作为额外的安全措施。你在 GitHub 上的活动使你也在此要求范围内。你需要在 2027年3月15日之前为帐户启用双因素身份验证，否则帐户操作将受到限制。'
     ]
   ])('%s', (_, html, expected) => {
     document.body.innerHTML = html
@@ -865,7 +865,7 @@ describe('common 被 <strong> 拆开的 Copilot 预算横幅（CopilotBudgetRequ
         'org admins',
         ' can increase it sooner.'
       ],
-      '你已用完来自 octo-org 的全部 AI 额度。将于 2026 年 11 月 1 日恢复使用。你的组织管理员可以提前提高额度。'
+      '你已用完来自 octo-org 的全部 AI 额度。将于 2026年11月1日恢复使用。你的组织管理员可以提前提高额度。'
     ],
     [
       '个人预算用尽（旧版预算名、企业预算、无法解析的日期原样保留）',
@@ -894,7 +894,7 @@ describe('common 被 <strong> 拆开的 Copilot 预算横幅（CopilotBudgetRequ
         'Dec 1',
         '. Contact your admins to increase it.'
       ],
-      '你的组织 octo-org 已用完全部 Copilot AI 额度。将于 12 月 1 日恢复使用。请联系你的管理员提高额度。'
+      '你的组织 octo-org 已用完全部 Copilot AI 额度。将于 12月1日恢复使用。请联系你的管理员提高额度。'
     ],
     [
       '申请已发送',
@@ -919,7 +919,7 @@ describe('common 被 <strong> 拆开的 Copilot 预算横幅（CopilotBudgetRequ
     ])
     expect(host.querySelector('strong')?.textContent).toBe('octo-org')
     expect(host.textContent).toBe(
-      '你已用完来自 octo-org 的全部 Copilot AI 额度。将于 2026 年 11 月 1 日恢复使用。你的组织管理员可以提前提高额度。'
+      '你已用完来自 octo-org 的全部 Copilot AI 额度。将于 2026年11月1日恢复使用。你的组织管理员可以提前提高额度。'
     )
   })
 })

@@ -181,9 +181,9 @@ const base = {
     'Import all the files, including the revision history, from another version control system.':
       '從其他版本控制系統匯入所有檔案，包括修訂歷史記錄。',
     'Support for importing Mercurial, Subversion and Team Foundation Version Control (TFVC) repositories ended on April 12, 2024. For more details, see the':
-      '匯入 Mercurial、Subversion 和 Team Foundation Version Control (TFVC) 儲存庫的支援已於 2024 年 4 月 12 日終止。如需詳細資訊，請參閱',
+      '匯入 Mercurial、Subversion 和 Team Foundation Version Control (TFVC) 儲存庫的支援已於 2024年4月12日終止。如需詳細資訊，請參閱',
     'Support for importing Mercurial, Subversion and Team Foundation Version Control (TFVC) repositories ended on April 12, 2024. For more details, see the changelog.':
-      '匯入 Mercurial、Subversion 和 Team Foundation Version Control (TFVC) 儲存庫的支援已於 2024 年 4 月 12 日終止。如需詳細資訊，請參閱變更記錄。',
+      '匯入 Mercurial、Subversion 和 Team Foundation Version Control (TFVC) 儲存庫的支援已於 2024年4月12日終止。如需詳細資訊，請參閱變更記錄。',
     'Your source repository details': '來源儲存庫詳細資料',
     'The URL for your source repository': '來源儲存庫的 URL',
     'Learn more about the types of': '瞭解',

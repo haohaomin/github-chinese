@@ -282,7 +282,7 @@ export default {
     'Learn more about GitHub Models rate limits': '瞭解 GitHub 模型速率限制',
     'GitHub Copilot is moving to AI credits': 'GitHub Copilot 將改用 AI 點數計費',
     'Starting June 1, 2026 Copilot usage will be measured and billed in AI credits instead of Premium request units. AI credits give you more granular visibility into your usage across models and features. Preview how this change will affect your billing based on your recent usage.':
-      '自 2026 年 6 月 1 日起，Copilot 使用量將改以 AI 點數而非進階請求單位計量並計費。AI 點數可讓你更精細地掌握各模型和功能的使用量。依據你近期的使用量預覽此變更對計費的影響。',
+      '自 2026年6月1日起，Copilot 使用量將改以 AI 點數而非進階請求單位計量並計費。AI 點數可讓你更精細地掌握各模型和功能的使用量。依據你近期的使用量預覽此變更對計費的影響。',
     'Preview your usage': '預覽你的使用量',
     'Read the blog post': '閱讀部落格文章',
 
@@ -508,7 +508,7 @@ export default {
       new RegExp(`^(~?)${MONEY} off(\\*?)$`),
       (_, tilde: string, amount: string, star: string) => `折抵${tilde ? '約' : ''} ${amount}${star}`
     ],
-    [new RegExp(`^${MONEY} off per month for (\\d+) years?$`), '$2 年內每月折抵 $1'],
+    [new RegExp(`^${MONEY} off per month for (\\d+) years?$`), '$2年內每月折抵 $1'],
     [new RegExp(`^${NUMBER} min used / ${NUMBER} min included$`), '已使用 $1 分鐘 / 包含 $2 分鐘'],
     [new RegExp(`^${NUMBER} GB used / ${NUMBER} GB included$`), '已使用 $1 GB / 包含 $2 GB'],
     // 包含的使用量明细（产品名译成中文，与 org-settings/billing.ts 同一译法）

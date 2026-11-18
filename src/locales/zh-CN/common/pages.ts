@@ -319,7 +319,7 @@ export default {
 
     // 企业试用 /enterprise/trial
     'Try the GitHub platform': '试用 GitHub 平台',
-    'The platform that powers more than 90% of the Fortune 100': '为超过 90% 的财富 100 强企业提供支持的平台',
+    'The platform that powers more than 90% of the Fortune 100': '为超过90% 的财富 100 强企业提供支持的平台',
     'Start a 30 day free trial': '开始 30 天免费试用',
     'Start a free 30 day trial': '开始 30 天免费试用',
     '30-day free trial': '30 天免费试用',

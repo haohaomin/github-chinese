@@ -110,7 +110,7 @@ const PERIODS: Readonly<Record<string, string>> = {
 const MONEY = '(\\$[\\d,]+(?:\\.\\d+)?)'
 const NUMBER = '(\\d[\\d,]*(?:\\.\\d+)?)'
 
-/** 日期区间：Oct 1 - Oct 31, 2025 → 10 月 1 日 - 2025 年 10 月 31 日 */
+/** 日期区间：Oct 1 - Oct 31, 2025 → 10月1日 - 2025年10月31日 */
 function dateRange(start: string, end: string): string {
   return `${translateTime(start)} - ${translateTime(end)}`
 }
@@ -390,15 +390,15 @@ export default {
     [
       new RegExp(`^Current usage for (${DATE_SOURCE}) - (${DATE_SOURCE})\\. Monthly quota resets in (\\d+) day\\(s\\)\\.$`),
       (_, start: string, end: string, days: string) =>
-        `${joinCjk(dateRange(start, end), '的当前使用情况。')}每月配额将在 ${days} 天后重置。`
+        `${joinCjk(dateRange(start, end), '的当前使用情况。')}每月配额将在 ${days}天后重置。`
     ],
     [
       new RegExp(`^Resets in (\\d+) days? on (${DATE_SOURCE})$`),
-      (_, days: string, date: string) => joinCjk(joinCjk(`${days} 天后于`, translateTime(date)), '重置')
+      (_, days: string, date: string) => joinCjk(joinCjk(`${days}天后于`, translateTime(date)), '重置')
     ],
     [
       /^Included usage limits reset in (\d+) days?(\.?)$/,
-      (_, days: string, dot: string) => `包含的使用量限制将在 ${days} 天后重置${dot ? '。' : ''}`
+      (_, days: string, dot: string) => `包含的使用量限制将在 ${days}天后重置${dot ? '。' : ''}`
     ],
     [/^(\d+) days?$/, '$1 天'],
 
@@ -408,7 +408,7 @@ export default {
       new RegExp(`^(~?)${MONEY} off(\\*?)$`),
       (_, tilde: string, amount: string, star: string) => `减免${tilde ? '约' : ''} ${amount}${star}`
     ],
-    [new RegExp(`^${MONEY} off per month for (\\d+) years?$`), '$2 年内每月减免 $1'],
+    [new RegExp(`^${MONEY} off per month for (\\d+) years?$`), '$2年内每月减免 $1'],
     [
       new RegExp(`^${MONEY} off per month until (${DATE_SOURCE})(\\.?)$`),
       (_, amount: string, date: string, dot: string) => `${joinCjk(translateTime(date), '前每月减免')} ${amount}${dot ? '。' : ''}`
@@ -500,7 +500,7 @@ export default {
     // 使用情况报告
     [
       /^We['’]re preparing your usage report\. It may take ~30 minutes to see usage in your report\. We['’]ll send an email to (\S+@\S+) when it['’]s ready\.$/,
-      '正在准备使用情况报告。使用情况可能约 30 分钟后才会出现在报告中。报告就绪后会发送电子邮件至 $1。'
+      '正在准备使用情况报告。使用情况可能约30分钟后才会出现在报告中。报告就绪后会发送电子邮件至 $1。'
     ],
     [
       /^We['’]re preparing your usage report\. We['’]ll send an email to (\S+@\S+) when it['’]s ready\.$/,
@@ -518,7 +518,7 @@ export default {
     [/^Start your free (\d+) day trial$/, '开始 $1 天免费试用'],
     [
       /^You can convert to a paid plan at any time\. If you don[’']t purchase by the end of (\d+) days, your trial will expire and all private repositories will lose access to Secret Protection and Code Security features\.$/,
-      '你可以随时转为付费计划。如果 $1 天内未购买，试用将过期，所有专用存储库都将无法使用机密保护和代码安全功能。'
+      '你可以随时转为付费计划。如果 $1天内未购买，试用将过期，所有专用存储库都将无法使用机密保护和代码安全功能。'
     ],
     // 卡片底部的试用期限：Trial ends on October 31, 2026.
     [

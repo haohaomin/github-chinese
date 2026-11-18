@@ -71,7 +71,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['Unsupported file type']
   },
   {
-    hits: [['Personal instructions must be 4000 characters or fewer.', '个人说明不能超过 4000 个字符。']],
+    hits: [['Personal instructions must be 4000 characters or fewer.', '个人说明不能超过4000 个字符。']],
     misses: ['Personal instructions must be short.']
   },
   {
@@ -260,15 +260,15 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [['Copilot chat messages quota usage', 'Copilot 聊天消息配额使用情况']], misses: ['Copilot quota usage'] },
   {
     hits: [
-      ['Resets on Nov 1', '11 月 1 日重置'],
-      ['Resets in 3 days', '3 天后重置'],
+      ['Resets on Nov 1', '11月1日重置'],
+      ['Resets in 3 days', '3天后重置'],
       ['Resets tomorrow', '明天重置']
     ],
     misses: ['Resets soon']
   },
   {
     hits: [
-      ['Limit resets on December 1.', '限额将于 12 月 1 日重置。'],
+      ['Limit resets on December 1.', '限额将于 12月1日重置。'],
       // 中文开头的时间不补空格
       ['Limit resets tomorrow.', '限额将于明天重置。']
     ],
@@ -277,7 +277,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   {
     hits: [
       ["You've used 75% of your included AI credits.", '你已使用包含的 AI 额度的 75%。'],
-      ["You've used 90% of your included AI credits. Limit resets on Nov 1.", '你已使用包含的 AI 额度的 90%。限额将于 11 月 1 日重置。']
+      ["You've used 90% of your included AI credits. Limit resets on Nov 1.", '你已使用包含的 AI 额度的 90%。限额将于 11月1日重置。']
     ],
     misses: ["You've used most of your included AI credits."]
   },
@@ -309,7 +309,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       ["You're almost out of your included usage with the free plan.", '免费计划包含的使用量即将用完。'],
       [
         "You're out of your included usage with the free plan. Limit resets on Nov 1.",
-        '免费计划包含的使用量已用完。限额将于 11 月 1 日重置。'
+        '免费计划包含的使用量已用完。限额将于 11月1日重置。'
       ]
     ],
     misses: ["You're out of usage."]
@@ -318,7 +318,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         "You've run out of your included AI credits for the month. Limit resets on Dec 1.",
-        '本月包含的 AI 额度已用完。限额将于 12 月 1 日重置。'
+        '本月包含的 AI 额度已用完。限额将于 12月1日重置。'
       ]
     ],
     misses: ["You've run out of credits."]
@@ -327,21 +327,21 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'Usage paused until your monthly limit resets on Nov 1. Request your administrator for additional usage.',
-        '使用已暂停，每月上限将于 11 月 1 日重置。如需额外使用量，请联系管理员。'
+        '使用已暂停，每月上限将于 11月1日重置。如需额外使用量，请联系管理员。'
       ]
     ],
     misses: ['Usage paused until later.']
   },
   {
     hits: [
-      ['You have used all requests available this month. Limit resets on November 1.', '本月可用请求已全部用完。限额将于 11 月 1 日重置。'],
+      ['You have used all requests available this month. Limit resets on November 1.', '本月可用请求已全部用完。限额将于 11月1日重置。'],
       [
         'You have used all premium requests available this month. Upgrade your plan to increase your limit. Limit resets on Nov 1, 2026.',
-        '本月可用高级请求已全部用完。升级计划可提高限额。限额将于 2026 年 11 月 1 日重置。'
+        '本月可用高级请求已全部用完。升级计划可提高限额。限额将于 2026年11月1日重置。'
       ],
       [
         'You have used all requests available this month. Limit resets on Nov 1. Plan upgrades are temporarily unavailable.',
-        '本月可用请求已全部用完。限额将于 11 月 1 日重置。计划升级暂不可用。'
+        '本月可用请求已全部用完。限额将于 11月1日重置。计划升级暂不可用。'
       ]
     ],
     misses: ['You have used all requests.']
@@ -350,7 +350,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'You have used all premium requests available this month. Enable additional requests to get more. Limit resets on Nov 1.',
-        '本月可用高级请求已全部用完。启用额外请求可获取更多使用量。限额将于 11 月 1 日重置。'
+        '本月可用高级请求已全部用完。启用额外请求可获取更多使用量。限额将于 11月1日重置。'
       ]
     ],
     misses: ['Enable additional requests to get more.']
@@ -359,7 +359,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'You have reached your monthly limit for premium requests. Ask your admin to increase your limit. Limit resets on Nov 1.',
-        '本月高级请求已达上限。请管理员提高限额。限额将于 11 月 1 日重置。'
+        '本月高级请求已达上限。请管理员提高限额。限额将于 11月1日重置。'
       ],
       // 无法识别的日期原样保留，与两侧中文之间补空格
       [
@@ -373,7 +373,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'You have used all premium requests available this month. You will be charged per additional premium request until the limit resets on Nov 1.',
-        '本月可用高级请求已全部用完。在限额于 11 月 1 日重置前，每个额外的高级请求将单独计费。'
+        '本月可用高级请求已全部用完。在限额于 11月1日重置前，每个额外的高级请求将单独计费。'
       ],
       [
         'You have used all premium requests available this month. You will be charged per additional premium request until the limit resets on 2026-11-01.',
@@ -384,10 +384,10 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['You have reached your free plan limit. Limit resets on Nov 1.', '已达免费计划上限。限额将于 11 月 1 日重置。'],
+      ['You have reached your free plan limit. Limit resets on Nov 1.', '已达免费计划上限。限额将于 11月1日重置。'],
       [
         'You have reached your free plan limit. Limit resets on Nov 1. Plan upgrades are temporarily unavailable.',
-        '已达免费计划上限。限额将于 11 月 1 日重置。计划升级暂不可用。'
+        '已达免费计划上限。限额将于 11月1日重置。计划升级暂不可用。'
       ]
     ],
     misses: ['You have reached your free plan limit.']
@@ -396,7 +396,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         "You don't have enough AI credits to start a session. Limit resets on Nov 1.",
-        'AI 额度不足，无法开始会话。限额将于 11 月 1 日重置。'
+        'AI 额度不足，无法开始会话。限额将于 11月1日重置。'
       ]
     ],
     misses: ['Not enough AI credits. Limit resets on Nov 1.']
@@ -409,7 +409,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       ],
       [
         "You've hit your session limit. Please upgrade your plan or wait 3 hours for your limit to reset.",
-        '已达会话上限。请升级计划，或等待 3 小时后限额重置。'
+        '已达会话上限。请升级计划，或等待 3小时后限额重置。'
       ]
     ],
     misses: ["You've hit your session limit."]
@@ -422,7 +422,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       ],
       [
         "You've exceeded your weekly usage limit. Your limit will reset in 5 hours. Please upgrade your plan or wait for your limit to reset.",
-        '已超出每周使用限制。限额将在 5 小时后重置。请升级计划或等待限额重置。'
+        '已超出每周使用限制。限额将在 5小时后重置。请升级计划或等待限额重置。'
       ]
     ],
     misses: ["You've exceeded your weekly usage limit."]
@@ -431,7 +431,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         "You've reached your additional usage limit for your plan. Pay for your additional usage to continue. Otherwise, wait until your credits reset on November 1.",
-        '已达计划的额外使用量上限。请为额外使用量付费以继续。否则，请等待额度于 11 月 1 日重置。'
+        '已达计划的额外使用量上限。请为额外使用量付费以继续。否则，请等待额度于 11月1日重置。'
       ]
     ],
     misses: ["You've reached your additional usage limit for your plan."]
@@ -440,7 +440,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         '. Upgrade to Copilot Pro+ for $39.00 to get an additional $10.00 in credits, or pay $5.00 to continue on Copilot Pro. Credits reset November 1.',
-        '。以 $39.00 升级到 Copilot 专业增强版可额外获得 $10.00 额度，或支付 $5.00 继续使用 Copilot 专业版。额度将于 11 月 1 日重置。'
+        '。以 $39.00 升级到 Copilot 专业增强版可额外获得 $10.00 额度，或支付 $5.00 继续使用 Copilot 专业版。额度将于 11月1日重置。'
       ]
     ],
     misses: ['. Upgrade to Copilot Pro+ for $39.00.']
@@ -449,7 +449,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         '. Upgrade to Copilot Pro+ for $39.00 and cut additional usage from $25.00 to $15.00, or pay $25.00 to continue on Copilot Pro. Credits reset November 1.',
-        '。以 $39.00 升级到 Copilot 专业增强版可将额外使用量从 $25.00 降至 $15.00，或支付 $25.00 继续使用 Copilot 专业版。额度将于 11 月 1 日重置。'
+        '。以 $39.00 升级到 Copilot 专业增强版可将额外使用量从 $25.00 降至 $15.00，或支付 $25.00 继续使用 Copilot 专业版。额度将于 11月1日重置。'
       ]
     ],
     misses: ['. Upgrade to Copilot Pro+ and cut additional usage.']
@@ -458,7 +458,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         "You're now using additional usage until your included credits reset on Nov 1.",
-        '你正在使用额外使用量直到包含的额度于 11 月 1 日重置。'
+        '你正在使用额外使用量直到包含的额度于 11月1日重置。'
       ],
       ["You're now using additional usage until your included credits reset.", '你正在使用额外使用量直到包含的额度重置。']
     ],
@@ -917,7 +917,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'Instructions must be 4,000 characters or fewer. Current length: 4,200 characters.',
-        '说明不能超过 4,000 个字符。当前长度：4,200 个字符。'
+        '说明不能超过4,000 个字符。当前长度：4,200 个字符。'
       ]
     ],
     misses: ['Instructions must be short.']
@@ -1071,7 +1071,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         '2 files could not be attached: a.bin, b.bin. Text and PDF files must be 32 MB or smaller, and you can attach up to 10 text, PDF, or image files at a time.',
-        '2 个文件无法附加：a.bin, b.bin。文本和 PDF 文件不能超过 32 MB，且一次最多可附加 10 个文本、PDF 或图片文件。'
+        '2 个文件无法附加：a.bin, b.bin。文本和 PDF 文件不能超过32 MB，且一次最多可附加 10 个文本、PDF 或图片文件。'
       ]
     ],
     misses: ['Files could not be attached.']
@@ -1080,7 +1080,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'a.bin could not be attached. Text and PDF files must be 32 MB or smaller, and you can attach up to 10 text, PDF, or image files at a time.',
-        '无法附加 a.bin。文本和 PDF 文件不能超过 32 MB，且一次最多可附加 10 个文本、PDF 或图片文件。'
+        '无法附加 a.bin。文本和 PDF 文件不能超过32 MB，且一次最多可附加 10 个文本、PDF 或图片文件。'
       ]
     ],
     misses: ['a.bin could not be attached.']
@@ -1375,7 +1375,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ["Couldn't attach a.exe."]
   },
   {
-    hits: [["Couldn't attach big.pdf. This file must be 32 MB or smaller.", '无法附加 big.pdf。文件不能超过 32 MB。']],
+    hits: [["Couldn't attach big.pdf. This file must be 32 MB or smaller.", '无法附加 big.pdf。文件不能超过32 MB。']],
     misses: ["Couldn't attach big.pdf. This file is too big."]
   },
   {
@@ -1551,7 +1551,7 @@ describe('copilot 正则词条', () => {
           ].join('')
         )
       )
-    ).toBe('。以 $39.00 升级到 Copilot 专业增强版可额外获得 $10.00 额度，或支付 $5.00 继续使用 Copilot 专业版。额度将于 11 月 1 日重置。')
+    ).toBe('。以 $39.00 升级到 Copilot 专业增强版可额外获得 $10.00 额度，或支付 $5.00 继续使用 Copilot 专业版。额度将于 11月1日重置。')
     expect(translate(normalizeText(['Connect with ', 'Docker'].join('')))).toBe('连接 Docker')
   })
 

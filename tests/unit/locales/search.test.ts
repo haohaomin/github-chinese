@@ -73,8 +73,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['More than 1M results', '超过 1M 个结果'],
-      ['More than 100 files', '超过 100 个文件']
+      ['More than 1M results', '超过1M 个结果'],
+      ['More than 100 files', '超过100 个文件']
     ],
     misses: ['More than a few results']
   },
@@ -99,13 +99,13 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   // 浏览器语言为中文时的本地格式日期（数字与年月日之间有无空格都匹配，输出带空格）
   {
     hits: [
-      ['on 1月23日', '1 月 23 日'],
-      ['on 2017年4月7日', '2017 年 4 月 7 日'],
-      ['on 1 月 23 日', '1 月 23 日'],
-      ['on 2017 年 4 月 7 日', '2017 年 4 月 7 日'],
-      ['on 12月1日', '12 月 1 日']
+      ['on 1月23日', '1月23日'],
+      ['on 2017年4月7日', '2017年4月7日'],
+      ['on 1月23日', '1月23日'],
+      ['on 2017年4月7日', '2017年4月7日'],
+      ['on 12月1日', '12月1日']
     ],
-    misses: ['on Jan 23', 'on 1月23', 'on 2017年4月', 'on 1 月 23', 'on 2017 年 4 月']
+    misses: ['on Jan 23', 'on 1月23', 'on 2017年4月', 'on 1 月 23', 'on 2017年4月']
   },
   // 存储库结果
   {
@@ -330,7 +330,7 @@ describe('search 静态词条', () => {
     ['Restrict your search to the title by using the in:title qualifier.', '使用 in:title 限定符可只搜索标题。'],
     ["Why wasn't my code found?", '为什么找不到我的代码？'],
     ['Why wasn’t my code found?', '为什么找不到我的代码？'],
-    ['Empty files and files over 350 kiB are excluded', '排除空文件和超过 350 kiB 的文件'],
+    ['Empty files and files over 350 kiB are excluded', '排除空文件和超过350 kiB 的文件'],
     // 原文没有冒号：Note that … 不译出“注意：”
     [
       'Note that we don’t currently support regular expressions in the repo or org qualifiers. For more information on search syntax, see our',

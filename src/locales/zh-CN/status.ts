@@ -149,36 +149,36 @@ function utcSuffix(abbr: string): string {
 /** 行内句：Statuspage 时间戳（槽位是 <var> 里的日、年、时刻，span.ago 与 Posted on / Scheduled for） */
 const TIMESTAMP_RULES: readonly InlineRule[] = [
   // 日期标题：Oct <var>28</var>, <var>2026</var>（年份后没有文字，不能补「年」）
-  [new RegExp(`^${MONTH_SOURCE} \\{#\\}, \\{#\\}$`), (_, month: string) => `${monthLabel(month)} {#} 日，{#}`],
+  [new RegExp(`^${MONTH_SOURCE} \\{#\\}, \\{#\\}$`), (_, month: string) => `${monthLabel(month)}{#}日，{#}`],
   // 更新时间：Oct <var>27</var>, <var>08:00</var> UTC
-  [new RegExp(`^${MONTH_SOURCE} \\{#\\}, \\{\\} UTC$`), (_, month: string) => `${monthLabel(month)} {#} 日 {}${utcSuffix(month)}`],
+  [new RegExp(`^${MONTH_SOURCE} \\{#\\}, \\{\\} UTC$`), (_, month: string) => `${monthLabel(month)}{#}日 {}${utcSuffix(month)}`],
   // 发布时间：Posted <span.ago>…</span>Oct <var>27</var>, <var>2026</var> - <var>08:00</var> UTC；
   // 未解决事件只有 span.ago，计划维护前有 <var>Posted on</var>。排在「事件起止」之前：{} 也匹配年份
   [
     new RegExp(`^(Posted)?((?:\\{\\}){1,2})${MONTH_SOURCE} \\{#\\}, \\{#\\} - \\{\\} UTC$`),
     (_, posted: string, slots: string, month: string) =>
-      `${posted ? '发布于 ' : ''}${slots} ${monthLabel(month)} {#} 日，{#} 年 {}${utcSuffix(month)}`
+      `${posted ? '发布于 ' : ''}${slots} ${monthLabel(month)}{#}日，{#} 年 {}${utcSuffix(month)}`
   ],
   // 事件起止（历史页）；计划维护页副标题前有 <var>Scheduled for</var>
   [
     new RegExp(`^(\\{\\})?${MONTH_SOURCE} \\{#\\}, \\{\\} - \\{\\} UTC$`),
-    (_, lead: string, month: string) => `${lead} ${monthLabel(month)} {#} 日 {} - {}${utcSuffix(month)}`
+    (_, lead: string, month: string) => `${lead} ${monthLabel(month)}{#}日 {} - {}${utcSuffix(month)}`
   ],
   // 跨日的事件起止
   [
     new RegExp(`^(\\{\\})?${MONTH_SOURCE} \\{#\\}, \\{\\} - ${MONTH_SOURCE} \\{#\\}, \\{\\} UTC$`),
     (_, lead: string, start: string, end: string) =>
-      `${lead} ${monthLabel(start)} {#} 日 {} - ${monthLabel(end)} {#} 日 {}${utcSuffix(end)}`
+      `${lead} ${monthLabel(start)}{#}日 {} - ${monthLabel(end)}{#}日 {}${utcSuffix(end)}`
   ],
   // 计划维护时段：Oct <var>28</var>, <var>2026</var> <var>04:00</var>-<var>06:00</var> UTC
   [
     new RegExp(`^${MONTH_SOURCE} \\{#\\}, \\{#\\} \\{\\}-\\{\\} UTC$`),
-    (_, month: string) => `${monthLabel(month)} {#} 日，{#} 年 {}-{}${utcSuffix(month)}`
+    (_, month: string) => `${monthLabel(month)}{#}日，{#} 年 {}-{}${utcSuffix(month)}`
   ],
   // 跨日的计划维护时段：Oct <var>28</var>, <var>2026</var> <var>23:00</var> - Oct <var>29</var>, …
   [
     new RegExp(`^${MONTH_SOURCE} \\{#\\}, \\{#\\} \\{\\} - ${MONTH_SOURCE} \\{#\\}, \\{#\\} \\{\\} UTC$`),
-    (_, start: string, end: string) => `${monthLabel(start)} {#} 日，{#} 年 {} - ${monthLabel(end)} {#} 日，{#} 年 {}${utcSuffix(end)}`
+    (_, start: string, end: string) => `${monthLabel(start)}{#}日，{#} 年 {} - ${monthLabel(end)}{#}日，{#} 年 {}${utcSuffix(end)}`
   ],
   // span.ago：<var>21</var> hours ago.
   [/^\{#\} (minute|hour|day|month|year)s? ago\.$/, (_, unit: string) => `{#} ${AGO_UNITS.get(unit) ?? unit}前。`]

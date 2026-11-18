@@ -163,9 +163,9 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   {
     // 时间由 helpers 生成，后接中文不加空格
     hits: [
-      ['Invited on Oct 20, 2025', '2025 年 10 月 20 日邀请'],
-      ['Invited 3 days ago', '3 天前邀请'],
-      ['Invited about 1 year ago', '约 1 年前邀请'],
+      ['Invited on Oct 20, 2025', '2025年10月20日邀请'],
+      ['Invited 3 days ago', '3天前邀请'],
+      ['Invited about 1 year ago', '约1年前邀请'],
       ['Invited yesterday', '昨天邀请']
     ],
     misses: ['Invited by octocat']

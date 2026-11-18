@@ -232,22 +232,22 @@ describe('动作页的筛选面板', () => {
  */
 describe('繁体时刻', () => {
   it.each([
-    [COMMON, 'Oct 26, 2026, 8:33 PM GMT+8', '2026 年 10 月 26 日 下午 8:33'],
-    [COMMON, 'Oct 26, 2026, 12:05 AM UTC', '2026 年 10 月 26 日 上午 12:05 [UTC]'],
-    [COMMON, 'Jan 15, 2026, 6:05 PM GMT', '2026 年 1 月 15 日 下午 6:05 [GMT]'],
-    [COMMON, 'Jul 15, 2026, 11:05 AM PDT', '2026 年 7 月 15 日 上午 11:05 [PDT]'],
-    [COMMON, 'Jan 15, 2026, 8:05 AM HST', '2026 年 1 月 15 日 上午 8:05 [HAST]'],
+    [COMMON, 'Oct 26, 2026, 8:33 PM GMT+8', '2026年10月26日 下午 8:33'],
+    [COMMON, 'Oct 26, 2026, 12:05 AM UTC', '2026年10月26日 上午 12:05 [UTC]'],
+    [COMMON, 'Jan 15, 2026, 6:05 PM GMT', '2026年1月15日 下午 6:05 [GMT]'],
+    [COMMON, 'Jul 15, 2026, 11:05 AM PDT', '2026年7月15日 上午 11:05 [PDT]'],
+    [COMMON, 'Jan 15, 2026, 8:05 AM HST', '2026年1月15日 上午 8:05 [HAST]'],
     // en-US 给 America/Adak 用的缩写，繁体 Intl 写法相同
-    [COMMON, 'Jan 15, 2026, 12:05 AM HAST', '2026 年 1 月 15 日 上午 12:05 [HAST]'],
-    [COMMON, 'Jul 15, 2026, 1:05 AM HADT', '2026 年 7 月 15 日 上午 1:05 [HADT]'],
-    [COMMON, 'on Oct 26, 2026, 10:03 AM', '2026 年 10 月 26 日 上午 10:03'],
-    [COMMON, 'October 26, 2026 00:05', '2026 年 10 月 26 日 上午 12:05'],
-    [COMMON, 'October 26, 2026 14:03', '2026 年 10 月 26 日 下午 2:03'],
+    [COMMON, 'Jan 15, 2026, 12:05 AM HAST', '2026年1月15日 上午 12:05 [HAST]'],
+    [COMMON, 'Jul 15, 2026, 1:05 AM HADT', '2026年7月15日 上午 1:05 [HADT]'],
+    [COMMON, 'on Oct 26, 2026, 10:03 AM', '2026年10月26日 上午 10:03'],
+    [COMMON, 'October 26, 2026 00:05', '2026年10月26日 上午 12:05'],
+    [COMMON, 'October 26, 2026 14:03', '2026年10月26日 下午 2:03'],
     [COMMON, '12:00 PM today', '今天 下午 12:00'],
-    [COMMON, '7:05 AM on October 19', '10 月 19 日 上午 7:05'],
-    [COMMON, '07:51AM on October 16', '10 月 16 日 上午 7:51'],
+    [COMMON, '7:05 AM on October 19', '10月19日 上午 7:05'],
+    [COMMON, '07:51AM on October 16', '10月16日 上午 7:51'],
     [COMMON, 'Yesterday at 3:45 PM', '昨天 下午 3:45'],
-    [DISCUSSIONS, '12 comments: octocat, 11:34PM on September 06', '12 則留言：octocat，9 月 6 日 下午 11:34'],
+    [DISCUSSIONS, '12 comments: octocat, 11:34PM on September 06', '12 則留言：octocat，9月6日 下午 11:34'],
     [GIST, 'LICENSE content, created by octocat on 02:10AM today.', 'LICENSE 的內容，由 octocat 於今天 上午 2:10 建立。']
   ] as const)('%j：%s → %s', (scopes, source, target) => {
     expect(matcher.translate(source, scopes)).toBe(target)
@@ -263,8 +263,8 @@ describe('繁体时刻', () => {
       // 匹配器按原文缓存译文：换了时区要新建
       const adak = createMatcher(zhTW)
 
-      expect(adak.translate('Jan 15, 2026, 12:05 AM HAST', COMMON)).toBe('2026 年 1 月 15 日 上午 12:05')
-      expect(adak.translate('Jul 15, 2026, 1:05 AM HADT', COMMON)).toBe('2026 年 7 月 15 日 上午 1:05')
+      expect(adak.translate('Jan 15, 2026, 12:05 AM HAST', COMMON)).toBe('2026年1月15日 上午 12:05')
+      expect(adak.translate('Jul 15, 2026, 1:05 AM HADT', COMMON)).toBe('2026年7月15日 上午 1:05')
     })
   })
 })
@@ -300,7 +300,7 @@ describe('跨页面配套词条', () => {
         COMMON
       )
     ).toBe(
-      '啟用雙重驗證作為額外的安全措施。根據你在 GitHub 上的活動，你也在此要求範圍內。你必須在 2027 年 3 月 15 日之前為帳號啟用雙重驗證，否則帳號操作將受到限制。'
+      '啟用雙重驗證作為額外的安全措施。根據你在 GitHub 上的活動，你也在此要求範圍內。你必須在 2027年3月15日之前為帳號啟用雙重驗證，否則帳號操作將受到限制。'
     )
   })
 
@@ -313,8 +313,8 @@ describe('跨页面配套词条', () => {
   })
 
   it('代码片段名片的本地时间差：时与分之间不带空格', () => {
-    expect(matcher.translate('- 2h30m behind', GIST)).toBe('- 慢 2 小時 30 分鐘')
-    expect(matcher.translate('- 5h 30m ahead', GIST)).toBe('- 快 5 小時 30 分鐘')
+    expect(matcher.translate('- 2h30m behind', GIST)).toBe('- 慢2 小時 30 分鐘')
+    expect(matcher.translate('- 5h 30m ahead', GIST)).toBe('- 快5 小時 30 分鐘')
   })
 
   it('全站横幅：locked out 同「無法存取帳號」；停用功能预览的两句按句拆开，Please 是全局词条', () => {

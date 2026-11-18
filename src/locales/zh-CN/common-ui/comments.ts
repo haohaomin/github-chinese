@@ -66,7 +66,7 @@ const REACTION_SUBJECTS: Readonly<Record<string, string>> = {
 const SPONSOR_MONTH_SOURCE = `${MONTH_SOURCE}|(?:十[一二]?|[一二三四五六七八九])月|(?:1[0-2]|[1-9])月`
 const CHINESE_MONTHS = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二']
 
-/** January 2024 / 一月 2024 / 1月 2024 → 2024 年 1 月 */
+/** January 2024 / 一月 2024 / 1月 2024 → 2024年1月 */
 function sponsorSince(month: string, year: string): string {
   if (!month.endsWith('月')) return formatMonthYear(month, year)
   const name = month.slice(0, -1)

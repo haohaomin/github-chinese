@@ -48,7 +48,7 @@ function deployTo(prefix: string, name: string): string {
 
 /**
  * 最近推送的时间：5 minutes ago、yesterday、on Oct 26；
- * 超过一个月时日期由浏览器按本地语言格式化（on 10月26日），去掉 on，中文与数字之间补空格（10 月 26 日）。
+ * 超过一个月时日期由浏览器按本地语言格式化（on 10月26日），去掉 on，中文与数字之间补空格（10月26日）。
  */
 function pushTime(time: string): string {
   if (time === 'less than a minute ago') return '剛剛'

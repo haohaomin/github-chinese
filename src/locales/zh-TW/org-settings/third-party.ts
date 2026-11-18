@@ -62,7 +62,7 @@ export default {
     'Receive webhooks for private events.': '接收不公開事件的 Web 鉤子。',
     'Restrict third-party application access': '限制第三方應用程式存取',
     'Restricting access will immediately block all unapproved applications and will disable SSH keys created before February 2014.':
-      '限制存取將立即封鎖所有未核准的應用程式，並停用 2014 年 2 月之前建立的 SSH 金鑰。',
+      '限制存取將立即封鎖所有未核准的應用程式，並停用 2014年2月之前建立的 SSH 金鑰。',
     // OAuth 应用访问申请详细信息（/orgs/<组织>/policies/applications/<id>，organization 页面类型）
     'Applications act on your behalf to access your data based on the permissions you grant them. Organizations control which applications are allowed to access their private data. Applications authorized by members will always have access to public data in your organization.':
       '應用程式會依你授予的權限代表你存取資料。組織可以控制允許哪些應用程式存取其不公開的資料。成員授權的應用程式一律可以存取組織的公開資料。',

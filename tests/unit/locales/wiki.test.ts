@@ -66,8 +66,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   // 最后编辑者与时间
   {
     hits: [
-      ['Last edited by octocat 2 weeks ago', 'octocat 最后编辑于 2 周前'],
-      ['Last edited by octocat, on Mar 18, 2025', 'octocat 最后编辑于 2025 年 3 月 18 日'],
+      ['Last edited by octocat 2 weeks ago', 'octocat 最后编辑于 2周前'],
+      ['Last edited by octocat, on Mar 18, 2025', 'octocat 最后编辑于 2025年3月18日'],
       ['Last edited by octocat yesterday', 'octocat 最后编辑于昨天']
     ],
     misses: ['Last edited by octocat', 'Last edited by octocat recently']

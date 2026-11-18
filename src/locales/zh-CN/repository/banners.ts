@@ -48,7 +48,7 @@ function deployTo(prefix: string, name: string): string {
 
 /**
  * 最近推送的时间：5 minutes ago、yesterday、on Oct 26；
- * 超过一个月时日期由浏览器按本地语言格式化（on 10月26日），去掉 on，中文与数字之间补空格（10 月 26 日）。
+ * 超过一个月时日期由浏览器按本地语言格式化（on 10月26日），去掉 on，中文与数字之间补空格（10月26日）。
  */
 function pushTime(time: string): string {
   if (time === 'less than a minute ago') return '刚刚'
@@ -56,10 +56,10 @@ function pushTime(time: string): string {
   return translated === time ? spaceDigits(time.replace(/^on /, '')) : translated
 }
 
-/** 剩余时间：23 hours → 剩余 23 小时；about 1 month → 剩余约 1 个月（数字与单位之间加空格） */
+/** 剩余时间：23 hours → 剩余 23 小时；about 1 month → 剩余约1 个月（数字与单位之间加空格） */
 function remaining(qualifier: string, amount: string, unit: string): string {
   const count = /^\d+$/.test(amount) ? amount : '1'
-  const duration = `${count} ${LIMIT_UNITS[unit] ?? unit}`
+  const duration = `${count}${LIMIT_UNITS[unit] ?? unit}`
   return joinCjk('剩余', joinCjk(LIMIT_QUALIFIERS[qualifier] ?? '', duration))
 }
 

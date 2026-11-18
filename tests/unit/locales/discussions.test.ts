@@ -85,10 +85,10 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   // list：登录后列表项的屏幕阅读器文字
   {
     hits: [
-      ['General · #527 was created by octocat on January 08, 2025 23:53', '常规 · #527 由 octocat 于 2025 年 1 月 8 日 23:53 创建'],
+      ['General · #527 was created by octocat on January 08, 2025 23:53', '常规 · #527 由 octocat 于 2025年1月8日 23:53 创建'],
       [
         'Other Feature Feedback, Questions, & Ideas · #7 was created by mona on May 14, 2026 14:50',
-        'Other Feature Feedback, Questions, & Ideas · #7 由 mona 于 2026 年 5 月 14 日 14:50 创建'
+        'Other Feature Feedback, Questions, & Ideas · #7 由 mona 于 2026年5月14日 14:50 创建'
       ]
     ],
     misses: ['General · #527 was created by octocat', 'General #527 was created by octocat on January 08, 2025 23:53']
@@ -96,10 +96,10 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   // list：评论数链接
   {
     hits: [
-      ['12 comments: octocat, 11:34PM on September 06', '12 条评论：octocat，9 月 6 日 23:34'],
+      ['12 comments: octocat, 11:34PM on September 06', '12 条评论：octocat，9月6日 23:34'],
       ['0 comments: mona, 01:59AM today', '0 条评论：mona，今天 1:59'],
       ['3 comments: octo-user, 11:51PM yesterday', '3 条评论：octo-user，昨天 23:51'],
-      ['2013 comments: mona, 12:37PM on February 22, 2020', '2013 条评论：mona，2020 年 2 月 22 日 12:37'],
+      ['2013 comments: mona, 12:37PM on February 22, 2020', '2013 条评论：mona，2020年2月22日 12:37'],
       ['1 comment: octocat, 12:05AM today', '1 条评论：octocat，今天 0:05']
     ],
     misses: ['12 comments: octocat', '12 comments']
@@ -140,8 +140,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   {
     hits: [
       // 原文没有括号：日期放进句中；原文有句点才加句号
-      ['This discussion was converted from issue #123 on January 5, 2024', '此讨论于 2024 年 1 月 5 日由议题 #123 转换而来'],
-      ['This discussion was converted from issue #7 on Jan 5, 2024.', '此讨论于 2024 年 1 月 5 日由议题 #7 转换而来。'],
+      ['This discussion was converted from issue #123 on January 5, 2024', '此讨论于 2024年1月5日由议题 #123 转换而来'],
+      ['This discussion was converted from issue #7 on Jan 5, 2024.', '此讨论于 2024年1月5日由议题 #7 转换而来。'],
       ['This discussion was converted from issue #42.', '此讨论由议题 #42 转换而来。']
     ],
     misses: ['This discussion was converted from issue #abc']
@@ -160,7 +160,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   // viewer：登录后评论的按钮名称
   {
     hits: [
-      ['Upvote: (86): octocat, 09:00AM on May 12, 2022', '赞成 (86)：octocat，2022 年 5 月 12 日 9:00'],
+      ['Upvote: (86): octocat, 09:00AM on May 12, 2022', '赞成 (86)：octocat，2022年5月12日 9:00'],
       ['Upvote: (1,024): mona, 11:30PM yesterday', '赞成 (1,024)：mona，昨天 23:30']
     ],
     misses: ['Upvote: (86)']
@@ -340,7 +340,7 @@ describe('discussions 正则词条', () => {
 
 describe('discussions 时间与类别名工具', () => {
   it('评论时间转为 24 小时制，小时不补零', () => {
-    expect(commentTime('11:34PM on September 06')).toBe('9 月 6 日 23:34')
+    expect(commentTime('11:34PM on September 06')).toBe('9月6日 23:34')
     expect(commentTime('12:05AM today')).toBe('今天 0:05')
     expect(commentTime('12:37PM yesterday')).toBe('昨天 12:37')
     expect(commentTime('noon')).toBe('noon')

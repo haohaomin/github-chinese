@@ -766,15 +766,15 @@ const REGEXP_CASES: Readonly<Record<PartName, readonly RegExpCase[]>> = {
     },
     {
       hits: [
-        ['Retention period must be less than or equal to 90 days.', '保留期不能超过 90 天。'],
-        ['Retention period must be 1 days or more.', '保留期不能少于 1 天。']
+        ['Retention period must be less than or equal to 90 days.', '保留期不能超过 90天。'],
+        ['Retention period must be 1 days or more.', '保留期不能少于 1天。']
       ],
       misses: ['Retention period must be positive.']
     },
     {
       hits: [
-        ['Cache size must be less than or equal to 10000 GB.', '缓存大小不能超过 10000 GB。'],
-        ['Cache size must be 10 GB or more.', '缓存大小不能少于 10 GB。']
+        ['Cache size must be less than or equal to 10000 GB.', '缓存大小不能超过 10000GB。'],
+        ['Cache size must be 10 GB or more.', '缓存大小不能少于 10GB。']
       ],
       misses: ['Cache size must be positive.']
     },
@@ -799,8 +799,8 @@ const REGEXP_CASES: Readonly<Record<PartName, readonly RegExpCase[]>> = {
     // 策略：pull_request_target 限制公告
     {
       hits: [
-        ['On December 2, 2026, GitHub will restrict', '2026 年 12 月 2 日起，GitHub 将默认在公共存储库中限制'],
-        ['On Dec 2, 2026, GitHub will restrict', '2026 年 12 月 2 日起，GitHub 将默认在公共存储库中限制']
+        ['On December 2, 2026, GitHub will restrict', '2026年12月2日起，GitHub 将默认在公共存储库中限制'],
+        ['On Dec 2, 2026, GitHub will restrict', '2026年12月2日起，GitHub 将默认在公共存储库中限制']
       ],
       misses: ['On a later date, GitHub will restrict']
     },
@@ -808,7 +808,7 @@ const REGEXP_CASES: Readonly<Record<PartName, readonly RegExpCase[]>> = {
       hits: [
         [
           'On December 2, 2026, GitHub will restrict pull_request_target on public repositories by default. To continue allowing the event trigger, configure an Actions policy.',
-          '2026 年 12 月 2 日起，GitHub 将默认在公共存储库中限制 pull_request_target 事件。如需继续允许此事件触发器，请配置操作策略。'
+          '2026年12月2日起，GitHub 将默认在公共存储库中限制 pull_request_target 事件。如需继续允许此事件触发器，请配置操作策略。'
         ]
       ],
       misses: ['GitHub will restrict pull_request_target on public repositories by default.']
@@ -967,13 +967,13 @@ const REGEXP_CASES: Readonly<Record<PartName, readonly RegExpCase[]>> = {
   security: [
     {
       hits: [
-        ['Last scan 2 hours ago', '上次扫描于 2 小时前'],
-        ['Last scan on Oct 26, 2026', '上次扫描于 2026 年 10 月 26 日'],
+        ['Last scan 2 hours ago', '上次扫描于 2小时前'],
+        ['Last scan on Oct 26, 2026', '上次扫描于 2026年10月26日'],
         ['Last scan yesterday', '上次扫描于昨天']
       ],
       misses: ['Last scan sometime']
     },
-    { hits: [['Next scan in 3 days', '下次扫描于 3 天后']], misses: ['Next scan soon'] },
+    { hits: [['Next scan in 3 days', '下次扫描于 3天后']], misses: ['Next scan soon'] },
     {
       hits: [
         ['4 of 4 languages selected', '已选择 4 种语言中的 4 种'],
@@ -1027,22 +1027,22 @@ const REGEXP_CASES: Readonly<Record<PartName, readonly RegExpCase[]>> = {
   secrets: [
     {
       hits: [
-        ['Updated Oct 26, 2026', '更新于 2026 年 10 月 26 日'],
-        ['Updated Mar 3', '更新于 3 月 3 日']
+        ['Updated Oct 26, 2026', '更新于 2026年10月26日'],
+        ['Updated Mar 3', '更新于 3月3日']
       ],
       misses: ['Updated yesterday']
     },
     {
       hits: [
-        ['Added on Oct 26, 2026', '添加于 2026 年 10 月 26 日'],
-        ['Added on 26 Oct 2026', '添加于 2026 年 10 月 26 日']
+        ['Added on Oct 26, 2026', '添加于 2026年10月26日'],
+        ['Added on 26 Oct 2026', '添加于 2026年10月26日']
       ],
       misses: ['Added on yesterday']
     },
     {
       hits: [
-        ['Last used within the last 2 weeks', '最近 2 周内使用过'],
-        ['Last used within the last 3 months', '最近 3 个月内使用过']
+        ['Last used within the last 2 weeks', '最近 2周内使用过'],
+        ['Last used within the last 3 months', '最近 3个月内使用过']
       ],
       misses: ['Last used within the last 2 years']
     },
@@ -1174,7 +1174,7 @@ describe('repo-settings 静态词条', () => {
     ['Level up your tag protections with Repository Rules', '使用存储库规则升级标签保护'],
     [
       'Protected tags are being deprecated. To continue protecting tags, please migrate to a tag ruleset by August 30th. You can learn more about the sunset in our',
-      '受保护标签即将弃用。如需继续保护标签，请在 8 月 30 日前迁移到标签规则集。你可以在'
+      '受保护标签即将弃用。如需继续保护标签，请在 8月30日前迁移到标签规则集。你可以在'
     ],
     ['New branch ruleset', '新建分支规则集'],
     ['Organization rulesets', '组织规则集'],

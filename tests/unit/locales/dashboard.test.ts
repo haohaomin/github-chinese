@@ -227,7 +227,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     ],
     misses: ['two of three completed']
   },
-  { hits: [['Read · Est. 5m', '阅读 · 约 5 分钟']], misses: ['Read · 5 minutes'] },
+  { hits: [['Read · Est. 5m', '阅读 · 约5 分钟']], misses: ['Read · 5 minutes'] },
   {
     hits: [
       ['Watch · 9 videos', '观看 · 9 个视频'],
@@ -249,14 +249,14 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   // 免费计划额度用尽：输入框横幅与首页提示
   {
     hits: [
-      ['You have reached your free plan limit. Limit resets on November 1, 2026.', '已达免费计划上限。限额将于 2026 年 11 月 1 日重置。'],
-      ['You have reached your free plan limit. It will reset on May 07, 2026.', '已达免费计划上限。限额将于 2026 年 5 月 7 日重置。'],
+      ['You have reached your free plan limit. Limit resets on November 1, 2026.', '已达免费计划上限。限额将于 2026年11月1日重置。'],
+      ['You have reached your free plan limit. It will reset on May 07, 2026.', '已达免费计划上限。限额将于 2026年5月7日重置。'],
       [
         'You have reached your free plan limit. Limit resets on November 1, 2026. Plan upgrades are temporarily unavailable.',
-        '已达免费计划上限。限额将于 2026 年 11 月 1 日重置。计划升级暂不可用。'
+        '已达免费计划上限。限额将于 2026年11月1日重置。计划升级暂不可用。'
       ],
       // 缺年份的日期同样以数字开头，前缀后补空格
-      ['You have reached your free plan limit. Limit resets on Dec 31.', '已达免费计划上限。限额将于 12 月 31 日重置。']
+      ['You have reached your free plan limit. Limit resets on Dec 31.', '已达免费计划上限。限额将于 12月31日重置。']
     ],
     misses: ['You have reached your free plan limit.']
   },
@@ -368,7 +368,7 @@ describe('dashboard 正则词条', () => {
     expect(translate(normalizeText([' · ', ' ', 'Failed'].join('')))).toBe('· 失败')
     // 免费计划横幅：'You have reached your free plan limit. Limit resets on ' + 日期 + '.'
     expect(translate(normalizeText(['You have reached your free plan limit. Limit resets on ', 'June 1, 2026', '.'].join('')))).toBe(
-      '已达免费计划上限。限额将于 2026 年 6 月 1 日重置。'
+      '已达免费计划上限。限额将于 2026年6月1日重置。'
     )
     // 清单进度：'1' + '/' + '4' + ' complete'
     expect(translate(normalizeText(['1', '/', '4', ' complete'].join('')))).toBe('已完成 1/4')

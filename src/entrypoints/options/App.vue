@@ -25,7 +25,6 @@
         <template #translation>
           <div class="options-group">
             <TranslationSwitch />
-            <TimeFormatSection />
             <ExcludedPathsSection />
             <UiTabs v-model="dictionaryTab" :tabs="dictionaryTabs" :label="t('dictionaries')" variant="pill">
               <template #custom><CustomEntriesSection /></template>
@@ -41,6 +40,7 @@
             <template #downloads><DownloadCountSection :active="tab === 'enhance' && enhanceTab === 'downloads'" /></template>
             <template #new-tab><NewTabSection /></template>
             <template #freshness><FreshnessSection /></template>
+            <template #time-format><TimeFormatSection /></template>
           </UiTabs>
         </template>
         <template #enterprise><EnterpriseSection /></template>
@@ -120,7 +120,8 @@
     { value: 'auto-load', label: 'autoLoad' },
     { value: 'downloads', label: 'downloadCount' },
     { value: 'new-tab', label: 'newTab' },
-    { value: 'freshness', label: 'freshness' }
+    { value: 'freshness', label: 'freshness' },
+    { value: 'time-format', label: 'timeFormat' }
   ]
 
   useUiPreferencesSync()

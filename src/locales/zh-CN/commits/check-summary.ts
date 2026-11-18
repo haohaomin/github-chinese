@@ -40,7 +40,7 @@ const DURATION_UNIT: Readonly<Record<string, string>> = { s: '秒', m: '分钟',
 const DURATION_SOURCE = '\\d+[smhd](?: \\d+[smhd]){0,2}'
 
 function duration(text: string): string {
-  return text.replace(/(\d+)([smhd])/g, (_, amount: string, unit: string) => `${amount} ${DURATION_UNIT[unit] ?? unit}`)
+  return text.replace(/(\d+)([smhd])/g, (_, amount: string, unit: string) => `${amount}${DURATION_UNIT[unit] ?? unit}`)
 }
 
 /** 检查结论（Failing after 30s 中的状态词） */

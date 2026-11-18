@@ -178,7 +178,7 @@ export default {
     'to index your non-GitHub repositories in VSCode.': '在 VSCode 中為你的非 GitHub 儲存庫建立索引。',
     // 「You can use the <a>GitHub Copilot app</a>. Enforcement begins …」（原文只有日期里的逗号，译文不另加）
     '. Enforcement begins July 27th, 2026 in version 1.1 of the GitHub Copilot app. The Copilot CLI policy continues to govern the GitHub Copilot App until version 1.1':
-      '。GitHub Copilot 應用程式 1.1 版自 2026 年 7 月 27 日起強制執行此政策。Copilot CLI 政策在 1.1 版之前繼續管控 GitHub Copilot 應用程式',
+      '。GitHub Copilot 應用程式 1.1 版自 2026年7月27日起強制執行此政策。Copilot CLI 政策在 1.1 版之前繼續管控 GitHub Copilot 應用程式',
     // 「If enabled, you may be served <a>evaluation models</a> through <a>Copilot Auto model selection</a>」
     // 拼出「啟用後，可能會將 評估模型 納入 Copilot 自動模型選擇」（through 见 scoped）
     'Evaluation models in Copilot auto model selection': 'Copilot 自動模型選擇中的評估模型',

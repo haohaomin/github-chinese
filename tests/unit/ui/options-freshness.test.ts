@@ -110,13 +110,13 @@ describe.skipIf(!App)('设置页：更新时间着色', () => {
 
   it('开关默认关闭；「颜色」分浅色、深色两组（各按 GitHub 该主题的配色），三个时段默认为空、显示默认颜色，关闭时不可用', async () => {
     const { scope } = await render()
-    expect(scope.findAll('h2').map(item => item.text())).toEqual(['颜色'])
+    expect(scope.findAll('h2').map(item => item.text())).toEqual(['时段范围', '颜色'])
     expect(switchOf(scope, '更新时间着色').attributes('aria-checked')).toBe('false')
     expect(scope.findAll('h3').map(item => item.text())).toEqual(['浅色', '深色'])
     for (const scheme of FRESHNESS_SCHEMES) {
       const group = scope.get(`[data-test="freshness-${scheme}"]`)
       expect(group.attributes('data-gcn-scheme')).toBe(scheme)
-      expect(group.findAll('[data-test="color-label"]').map(item => item.text())).toEqual(['30 天内', '一年内', '更早'])
+      expect(group.findAll('[data-test="color-label"]').map(item => item.text())).toEqual(['30 天内', '365 天内', '更早'])
       for (const level of FRESHNESS_LEVELS) {
         const row = field(scope, scheme, level)
         const fallback = FRESHNESS_PREVIEW_COLORS[level][scheme]
@@ -128,9 +128,9 @@ describe.skipIf(!App)('设置页：更新时间着色', () => {
       }
     }
     const row = field(scope, 'dark', 'recent')
-    expect(labelledBy(picker(row).element)).toBe('深色 一年内')
-    expect(labelledBy(hex(row).element)).toBe('深色 一年内')
-    expect(labelledBy(reset(row).element)).toBe('重置 深色 一年内')
+    expect(labelledBy(picker(row).element)).toBe('深色 365 天内')
+    expect(labelledBy(hex(row).element)).toBe('深色 365 天内')
+    expect(labelledBy(reset(row).element)).toBe('重置 深色 365 天内')
   })
 
   it('开关立即保存；开启后颜色可改', async () => {
@@ -228,7 +228,7 @@ describe.skipIf(!App)('设置页：更新时间着色', () => {
     await settle()
     expect(scope.findAll('h3').map(item => item.text())).toEqual(['Light', 'Dark'])
     const labels = scope.get('[data-test="freshness-light"]').findAll('[data-test="color-label"]')
-    expect(labels.map(item => item.text())).toEqual(['Within 30 days', 'Within a year', 'Older'])
+    expect(labels.map(item => item.text())).toEqual(['Within 30 days', 'Within 365 days', 'Older'])
     expect(hex(field(scope, 'light', 'fresh')).attributes('placeholder')).toBe('Default')
     expect(reset(field(scope, 'light', 'fresh')).text()).toBe('Reset')
   })

@@ -49,7 +49,7 @@ export default {
     // 数据：5 million students / 200K verified educators / +2K educational institutions
     [/^(\d+) million students$/, (_, count) => joinCjk(millions(count!), '学生')],
     [/^(\d+)K verified educators$/, (_, count) => joinCjk(thousands(count!), '已验证教育工作者')],
-    [/^\+(\d+)K educational institutions$/, (_, count) => joinCjk(`超过 ${thousands(count!)}`, '所教育机构')]
+    [/^\+(\d+)K educational institutions$/, (_, count) => joinCjk(`超过${thousands(count!)}`, '所教育机构')]
   ],
   inline: [
     // <b>Join us today</b> and take the first step towards transforming your tech education experience.

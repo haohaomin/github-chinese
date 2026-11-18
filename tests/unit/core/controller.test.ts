@@ -426,8 +426,8 @@ describe('本地时区变化', () => {
   /** 测试词典加上完整时间的词条 */
   const ZONE_BUNDLE: LocaleBundle = [...TEST_BUNDLE, ['common', zhCnTime]]
   const FULL_TIME = 'Oct 26, 2026, 10:03 AM GMT+8'
-  const LOCAL_TIME = '2026 年 10 月 26 日 10:03'
-  const OTHER_ZONE_TIME = '2026 年 10 月 26 日 10:03 (GMT+8)'
+  const LOCAL_TIME = '2026年10月26日 10:03'
+  const OTHER_ZONE_TIME = '2026年10月26日 10:03 (GMT+8)'
 
   beforeAll(defineFakeRelativeTime)
 
@@ -535,7 +535,7 @@ describe('本地时区变化', () => {
 
     expect($('p').textContent).toBe(OTHER_ZONE_TIME)
     expect($('p').getAttribute('title')).toBe(OTHER_ZONE_TIME)
-    expect($('relative-time').getAttribute('title')).toBe('2026 年 10 月 26 日 GMT+8 10:03')
+    expect($('relative-time').getAttribute('title')).toBe('2026年10月26日 GMT+8 10:03')
     // 停止时通知一次，恢复翻译后补发一次
     expect(onReset.mock.calls).toEqual([['change'], ['change']])
     // 已按新时区重建：之后的事件不再重建
@@ -577,7 +577,7 @@ describe('本地时区变化', () => {
     await settleTime()
 
     expect($('p').textContent).toBe(OTHER_ZONE_TIME)
-    expect($('relative-time').getAttribute('title')).toBe('2026 年 10 月 26 日 GMT+8 10:03')
+    expect($('relative-time').getAttribute('title')).toBe('2026年10月26日 GMT+8 10:03')
   })
 })
 
@@ -593,6 +593,6 @@ describe('时间格式', () => {
     expect(($('relative-time') as HTMLElement).shadowRoot?.textContent).toBe('2026/10/26')
     c.updateSettings({ ...SETTINGS, timeFormat: 'default', customTimeFormat: 'YYYY/MM/DD' })
     expect(c.translator.features.timeFormat).toBe('')
-    expect(($('relative-time') as HTMLElement).shadowRoot?.textContent).toBe('3 天前')
+    expect(($('relative-time') as HTMLElement).shadowRoot?.textContent).toBe('3天前')
   })
 })

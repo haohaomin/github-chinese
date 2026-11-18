@@ -32,7 +32,7 @@ export const ITERATION_RANGE_SOURCE = `${MONTH_SOURCE} \\d{1,2}(?:, \\d{4})? - $
 const WEEKDAY_DATE_RE = new RegExp(`^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), (${MONTH_SOURCE}) (\\d{1,2})(?: (\\d{4}))?$`)
 const SHORT_DATE_RE = new RegExp(`^${MONTH_SOURCE} \\d{1,2}$`)
 
-/** "Mon, Oct 26" → 10 月 26 日週一；"Fri, Jan 8 2027" → 2027 年 1 月 8 日週五 */
+/** "Mon, Oct 26" → 10月26日週一；"Fri, Jan 8 2027" → 2027年1月8日週五 */
 export function translateWeekdayDate(text: string): string {
   const match = WEEKDAY_DATE_RE.exec(text)
   if (!match) return translateDate(text) ?? text
@@ -53,7 +53,7 @@ function translateSpanNote(note: string): string {
     .join(' - ')
 }
 
-/** 路线图项提示：Mon, Oct 26 - Fri, Nov 6 [Iteration 3] → 10 月 26 日週一 - 11 月 6 日週五 [Iteration 3] */
+/** 路线图项提示：Mon, Oct 26 - Fri, Nov 6 [Iteration 3] → 10月26日週一 - 11月6日週五 [Iteration 3] */
 export function translateRoadmapSpan(text: string): string {
   const match = /^(.+?)(?: \[([^\]]+)\])?$/.exec(text)
   if (!match) return text
@@ -65,7 +65,7 @@ export function translateRoadmapSpan(text: string): string {
   return note ? `${dates} [${translateSpanNote(note)}]` : dates
 }
 
-/** "Oct 01 - Oct 14" → 10 月 1 日 - 10 月 14 日 */
+/** "Oct 01 - Oct 14" → 10月1日 - 10月14日 */
 export function translateIterationRange(text: string): string {
   return text
     .split(' - ')
@@ -623,7 +623,7 @@ export default {
     ],
     [new RegExp(`^Today: (${ROADMAP_SPAN_SOURCE})$`), (_, span: string) => `今天：${translateRoadmapSpan(span)}`],
     [new RegExp(`^Scroll to: (${WEEKDAY_DATE_SOURCE})$`), (_, date: string) => `捲動到：${translateWeekdayDate(date)}`],
-    // 原文没有冒号：新增到今天 10 月 26 日週一
+    // 原文没有冒号：新增到今天 10月26日週一
     [new RegExp(`^Add to today at (${ROADMAP_SPAN_SOURCE})$`), (_, span: string) => joinCjk('新增到今天', translateRoadmapSpan(span))],
     [new RegExp(`^Add to (${ROADMAP_SPAN_SOURCE})$`), (_, span: string) => joinCjk('新增到', translateRoadmapSpan(span))],
     [

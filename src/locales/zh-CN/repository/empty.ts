@@ -16,7 +16,7 @@ const regexp: readonly RegExpRule[] = [
   // 正在创建存储库时的自动刷新提示（原文无逗号，译文不加）
   [
     /^This page will automatically refresh in (\d+) seconds to check if the repository is ready\.$/,
-    '此页面将在 $1 秒后自动刷新以检查存储库是否就绪。'
+    '此页面将在 $1秒后自动刷新以检查存储库是否就绪。'
   ],
   // 空存储库的功能申请（引导卡片）：读屏播报
   [/^Request for (.+) submitted successfully$/, (_, name: string) => featureRequest('已提交', name, '的申请')],

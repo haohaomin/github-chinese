@@ -85,9 +85,9 @@ export default {
     'Exploit Prediction Scoring System (EPSS)': '漏洞利用预测评分系统 (EPSS)',
     'Exploit Prediction Scoring System': '漏洞利用预测评分系统',
     'This score estimates the probability of this vulnerability being exploited within the next 30 days. Data by':
-      '此评分估计该漏洞在未来 30 天内被利用的概率。数据来源',
+      '此评分估计该漏洞在未来 30天内被利用的概率。数据来源',
     'This score estimates the probability of this vulnerability being exploited within the next 30 days. Data provided by':
-      '此评分估计该漏洞在未来 30 天内被利用的概率。数据来源',
+      '此评分估计该漏洞在未来 30天内被利用的概率。数据来源',
     'Learn more about the EPSS score.': '了解 EPSS 评分。',
 
     // 严重性计算器（公告表单）

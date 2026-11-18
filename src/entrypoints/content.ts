@@ -139,7 +139,7 @@ async function probeSources(): Promise<SourceHealth> {
   return response.health
 }
 
-/** 请后台经加速源取回加载失败的图片，返回 data: 地址 */
+/** 请后台经加速源取回加载失败的图片，返回data: 地址 */
 async function fetchImage(url: string): Promise<string> {
   const message: BackgroundMessage = { type: 'gcn:fetch-image', url }
   const response = await sendToBackground(message, FETCH_IMAGE_TIMEOUT_MS)
@@ -180,7 +180,7 @@ export default defineContentScript({
     'https://support.github.com/*'
   ],
   runAt: 'document_start',
-  // 新实例只用 document 上的自定义事件让旧实例失效，不经 window.postMessage 把事件名广播给页面脚本
+  // 新实例只用document 上的自定义事件让旧实例失效，不经 window.postMessage 把事件名广播给页面脚本
   noScriptStartedPostMessage: true,
   async main(ctx) {
     if (ctx.isInvalid) return
@@ -351,7 +351,8 @@ export default defineContentScript({
     // 更新时间着色：文件列表与最近提交的时间按距今远近改颜色（见 core/freshness）
     const freshness = createFreshness(document, {
       active: () => current.enabled && current.freshness,
-      colors: () => current.freshnessColors
+      colors: () => current.freshnessColors,
+      days: () => current.freshnessDays
     })
     // 自动加载：「加载更多」与分页列表的下一页（见 core/auto-load）
     const autoLoader = createAutoLoader(document, {

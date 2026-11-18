@@ -574,7 +574,7 @@ export default {
     // 里程碑与状态更新
     [new RegExp(`^Past due by (${DISTANCE_SOURCE})$`), (_, distance: string) => joinCjk('已逾期', translateDistance(distance))],
     [new RegExp(`^Due by (${DATE_SOURCE})$`), (_, date: string) => joinCjk('截止於', translateDate(date) ?? date)],
-    // 项目头部状态徽章的 aria-label：原文没有引号、逗号，改语序代替标点（查看 2026 年 1 月 5 日更新為進度正常的最新狀態）
+    // 项目头部状态徽章的 aria-label：原文没有引号、逗号，改语序代替标点（查看 2026年1月5日更新為進度正常的最新狀態）
     [
       new RegExp(`^View latest (.+) status updated (${DATE_SOURCE})$`),
       (_, status: string, date: string) =>

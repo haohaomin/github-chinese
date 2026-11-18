@@ -38,12 +38,12 @@ interface RegExpCase {
 /** 按合并后的正则顺序排列，每条正则至少一个正例、一个反例 */
 const REGEXP_CASES: readonly RegExpCase[] = [
   // SSH 与 GPG 密钥、凭据汇总
-  { hits: [['Added on Jan 5, 2024', '添加于 2024 年 1 月 5 日']], misses: ['Added on someday'] },
+  { hits: [['Added on Jan 5, 2024', '添加于 2024年1月5日']], misses: ['Added on someday'] },
   {
     hits: [
-      ['Last used within the last 3 weeks', '最近 3 周内使用过'],
+      ['Last used within the last 3 weeks', '最近 3周内使用过'],
       ['Last used within the last week', '最近一周内使用过'],
-      ['Last used within the last 2 months', '最近 2 个月内使用过']
+      ['Last used within the last 2 months', '最近 2个月内使用过']
     ],
     misses: ['Last used within the last day']
   },
@@ -193,9 +193,9 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   {
     hits: [
       // 原文无逗号，译文不加；句号随原文
-      ['Enabled with 23 hours remaining.', '已启用剩余 23 小时。'],
-      ['Enabled with about 1 month remaining', '已启用剩余约 1 个月'],
-      ['Enabled with less than a minute remaining.', '已启用剩余不到 1 分钟。']
+      ['Enabled with 23 hours remaining.', '已启用剩余 23小时。'],
+      ['Enabled with about 1 month remaining', '已启用剩余约 1个月'],
+      ['Enabled with less than a minute remaining.', '已启用剩余不到 1分钟。']
     ],
     misses: ['Enabled with remaining']
   },
@@ -269,17 +269,17 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'Upgrade for higher limits, premium models, AI reviews. Free responses reset in 12 days.',
-        '升级以获得更高额度、高级模型和 AI 审查。免费额度将在 12 天后重置。'
+        '升级以获得更高额度、高级模型和 AI 审查。免费额度将在 12天后重置。'
       ],
       [
         'Upgrade for higher limits, premium models, AI reviews. Free responses reset in 1 day',
-        '升级以获得更高额度、高级模型和 AI 审查。免费额度将在 1 天后重置'
+        '升级以获得更高额度、高级模型和 AI 审查。免费额度将在 1天后重置'
       ]
     ],
     misses: ['Upgrade for higher limits']
   },
   {
-    hits: [['Free responses reset in 3 days.', '免费额度将在 3 天后重置。']],
+    hits: [['Free responses reset in 3 days.', '免费额度将在 3天后重置。']],
     misses: ['Free responses reset in 3 days']
   },
   {
@@ -299,7 +299,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['Copilot Business subscription']
   },
   {
-    hits: [['Your GitHub Copilot subscription will renew in 5 days.', '你的 GitHub Copilot 订阅将在 5 天后续订。']],
+    hits: [['Your GitHub Copilot subscription will renew in 5 days.', '你的 GitHub Copilot 订阅将在 5天后续订。']],
     misses: ['Your GitHub Copilot subscription will renew soon.']
   },
   { hits: [['1,200 / 3,000 AI credits', '1,200 / 3,000 AI 额度']], misses: ['1,200 AI credits left'] },
@@ -322,9 +322,9 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [['45.5% used', '已使用 45.5%']], misses: ['45 used'] },
   {
     hits: [
-      ['Resets on Nov 1, 2026', '2026 年 11 月 1 日重置'],
-      ['Resets Dec 1', '12 月 1 日重置'],
-      ['Resets in 5 days', '5 天后重置']
+      ['Resets on Nov 1, 2026', '2026年11月1日重置'],
+      ['Resets Dec 1', '12月1日重置'],
+      ['Resets in 5 days', '5天后重置']
     ],
     misses: ['Resets soon']
   },
@@ -523,7 +523,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   {
     hits: [
       ['Never used · Owned by', '从未使用 · 所有者'],
-      ['Last used within the last 2 weeks · Owned by', '最近 2 周内使用过 · 所有者']
+      ['Last used within the last 2 weeks · Owned by', '最近 2周内使用过 · 所有者']
     ],
     misses: ['Used · Owned by']
   },
@@ -586,15 +586,15 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   // 安装配置页
   {
     hits: [
-      ['Installed 2 years ago', '2 年前安装'],
-      ['Installed on Jan 5, 2024', '2024 年 1 月 5 日安装']
+      ['Installed 2 years ago', '2年前安装'],
+      ['Installed on Jan 5, 2024', '2024年1月5日安装']
     ],
     misses: ['Installed apps']
   },
   {
     hits: [
-      ['Your installation was suspended by you on Jan 5, 2025.', '你已于 2025 年 1 月 5 日暂停此安装。'],
-      ['Your installation was suspended by you on Jan 5, 2025', '你已于 2025 年 1 月 5 日暂停此安装']
+      ['Your installation was suspended by you on Jan 5, 2025.', '你已于 2025年1月5日暂停此安装。'],
+      ['Your installation was suspended by you on Jan 5, 2025', '你已于 2025年1月5日暂停此安装']
     ],
     misses: ['Your installation was suspended by you']
   },
@@ -714,8 +714,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['Added 3 days ago by octocat', '3 天前由 octocat 添加'],
-      ['Added on Jan 5, 2024 by octocat', '2024 年 1 月 5 日由 octocat 添加']
+      ['Added 3 days ago by octocat', '3天前由 octocat 添加'],
+      ['Added on Jan 5, 2024 by octocat', '2024年1月5日由 octocat 添加']
     ],
     misses: ['Added 3 days ago']
   },
@@ -745,43 +745,43 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   // 个人访问令牌：过期时间
   {
     hits: [
-      ['Expires on Tue, Nov 25 2025.', '有效期至 2025 年 11 月 25 日周二。'],
-      ['Expires on Tue, Nov 25 2025', '有效期至 2025 年 11 月 25 日周二'],
-      ['Expired on Nov 25, 2025', '已于 2025 年 11 月 25 日过期']
+      ['Expires on Tue, Nov 25 2025.', '有效期至 2025年11月25日周二。'],
+      ['Expires on Tue, Nov 25 2025', '有效期至 2025年11月25日周二'],
+      ['Expired on Nov 25, 2025', '已于 2025年11月25日过期']
     ],
     misses: ['Expires on someday']
   },
   {
-    hits: [['This token expires on Tue, Nov 25 2025.', '此令牌将于 2025 年 11 月 25 日周二过期。']],
+    hits: [['This token expires on Tue, Nov 25 2025.', '此令牌将于 2025年11月25日周二过期。']],
     misses: ['This token expires soon.']
   },
   {
-    hits: [['This token expired on Mon, Jan 5 2026.', '此令牌已于 2026 年 1 月 5 日周一过期。']],
+    hits: [['This token expired on Mon, Jan 5 2026.', '此令牌已于 2026年1月5日周一过期。']],
     misses: ['This token expired.']
   },
   {
-    hits: [['The token will expire on Sun, Nov 30 2025', '令牌将于 2025 年 11 月 30 日周日过期']],
+    hits: [['The token will expire on Sun, Nov 30 2025', '令牌将于 2025年11月30日周日过期']],
     misses: ['The token will expire on someday']
   },
   {
     hits: [
       // 「Expires in 3 days」由 settings-account 的计划页规则先行翻译，这里用小时、今天等其余写法
-      ['Expires in 5 hours', '5 小时后过期'],
+      ['Expires in 5 hours', '5小时后过期'],
       ['Expires today.', '今天过期。']
     ],
     misses: ['Expires soon']
   },
   {
     hits: [
-      ['30 days (Tue, Nov 25 2025)', '30 天（2025 年 11 月 25 日周二）'],
-      ['7 days (Nov 2, 2025)', '7 天（2025 年 11 月 2 日）']
+      ['30 days (Tue, Nov 25 2025)', '30 天（2025年11月25日周二）'],
+      ['7 days (Nov 2, 2025)', '7 天（2025年11月2日）']
     ],
     misses: ['30 days (soon)']
   },
   {
     hits: [
-      ['Tue, Nov 25 2025', '2025 年 11 月 25 日周二'],
-      ['Wed, Dec 3 2025.', '2025 年 12 月 3 日周三。']
+      ['Tue, Nov 25 2025', '2025年11月25日周二'],
+      ['Wed, Dec 3 2025.', '2025年12月3日周三。']
     ],
     misses: ['Tue, 25 Nov 2025']
   },
@@ -968,10 +968,10 @@ describe('settings-developer 正则词条', () => {
 
 describe('settings-developer 工具函数', () => {
   it('translateTokenDate 处理带星期、常规与相对日期', () => {
-    expect(translateTokenDate('Tue, Nov 25 2025')).toBe('2025 年 11 月 25 日周二')
-    expect(translateTokenDate('Sat, Jan 3, 2026')).toBe('2026 年 1 月 3 日周六')
-    expect(translateTokenDate('Nov 25, 2025')).toBe('2025 年 11 月 25 日')
-    expect(translateTokenDate('in 3 days')).toBe('3 天后')
+    expect(translateTokenDate('Tue, Nov 25 2025')).toBe('2025年11月25日周二')
+    expect(translateTokenDate('Sat, Jan 3, 2026')).toBe('2026年1月3日周六')
+    expect(translateTokenDate('Nov 25, 2025')).toBe('2025年11月25日')
+    expect(translateTokenDate('in 3 days')).toBe('3天后')
     expect(translateTokenDate('someday')).toBe('someday')
   })
 
@@ -986,19 +986,19 @@ describe('settings-developer 工具函数', () => {
 
   it('lastUsedLabel、translateLastUsed、translateUsage', () => {
     expect(lastUsedLabel(undefined, 'month')).toBe('最近一个月内使用过')
-    expect(lastUsedLabel('2', 'week')).toBe('最近 2 周内使用过')
+    expect(lastUsedLabel('2', 'week')).toBe('最近 2周内使用过')
     expect(translateLastUsed('Last used within the last year')).toBe('最近一年内使用过')
     expect(translateLastUsed('Never used')).toBeUndefined()
     expect(translateUsage('Never used')).toBe('从未使用')
-    expect(translateUsage('Last used within the last 3 years')).toBe('最近 3 年内使用过')
+    expect(translateUsage('Last used within the last 3 years')).toBe('最近 3年内使用过')
     expect(translateUsage('Used yesterday')).toBe('Used yesterday')
   })
 
   it('translateDuration', () => {
-    expect(translateDuration('over 2 days')).toBe('超过 2 天')
-    expect(translateDuration('about 23 hours')).toBe('约 23 小时')
-    expect(translateDuration('an hour')).toBe('1 小时')
-    expect(translateDuration('less than a minute')).toBe('不到 1 分钟')
+    expect(translateDuration('over 2 days')).toBe('超过 2天')
+    expect(translateDuration('about 23 hours')).toBe('约 23小时')
+    expect(translateDuration('an hour')).toBe('1小时')
+    expect(translateDuration('less than a minute')).toBe('不到 1分钟')
     expect(translateDuration('forever')).toBe('forever')
   })
 
@@ -1009,9 +1009,9 @@ describe('settings-developer 工具函数', () => {
     expect(joinCjk('（只读）', 'Gists')).toBe('（只读）Gists')
     expect(joinCjk('Gists', '（只读）')).toBe('Gists（只读）')
     expect(joinCjk('', '代码')).toBe('代码')
-    expect(joinCjk('添加于', '2024 年 1 月 5 日')).toBe('添加于 2024 年 1 月 5 日')
+    expect(joinCjk('添加于', '2024年1月5日')).toBe('添加于 2024年1月5日')
     expect(joinCjk('已于', '昨天')).toBe('已于昨天')
-    expect(joinCjk('3 天前', '重置')).toBe('3 天前重置')
+    expect(joinCjk('3天前', '重置')).toBe('3天前重置')
   })
 
   it('权限标题：自有标题都有译文，已由其他文件收录的不重复收录', () => {
@@ -1087,11 +1087,11 @@ describe('settings-developer 静态词条', () => {
     // 手写日期：中文与数字之间加空格
     [
       'GitHub will enable push protection for all GitHub Free individuals in January 2024. Enable below to try it now in beta.',
-      'GitHub 将于 2024 年 1 月为所有 GitHub 免费版个人用户启用推送保护。可在下方启用以抢先体验测试版。'
+      'GitHub 将于 2024年1月为所有 GitHub 免费版个人用户启用推送保护。可在下方启用以抢先体验测试版。'
     ],
     [
       '. Enforcement begins July 27th, 2026 in version 1.1 of the GitHub Copilot app. The Copilot CLI policy continues to govern the GitHub Copilot App until version 1.1',
-      '。GitHub Copilot 应用 1.1 版自 2026 年 7 月 27 日起强制实施此策略。Copilot CLI 策略在 1.1 版之前继续管控 GitHub Copilot 应用'
+      '。GitHub Copilot 应用 1.1 版自 2026年7月27日起强制实施此策略。Copilot CLI 策略在 1.1 版之前继续管控 GitHub Copilot 应用'
     ],
     ['Dotfiles repository', 'Dotfiles 存储库'],
     // 与拉取请求并列的 open issues → 创建问题；整句与组织、存储库设置同句写法一致
@@ -1135,7 +1135,7 @@ describe('settings-developer 静态词条', () => {
     ['Failed to update budget. Please try again.', '无法更新预算。请重试。'],
     ['Whoops! Try again.', '出错了！请重试。'],
     ['Only images, please. Try again.', '仅支持图片。请重试。'],
-    ['1MB or less, please. Try again.', '图片不能超过 1MB。请重试。'],
+    ['1MB or less, please. Try again.', '图片不能超过1MB。请重试。'],
     [
       'You cannot transform this account into an organization because you have an active GitHub Sponsors account.',
       '你因有活跃的 GitHub 赞助帐户而无法将此帐户转换为组织。'

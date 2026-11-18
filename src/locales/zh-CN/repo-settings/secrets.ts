@@ -168,7 +168,7 @@ export default {
     [new RegExp(`^Added on (${DATE_SOURCE})$`), (_, date: string) => joinCjk('添加于', translateDate(date) ?? date)],
     [
       /^Last used within the last (\d+) (week|month)s?$/,
-      (_, count: string, unit: string) => `最近 ${count} ${unit === 'week' ? '周' : '个月'}内使用过`
+      (_, count: string, unit: string) => `最近 ${count}${unit === 'week' ? '周' : '个月'}内使用过`
     ],
     // 部署密钥列表的权限标记：原文破折号不计入检查脚本的原文标点，用正则保留破折号
     [/^— Read(\/write)?$/, (_, write: string | undefined) => (write ? '— 读写' : '— 只读')],

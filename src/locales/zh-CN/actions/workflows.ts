@@ -323,7 +323,7 @@ export default {
     'GitHub-hosted runner capacity': 'GitHub 托管运行器容量',
     'Upcoming change to GitHub App installation token format': 'GitHub 应用安装令牌格式即将变更',
     'GitHub App installation tokens will soon use a new stateless format (ghs_...) and may be longer (~520 characters). Apps with hardcoded length assumptions may break.':
-      'GitHub 应用安装令牌即将改用新的无状态格式 (ghs_...) 且长度可能更长（约 520 个字符）。硬编码长度假设的应用可能会出错。',
+      'GitHub 应用安装令牌即将改用新的无状态格式 (ghs_...) 且长度可能更长（约520 个字符）。硬编码长度假设的应用可能会出错。',
     'Validate your apps and workflows with the per-request override header detailed in this':
       '使用逐请求覆盖标头验证你的应用和工作流的方法详见',
 

@@ -6,11 +6,11 @@ import { joinCjk, TIME_SOURCE, translateTime } from '../../../src/locales/zh-CN/
 import { $, TEST_BUNDLE, testMatcher } from './helpers'
 import { defineFakeRelativeTime, settleTime, type FakeRelativeTime } from './time-element'
 
-const ZH_TEXT = '3 天前'
-const ZH_TITLE = '2026 年 10 月 26 日 10:03'
+const ZH_TEXT = '3天前'
+const ZH_TITLE = '2026年10月26日 10:03'
 const EN_TEXT = '3 days ago'
 const EN_TITLE = 'Oct 26, 2026, 10:03 AM GMT+8'
-/** 页面自己设为中文（24 小时制）、不带前缀与中文 title 的时间元素：引擎要设的属性值与原值相同，不改写 */
+/** 页面自己设为中文（24小时制）、不带前缀与中文 title 的时间元素：引擎要设的属性值与原值相同，不改写 */
 const PAGE_ZH_TIME = '<relative-time lang="zh-CN" hour-cycle="h23" prefix="" title="Sample title"></relative-time>'
 
 /** 测试词典加上全局忽略规则 */
@@ -113,8 +113,8 @@ describe('时间元素按中文渲染后补空格', () => {
     await settleTime()
     time().setAttribute('datetime', '2026-10-22T02:03:00Z')
     await settleTime()
-    expect(time().renderedText).toBe('7 天前')
-    expect(time().getAttribute('title')).toBe('2026 年 10 月 22 日 10:03')
+    expect(time().renderedText).toBe('7天前')
+    expect(time().getAttribute('title')).toBe('2026年10月22日 10:03')
     stop()
     await settleTime()
     expect(time().renderedText).toBe('7 days ago')
@@ -128,7 +128,7 @@ describe('时间元素按中文渲染后补空格', () => {
     time().setAttribute('datetime', '2026-10-28T07:20:00Z')
     await settleTime()
     expect(time().renderedText).toBe('昨天')
-    expect(time().getAttribute('title')).toBe('2026 年 10 月 28 日 15:20')
+    expect(time().getAttribute('title')).toBe('2026年10月28日 15:20')
   })
 
   it('克隆体（Turbo 缓存快照）带着中文 lang：同样补空格', async () => {
@@ -272,7 +272,7 @@ describe('定时刷新沿用位置判断', () => {
     $('section').className = 'sample-region'
     time().setAttribute('datetime', '2026-10-22T02:03:00Z')
     await settleTime()
-    expect(time().renderedText).toBe('7 天前')
+    expect(time().renderedText).toBe('7天前')
   })
 
   it('祖先加上退出标记：不补空格', async () => {
@@ -322,7 +322,7 @@ describe('定时刷新沿用位置判断', () => {
     try {
       t.checkLocation()
       time().tick()
-      expect(time().renderedText).toBe('7 天前')
+      expect(time().renderedText).toBe('7天前')
     } finally {
       history.pushState(null, '', '/vuejs/core/issues')
     }
@@ -362,10 +362,10 @@ describe('TIME_SOURCE 拼成的词典规则', () => {
   ]
 
   it.each([
-    ['Updated on Jan 5, 2024', '2024 年 1 月 5 日更新'],
-    ['Updated on January 2024', '2024 年 1 月更新'],
-    ['Updated on 5 January 2024', '2024 年 1 月 5 日更新'],
-    ['on January 2024', '2024 年 1 月']
+    ['Updated on Jan 5, 2024', '2024年1月5日更新'],
+    ['Updated on January 2024', '2024年1月更新'],
+    ['Updated on 5 January 2024', '2024年1月5日更新'],
+    ['on January 2024', '2024年1月']
   ])('规则接受的带 on 日期整句译出：%s → %s', (source, expected) => {
     start(`<span id="time">${source}</span>`, { matcher: testMatcher(undefined, TIME_BUNDLE) })
     expect($('#time').textContent).toBe(expected)

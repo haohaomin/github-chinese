@@ -8,14 +8,14 @@ import { TIME_UPDATED_EVENT } from '../../../src/core/time-text'
 
 /** 未设 datetime 时的日期 */
 const DEFAULT_DATETIME = '2026-10-26T02:03:00Z'
-/** 相对时间的参照时刻：默认日期为 3 天前 */
+/** 相对时间的参照时刻：默认日期为3天前 */
 const NOW = Date.parse('2026-10-29T02:03:00Z')
 const DAY_MS = 86_400_000
 /** 时区固定为 GMT+8 */
 const OFFSET_MS = 8 * 3_600_000
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
-/** zh-CN：3天前 / 昨天；zh-TW：3 天前 / 昨天；其余：3 days ago / yesterday */
+/** zh-CN：3天前 / 昨天；zh-TW：3天前 / 昨天；其余：3 days ago / yesterday */
 function formatText(time: number, lang: string): string {
   const days = Math.round((NOW - time) / DAY_MS)
   if (lang === 'zh-CN') return days === 1 ? '昨天' : `${days}天前`
@@ -25,7 +25,7 @@ function formatText(time: number, lang: string): string {
 
 /**
  * zh-CN：2026年10月26日 GMT+8 10:03；zh-TW：2026年10月26日 上午10:03 [GMT+8]；其余：Oct 26, 2026, 10:03 AM GMT+8。
- * cycle 为 h12 / h23 时按该小时制（zh-CN 12 小时制：GMT+8 上午10:03；zh-TW 24 小时制：10:03 [GMT+8]），否则按语言默认
+ * cycle 为 h12 / h23时按该小时制（zh-CN 12小时制：GMT+8上午10:03；zh-TW 24小时制：10:03 [GMT+8]），否则按语言默认
  */
 function formatTitle(time: number, lang: string, cycle?: string): string {
   const local = new Date(time + OFFSET_MS)

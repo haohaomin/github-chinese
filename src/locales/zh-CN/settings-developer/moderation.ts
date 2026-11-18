@@ -18,14 +18,14 @@ const DURATION_RE = /^(?:(about|almost|over) )?(\d+|an?|one) (second|minute|hour
 /** 剩余时长片段（不含捕获组）：less than a minute、about 23 hours、1 day 等 */
 const DURATION_SOURCE = '(?:less than a minute|(?:(?:about|almost|over) )?(?:\\d+|an?|one) (?:second|minute|hour|day|week|month|year)s?)'
 
-/** 剩余时长：“about 23 hours” → 约 23 小时；无法识别时原样返回 */
+/** 剩余时长：“about 23 hours” → 约23 小时；无法识别时原样返回 */
 export function translateDuration(text: string): string {
-  if (text === 'less than a minute') return '不到 1 分钟'
+  if (text === 'less than a minute') return '不到 1分钟'
   const match = DURATION_RE.exec(text)
   if (!match) return text
   const amount = /^\d+$/.test(match[2]!) ? match[2]! : '1'
   const qualifier = match[1] === undefined ? '' : (DURATION_QUALIFIER[match[1]] ?? '')
-  return `${qualifier}${amount} ${DURATION_UNIT[match[3]!] ?? match[3]}`
+  return `${qualifier}${amount}${DURATION_UNIT[match[3]!] ?? match[3]}`
 }
 
 const LOGIN = '@([\\w-]+)'

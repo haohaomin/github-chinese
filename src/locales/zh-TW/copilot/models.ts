@@ -50,12 +50,12 @@ const UPGRADE = `(${Object.keys(UPGRADE_TAIL)
   .map(tail => tail.replaceAll('.', '\\.'))
   .join('|')})?`
 
-/** 限额重置尾句：限額將於 11 月 1 日重設。无时间时为空 */
+/** 限额重置尾句：限額將於 11月1日重設。无时间时为空 */
 function resetTail(time: string): string {
   return time ? joinCjk(joinCjk('限額將於', translateTime(time)), '重設。') : ''
 }
 
-/** 点数重置尾句：點數將於 11 月 1 日重設。 */
+/** 点数重置尾句：點數將於 11月1日重設。 */
 function creditResetTail(time: string): string {
   return joinCjk(joinCjk('點數將於', translateTime(time)), '重設。')
 }

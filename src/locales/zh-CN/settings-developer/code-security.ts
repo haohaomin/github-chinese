@@ -26,7 +26,7 @@ export default {
     'Enable push protection for yourself': '为自己启用推送保护',
     'Disable push protection for yourself': '为自己禁用推送保护',
     'GitHub will enable push protection for all GitHub Free individuals in January 2024. Enable below to try it now in beta.':
-      'GitHub 将于 2024 年 1 月为所有 GitHub 免费版个人用户启用推送保护。可在下方启用以抢先体验测试版。',
+      'GitHub 将于 2024年1月为所有 GitHub 免费版个人用户启用推送保护。可在下方启用以抢先体验测试版。',
     "Pushes that contain secrets will be blocked on public repositories. You'll have the option to bypass the block.":
       '包含机密的推送在公共存储库中将被阻止。你可以选择绕过阻止。',
     'Pushes that contain secrets will be blocked on public repositories. You’ll have the option to bypass the block.':

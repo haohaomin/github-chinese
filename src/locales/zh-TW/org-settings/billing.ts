@@ -111,7 +111,7 @@ const PERIODS: Readonly<Record<string, string>> = {
 const MONEY = '(\\$[\\d,]+(?:\\.\\d+)?)'
 const NUMBER = '(\\d[\\d,]*(?:\\.\\d+)?)'
 
-/** 日期区间：Oct 1 - Oct 31, 2025 → 10 月 1 日 - 2025 年 10 月 31 日 */
+/** 日期区间：Oct 1 - Oct 31, 2025 → 10月1日 - 2025年10月31日 */
 function dateRange(start: string, end: string): string {
   return `${translateTime(start)} - ${translateTime(end)}`
 }
@@ -390,7 +390,7 @@ export default {
     [/^(\d+) billing managers?$/, '$1 位帳務管理員'],
 
     // 总览卡片说明：Gross metered usage for Oct 1 - Oct 31, 2025.（句号随原文）
-    // 折扣一句用「期間」连接，避免「…的包含的…」：10 月 1 日 - 2025 年 10 月 31 日期間包含的使用量折扣
+    // 折扣一句用「期間」连接，避免「…的包含的…」：10月1日 - 2025年10月31日期間包含的使用量折扣
     [
       new RegExp(`^(Gross metered usage|Included usage discounts) for (${DATE_SOURCE}) - (${DATE_SOURCE})(\\.?)$`),
       (_, kind: string, start: string, end: string, dot: string) => {
@@ -418,7 +418,7 @@ export default {
       new RegExp(`^(~?)${MONEY} off(\\*?)$`),
       (_, tilde: string, amount: string, star: string) => `折抵${tilde ? '約' : ''} ${amount}${star}`
     ],
-    [new RegExp(`^${MONEY} off per month for (\\d+) years?$`), '$2 年內每月折抵 $1'],
+    [new RegExp(`^${MONEY} off per month for (\\d+) years?$`), '$2年內每月折抵 $1'],
     [
       new RegExp(`^${MONEY} off per month until (${DATE_SOURCE})(\\.?)$`),
       (_, amount: string, date: string, dot: string) => `${joinCjk(translateTime(date), '前每月折抵')} ${amount}${dot ? '。' : ''}`

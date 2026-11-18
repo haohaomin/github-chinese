@@ -8,25 +8,25 @@ import { settle, TEST_BUNDLE, testMatcher } from './helpers'
 import { defineFakeRelativeTime, settleTime, type FakeRelativeTime } from './time-element'
 
 /**
- * 首轮处理（start）上限：happy-dom 下 2 万个文本节点。
- * 单独运行约 150 ms，并行负载下 300 ms 以上，覆盖率插桩加满载时 700 ms 左右；预算只防数量级退化
+ * 首轮处理（start）上限：happy-dom 下2万个文本节点。
+ * 单独运行约150 ms，并行负载下300 ms 以上，覆盖率插桩加满载时700 ms 左右；预算只防数量级退化
  */
 const BUDGET_MS = 1000
 const TARGET_TEXT_NODES = 20_000
-/** 反复构建 2 万节点页面的用例：解析占大头，满载时超过默认的 5 秒 */
+/** 反复构建2万节点页面的用例：解析占大头，满载时超过默认的5秒 */
 const HEAVY_TIMEOUT_MS = 30_000
 /**
  * 大块纯代码区对首轮耗时的影响（与同规模、不查找的基线之比；不注册观察）。
- * 修复前在整个文档里查找重新进入区域，约 3～6 倍；现在约 1 倍
+ * 修复前在整个文档里查找重新进入区域，约3～6倍；现在约1倍
  */
 const CODE_RATIO_BUDGET = 2
 /** 比值取各轮最好成绩之比：页面每轮重建（happy-dom 按节点缓存选择器结果） */
 const CODE_RATIO_ROUNDS = 5
-/** 纯代码区的一行：5 个元素 */
+/** 纯代码区的一行：5个元素 */
 const CODE_LINE = '<div class="react-file-line"><span>const</span> <span>x</span> <span>=</span> <span>1</span></div>'
 /**
  * 行内句规则对首轮耗时的影响（与同一页面、无行内句规则之比）。有规则时每个直接文字含英文的宿主都要拆组建键查句型，
- * 直接文字没有英文的容器不查；约 1.2～1.4 倍，预算只防数量级退化
+ * 直接文字没有英文的容器不查；约1.2～1.4倍，预算只防数量级退化
  */
 const INLINE_RATIO_BUDGET = 2
 const INLINE_RATIO_ROUNDS = 5
@@ -126,7 +126,7 @@ afterEach(() => {
 })
 
 describe('性能', () => {
-  it(`2 万个文本节点首轮处理 < ${BUDGET_MS}ms`, { timeout: HEAVY_TIMEOUT_MS }, () => {
+  it(`2万个文本节点首轮处理 < ${BUDGET_MS}ms`, { timeout: HEAVY_TIMEOUT_MS }, () => {
     document.body.innerHTML = buildPage(10)
     const perRow = countTextNodes(document.body) / 10
     const rows = Math.ceil(TARGET_TEXT_NODES / perRow)
@@ -146,7 +146,7 @@ describe('性能', () => {
     expect(Math.min(...timings)).toBeLessThan(BUDGET_MS)
   })
 
-  it('批量插入 2 万个文本节点后一次回调处理完', async () => {
+  it('批量插入2万个文本节点后一次回调处理完', async () => {
     document.body.innerHTML = '<main></main>'
     translator = createTranslator({ matcher: testMatcher(), host: window })
     translator.start()
@@ -159,7 +159,7 @@ describe('性能', () => {
   })
 
   it(
-    `界面含忽略元素时不在 2 万元素的纯代码区里查找：首轮耗时为不查找基线的 ${CODE_RATIO_BUDGET} 倍以内`,
+    `界面含忽略元素时不在2万元素的纯代码区里查找：首轮耗时为不查找基线的 ${CODE_RATIO_BUDGET} 倍以内`,
     { timeout: HEAVY_TIMEOUT_MS },
     () => {
       const code = CODE_LINE.repeat(4000)
@@ -229,7 +229,7 @@ describe('性能', () => {
  */
 const LIST_SMALL = 50
 const LIST_LARGE = 400
-/** 列表长度放大 8 倍时读取次数的放大上限：线性约 8 倍，平方级约 64 倍 */
+/** 列表长度放大8倍时读取次数的放大上限：线性约8倍，平方级约64倍 */
 const LIST_GROWTH_BUDGET = 16
 
 const LIST_BUNDLE: LocaleBundle = [['common', { static: { 'Contributed to': '贡献于' } }]]
@@ -360,8 +360,8 @@ describe('正则阶段执行条数', () => {
 
 /**
  * 时间元素定时刷新：补过空格的元素每次刷新都派发事件（元素比较的是刷新前的显示文字），
- * 每个事件判断元素是否位于跳过区域。修复前逐次按忽略选择器查找祖先，耗时随规则数增长（400 条额外规则约 5 倍）；
- * 现在按元素沿用判断，约 1 倍
+ * 每个事件判断元素是否位于跳过区域。修复前逐次按忽略选择器查找祖先，耗时随规则数增长（400条额外规则约5倍）；
+ * 现在按元素沿用判断，约1倍
  */
 const TIME_RATIO_BUDGET = 2
 const TIME_RATIO_ROUNDS = 5
@@ -412,7 +412,7 @@ describe('时间元素定时刷新', () => {
       await settleTime()
       const times = [...document.querySelectorAll('relative-time')] as FakeRelativeTime[]
       expect(times).toHaveLength(TIME_COUNT)
-      expect(times[0]!.renderedText).toBe('3 天前')
+      expect(times[0]!.renderedText).toBe('3天前')
       const baseTimings: number[] = []
       const extraTimings: number[] = []
       /** 换上 bundle 后刷新一次预热，再取三次中的最好成绩 */
@@ -428,7 +428,7 @@ describe('时间元素定时刷新', () => {
       for (let round = 0; round < TIME_RATIO_ROUNDS; round++) {
         for (const time of round % 2 === 0 ? [timeBase, timeExtra] : [timeExtra, timeBase]) await time()
       }
-      expect(times[TIME_COUNT - 1]!.renderedText).toBe('3 天前')
+      expect(times[TIME_COUNT - 1]!.renderedText).toBe('3天前')
       expect(Math.min(...extraTimings) / Math.min(...baseTimings)).toBeLessThan(TIME_RATIO_BUDGET)
     }
   )

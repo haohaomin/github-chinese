@@ -30,6 +30,14 @@
         <output v-if="preview" class="time-format-preview" for="time-format-pattern" data-test="time-format-preview">{{ preview }}</output>
       </template>
     </div>
+
+    <dl class="format-reference" v-if="settings.timeFormat === 'custom'">
+      <div v-for="token in TOKEN_REFERENCE" :key="token.code" class="format-reference-row">
+        <dt class="format-reference-code">{{ token.code }}</dt>
+        <dd class="format-reference-desc">{{ token.desc }}</dd>
+        <span class="format-reference-example">{{ token.example }}</span>
+      </div>
+    </dl>
   </section>
 </template>
 
@@ -57,6 +65,28 @@
 
   /** 输入停顿多久后保存（毫秒） */
   const SAVE_DELAY_MS = 400
+
+  /** 格式符说明：code 为格式符，desc 为含义，example 为示例输出 */
+  const TOKEN_REFERENCE = [
+    { code: 'YYYY', desc: '年（四位）', example: '2026' },
+    { code: 'YY', desc: '年（两位）', example: '26' },
+    { code: 'M / MM', desc: '月', example: '1 / 01' },
+    { code: 'MMM', desc: '月（短）', example: '1月' },
+    { code: 'MMMM', desc: '月（全）', example: '一月' },
+    { code: 'D / DD', desc: '日', example: '5 / 05' },
+    { code: 'H / HH', desc: '时（24小时）', example: '9 / 09' },
+    { code: 'h / hh', desc: '时（12小时）', example: '9 / 09' },
+    { code: 'A / a', desc: '上午 / 下午', example: '上午' },
+    { code: 'm / mm', desc: '分', example: '5 / 05' },
+    { code: 's / ss', desc: '秒', example: '8 / 08' },
+    { code: 'SSS', desc: '毫秒', example: '007' },
+    { code: 'd', desc: '星期（数字 0–6）', example: '1' },
+    { code: 'dd', desc: '星期（简）', example: '一' },
+    { code: 'ddd', desc: '星期（短）', example: '周一' },
+    { code: 'dddd', desc: '星期（全）', example: '星期一' },
+    { code: 'Z / ZZ', desc: '时区偏移', example: '+08:00 / +0800' },
+    { code: '[文字]', desc: '原样输出', example: '[今天] → 今天' }
+  ] as const
 
   const { t } = useI18n()
   const { settings, ready, save } = useSettingsSave()
@@ -133,5 +163,52 @@
   .time-format-preview {
     color: var(--gcn-fg-muted);
     font-variant-numeric: tabular-nums;
+  }
+
+  /* 格式符说明表：三列（符号、含义、示例），紧凑排列 */
+  .format-reference {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0;
+    margin: 0;
+    padding: 4px 0;
+    border: 1px solid var(--gcn-border);
+    border-radius: var(--gcn-radius-lg);
+    overflow: hidden;
+  }
+
+  .format-reference-row {
+    display: contents;
+  }
+
+  .format-reference-row > * {
+    padding: 5px 12px;
+    border-bottom: 1px solid var(--gcn-border-muted);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .format-reference-row:last-child > * {
+    border-bottom: none;
+  }
+
+  .format-reference-code {
+    font-family: var(--gcn-font-mono);
+    font-size: 12px;
+    color: var(--gcn-accent);
+    white-space: nowrap;
+  }
+
+  .format-reference-desc {
+    margin: 0;
+    color: var(--gcn-fg);
+  }
+
+  .format-reference-example {
+    font-family: var(--gcn-font-mono);
+    font-size: 12px;
+    color: var(--gcn-fg-muted);
+    white-space: nowrap;
+    text-align: right;
   }
 </style>

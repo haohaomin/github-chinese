@@ -192,7 +192,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   // blob：追溯（日期由 helpers 生成，与前面的中文隔空格；原文只有逗号，译文不换成括号）
   {
-    hits: [['Blame prior to change 20ea62d, made on Feb 3, 2023', '追溯 20ea62d 之前的版本，该更改提交于 2023 年 2 月 3 日']],
+    hits: [['Blame prior to change 20ea62d, made on Feb 3, 2023', '追溯 20ea62d 之前的版本，该更改提交于 2023年2月3日']],
     misses: ['Blame prior to change 20ea62d']
   },
   // blob：符号面板
@@ -361,7 +361,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'Your request for Copilot Business was declined by an admin on Mar 3, 2025.',
-        '你的 Copilot 商业版申请已于 2025 年 3 月 3 日被管理员拒绝。'
+        '你的 Copilot 商业版申请已于 2025年3月3日被管理员拒绝。'
       ],
       // 无法解析的日期原样保留，与两侧中文各空一格
       [

@@ -157,21 +157,21 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['Successful in 41s', '成功用时 41 秒'],
-      ['Successful in 1m 30s', '成功用时 1 分钟 30 秒'],
-      ['Success in 2m', '成功用时 2 分钟'],
-      ['Completed in 2h 5m', '完成用时 2 小时 5 分钟']
+      ['Successful in 41s', '成功用时 41秒'],
+      ['Successful in 1m 30s', '成功用时 1分钟 30秒'],
+      ['Success in 2m', '成功用时 2分钟'],
+      ['Completed in 2h 5m', '完成用时 2小时 5分钟']
     ],
     misses: ['Successful in a minute']
   },
   {
     hits: [
-      ['Failing after 2m 5s', '2 分钟 5 秒后失败'],
-      ['Failed after 1h 2m 3s', '1 小时 2 分钟 3 秒后失败'],
-      ['Cancelled after 12s', '12 秒后取消'],
-      ['Canceled after 3m', '3 分钟后取消'],
-      ['Timed out after 6h', '6 小时后超时'],
-      ['Startup failure after 1s', '1 秒后启动失败']
+      ['Failing after 2m 5s', '2分钟 5秒后失败'],
+      ['Failed after 1h 2m 3s', '1小时 2分钟 3秒后失败'],
+      ['Cancelled after 12s', '12秒后取消'],
+      ['Canceled after 3m', '3分钟后取消'],
+      ['Timed out after 6h', '6小时后超时'],
+      ['Startup failure after 1s', '1秒后启动失败']
     ],
     misses: ['Failing after retry', 'Failed after']
   },

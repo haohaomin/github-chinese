@@ -9,9 +9,9 @@ const DURATION_UNIT: Readonly<Record<string, string>> = {
   year: '年'
 }
 
-/** 「3 days」→「3 天」；数字与单位之间加空格（术语表） */
+/** 「3 days」→「3天」 */
 export function translateDuration(amount: string, unit: string): string {
-  return `${amount} ${DURATION_UNIT[unit.replace(/s$/, '')] ?? unit}`
+  return `${amount}${DURATION_UNIT[unit.replace(/s$/, '')] ?? unit}`
 }
 
 const DURATION_SOURCE = '(\\d+) (hours?|days?|weeks?|months?|years?)'

@@ -337,7 +337,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [[', 45% complete', '，已完成 45%']], misses: [', almost complete'] },
   // metadata：问题字段
   {
-    hits: [['Value cannot be more than 1024 characters (1100)', '值不能超过 1024 个字符（当前 1100 个）']],
+    hits: [['Value cannot be more than 1024 characters (1100)', '值不能超过1024 个字符（当前 1100 个）']],
     misses: ['Value cannot be more than 1024 characters']
   },
   // 字段名是用户内容，不加引号；英文名与中文之间留空格
@@ -830,10 +830,10 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   {
     hits: [
       // 日期由 helpers 生成（中文与数字之间带空格），后接中文不加空格
-      ['Due by October 26, 2026', '2026 年 10 月 26 日截止'],
-      ['Due by Oct 26, 2026, 45% complete', '2026 年 10 月 26 日截止，已完成 45%'],
-      ['Due by October 26, 2026, not started', '2026 年 10 月 26 日截止，未开始'],
-      ['Due by January 2027', '2027 年 1 月截止']
+      ['Due by October 26, 2026', '2026年10月26日截止'],
+      ['Due by Oct 26, 2026, 45% complete', '2026年10月26日截止，已完成 45%'],
+      ['Due by October 26, 2026, not started', '2026年10月26日截止，未开始'],
+      ['Due by January 2027', '2027年1月截止']
     ],
     misses: ['Due by next week']
   },
@@ -1237,8 +1237,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['Fix login bug · Updated 5m ago · Running for 1h 2m', 'Fix login bug · 5 分钟前更新 · 已运行 1 小时 2 分钟'],
-      ['Fix login bug · Updated 2d 3h ago · Ran for 45s', 'Fix login bug · 2 天 3 小时前更新 · 运行了 45 秒']
+      ['Fix login bug · Updated 5m ago · Running for 1h 2m', 'Fix login bug · 5分钟前更新 · 已运行 1小时 2分钟'],
+      ['Fix login bug · Updated 2d 3h ago · Ran for 45s', 'Fix login bug · 2天 3小时前更新 · 运行了 45秒']
     ],
     misses: ['Fix login bug · Updated 5m ago']
   },
@@ -1387,7 +1387,7 @@ describe('issues 正则词条', () => {
     ).toBe('仅显示前 1,000 个议题。如需查看更多议题，请细化搜索条件。')
     expect(translate(normalizeText(['Bulk update is in progress ', '40', ' %'].join('')))).toBe('批量更新进行中 40%')
     expect(translate(normalizeText(['12', ' ', 'labels', ' matching'].join('')))).toBe('12 个匹配项')
-    expect(translate(normalizeText(['Due by ', 'October 26, 2026'].join('')))).toBe('2026 年 10 月 26 日截止')
+    expect(translate(normalizeText(['Due by ', 'October 26, 2026'].join('')))).toBe('2026年10月26日截止')
     expect(translate(normalizeText(['Created', ':', ' '].join('')))).toBe('创建时间：')
     expect(translate(normalizeText(['closed this ', 'as '].join('')))).toBe('将此议题关闭为')
   })

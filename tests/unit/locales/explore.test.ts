@@ -103,8 +103,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['February 11, 2014', '2014 年 2 月 11 日'],
-      ['13 days ago', '13 天前'],
+      ['February 11, 2014', '2014年2月11日'],
+      ['13 days ago', '13天前'],
       ['yesterday', '昨天']
     ],
     misses: ['Octember 11, 2014']

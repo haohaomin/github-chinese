@@ -1,6 +1,6 @@
 import type { Messages } from './zh-CN'
 
-/** 扩展界面文案：繁体中文（台湾通行用语，见 docs/GLOSSARY.zh-TW.md） */
+/** 扩展界面文案：繁体中文（台湾通行用语，见docs/GLOSSARY.zh-TW.md） */
 export default {
   appName: 'GitHub 中文化',
   newVersion: '新版本',
@@ -184,9 +184,13 @@ export default {
   newTabPaths: '自訂頁面',
   chineseReadme: '中文讀我檔案',
   freshness: '更新時間著色',
+  freshnessRange: '時段範圍',
+  freshnessFreshLabel: '近期',
+  freshnessRecentLabel: '次近',
+  freshnessUnit: '天',
   freshnessColors: '顏色',
   freshnessFresh: '{days} 天內',
-  freshnessRecent: '一年內',
+  freshnessRecent: '{days} 天內',
   freshnessStale: '更早',
   colorDefault: '預設',
   colorReset: '重設',

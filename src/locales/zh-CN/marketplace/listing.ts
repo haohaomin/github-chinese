@@ -220,7 +220,7 @@ export default {
 
     // 服务条款说明
     'You previously agreed to the': '你此前已同意',
-    // 后接 <relative-time>：拼成「你同意这些条款于 3 天前」「…于 2024 年 1 月 5 日」
+    // 后接 <relative-time>：拼成「你同意这些条款于 3 天前」「…于 2024年1月5日」
     'You agreed to these terms': '你同意这些条款于',
     'is provided by a third-party and is governed by': '由第三方提供并适用',
     'Marketplace Terms of Service': '市场服务条款',

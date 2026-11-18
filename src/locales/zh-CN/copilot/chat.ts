@@ -130,7 +130,7 @@ export default {
     'Deleting conversation': '正在删除对话',
     'Failed to delete chat. Please try again.': '删除聊天失败。请重试。',
     'Enter a name': '输入名称',
-    'Name cannot exceed 100 characters': '名称不能超过 100 个字符',
+    'Name cannot exceed 100 characters': '名称不能超过100 个字符',
     'Saving the conversation name': '正在保存对话名称',
     'The new conversation name could not be saved.': '无法保存新的对话名称。',
     'The conversation could not be exported.': '无法导出对话。',
@@ -645,7 +645,7 @@ export default {
     [/^An error occurred uploading the attachment (.+)$/, '上传附件 $1 时出错'],
     [/^Attached text files must be smaller than (\d+(?:\.\d+)?) ?KB$/, '附加的文本文件必须小于 $1 KB'],
     [/^"(.+)" has an unsupported file type\. Please try again with a plain text file$/, '“$1”的文件类型不受支持。请改用纯文本文件重试'],
-    [/^Personal instructions must be (\d+) characters or fewer\.$/, '个人说明不能超过 $1 个字符。'],
+    [/^Personal instructions must be (\d+) characters or fewer\.$/, '个人说明不能超过$1 个字符。'],
     [
       /^The (.+) model currently doesn[’']t support external context from ongoing conversations\. Start a new conversation to chat with this model\.$/,
       '$1 模型目前不支持来自进行中对话的外部上下文。开始新对话以使用此模型。'

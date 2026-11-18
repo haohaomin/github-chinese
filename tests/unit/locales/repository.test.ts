@@ -35,11 +35,11 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'This repo was archived by the owner on Sep 3, 2024. It is now read-only.',
-        '此存储库已由所有者于 2024 年 9 月 3 日存档。现为只读。'
+        '此存储库已由所有者于 2024年9月3日存档。现为只读。'
       ],
       [
         'This repository was archived by the owner on Mar 3, 2023. It is now read-only.',
-        '此存储库已由所有者于 2023 年 3 月 3 日存档。现为只读。'
+        '此存储库已由所有者于 2023年3月3日存档。现为只读。'
       ]
     ],
     misses: [
@@ -428,24 +428,24 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['had recent pushes 5 minutes ago', '5 分钟前有新推送'],
+      ['had recent pushes 5 minutes ago', '5分钟前有新推送'],
       ['had recent pushes yesterday', '昨天有新推送'],
-      ['had recent pushes on Mar 3', '3 月 3 日有新推送'],
+      ['had recent pushes on Mar 3', '3月3日有新推送'],
       ['had recent pushes less than a minute ago', '刚刚有新推送'],
       // 超过一个月的日期由浏览器按本地语言格式化，中文与数字之间补空格
-      ['had recent pushes on 10月26日', '10 月 26 日有新推送'],
-      ['had recent pushes on 2023年10月26日', '2023 年 10 月 26 日有新推送']
+      ['had recent pushes on 10月26日', '10月26日有新推送'],
+      ['had recent pushes on 2023年10月26日', '2023年10月26日有新推送']
     ],
     misses: ['had recent pushes']
   },
   {
     hits: [
-      ['23 hours remaining', '剩余 23 小时'],
-      ['1 day remaining', '剩余 1 天'],
-      ['about 1 month remaining', '剩余约 1 个月'],
-      ['almost 2 weeks remaining', '剩余将近 2 周'],
-      ['less than a minute remaining', '剩余不到 1 分钟'],
-      ['an hour remaining', '剩余 1 小时']
+      ['23 hours remaining', '剩余 23小时'],
+      ['1 day remaining', '剩余 1天'],
+      ['about 1 month remaining', '剩余约 1个月'],
+      ['almost 2 weeks remaining', '剩余将近 2周'],
+      ['less than a minute remaining', '剩余不到 1分钟'],
+      ['an hour remaining', '剩余 1小时']
     ],
     misses: ['a few hours remaining', '23 hours']
   },
@@ -504,7 +504,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'This page will automatically refresh in 10 seconds to check if the repository is ready.',
-        '此页面将在 10 秒后自动刷新以检查存储库是否就绪。'
+        '此页面将在 10秒后自动刷新以检查存储库是否就绪。'
       ]
     ],
     misses: ['This page will automatically refresh to check if the repository is ready.']
@@ -909,10 +909,10 @@ describe('repository 繁体词条（zh-TW）', () => {
 
   it('存档横幅：原文有 repository、repo 两种写法', () => {
     expect(twMatcher.translate('This repo was archived by the owner on Sep 3, 2024. It is now read-only.', HOME)).toBe(
-      '此儲存庫已由擁有者於 2024 年 9 月 3 日封存。目前為唯讀。'
+      '此儲存庫已由擁有者於 2024年9月3日封存。目前為唯讀。'
     )
     expect(twMatcher.translate('This repository was archived by the owner on Mar 3, 2023. It is now read-only.', HOME)).toBe(
-      '此儲存庫已由擁有者於 2023 年 3 月 3 日封存。目前為唯讀。'
+      '此儲存庫已由擁有者於 2023年3月3日封存。目前為唯讀。'
     )
   })
 })

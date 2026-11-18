@@ -145,7 +145,7 @@ const ELAPSED_SOURCE = '\\d+[dhms](?: \\d+[dhms])?'
 
 /** 耗时：数字与单位之间、各段之间都留空格（2h 3m → 2 小时 3 分钟） */
 function elapsed(text: string): string {
-  return text.replace(/(\d+)([dhms])/g, (_, value: string, unit: string) => `${value} ${ELAPSED_UNIT[unit] ?? unit}`)
+  return text.replace(/(\d+)([dhms])/g, (_, value: string, unit: string) => `${value}${ELAPSED_UNIT[unit] ?? unit}`)
 }
 
 /** 前缀 + 位于 A 和 B 之间：条目标题是用户内容，不加引号；与中文之间按 joinName 留空格 */

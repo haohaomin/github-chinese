@@ -14,8 +14,8 @@ defineFakeRelativeTime()
 
 /** 测试时区（vitest 配置的 TZ，GMT+8）：改了时区的用例结束后改回 */
 const TEST_ZONE = 'Asia/Shanghai'
-/** 带空格的中文 title */
-const SPACED_TITLE = '2026 年 10 月 26 日 GMT+8 10:03'
+/** 带空格的中文 title（已去掉时区词） */
+const SPACED_TITLE = '2026年10月26日 10:03'
 /** SpacedTitleTime 的渲染上限 */
 const MAX_RENDERS = 10
 
@@ -87,7 +87,7 @@ const TITLE_OPTIONS: Intl.DateTimeFormatOptions = {
   minute: '2-digit',
   timeZoneName: 'short'
 }
-/** 显示文字的格式（超过 30 天显示日期）：2026年10月26日 */
+/** 显示文字的格式（超过30天显示日期）：2026年10月26日 */
 const DATE_OPTIONS: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short', year: 'numeric' }
 const HOUR_CYCLES: ReadonlySet<string> = new Set(['h11', 'h12', 'h23', 'h24'])
 
@@ -199,11 +199,11 @@ async function leftover(): Promise<FakeRelativeTime> {
 
 describe('spaceDigits', () => {
   it.each([
-    ['3天前', '3 天前'],
-    ['约1年前', '约 1 年前'],
-    ['2026年10月26日 GMT+8 10:03', '2026 年 10 月 26 日 GMT+8 10:03'],
-    ['上午10:03', '上午 10:03'],
-    ['3小时5分钟', '3 小时 5 分钟'],
+    ['3天前', '3天前'],
+    ['约1年前', '约1年前'],
+    ['2026年10月26日 GMT+8 10:03', '2026年10月26日 GMT+8 10:03'],
+    ['上午10:03', '上午10:03'],
+    ['3小时5分钟', '3小时5分钟'],
     ['昨天', '昨天'],
     ['3 days ago', '3 days ago']
   ])('%s → %s', (input, expected) => {
@@ -298,7 +298,7 @@ describe('createZoneWatcher', () => {
     window.dispatchEvent(new Event('focus'))
     document.dispatchEvent(new Event('visibilitychange'))
 
-    // 每次事件一次：Intl 一次，getTimezoneOffset 两次（1 月、7 月）
+    // 每次事件一次：Intl 一次，getTimezoneOffset 两次（1月、7月）
     expect(intl).toHaveBeenCalledTimes(2)
     expect(offset).toHaveBeenCalledTimes(4)
     expect(first).toHaveBeenCalledTimes(1)
@@ -330,10 +330,10 @@ describe('createTimeText', () => {
     create().attach()
     time.setAttribute('lang', 'zh-CN')
     await settleTime()
-    expect(time.renderedText).toBe('3 天前')
-    expect(time.getAttribute('title')).toBe('2026 年 10 月 26 日 10:03')
+    expect(time.renderedText).toBe('3天前')
+    expect(time.getAttribute('title')).toBe('2026年10月26日 10:03')
     time.tick()
-    expect(time.renderedText).toBe('3 天前')
+    expect(time.renderedText).toBe('3天前')
   })
 
   it('owns 为 false 时不改写', async () => {
@@ -360,8 +360,8 @@ describe('createTimeText', () => {
     time.setAttribute('lang', 'zh-CN')
     await settleTime()
     create().sync(time)
-    expect(time.renderedText).toBe('3 天前')
-    expect(time.getAttribute('title')).toBe('2026 年 10 月 26 日 10:03')
+    expect(time.renderedText).toBe('3天前')
+    expect(time.getAttribute('title')).toBe('2026年10月26日 10:03')
   })
 
   it('restore 移除改写过的 title，元素按当前 lang 重新生成', async () => {
@@ -386,9 +386,9 @@ describe('createTimeText', () => {
     time.setAttribute('lang', 'zh-CN')
     await settleTime()
     timeText.sync(time)
-    time.setAttribute('title', '页面自定义 1')
+    time.setAttribute('title', '页面自定义1')
     timeText.restore(time)
-    expect(time.getAttribute('title')).toBe('页面自定义 1')
+    expect(time.getAttribute('title')).toBe('页面自定义1')
   })
 
   it('datetime 变化：移除改写过的 title，元素按新日期重新生成后再补空格', async () => {
@@ -398,8 +398,8 @@ describe('createTimeText', () => {
     await settleTime()
     time.setAttribute('datetime', '2026-10-22T02:03:00Z')
     await settleTime()
-    expect(time.renderedText).toBe('7 天前')
-    expect(time.getAttribute('title')).toBe('2026 年 10 月 22 日 10:03')
+    expect(time.renderedText).toBe('7天前')
+    expect(time.getAttribute('title')).toBe('2026年10月22日 10:03')
   })
 
   it('datetime 变化、显示文字不变（元素不派发事件）：title 同样更新', async () => {
@@ -411,7 +411,7 @@ describe('createTimeText', () => {
     time.setAttribute('datetime', '2026-10-28T07:20:00Z')
     await settleTime()
     expect(time.renderedText).toBe('昨天')
-    expect(time.getAttribute('title')).toBe('2026 年 10 月 28 日 15:20')
+    expect(time.getAttribute('title')).toBe('2026年10月28日 15:20')
   })
 
   it('datetime 写回同一时刻（含换种写法）、元素定时刷新：不移除 title', async () => {
@@ -425,7 +425,7 @@ describe('createTimeText', () => {
     time.tick()
     await settleTime()
     expect(removeAttribute).not.toHaveBeenCalled()
-    expect(time.getAttribute('title')).toBe('2026 年 10 月 26 日 10:03')
+    expect(time.getAttribute('title')).toBe('2026年10月26日 10:03')
   })
 
   it('页面改了 title 后 datetime 变化：保留页面的值', async () => {
@@ -436,7 +436,7 @@ describe('createTimeText', () => {
     time.setAttribute('title', 'Sample title')
     time.setAttribute('datetime', '2026-10-22T02:03:00Z')
     await settleTime()
-    expect(time.renderedText).toBe('7 天前')
+    expect(time.renderedText).toBe('7天前')
     expect(time.getAttribute('title')).toBe('Sample title')
   })
 
@@ -463,8 +463,8 @@ describe('createTimeText', () => {
     timeText.attach()
     time.setAttribute('datetime', '2026-10-22T02:03:00Z')
     await settleTime()
-    expect(time.renderedText).toBe('7 天前')
-    expect(time.getAttribute('title')).toBe('2026 年 10 月 22 日 10:03')
+    expect(time.renderedText).toBe('7天前')
+    expect(time.getAttribute('title')).toBe('2026年10月22日 10:03')
   })
 
   it('失效实例留下的 title，期间 datetime 变化：新实例 sync 后 title 按新日期', async () => {
@@ -472,13 +472,13 @@ describe('createTimeText', () => {
     time.setAttribute('datetime', '2026-10-22T02:03:00Z')
     await settleTime()
     // 元素把补过空格的 title 当作自定义值，不随 datetime 重新生成
-    expect(time.getAttribute('title')).toBe('2026 年 10 月 26 日 10:03')
+    expect(time.getAttribute('title')).toBe('2026年10月26日 10:03')
     const timeText = create()
     timeText.attach()
     timeText.sync(time)
     await settleTime()
-    expect(time.renderedText).toBe('7 天前')
-    expect(time.getAttribute('title')).toBe('2026 年 10 月 22 日 10:03')
+    expect(time.renderedText).toBe('7天前')
+    expect(time.getAttribute('title')).toBe('2026年10月22日 10:03')
   })
 
   it('失效实例留下的 title、datetime 未变：新实例 sync 后 title 不变，之后 datetime 变化照常更新', async () => {
@@ -487,11 +487,11 @@ describe('createTimeText', () => {
     timeText.attach()
     timeText.sync(time)
     await settleTime()
-    expect(time.getAttribute('title')).toBe('2026 年 10 月 26 日 10:03')
+    expect(time.getAttribute('title')).toBe('2026年10月26日 10:03')
     time.setAttribute('datetime', '2026-10-22T02:03:00Z')
     await settleTime()
-    expect(time.renderedText).toBe('7 天前')
-    expect(time.getAttribute('title')).toBe('2026 年 10 月 22 日 10:03')
+    expect(time.renderedText).toBe('7天前')
+    expect(time.getAttribute('title')).toBe('2026年10月22日 10:03')
   })
 
   it('失效实例留下的 title 在渲染中（事件路径）首次遇到：等这次渲染结束再移除，title 按新日期', async () => {
@@ -499,23 +499,23 @@ describe('createTimeText', () => {
     create().attach()
     time.setAttribute('datetime', '2026-10-22T02:03:00Z')
     await settleTime()
-    expect(time.renderedText).toBe('7 天前')
-    expect(time.getAttribute('title')).toBe('2026 年 10 月 22 日 10:03')
+    expect(time.renderedText).toBe('7天前')
+    expect(time.getAttribute('title')).toBe('2026年10月22日 10:03')
   })
 
   it('旧版本留下的带本地时区的 title：同样当作改写过的移除，按新写法重新生成', async () => {
     const time = mount()
     time.setAttribute('lang', 'zh-CN')
     await settleTime()
-    time.setAttribute('title', '2026 年 10 月 26 日 GMT+8 10:03')
+    time.setAttribute('title', '2026年10月26日 GMT+8 10:03')
     time.setAttribute('datetime', '2026-10-22T02:03:00Z')
     await settleTime()
     const timeText = create()
     timeText.attach()
     timeText.sync(time)
     await settleTime()
-    expect(time.renderedText).toBe('7 天前')
-    expect(time.getAttribute('title')).toBe('2026 年 10 月 22 日 10:03')
+    expect(time.renderedText).toBe('7天前')
+    expect(time.getAttribute('title')).toBe('2026年10月22日 10:03')
   })
 
   it('失效实例留下的 title 在移除前被页面改掉：保留页面的值', async () => {
@@ -537,8 +537,8 @@ describe('createTimeText', () => {
     clone.setAttribute('datetime', '2026-10-22T02:03:00Z')
     time.replaceWith(clone)
     await settleTime()
-    expect(clone.renderedText).toBe('7 天前')
-    expect(clone.getAttribute('title')).toBe('2026 年 10 月 22 日 10:03')
+    expect(clone.renderedText).toBe('7天前')
+    expect(clone.getAttribute('title')).toBe('2026年10月22日 10:03')
   })
 
   it('元素按中文生成的 title 本身就带空格（假设）：只移除一次，不反复渲染', async () => {
@@ -550,7 +550,7 @@ describe('createTimeText', () => {
     timeText.attach()
     timeText.sync(time)
     await settleTime()
-    expect(time.getAttribute('title')).toBe('2026 年 10 月 26 日 10:03')
+    expect(time.getAttribute('title')).toBe('2026年10月26日 10:03')
     expect(time.renders - renders).toBe(1)
   })
 
@@ -589,7 +589,7 @@ describe('自定义时间格式', () => {
     time.setAttribute('lang', 'zh-CN')
     await settleTime()
     expect(time.renderedText).toBe('2026-10-26 10:03')
-    expect(time.getAttribute('title')).toBe('2026 年 10 月 26 日 10:03')
+    expect(time.getAttribute('title')).toBe('2026年10月26日 10:03')
     time.tick()
     expect(time.renderedText).toBe('2026-10-26 10:03')
   })
@@ -600,7 +600,7 @@ describe('自定义时间格式', () => {
     createCustom().attach()
     time.setAttribute('lang', 'zh-CN')
     await settleTime()
-    expect(time.renderedText).toBe('3 天前')
+    expect(time.renderedText).toBe('3天前')
   })
 
   it('日期无效：不按写法，保留元素渲染的文字', async () => {
@@ -626,9 +626,9 @@ describe('自定义时间格式', () => {
     expect(time.renderedText).toBe('10/26 10:03')
     custom.pattern = ''
     timeText.sync(time)
-    expect(time.renderedText).toBe('3 天前')
+    expect(time.renderedText).toBe('3天前')
     time.tick()
-    expect(time.renderedText).toBe('3 天前')
+    expect(time.renderedText).toBe('3天前')
   })
 
   it('默认改为自定义后 sync：按写法；之后元素重新渲染也按写法', async () => {
@@ -637,7 +637,7 @@ describe('自定义时间格式', () => {
     timeText.attach()
     time.setAttribute('lang', 'zh-CN')
     await settleTime()
-    expect(time.renderedText).toBe('3 天前')
+    expect(time.renderedText).toBe('3天前')
     custom.pattern = 'HH:mm'
     timeText.sync(time)
     expect(time.renderedText).toBe('10:03')
@@ -694,13 +694,13 @@ describe('改了系统时区', () => {
     create().attach()
     const time = mountIntl()
     await settleTime()
-    expect(time.getAttribute('title')).toBe('2026 年 10 月 26 日 10:03')
+    expect(time.getAttribute('title')).toBe('2026年10月26日 10:03')
 
     changeZone('Asia/Tokyo')
     window.dispatchEvent(new Event('focus'))
     await settleTime()
 
-    expect(time.getAttribute('title')).toBe('2026 年 10 月 26 日 GMT+8 10:03')
+    expect(time.getAttribute('title')).toBe('2026年10月26日 GMT+8 10:03')
   })
 
   it('元素的格式缓存清空后（新建格式）：按新时区重新生成，去掉本地时区', async () => {
@@ -713,7 +713,7 @@ describe('改了系统时区', () => {
     window.dispatchEvent(new Event('focus'))
     await settleTime()
 
-    expect(time.getAttribute('title')).toBe('2026 年 10 月 26 日 11:03')
+    expect(time.getAttribute('title')).toBe('2026年10月26日 11:03')
   })
 
   it('不定时刷新的元素：页面重新可见时同样复位', async () => {
@@ -726,7 +726,7 @@ describe('改了系统时区', () => {
     document.dispatchEvent(new Event('visibilitychange'))
     await settleTime()
 
-    expect(time.getAttribute('title')).toBe('2026 年 10 月 26 日 11:03')
+    expect(time.getAttribute('title')).toBe('2026年10月26日 11:03')
   })
 
   it('元素定时刷新：渲染时发现本地偏移已变，等这次渲染结束后复位', async () => {
@@ -738,8 +738,8 @@ describe('改了系统时区', () => {
     time.tick()
     await settleTime()
 
-    expect(time.getAttribute('title')).toBe('2026 年 10 月 26 日 GMT+8 10:03')
-    expect(time.shadowRoot?.textContent).toBe('2026 年 10 月 26 日')
+    expect(time.getAttribute('title')).toBe('2026年10月26日 10:03')
+    expect(time.shadowRoot?.textContent).toBe('2026年10月26日')
   })
 
   it('sync 时发现本地偏移已变：移除改写过的 title，元素重新生成后再改写', async () => {
@@ -753,12 +753,12 @@ describe('改了系统时区', () => {
     timeText.sync(time)
     await settleTime()
 
-    expect(time.getAttribute('title')).toBe('2026 年 10 月 26 日 11:03')
+    expect(time.getAttribute('title')).toBe('2026年10月26日 11:03')
   })
 
   it.each([
-    ['zh-CN', ZH_CN_TIME, '2026 年 10 月 26 日 GMT+8 10:03', '2026 年 10 月 26 日 11:03'],
-    ['zh-TW', ZH_TW_TIME, '2026 年 10 月 26 日 上午 10:03 [GMT+8]', '2026 年 10 月 26 日 上午 11:03']
+    ['zh-CN', ZH_CN_TIME, '2026年10月26日 GMT+8 10:03', '2026年10月26日 11:03'],
+    ['zh-TW', ZH_TW_TIME, '2026年10月26日 上午10:03 [GMT+8]', '2026年10月26日 上午11:03']
   ])('改时区后插入的 %s 元素：沿用缓存的格式时保留时区，新建的格式按新时区去掉', async (_lang, html, cached, fresh) => {
     create().attach()
     mountIntl(html)
@@ -787,7 +787,7 @@ describe('改了系统时区', () => {
     await settleTime()
 
     expect(removeAttribute).not.toHaveBeenCalled()
-    expect(time.getAttribute('title')).toBe('2026 年 10 月 26 日 10:03')
+    expect(time.getAttribute('title')).toBe('2026年10月26日 10:03')
   })
 
   it('detach 后不再检查时区', async () => {

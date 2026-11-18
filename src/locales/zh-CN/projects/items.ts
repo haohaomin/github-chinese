@@ -35,7 +35,7 @@ const SCOPED_STATE_LABELS: Readonly<Record<string, string>> = Object.fromEntries
   Object.entries(STATE_LABELS).filter(([label]) => label !== 'Closed as not planned issue')
 )
 
-/** 无后缀距离：about 2 months → 约 2 个月；less than a minute → 不到 1 分钟 */
+/** 无后缀距离：about 2 months → 约2 个月；less than a minute → 不到 1 分钟 */
 const DISTANCE_UNITS: Readonly<Record<string, string>> = {
   second: '秒',
   minute: '分钟',
@@ -61,7 +61,7 @@ export function translateDistance(text: string): string {
   if (!match) return text
   const [, prefix, amount = '', unit = ''] = match
   const count = /^\d+$/.test(amount) ? amount : '1'
-  const distance = `${count} ${DISTANCE_UNITS[unit] ?? unit}`
+  const distance = `${count}${DISTANCE_UNITS[unit] ?? unit}`
   return prefix ? joinCjk(DISTANCE_PREFIXES[prefix] ?? '', distance) : distance
 }
 
@@ -536,7 +536,7 @@ export default {
     ],
     [
       /^More than (\d+) cells are selected\. Deselect some cells to perform bulk edits\.$/,
-      '已选择超过 $1 个单元格。取消选择部分单元格后才能批量编辑。'
+      '已选择超过$1 个单元格。取消选择部分单元格后才能批量编辑。'
     ],
     [/^Unable to assign the following users to the converted issue: (.+)$/, '无法将以下用户分配给转换后的议题：$1'],
     [/^This value must be between (-?\d+) and (-?\d+)$/, '此值必须介于 $1 和 $2 之间'],
@@ -577,11 +577,11 @@ export default {
     [
       new RegExp(`^View latest (.+) status updated (${DATE_SOURCE})$`),
       (_, status: string, date: string) =>
-        pangu(`${joinCjk('查看更新于', translateDate(date) ?? date)}的最新${STATUS_OPTIONS[status] ?? status}状态`)
+        `${joinCjk('查看更新于', translateDate(date) ?? date)}的最新${joinCjk(STATUS_OPTIONS[status] ?? status, '状态')}`
     ],
     [
       new RegExp(`^Updated (less than a minute ago|${RELATIVE_SOURCE})$`),
-      (_, time: string) => joinCjk('更新于', time === 'less than a minute ago' ? '不到 1 分钟前' : translateTime(time))
+      (_, time: string) => joinCjk('更新于', time === 'less than a minute ago' ? '不到 1分钟前' : translateTime(time))
     ],
     [/^React with (.+) \((\d+) .+ reactions? so far\)$/, '添加 $1 反应（已有 $2 个）'],
 

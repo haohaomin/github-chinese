@@ -9,7 +9,7 @@ import {
   type BridgeWindow
 } from '../../../src/core/turbo-bridge'
 import { DEFAULT_AUTO_LOAD_SCOPES } from '../../../src/shared/auto-load'
-import { DEFAULT_FRESHNESS_COLORS } from '../../../src/shared/freshness'
+import { DEFAULT_FRESHNESS_COLORS, DEFAULT_FRESHNESS_DAYS } from '../../../src/shared/freshness'
 import { $, settle, TEST_BUNDLE } from './helpers'
 
 const HOME = '/vuejs/core/issues'
@@ -31,7 +31,7 @@ let visitStarts = true
 
 /**
  * Turbo 的快照缓存（按 Turbo 7.2 的顺序）：访问渲染前把当前页面按上次渲染的地址缓存，
- * head 里的 turbo-cache-control 为 no-cache（exemptPageFromCache）时不缓存；每次渲染都合并 head，这个元素随之换掉
+ * head里的 turbo-cache-control 为 no-cache（exemptPageFromCache）时不缓存；每次渲染都合并 head，这个元素随之换掉
  */
 const snapshots = new Map<string, HTMLElement>()
 let lastRendered = ''
@@ -39,12 +39,12 @@ let lastRendered = ''
 const CACHE_CONTROL = 'meta[name="turbo-cache-control"]'
 const TRANSIENT = '[data-turbo-transient]'
 
-/** head 里 turbo-cache-control 的值 */
+/** head里 turbo-cache-control 的值 */
 function cacheControl(): string | null {
   return document.head.querySelector(CACHE_CONTROL)?.getAttribute('content') ?? null
 }
 
-/** GitHub 页面 head 里的 turbo-cache-control：no-preview，带 data-turbo-transient */
+/** GitHub 页面 head里的 turbo-cache-control：no-preview，带data-turbo-transient */
 function cacheControlMeta(): Element {
   const meta = document.createElement('meta')
   meta.setAttribute('name', 'turbo-cache-control')
@@ -53,7 +53,7 @@ function cacheControlMeta(): Element {
   return meta
 }
 
-/** 换掉 head 里带 data-turbo-transient 的元素（Turbo 合并 head、GitHub 写回帧缓存） */
+/** 换掉 head里带data-turbo-transient 的元素（Turbo 合并 head、GitHub 写回帧缓存） */
 function replaceTransients(elements: readonly Element[]): void {
   const head = document.head
   if (!head) return
@@ -61,7 +61,7 @@ function replaceTransients(elements: readonly Element[]): void {
   head.append(...elements)
 }
 
-/** 与 Turbo 一致：exemptPageFromCache 只改 head 里 turbo-cache-control 的 content，没有时新建 */
+/** 与 Turbo 一致：exemptPageFromCache 只改 head里 turbo-cache-control 的 content，没有时新建 */
 function setNoCache(): void {
   let meta = document.head.querySelector(CACHE_CONTROL)
   if (!meta) {
@@ -211,18 +211,18 @@ function destroyContentScript(): void {
   window.removeEventListener(TURBO_TRANSLATING_EVENT, answerTranslating)
 }
 
-/** GitHub 帧缓存里各地址 head 的 transient 元素：缓存时克隆，写回时原样移进 head（不克隆） */
+/** GitHub 帧缓存里各地址 head的 transient 元素：缓存时克隆，写回时原样移进 head（不克隆） */
 const cachedTransients = new Map<string, Element[]>()
 /** GitHub 的帧导航标志：帧渲染时设上，soft-nav:success 时清掉 */
 let githubFrameNavigation = false
 
-/** GitHub 按当前地址用帧缓存里的 transient 元素换掉 head 里的 */
+/** GitHub 按当前地址用帧缓存里的 transient 元素换掉 head里的 */
 function replaceTransientTags(): void {
   const cached = cachedTransients.get(location.href)
   if (cached) replaceTransients(cached)
 }
 
-/** GitHub 帧导航：帧请求的响应到达时，GitHub 缓存当前页面的标题、head 里的 transient 元素与 [data-turbo-replace] 元素 */
+/** GitHub 帧导航：帧请求的响应到达时，GitHub 缓存当前页面的标题、head里的 transient 元素与 [data-turbo-replace] 元素 */
 function frameResponse(): void {
   const frame = document.createElement('turbo-frame')
   document.body.append(frame)
@@ -255,8 +255,8 @@ function frameRender(url: string, nav = '<p>Pull requests</p>'): void {
 }
 
 /**
- * 提升访问的 turbo:load 里 GitHub 派发 soft-nav:success；它的监听（注册在桥接之后）在帧导航后按当前地址
- * 写回帧缓存里的标题与 head 里的 transient 元素（packages/turbo/frame.ts）。cachedTitle 为该地址缓存里的标题
+ * 提升访问的 turbo:load里 GitHub 派发 soft-nav:success；它的监听（注册在桥接之后）在帧导航后按当前地址
+ * 写回帧缓存里的标题与 head里的 transient 元素（packages/turbo/frame.ts）。cachedTitle 为该地址缓存里的标题
  */
 function softNavSuccess(cachedTitle?: string): void {
   const replaceFromCache = (): void => {
@@ -269,7 +269,7 @@ function softNavSuccess(cachedTitle?: string): void {
   document.dispatchEvent(new Event('soft-nav:success'))
 }
 
-/** 恢复访问的 turbo:load 之后：GitHub 写回帧缓存里的标题与 [data-turbo-replace] 元素，派发 turbo:restored */
+/** 恢复访问的 turbo:load之后：GitHub 写回帧缓存里的标题与 [data-turbo-replace] 元素，派发 turbo:restored */
 function writeBack(title = '议题 · vuejs/core', nav = '<p>议题</p>'): void {
   document.title = title
   const element = document.querySelector('[data-turbo-replace]')
@@ -342,7 +342,7 @@ describe('installTurboBridge', () => {
     expect(turbo.visit).toHaveBeenCalledTimes(1)
   })
 
-  it('访问进行中重置：等 turbo:load 再判断', () => {
+  it('访问进行中重置：等 turbo:load再判断', () => {
     install()
     renderCachedSnapshot()
     startVisit()
@@ -551,7 +551,7 @@ describe('重复安装（扩展更新、补注）', () => {
     expect(turbo.visit).not.toHaveBeenCalled()
   })
 
-  it('重装前注册的 GitHub 一次性 turbo:load 监听先于新桥接执行：写回时这次访问已结束，照常处理', () => {
+  it('重装前注册的 GitHub 一次性 turbo:load监听先于新桥接执行：写回时这次访问已结束，照常处理', () => {
     install()
     translating(true)
     frameResponse()
@@ -574,7 +574,7 @@ describe('重复安装（扩展更新、补注）', () => {
 })
 
 describe('滚动位置绑定本次重新访问', () => {
-  it('重新访问完成：turbo:load 时恢复，只恢复一次', () => {
+  it('重新访问完成：turbo:load时恢复，只恢复一次', () => {
     install()
     const scrollTo = scrolledTo640()
     renderCachedSnapshot()
@@ -586,7 +586,7 @@ describe('滚动位置绑定本次重新访问', () => {
     expect(scrollTo).toHaveBeenCalledTimes(1)
   })
 
-  it('重新访问被其他访问取代：之后的 turbo:load 不恢复', () => {
+  it('重新访问被其他访问取代：之后的 turbo:load不恢复', () => {
     install()
     const scrollTo = scrolledTo640()
     renderCachedSnapshot()
@@ -597,7 +597,7 @@ describe('滚动位置绑定本次重新访问', () => {
     expect(scrollTo).not.toHaveBeenCalled()
   })
 
-  it('被同一地址的用户导航取代：turbo:load 地址相同也不恢复', () => {
+  it('被同一地址的用户导航取代：turbo:load地址相同也不恢复', () => {
     install()
     const scrollTo = scrolledTo640()
     renderCachedSnapshot()
@@ -670,7 +670,7 @@ describe('滚动位置绑定本次重新访问', () => {
     expect(scrollTo).not.toHaveBeenCalled()
   })
 
-  it('重定向到别处（turbo:load 的地址不同）：不恢复', () => {
+  it('重定向到别处（turbo:load的地址不同）：不恢复', () => {
     install()
     const scrollTo = scrolledTo640()
     renderCachedSnapshot()
@@ -782,7 +782,7 @@ describe('强制重新访问（页面上有已失效实例的译文）', () => {
     expect(turbo.visit).toHaveBeenCalledTimes(1)
   })
 
-  it('访问进行中，这次访问没换 body（帧提升访问）：turbo:load 后按当前地址重新访问', () => {
+  it('访问进行中，这次访问没换 body（帧提升访问）：turbo:load后按当前地址重新访问', () => {
     install()
     startVisit('https://github.com/vuejs/core/pulls')
     forceRevisit()
@@ -1004,7 +1004,7 @@ describe('带旧译文的页面不再进 Turbo 缓存', () => {
     expect(turbo.visit).toHaveBeenCalledTimes(1)
   })
 
-  it('页面没有 <head>：不调用 exemptPageFromCache（它要往 head 里写），照常重新访问', () => {
+  it('页面没有 <head>：不调用 exemptPageFromCache（它要往 head里写），照常重新访问', () => {
     install()
     const head = document.head
     head.remove()
@@ -1018,7 +1018,7 @@ describe('带旧译文的页面不再进 Turbo 缓存', () => {
     }
   })
 
-  describe('帧导航打断重新访问：GitHub 在 soft-nav:success 换回 head 里的 turbo-cache-control', () => {
+  describe('帧导航打断重新访问：GitHub 在 soft-nav:success 换回 head里的 turbo-cache-control', () => {
     /** 响应到达前点了仓库标签：帧导航，提升访问取消重新访问；随后 GitHub 在 soft-nav:success 写回 /pulls 的帧缓存 */
     function frameNavigateToPulls(): void {
       frameResponse()
@@ -1300,7 +1300,7 @@ describe('GitHub 帧缓存写回带译文的标题与元素', () => {
     expect(turbo.visit).not.toHaveBeenCalled()
   })
 
-  it('文档解析中安装：按 DOMContentLoaded 时是否在翻译记下首个页面', () => {
+  it('文档解析中安装：按 DOMContentLoaded时是否在翻译记下首个页面', () => {
     const readyState = vi.spyOn(document, 'readyState', 'get').mockReturnValue('loading')
     install()
     readyState.mockReturnValue('interactive')
@@ -1312,7 +1312,7 @@ describe('GitHub 帧缓存写回带译文的标题与元素', () => {
     expect(turbo.visit).toHaveBeenCalledTimes(1)
   })
 
-  it('文档解析中安装、DOMContentLoaded 时没在翻译：首个页面不算', () => {
+  it('文档解析中安装、DOMContentLoaded时没在翻译：首个页面不算', () => {
     const readyState = vi.spyOn(document, 'readyState', 'get').mockReturnValue('loading')
     install()
     readyState.mockReturnValue('interactive')
@@ -1381,7 +1381,7 @@ describe('GitHub 帧缓存写回带译文的标题与元素', () => {
       expect(turbo.visit).not.toHaveBeenCalled()
     })
 
-    it('询问事件是可取消、不带 detail 的普通 Event：跨世界读不到 detail', () => {
+    it('询问事件是可取消、不带detail 的普通 Event：跨世界读不到detail', () => {
       const seen: Event[] = []
       const listener = (event: Event): void => {
         seen.push(event)
@@ -1666,6 +1666,7 @@ describe('与控制器一起：排除路径', () => {
         newTabPaths: [],
         chineseReadme: false,
         freshness: false,
+        freshnessDays: DEFAULT_FRESHNESS_DAYS,
         freshnessColors: DEFAULT_FRESHNESS_COLORS,
         categories: [],
         categoryOrder: [],

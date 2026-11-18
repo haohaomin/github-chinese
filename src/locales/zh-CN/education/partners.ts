@@ -111,7 +111,7 @@ export default {
   },
   regexp: [
     // +50% of students will influence their workplaces / 75% of student developers actively self-educate
-    [/^\+(\d+)% of students will influence their workplaces$/, '超过 $1% 的学生将影响其工作场所'],
+    [/^\+(\d+)% of students will influence their workplaces$/, '超过$1% 的学生将影响其工作场所'],
     [/^(\d+)% of student developers actively self-educate$/, '$1% 的学生开发人员主动自学'],
     // 5M students use GitHub Education
     [/^(\d+)M students use GitHub Education$/, (_, count) => joinCjk(millions(count!), '学生使用 GitHub 教育')]

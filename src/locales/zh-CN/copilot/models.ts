@@ -50,12 +50,12 @@ const UPGRADE = `(${Object.keys(UPGRADE_TAIL)
   .map(tail => tail.replaceAll('.', '\\.'))
   .join('|')})?`
 
-/** 限额重置尾句：限额将于 11 月 1 日重置。无时间时为空 */
+/** 限额重置尾句：限额将于 11月1日重置。无时间时为空 */
 function resetTail(time: string): string {
   return time ? joinCjk(joinCjk('限额将于', translateTime(time)), '重置。') : ''
 }
 
-/** 额度重置尾句：额度将于 11 月 1 日重置。 */
+/** 额度重置尾句：额度将于 11月1日重置。 */
 function creditResetTail(time: string): string {
   return joinCjk(joinCjk('额度将于', translateTime(time)), '重置。')
 }
@@ -400,12 +400,12 @@ export default {
     [
       /^You['’]ve hit your session limit\. Please upgrade your plan or wait (?:(\d+) (hour|minute)s? )?for your limit to reset\.$/,
       (_, amount: string, unit: string) =>
-        `已达会话上限。请升级计划，或等待${amount ? ` ${amount} ${unit === 'hour' ? '小时' : '分钟'}后` : ''}限额重置。`
+        `已达会话上限。请升级计划，或等待${amount ? ` ${amount}${unit === 'hour' ? '小时' : '分钟'}后` : ''}限额重置。`
     ],
     [
       /^You['’]ve exceeded your weekly usage limit\.(?: Your limit will reset in (\d+) (hour|minute)s?\.)? Please upgrade your plan or wait for your limit to reset\.$/,
       (_, amount = '', unit = '') =>
-        `已超出每周使用限制。${amount ? `限额将在 ${amount} ${unit === 'hour' ? '小时' : '分钟'}后重置。` : ''}请升级计划或等待限额重置。`
+        `已超出每周使用限制。${amount ? `限额将在 ${amount}${unit === 'hour' ? '小时' : '分钟'}后重置。` : ''}请升级计划或等待限额重置。`
     ],
 
     // 额外使用量上限横幅（“额外使用量上限”链接之后的整段）

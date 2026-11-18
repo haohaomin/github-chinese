@@ -39,13 +39,13 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['1 week', '1 周'],
-      ['12 hours', '12 小时'],
-      ['24 hours', '24 小时'],
-      ['3 days', '3 天'],
-      ['1 month', '1 个月'],
-      ['6 months', '6 个月'],
-      ['2 years', '2 年']
+      ['1 week', '1周'],
+      ['12 hours', '12小时'],
+      ['24 hours', '24小时'],
+      ['3 days', '3天'],
+      ['1 month', '1个月'],
+      ['6 months', '6个月'],
+      ['2 years', '2年']
     ],
     misses: ['1 decade']
   },
@@ -84,11 +84,11 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         "There hasn't been any commit activity on octo-org/hello-world over the last 1 week",
-        '过去 1 周内 octo-org/hello-world 没有任何提交活动'
+        '过去 1周内 octo-org/hello-world 没有任何提交活动'
       ],
       [
         'There hasn’t been any commit activity on octo-org/hello-world over the last 24 hours',
-        '过去 24 小时内 octo-org/hello-world 没有任何提交活动'
+        '过去 24小时内 octo-org/hello-world 没有任何提交活动'
       ]
     ],
     misses: ["There hasn't been any commit activity on octo-org over the last week"]
@@ -117,7 +117,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'Contributions per week to main, line counts have been omitted because commit count exceeds 10,000.',
-        '每周对 main 的贡献，因提交数超过 10,000 而省略了行数统计。'
+        '每周对 main 的贡献，因提交数超过10,000 而省略了行数统计。'
       ]
     ],
     misses: ['Contributions per week to main, line counts have been omitted.']
@@ -125,8 +125,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   // 拼接失败时的单节点兜底：分支名之后的句尾
   {
     hits: [
-      [', line counts have been omitted because commit count exceeds 10,000.', '，因提交数超过 10,000 而省略了行数统计。'],
-      [', line counts have been omitted because commit count exceeds 500.', '，因提交数超过 500 而省略了行数统计。']
+      [', line counts have been omitted because commit count exceeds 10,000.', '，因提交数超过10,000 而省略了行数统计。'],
+      [', line counts have been omitted because commit count exceeds 500.', '，因提交数超过500 而省略了行数统计。']
     ],
     misses: [
       ', line counts have been omitted.',
@@ -165,7 +165,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       ['Weekly from 25 Jul 2026 to 25 Oct 2026', WEEKLY],
       // 浏览器语言为中文时的本地格式（原生无空格），按 helpers 的日期格式输出
       ['Weekly from 2026年7月25日 to 2026年10月25日', WEEKLY],
-      ['Weekly from 2026 年 7 月 25 日 to 2026 年 10 月 25 日', WEEKLY]
+      ['Weekly from 2026年7月25日 to 2026年10月25日', WEEKLY]
     ],
     misses: ['Weekly from yesterday to today']
   },
@@ -369,7 +369,7 @@ describe('insights 正则词条', () => {
     expect(joined(['Commits', ' over time'])).toBe('提交趋势')
     expect(joined(['Weekly from ', 'Jul 25, 2026', ' to ', 'Oct 25, 2026'])).toBe(WEEKLY)
     expect(joined(["There hasn't been any commit activity on ", 'octo-org', '/', 'hello-world', ' over the last ', '1 week'])).toBe(
-      '过去 1 周内 octo-org/hello-world 没有任何提交活动'
+      '过去 1周内 octo-org/hello-world 没有任何提交活动'
     )
   })
 
@@ -391,7 +391,7 @@ describe('insights 正则词条', () => {
     expect(read(['12', 'commits authored by', 'octocat'])).toBe('12 个提交的作者为 octocat')
     expect(read(['Contributions per week to', 'main', ', excluding merge commits'])).toBe('每周贡献到 main ，不含合并提交')
     expect(read(['Contributions per week to', 'main', ', line counts have been omitted because commit count exceeds 10,000.'])).toBe(
-      '每周贡献到 main ，因提交数超过 10,000 而省略了行数统计。'
+      '每周贡献到 main ，因提交数超过10,000 而省略了行数统计。'
     )
   })
 
@@ -400,7 +400,7 @@ describe('insights 正则词条', () => {
     expect(matcher.translateRaw(' to all branches.', PAGES)).toBe(' 到所有分支。')
     // 译文以全角逗号开头：开头的空白不保留
     expect(matcher.translateRaw(' , line counts have been omitted because commit count exceeds 10,000.', PAGES)).toBe(
-      '，因提交数超过 10,000 而省略了行数统计。'
+      '，因提交数超过10,000 而省略了行数统计。'
     )
   })
 })
@@ -554,10 +554,10 @@ describe('insights 页面词条', () => {
 })
 
 describe('insights 辅助函数', () => {
-  it('时长：数字与单位之间加空格', () => {
-    expect(translateDuration('3', 'days')).toBe('3 天')
-    expect(translateDuration('1', 'month')).toBe('1 个月')
-    expect(translateDuration('24', 'hours')).toBe('24 小时')
+  it('时长：数字与单位之间不加空格', () => {
+    expect(translateDuration('3', 'days')).toBe('3天')
+    expect(translateDuration('1', 'month')).toBe('1个月')
+    expect(translateDuration('24', 'hours')).toBe('24小时')
   })
 
   it('图表标题', () => {

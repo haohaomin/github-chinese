@@ -93,9 +93,9 @@ export default {
     'Show times as “relative” (time since event) or “absolute” (specific date & time)':
       '以“相对时间”（距事件发生的时间）或“绝对时间”（具体日期和时间）显示时间',
     // 原文无冒号，译文不加（与其他词典的 e.g. 一致）
-    'e.g. 2 hours ago': '例如 2 小时前',
+    'e.g. 2 hours ago': '例如 2小时前',
     // 示例写法同绝对时间的实际显示（本地时区不写，24 小时制）
-    'e.g. Jan 1, 2024, 10:00 AM PST': '例如 2024 年 1 月 1 日 10:00',
+    'e.g. Jan 1, 2024, 10:00 AM PST': '例如 2024年1月1日 10:00',
     'Unable to save timestamp display preference.': '无法保存时间戳显示首选项。',
 
     // 辅助功能：键盘快捷方式。说明被链接与 <kbd> 拆开

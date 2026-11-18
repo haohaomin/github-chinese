@@ -2,16 +2,17 @@
  * 更新时间着色：存储库文件列表（首页、目录页）各项的最近提交时间，以及最近一次提交的时间（文件列表上方、文件页），
  * 按距今远近改文字颜色。默认 FRESH_DAYS 天内绿色、RECENT_DAYS 天内琥珀色（GitHub 主题的成功色、提示色），更早的不变；
  * 各时段的颜色可在设置页按 GitHub 的浅色、深色主题分别改（见 shared/freshness）。
- * 只改颜色，不改文字；时间取自 <relative-time> 的 datetime。
+ * 只改颜色，不改文字；时间取自 <relative-time> 的datetime。
  * 思路参考 GitHub-Freshness（rational-stars），不搬运代码
  */
 import {
   DEFAULT_FRESHNESS_COLORS,
-  FRESH_DAYS,
+  DEFAULT_FRESHNESS_DAYS,
   FRESHNESS_LEVELS,
+  isValidColor,
   normalizeHexColor,
-  RECENT_DAYS,
   type FreshnessColors,
+  type FreshnessDays,
   type FreshnessLevel
 } from '../shared/freshness'
 
@@ -20,6 +21,8 @@ export interface FreshnessDeps {
   readonly active: () => boolean
   /** 各时段的颜色；不给时都用默认 */
   readonly colors?: () => FreshnessColors
+  /** 各时段的天数阈值；不给时用默认 */
+  readonly days?: () => FreshnessDays
   /** 当前时间（毫秒时间戳）；不给时用 Date.now */
   readonly now?: () => number
 }
@@ -54,26 +57,43 @@ const DEFAULT_COLORS: Readonly<Record<FreshnessLevel, string>> = {
 }
 
 /** 距今远近：datetime 无效时为 undefined；晚于当前（时钟偏差）的算 fresh */
-export function freshnessOf(datetime: string | null, now: number): FreshnessLevel | undefined {
+export function freshnessOf(datetime: string | null, now: number, freshDays: number, recentDays: number): FreshnessLevel | undefined {
   const time = datetime === null ? Number.NaN : Date.parse(datetime)
   if (!Number.isFinite(time)) return undefined
   const days = (now - time) / DAY_MS
-  if (days <= FRESH_DAYS) return 'fresh'
-  if (days <= RECENT_DAYS) return 'recent'
+  if (days <= freshDays) return 'fresh'
+  if (days <= recentDays) return 'recent'
   return 'stale'
 }
 
 /**
  * 样式：每个时段一条，都没改过的「更早」不加。改过的用 light-dark() 按页面的 color-scheme
- * （GitHub 按当前主题设置，跟随系统时随系统）取浅色或深色主题的颜色，没改的一侧用默认
+ * （GitHub 按当前主题设置，跟随系统时随系统）取浅色或深色主题的颜色，没改的一侧用默认。
+ * 支持任意 CSS 颜色值（#rrggbb、rgba(...)、渐变等）
  */
 export function freshnessStyle(colors: FreshnessColors): string {
   return FRESHNESS_LEVELS.flatMap(level => {
     const fallback = DEFAULT_COLORS[level]
-    const light = normalizeHexColor(colors[level].light)
-    const dark = normalizeHexColor(colors[level].dark)
+    const rawLight = colors[level].light.trim()
+    const rawDark = colors[level].dark.trim()
+    const light = isValidColor(rawLight) ? rawLight : undefined
+    const dark = isValidColor(rawDark) ? rawDark : undefined
     if (light === undefined && dark === undefined) {
       return level === 'stale' ? [] : [`relative-time[${FRESHNESS_ATTRIBUTE}="${level}"] { color: ${fallback} !important; }`]
+    }
+    // 渐变值不能用 color，改用 background + background-clip
+    const isGradient = (v: string | undefined): boolean => !!v && /gradient/.test(v)
+    if (isGradient(light) || isGradient(dark)) {
+      const lv = light ?? fallback
+      const dv = dark ?? fallback
+      return [
+        `relative-time[${FRESHNESS_ATTRIBUTE}="${level}"] {`,
+        `  background: light-dark(${lv}, ${dv}) !important;`,
+        `  -webkit-background-clip: text !important;`,
+        `  -webkit-text-fill-color: transparent !important;`,
+        `  background-clip: text !important;`,
+        `}`
+      ].join('\n')
     }
     const color = `light-dark(${light ?? fallback}, ${dark ?? fallback})`
     return [`relative-time[${FRESHNESS_ATTRIBUTE}="${level}"] { color: ${color} !important; }`]
@@ -83,6 +103,7 @@ export function freshnessStyle(colors: FreshnessColors): string {
 export function createFreshness(doc: Document, deps: FreshnessDeps): FreshnessMarker {
   const now = deps.now ?? (() => Date.now())
   const colors = deps.colors ?? (() => DEFAULT_FRESHNESS_COLORS)
+  const days = deps.days ?? (() => DEFAULT_FRESHNESS_DAYS)
   /** 页面上有没有加过：没有时关闭状态下的变动不用查找移除 */
   let marked = false
   let scheduled = false
@@ -109,7 +130,8 @@ export function createFreshness(doc: Document, deps: FreshnessDeps): FreshnessMa
   }
 
   function mark(time: Element, at: number): void {
-    const level = freshnessOf(time.getAttribute('datetime'), at)
+    const { fresh: freshDays, recent: recentDays } = days()
+    const level = freshnessOf(time.getAttribute('datetime'), at, freshDays, recentDays)
     const current = time.getAttribute(FRESHNESS_ATTRIBUTE)
     if (level === undefined) {
       if (current !== null) time.removeAttribute(FRESHNESS_ATTRIBUTE)

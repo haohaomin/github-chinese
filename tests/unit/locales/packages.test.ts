@@ -27,19 +27,19 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   // 版本发布时间
   {
     hits: [
-      ['Published 38 minutes ago · Digest', '38 分钟前发布 · 摘要'],
-      ['Published about 24 hours ago · Digest', '约 24 小时前发布 · 摘要']
+      ['Published 38 minutes ago · Digest', '38分钟前发布 · 摘要'],
+      ['Published about 24 hours ago · Digest', '约24小时前发布 · 摘要']
     ],
     misses: ['Published · Digest', 'Published recently · Digest']
   },
   {
     hits: [
       ['Published 1 day ago', '昨天发布'],
-      ['Published almost 4 years ago', '将近 4 年前发布'],
-      ['Published on Mar 25, 2021', '2021 年 3 月 25 日发布'],
+      ['Published almost 4 years ago', '将近4年前发布'],
+      ['Published on Mar 25, 2021', '2021年3月25日发布'],
       // translateDate 接受 on 前缀的月年、日月年写法
-      ['Published on January 2024', '2024 年 1 月发布'],
-      ['Published on 5 January 2024', '2024 年 1 月 5 日发布']
+      ['Published on January 2024', '2024年1月发布'],
+      ['Published on 5 January 2024', '2024年1月5日发布']
     ],
     misses: ['Published recently', 'Published by octocat']
   },

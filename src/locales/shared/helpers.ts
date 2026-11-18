@@ -1,7 +1,7 @@
 /**
  * 简体、繁体词典共用的工具：日期、相对时间、中英文拼接、词典合并。
  * 各语言的 helpers.ts 用 createTimeHelpers 生成本语言的相对时间（Intl 与「刚刚 / 约」等用词），并转出其余部分。
- * 中文与数字之间加空格（如“3 天前”“2024 年 1 月 5 日”），与引擎对 <relative-time> 输出的处理一致。
+ * 中文与数字之间加空格（如“3 天前”“2024年1月5日”），与引擎对 <relative-time> 输出的处理一致。
  *
  * *_SOURCE 常量是不含捕获组的正则片段，可拼进词典规则：
  *   [new RegExp(`^Updated (${TIME_SOURCE})$`), (_, time) => `${translateTime(time)}更新`]
@@ -69,11 +69,11 @@ function isUnit(value: string): value is Unit {
   return (UNITS as readonly string[]).includes(value)
 }
 
-/** 2024, 1, 5 → 2024 年 1 月 5 日；缺年 → 1 月 5 日；缺日 → 2024 年 1 月 */
+/** 2024, 1, 5 → 2024年1月5日；缺年 → 1月5日；缺日 → 2024年1月 */
 export function formatDate(year: number | undefined, month: number, day: number | undefined): string {
-  const y = year === undefined ? '' : `${year} 年 `
-  const d = day === undefined ? '' : ` ${day} 日`
-  return `${y}${month} 月${d}`
+  const y = year === undefined ? '' : `${year}年`
+  const d = day === undefined ? '' : `${day}日`
+  return `${y}${month}月${d}`
 }
 
 const DATE_MDY_RE = new RegExp(`^(?:on )?(${MONTH_SOURCE}) (\\d{1,2})(?:, (\\d{4}))?$`)
@@ -81,8 +81,8 @@ const DATE_MY_RE = new RegExp(`^(?:on )?(${MONTH_SOURCE}),? (\\d{4})$`)
 const DATE_DMY_RE = new RegExp(`^(?:on )?(\\d{1,2}) (${MONTH_SOURCE}),? (\\d{4})$`)
 
 /**
- * "Jan 5, 2024" → 2024 年 1 月 5 日；"January 2024" → 2024 年 1 月；"5 January 2024" → 2024 年 1 月 5 日。
- * 三种写法都可带 on 前缀（与 TIME_SOURCE 一致）："on Jan 5" → 1 月 5 日
+ * "Jan 5, 2024" → 2024年1月5日；"January 2024" → 2024年1月；"5 January 2024" → 2024年1月5日。
+ * 三种写法都可带 on 前缀（与 TIME_SOURCE 一致）："on Jan 5" → 1月5日
  */
 export function translateDate(text: string): string | undefined {
   const value = text.trim()
@@ -130,7 +130,7 @@ export interface TimeWords {
 export interface TimeHelpers {
   /** Intl 相对时间：relativeTime(-3, 'day') → 3 天前 */
   relativeTime(amount: number, unit: Intl.RelativeTimeFormatUnit): string
-  /** "3 days ago" → 3 天前；"about 1 year ago" → 约 1 年前；"in 2 hours" → 2 小时后；"yesterday" → 昨天 */
+  /** "3 days ago" → 3 天前；"about 1 year ago" → 约1 年前；"in 2 hours" → 2 小时后；"yesterday" → 昨天 */
   translateRelativeTime(text: string): string | undefined
   /** 相对时间或日期；都不匹配时原样返回 */
   translateTime(text: string): string
@@ -151,7 +151,7 @@ export function createTimeHelpers(words: TimeWords): TimeHelpers {
   const qualifiers: ReadonlyMap<string, string> = new Map(Object.entries(words.qualifiers))
 
   function relativeTime(amount: number, unit: Intl.RelativeTimeFormatUnit): string {
-    return spaceDigits(relativeFormat.format(amount, unit))
+    return relativeFormat.format(amount, unit)
   }
 
   function translateRelativeTime(text: string): string | undefined {
@@ -165,7 +165,7 @@ export function createTimeHelpers(words: TimeWords): TimeHelpers {
       if (amount === undefined) return undefined
       const qualifier = past[1] === undefined ? undefined : qualifiers.get(past[1])
       if (qualifier === undefined) return relativeTime(-amount, past[3])
-      return spaceDigits(qualifier + numericFormat.format(-amount, past[3]))
+      return qualifier + numericFormat.format(-amount, past[3])
     }
     const future = RELATIVE_FUTURE_RE.exec(lower)
     if (future && isUnit(future[2]!)) {

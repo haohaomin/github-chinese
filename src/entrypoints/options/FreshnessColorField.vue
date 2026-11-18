@@ -1,10 +1,11 @@
 <template>
   <div class="color-field">
-    <span :id="labelId" class="color-field-label" :style="{ color: preview }" data-test="color-label">{{ label }}</span>
+    <span :id="labelId" class="color-field-label" :style="previewStyle" data-test="color-label">{{ label }}</span>
     <input
+      v-if="isHexColor"
       class="color-field-picker"
       type="color"
-      :value="preview"
+      :value="hexPreview"
       :disabled="disabled"
       :aria-labelledby="names"
       data-test="color-picker"
@@ -44,20 +45,17 @@
   import UiButton from '../../components/ui/UiButton.vue'
   import UiInput from '../../components/ui/UiInput.vue'
   import { useI18n } from '../../components/ui-preferences'
-  import { normalizeHexColor } from '../../shared/freshness'
+  import { isValidColor, normalizeHexColor } from '../../shared/freshness'
 
   /**
-   * 一项颜色：名称（用当前颜色显示，即预览）、取色器、颜色写法（#rrggbb）、重置。
-   * 取色器拖动时只预览，关闭时保存；写法在失去焦点、按 Enter、离开标签页时保存，格式不符时提示、不保存；清空为默认
+   * 一项颜色：名称（用当前颜色显示，即预览）、取色器（仅纯 hex 时显示）、颜色写法、重置。
+   * 支持 #rrggbb、#rgb、rgba(...)、渐变等任意 CSS 颜色值。
+   * 取色器拖动时只预览，关闭时保存；写法在失去焦点、按 Enter、离开标签页时保存；清空为默认
    */
   const props = defineProps<{
-    /** 名称 */
     label: string
-    /** 保存的颜色（小写 #rrggbb）；空为默认 */
     color: string
-    /** 默认颜色的近似值：预览、取色器用 */
     fallback: string
-    /** 所在分组标题的 id：与名称一起作控件的无障碍名称 */
     groupLabelId: string
     disabled?: boolean
   }>()
@@ -70,10 +68,8 @@
   const statusId = useId()
   const names = computed(() => `${props.groupLabelId} ${labelId}`)
 
-  /** 写法输入框里的文字：输入、取色时先改这里，提交时保存 */
   const draft = ref(props.color)
   const invalid = ref(false)
-  /** 有未提交的改动：设置在别处变了（其他页面、导入备份）也不覆盖 */
   let dirty = false
 
   watch(
@@ -85,11 +81,32 @@
     }
   )
 
-  /** 预览的颜色：清空时为默认，写法有效时用写法，输入中或格式不符时用保存的颜色 */
-  const preview = computed(() => {
+  /** 当前草稿是否为纯 hex 颜色（显示取色器的条件） */
+  const isHexColor = computed(() => {
     const text = draft.value.trim()
-    if (text === '') return props.fallback
-    return normalizeHexColor(text) ?? (props.color || props.fallback)
+    return text === '' || normalizeHexColor(text) !== undefined
+  })
+
+  /** 取色器用的 hex 值 */
+  const hexPreview = computed(() => {
+    const text = draft.value.trim()
+    return normalizeHexColor(text) ?? props.fallback
+  })
+
+  /** 名称标签的颜色样式：纯 hex 用 color，渐变用 background-clip；非法时回退默认 */
+  const previewStyle = computed(() => {
+    const text = draft.value.trim()
+    if (text === '' || invalid.value) return { color: props.fallback }
+    const hex = normalizeHexColor(text)
+    if (hex) return { color: hex }
+    if (!isValidColor(text)) return { color: props.fallback }
+    // 渐变或其他 CSS 值：用 background-clip: text
+    return {
+      background: text,
+      WebkitBackgroundClip: 'text',
+      WebkitTextFillColor: 'transparent',
+      backgroundClip: 'text'
+    }
   })
 
   function onInput(value: string): void {
@@ -108,18 +125,24 @@
     commit()
   }
 
-  /** 提交：空为默认；格式不符时提示，不保存 */
   function commit(): void {
     const text = draft.value.trim()
-    const color = text === '' ? '' : normalizeHexColor(text)
-    if (color === undefined) {
+    if (text === '') {
+      dirty = false
+      invalid.value = false
+      draft.value = ''
+      if ('' !== props.color) emit('save', '')
+      return
+    }
+    // 以 # 开头的必须是合法 hex；其他任意 CSS 值只过滤注入字符
+    if (text.startsWith('#') ? normalizeHexColor(text) === undefined : !isValidColor(text)) {
       invalid.value = true
       return
     }
     dirty = false
     invalid.value = false
-    draft.value = color
-    if (color !== props.color) emit('save', color)
+    draft.value = normalizeHexColor(text) ?? text
+    if (draft.value !== props.color) emit('save', draft.value)
   }
 
   function reset(): void {
@@ -133,7 +156,6 @@
 </script>
 
 <style scoped>
-  /* 名称、取色器、写法、重置一行；格式错误的提示在下一行 */
   .color-field {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto 96px auto;
@@ -145,7 +167,6 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* 取色器：与输入框同高的色块 */
   .color-field-picker {
     width: 40px;
     height: var(--gcn-control-md);

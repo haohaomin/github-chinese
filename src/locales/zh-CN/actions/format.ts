@@ -9,9 +9,9 @@ export const DURATION_SOURCE = '\\d+[dhms](?: \\d+[dhms]){0,3}'
 const DURATION_UNITS: Readonly<Record<string, string>> = { d: '天', h: '小时', m: '分钟', s: '秒' }
 const DURATION_PART_RE = /(\d+)([dhms])/g
 
-/** 1m 44s → 1 分钟 44 秒；2m 0s → 2 分钟 0 秒；6h0m0s → 6 小时 0 分钟 0 秒 */
+/** 1m 44s → 1分钟 44秒；2m 0s → 2分钟 0秒；6h0m0s → 6小时 0分钟 0秒 */
 export function formatDuration(text: string): string {
-  const parts = Array.from(text.matchAll(DURATION_PART_RE), ([, amount, unit]) => `${amount} ${DURATION_UNITS[unit!]}`)
+  const parts = Array.from(text.matchAll(DURATION_PART_RE), ([, amount, unit]) => `${amount}${DURATION_UNITS[unit!]}`)
   return parts.join(' ')
 }
 

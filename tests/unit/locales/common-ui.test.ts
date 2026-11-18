@@ -151,7 +151,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [['3 of 10 selected', '10 个中已选择 3 个']], misses: ['3 of many selected'] },
   // 反馈对话框
   {
-    hits: [['Please keep your feedback within 1,000 characters or less.', '反馈内容不能超过 1,000 个字符。']],
+    hits: [['Please keep your feedback within 1,000 characters or less.', '反馈内容不能超过1,000 个字符。']],
     misses: ['Please keep your feedback short.']
   },
   { hits: [['Request ID: 9F3C:1A2B:3C4D', '请求 ID：9F3C:1A2B:3C4D']], misses: ['Request ID'] },
@@ -228,61 +228,61 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   // 相对时间与日期
   {
     hits: [
-      ['3 days ago', '3 天前'],
-      ['about 1 year ago', '约 1 年前'],
+      ['3 days ago', '3天前'],
+      ['about 1 year ago', '约1年前'],
       ['last week', '上周'],
       ['yesterday', '昨天'],
-      ['Oct 26, 2026', '2026 年 10 月 26 日'],
-      ['on Jul 1', '7 月 1 日']
+      ['Oct 26, 2026', '2026年10月26日'],
+      ['on Jul 1', '7月1日']
     ],
     misses: ['days ago', '3 eons ago']
   },
   {
     hits: [
       ['2d ago', '前天'],
-      ['19m ago', '19 分钟前'],
-      ['12h ago', '12 小时前'],
-      ['3mo ago', '3 个月前']
+      ['19m ago', '19分钟前'],
+      ['12h ago', '12小时前'],
+      ['3mo ago', '3个月前']
     ],
     misses: ['2x ago', 'd ago']
   },
   {
     hits: [
-      ['Updated 3 days ago', '3 天前更新'],
-      ['updated on Jan 5', '1 月 5 日更新'],
-      ['Updated Oct 26, 2026', '2026 年 10 月 26 日更新'],
+      ['Updated 3 days ago', '3天前更新'],
+      ['updated on Jan 5', '1月5日更新'],
+      ['Updated Oct 26, 2026', '2026年10月26日更新'],
       ['Updated yesterday', '昨天更新']
     ],
     misses: ['Updated recently']
   },
-  { hits: [['Last updated 2 hours ago', '2 小时前最后更新']], misses: ['Last updated by octocat'] },
-  { hits: [['Created 5 minutes ago', '5 分钟前创建']], misses: ['Created by octocat'] },
-  { hits: [['Edited 3 days ago', '3 天前编辑']], misses: ['Edited sometime'] },
+  { hits: [['Last updated 2 hours ago', '2小时前最后更新']], misses: ['Last updated by octocat'] },
+  { hits: [['Created 5 minutes ago', '5分钟前创建']], misses: ['Created by octocat'] },
+  { hits: [['Edited 3 days ago', '3天前编辑']], misses: ['Edited sometime'] },
   // 带时刻的完整时间：本地时区（测试固定为 GMT+8）不写，其他时区写在时刻后的括号里
   {
     hits: [
-      ['Oct 26, 2026, 10:03 AM GMT+8', '2026 年 10 月 26 日 10:03'],
-      ['Oct 26, 2026, 8:33 PM GMT+8', '2026 年 10 月 26 日 20:33'],
-      ['Oct 26, 2026, 8:03 AM GMT+8', '2026 年 10 月 26 日 08:03'],
-      ['Oct 26, 2026, 12:05 AM UTC', '2026 年 10 月 26 日 00:05 (UTC)'],
-      ['Oct 26, 9:05 AM GMT-5:30', '10 月 26 日 09:05 (GMT-5:30)'],
+      ['Oct 26, 2026, 10:03 AM GMT+8', '2026年10月26日 10:03'],
+      ['Oct 26, 2026, 8:33 PM GMT+8', '2026年10月26日 20:33'],
+      ['Oct 26, 2026, 8:03 AM GMT+8', '2026年10月26日 08:03'],
+      ['Oct 26, 2026, 12:05 AM UTC', '2026年10月26日 00:05 (UTC)'],
+      ['Oct 26, 9:05 AM GMT-5:30', '10月26日 09:05 (GMT-5:30)'],
       // 零时区与 en-US 的美洲时区缩写：按 zh-CN Intl 写成 GMT / GMT 偏移
-      ['Jan 15, 2026, 6:05 PM GMT', '2026 年 1 月 15 日 18:05 (GMT)'],
-      ['Jul 15, 2026, 11:05 AM PDT', '2026 年 7 月 15 日 11:05 (GMT-7)'],
-      ['Jan 15, 2026, 9:05 AM AKST', '2026 年 1 月 15 日 09:05 (GMT-9)'],
-      ['Jan 15, 2026, 8:05 AM HST', '2026 年 1 月 15 日 08:05 (GMT-10)'],
+      ['Jan 15, 2026, 6:05 PM GMT', '2026年1月15日 18:05 (GMT)'],
+      ['Jul 15, 2026, 11:05 AM PDT', '2026年7月15日 11:05 (GMT-7)'],
+      ['Jan 15, 2026, 9:05 AM AKST', '2026年1月15日 09:05 (GMT-9)'],
+      ['Jan 15, 2026, 8:05 AM HST', '2026年1月15日 08:05 (GMT-10)'],
       // en-US 给 America/Adak 用的缩写
-      ['Jan 15, 2026, 12:05 AM HAST', '2026 年 1 月 15 日 00:05 (GMT-10)'],
-      ['Jul 15, 2026, 1:05 AM HADT', '2026 年 7 月 15 日 01:05 (GMT-9)'],
-      ['on Oct 26, 2026, 10:03 AM', '2026 年 10 月 26 日 10:03'],
-      ['October 26, 2026 02:03', '2026 年 10 月 26 日 2:03']
+      ['Jan 15, 2026, 12:05 AM HAST', '2026年1月15日 00:05 (GMT-10)'],
+      ['Jul 15, 2026, 1:05 AM HADT', '2026年7月15日 01:05 (GMT-9)'],
+      ['on Oct 26, 2026, 10:03 AM', '2026年10月26日 10:03'],
+      ['October 26, 2026 02:03', '2026年10月26日 2:03']
     ],
     misses: ['Oct 26, 2026, 25:61 AM', 'Octopus 26, 2026, 10:03 AM GMT+8', 'Oct 26, 2026, 10:03 AM XST']
   },
   {
     hits: [
-      ['7:05 AM on October 19', '10 月 19 日 7:05'],
-      ['3:00 AM on July 1, 2025', '2025 年 7 月 1 日 3:00'],
+      ['7:05 AM on October 19', '10月19日 7:05'],
+      ['3:00 AM on July 1, 2025', '2025年7月1日 3:00'],
       ['11:30 PM yesterday', '昨天 23:30'],
       ['12:00 PM today', '今天 12:00']
     ],
@@ -290,8 +290,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['07:51AM on October 16', '10 月 16 日 7:51'],
-      ['05:49PM on December 22, 2024', '2024 年 12 月 22 日 17:49']
+      ['07:51AM on October 16', '10月16日 7:51'],
+      ['05:49PM on December 22, 2024', '2024年12月22日 17:49']
     ],
     misses: ['07:51 on October 16']
   },
@@ -493,7 +493,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   // 评论操作与对话框
   {
     hits: [
-      ["Actions for octocat's comment, 7:05 AM on October 19", 'octocat 的评论操作，10 月 19 日 7:05'],
+      ["Actions for octocat's comment, 7:05 AM on October 19", 'octocat 的评论操作，10月19日 7:05'],
       ['Actions for octocat’s reply, 12:05 PM today', 'octocat 的回复操作，今天 12:05']
     ],
     misses: ["Actions for octocat's comment"]
@@ -515,10 +515,10 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ["octo-org's sponsor since January 2024", '自 2024 年 1 月起赞助 octo-org'],
-      ["octo-org's sponsor since 一月 2024", '自 2024 年 1 月起赞助 octo-org'],
-      ['octo-org’s sponsor since 十二月 2023', '自 2023 年 12 月起赞助 octo-org'],
-      ["octo-org's sponsor since 3月 2025", '自 2025 年 3 月起赞助 octo-org']
+      ["octo-org's sponsor since January 2024", '自 2024年1月起赞助 octo-org'],
+      ["octo-org's sponsor since 一月 2024", '自 2024年1月起赞助 octo-org'],
+      ['octo-org’s sponsor since 十二月 2023', '自 2023年12月起赞助 octo-org'],
+      ["octo-org's sponsor since 3月 2025", '自 2025年3月起赞助 octo-org']
     ],
     misses: ["octo-org's sponsor since 2024", "octo-org's sponsor since 十三月 2024", "octo-org's sponsor since 13月 2024"]
   },
@@ -648,7 +648,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['octocat reacted with smile emoji']
   },
   {
-    hits: [['thumbs up (21): github-actions[bot], 07:51AM on October 16', '点赞 (21)：github-actions[bot]，10 月 16 日 7:51']],
+    hits: [['thumbs up (21): github-actions[bot], 07:51AM on October 16', '点赞 (21)：github-actions[bot]，10月16日 7:51']],
     misses: ['thumbs up (21): github-actions[bot]']
   },
   {
@@ -702,7 +702,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   {
     hits: [
       ["React to octocat's comment, 7:05 AM today", '为 octocat 的评论添加反应，今天 7:05'],
-      ['React to review, 3:00 AM on July 1, 2025', '为审查添加反应，2025 年 7 月 1 日 3:00']
+      ['React to review, 3:00 AM on July 1, 2025', '为审查添加反应，2025年7月1日 3:00']
     ],
     misses: ["React to octocat's comment"]
   },
@@ -712,7 +712,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['Reactions for octocat’s comment, 7:05 AM on October 19', 'octocat 评论的反应，10 月 19 日 7:05'],
+      ['Reactions for octocat’s comment, 7:05 AM on October 19', 'octocat 评论的反应，10月19日 7:05'],
       ['Reactions for comment, 7:05 AM today', '评论的反应，今天 7:05']
     ],
     misses: ['Reactions for everyone']
@@ -814,7 +814,7 @@ describe('common-ui 正则词条', () => {
     expect(join(['Reacted by ', 'octocat, 小红 and monalisa'])).toBe('octocat、小红和 monalisa 做出了反应')
     expect(join(['Uploading your files... (', '1', '/', '3', ')'])).toBe('正在上传文件... (1/3)')
     expect(join(['3', ' of 10 selected'])).toBe('10 个中已选择 3 个')
-    expect(join(['Updated ', '3 days ago'])).toBe('3 天前更新')
+    expect(join(['Updated ', '3 days ago'])).toBe('3天前更新')
     expect(join(['Page ', '7', '...'])).toBe('第 7 页...')
     expect(join([', \n  ', 'and 3 more\n'])).toBe('，以及其他 3 个')
     expect(join(['Show +', '3', ' more'])).toBe('再显示 3 个')
@@ -846,8 +846,8 @@ describe('common-ui 正则词条', () => {
     expect(formatClock('12', '05', 'AM', true)).toBe('00:05')
     expect(formatClock('8', '03', 'PM')).toBe('20:03')
     expect(formatClock('02', '03')).toBe('2:03')
-    expect(translateAriaDate('9:15 AM on October 19, 2025')).toBe('2025 年 10 月 19 日 9:15')
-    expect(translateCompactDate('11:45AM on June 9, 2014')).toBe('2014 年 6 月 9 日 11:45')
+    expect(translateAriaDate('9:15 AM on October 19, 2025')).toBe('2025年10月19日 9:15')
+    expect(translateCompactDate('11:45AM on June 9, 2014')).toBe('2014年6月9日 11:45')
     expect(() => translateAriaDate('sometime')).toThrow()
     expect(formatPeople('a')).toBe('a')
     expect(formatPeople('a and b')).toBe('a 和 b')
@@ -872,9 +872,9 @@ describe('common-ui 完整时间随本地时区', () => {
     // 匹配器按原文缓存译文：换了时区要新建
     const adak = createMatcher([['common', commonUi]])
 
-    expect(adak.translate('Jan 15, 2026, 12:05 AM HAST', ['common'])).toBe('2026 年 1 月 15 日 00:05')
-    expect(adak.translate('Jul 15, 2026, 1:05 AM HADT', ['common'])).toBe('2026 年 7 月 15 日 01:05')
-    expect(adak.translate('Jan 15, 2026, 12:05 AM HST', ['common'])).toBe('2026 年 1 月 15 日 00:05')
+    expect(adak.translate('Jan 15, 2026, 12:05 AM HAST', ['common'])).toBe('2026年1月15日 00:05')
+    expect(adak.translate('Jul 15, 2026, 1:05 AM HADT', ['common'])).toBe('2026年7月15日 01:05')
+    expect(adak.translate('Jan 15, 2026, 12:05 AM HST', ['common'])).toBe('2026年1月15日 00:05')
   })
 })
 

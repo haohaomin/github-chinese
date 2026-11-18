@@ -50,8 +50,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['Payment due Nov 11, 2026', '应付款日期 2026 年 11 月 11 日'],
-      ['Payment due January 3, 2027', '应付款日期 2027 年 1 月 3 日']
+      ['Payment due Nov 11, 2026', '应付款日期 2026年11月11日'],
+      ['Payment due January 3, 2027', '应付款日期 2027年1月3日']
     ],
     misses: ['Payment due', 'Payment due soon', 'Next payment due Nov 11, 2026']
   },

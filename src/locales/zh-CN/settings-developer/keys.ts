@@ -6,7 +6,7 @@ const UNIT_LABEL: Readonly<Record<string, string>> = { week: '周', month: '个�
 /** “Last used within the last 3 weeks” → 最近 3 周内使用过；不带数字时 → 最近一周内使用过 */
 export function lastUsedLabel(amount: string | undefined, unit: string): string {
   const label = UNIT_LABEL[unit] ?? unit
-  return amount ? `最近 ${amount} ${label}内使用过` : `最近一${label}内使用过`
+  return amount ? `最近 ${amount}${label}内使用过` : `最近一${label}内使用过`
 }
 
 /** 最近使用时间片段（不含捕获组），供其他文件拼接 */

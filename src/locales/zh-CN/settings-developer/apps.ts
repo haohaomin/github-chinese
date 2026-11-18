@@ -126,7 +126,7 @@ export default {
     'You can also drag and drop a picture from your computer.': '你也可以从电脑拖放图片。',
     // 上传错误：原文两句，第二句「Try again.」单独成句（与下方 Whoops! 等同组提示一致）
     'Only images, please. Try again.': '仅支持图片。请重试。',
-    '1MB or less, please. Try again.': '图片不能超过 1MB。请重试。',
+    '1MB or less, please. Try again.': '图片不能超过1MB。请重试。',
     'Whoops! Try again.': '出错了！请重试。',
     'File contents don’t match the file extension. Try again.': '文件内容与扩展名不符。请重试。',
     "File contents don't match the file extension. Try again.": '文件内容与扩展名不符。请重试。',

@@ -45,7 +45,7 @@ export default {
     'Workflow name cannot be empty': '工作流名称不能为空',
     'A valid field is required': '需要有效的字段',
     'A query or a field id is required': '需要查询或字段 ID',
-    'Workflow name cannot be longer than 250 characters': '工作流名称不能超过 250 个字符',
+    'Workflow name cannot be longer than 250 characters': '工作流名称不能超过250 个字符',
     'Add the item to the project': '将项添加到项目',
     'Add sub-issues to the project': '将子议题添加到项目',
     'When the filter matches a new or updated item': '筛选器匹配新建或更新的项时',
@@ -138,7 +138,7 @@ export default {
     'Set by issue': '由议题决定',
     'Additional instructions for this agent': '给此代理的附加说明',
     'Provide additional instructions for the agent': '为代理提供附加说明',
-    'Prompt cannot be longer than 4000 characters': '提示不能超过 4000 个字符',
+    'Prompt cannot be longer than 4000 characters': '提示不能超过4000 个字符',
     Workflows: '工作流',
     'is added': '已添加',
     // “筛选项”易读作名词（筛选选项），写全“项目项”

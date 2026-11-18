@@ -29,7 +29,7 @@ const AUTO_LOAD_LABELS = [
 const NEW_TAB_LABELS = ['站外链接', '正文链接', '搜索结果', '议题与拉取请求', '通知', '首页', '个人与组织主页', '探索']
 
 /** 增强设置里的子标签，按显示顺序 */
-const ENHANCE_LABELS = ['自动加载', '下载次数', '新标签页打开', '更新时间着色']
+const ENHANCE_LABELS = ['自动加载', '下载次数', '新标签页打开', '更新时间着色', '时间格式']
 
 function tabLabels(scope: VueWrapper | DOMWrapper<Element>, selector: string): string[] {
   return scope

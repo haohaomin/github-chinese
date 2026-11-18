@@ -68,19 +68,19 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       ['CLAUDE.md content, created by monalisa on 04:55PM yesterday.', 'CLAUDE.md 的内容，由 monalisa 于昨天 16:55 创建。'],
       [
         'Dockerfile content, created by hubot on 02:30PM on June 25, 2019.',
-        'Dockerfile 的内容，由 hubot 于 2019 年 6 月 25 日 14:30 创建。'
+        'Dockerfile 的内容，由 hubot 于 2019年6月25日 14:30 创建。'
       ],
       [
         'data.json content, created by octocat on 12:46AM on August 12, 2022.',
-        'data.json 的内容，由 octocat 于 2022 年 8 月 12 日 00:46 创建。'
+        'data.json 的内容，由 octocat 于 2022年8月12日 00:46 创建。'
       ],
-      ['notes.md content, created by monalisa on 12:56PM on January 13.', 'notes.md 的内容，由 monalisa 于 1 月 13 日 12:56 创建。'],
+      ['notes.md content, created by monalisa on 12:56PM on January 13.', 'notes.md 的内容，由 monalisa 于 1月13日 12:56 创建。'],
       // 日在月前、无日的写法：on 前缀由 translateTime 去掉
       [
         'README.md content, created by octocat on 09:05AM on 25 June 2019.',
-        'README.md 的内容，由 octocat 于 2019 年 6 月 25 日 09:05 创建。'
+        'README.md 的内容，由 octocat 于 2019年6月25日 09:05 创建。'
       ],
-      ['hello.rb content, created by octocat on 11:30PM on June 2019.', 'hello.rb 的内容，由 octocat 于 2019 年 6 月 23:30 创建。']
+      ['hello.rb content, created by octocat on 11:30PM on June 2019.', 'hello.rb 的内容，由 octocat 于 2019年6月 23:30 创建。']
     ],
     misses: ['LICENSE content, created by octocat.', 'LICENSE content, created by octocat on 02:10AM last week.']
   },
@@ -165,9 +165,9 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   // 标星者列表与个人资料侧栏
   {
     hits: [
-      ['Joined on Apr 4, 2016', '2016 年 4 月 4 日加入'],
-      ['Joined on June 22, 2024', '2024 年 6 月 22 日加入'],
-      ['Joined on 4 April 2016', '2016 年 4 月 4 日加入']
+      ['Joined on Apr 4, 2016', '2016年4月4日加入'],
+      ['Joined on June 22, 2024', '2024年6月22日加入'],
+      ['Joined on 4 April 2016', '2016年4月4日加入']
     ],
     misses: ['Joined on 2016', 'Joined GitHub on Apr 4, 2016']
   },
@@ -178,12 +178,12 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [['Email: octocat@example.com', '电子邮件：octocat@example.com']], misses: ['Email: not public'] },
   {
     hits: [
-      ['- 15h behind', '- 慢 15 小时'],
-      ['- 5.5h ahead', '- 快 5.5 小时'],
+      ['- 15h behind', '- 慢15小时'],
+      ['- 5.5h ahead', '- 快5.5小时'],
       // 名片脚本按 `${h}h${m}m` 格式化，时与分之间不带空格；带空格的写法同样接受
-      ['- 2h30m behind', '- 慢 2 小时 30 分钟'],
-      ['- 5h 30m ahead', '- 快 5 小时 30 分钟'],
-      ['- 30m behind', '- 慢 30 分钟']
+      ['- 2h30m behind', '- 慢2小时 30分钟'],
+      ['- 5h 30m ahead', '- 快5小时 30分钟'],
+      ['- 30m behind', '- 慢30分钟']
     ],
     misses: ['- 15 hours behind', '- 2h30 behind']
   }
@@ -223,7 +223,7 @@ describe('gist 正则词条', () => {
   it('文件区无障碍名称：三种日期写法都不残留 on', () => {
     for (const date of ['June 25, 2019', '25 June 2019', 'June 2019']) {
       const output = translate(`LICENSE content, created by octocat on 02:10AM on ${date}.`)
-      expect(output).toMatch(/^LICENSE 的内容，由 octocat 于 2019 年 6 月/)
+      expect(output).toMatch(/^LICENSE 的内容，由 octocat 于 2019年6月/)
       expect(output).not.toMatch(/\bon\b/)
     }
   })

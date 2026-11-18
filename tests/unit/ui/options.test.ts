@@ -127,13 +127,12 @@ describe.skipIf(!App)('设置页组件', () => {
   })
 
   describe('布局', () => {
-    it('先是汉化设置（汉化开关、时间格式、排除路径；自定义词库、内置词库两个标签）、加速设置、净化设置、增强设置（自动加载、下载次数、新标签页打开、更新时间着色四个标签）、企业版设置五个标签页，再是关于；常规开关、语言下拉、快捷键都不在这里', async () => {
+    it('先是汉化设置（汉化开关、排除路径；自定义词库、内置词库两个标签）、加速设置、净化设置、增强设置（自动加载、下载次数、新标签页打开、更新时间着色、时间格式五个标签）、企业版设置五个标签页，再是关于；常规开关、语言下拉、快捷键都不在这里', async () => {
       const wrapper = await render()
       expect(wrapper.get('h1').text()).toBe('GitHub 中文化')
       expect(wrapper.get('[role="tablist"]').attributes('aria-label')).toBe('设置')
       expect(tabLabels(wrapper)).toEqual(['汉化设置', '加速设置', '净化设置', '增强设置', '企业版设置'])
       expect(headings(wrapper)).toEqual([
-        '时间格式',
         '排除路径',
         '加速源',
         '范围',
@@ -142,7 +141,9 @@ describe.skipIf(!App)('设置页组件', () => {
         '创建令牌',
         '隐私',
         '范围',
+        '时段范围',
         '颜色',
+        '时间格式',
         '关于'
       ])
       expect(dictionaryTabLabels(wrapper)).toEqual(['自定义词库', '内置词库'])
@@ -151,15 +152,15 @@ describe.skipIf(!App)('设置页组件', () => {
           .get('[role="tablist"][aria-label="增强设置"]')
           .findAll('[role="tab"]')
           .map(item => item.text())
-      ).toEqual(['自动加载', '下载次数', '新标签页打开', '更新时间着色'])
-      for (const title of ['自动加载', '下载次数', '新标签页打开', '更新时间着色']) {
+      ).toEqual(['自动加载', '下载次数', '新标签页打开', '更新时间着色', '时间格式'])
+      for (const title of ['自动加载', '下载次数', '新标签页打开', '更新时间着色', '时间格式']) {
         expect(
           section(wrapper, title).element.closest('.options-main > .ui-tabs > [role="tabpanel"]')?.getAttribute('aria-labelledby')
         ).toBe(tab(wrapper, '增强设置').attributes('id'))
       }
       expect(section(wrapper, '自定义词库').isVisible()).toBe(true)
       expect(section(wrapper, '内置词库').isVisible()).toBe(false)
-      for (const title of ['时间格式', '排除路径', '自定义词库', '内置词库']) {
+      for (const title of ['排除路径', '自定义词库', '内置词库']) {
         expect(
           section(wrapper, title).element.closest('.options-main > .ui-tabs > [role="tabpanel"]')?.getAttribute('aria-labelledby')
         ).toBe(tab(wrapper, '汉化设置').attributes('id'))
@@ -203,9 +204,9 @@ describe.skipIf(!App)('设置页组件', () => {
       ])
       // 下拉只有时间格式、内置词库的翻译语言与加速设置的替换原链接；没有界面语言下拉
       expect(wrapper.findAll('[role="combobox"]').map(item => item.attributes('data-test'))).toEqual([
-        'time-format',
         'dictionary-language',
-        'replace-category'
+        'replace-category',
+        'time-format'
       ])
       expect(wrapper.text()).not.toContain('快捷键')
     })
@@ -267,7 +268,6 @@ describe.skipIf(!App)('设置页组件', () => {
         'Settings',
         ['Translation', 'Acceleration', 'Search filter', 'Enhancements', 'Enterprise'],
         [
-          'Time format',
           'Excluded paths',
           'Sources',
           'Scope',
@@ -276,7 +276,9 @@ describe.skipIf(!App)('设置页组件', () => {
           'Create a token',
           'Privacy',
           'Scope',
+          'Date ranges',
           'Colors',
+          'Time format',
           'About'
         ],
         'GitHub repository'
@@ -286,7 +288,7 @@ describe.skipIf(!App)('设置页组件', () => {
         'GitHub 中文化',
         '設定',
         ['中文化設定', '加速設定', '淨化設定', '增強設定', '企業版設定'],
-        ['時間格式', '排除路徑', '加速來源', '範圍', '說明', '個人存取權杖', '建立權杖', '隱私權', '範圍', '顏色', '關於'],
+        ['排除路徑', '加速來源', '範圍', '說明', '個人存取權杖', '建立權杖', '隱私權', '範圍', '時段範圍', '顏色', '時間格式', '關於'],
         'GitHub'
       ]
     ] as const)('界面语言随设置（如在弹出页修改）切换：%s', async (uiLanguage, title, tabsLabel, tabs, sections, repository) => {

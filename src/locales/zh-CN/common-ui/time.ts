@@ -3,7 +3,7 @@ import { formatDate, isLocalZone, joinCjk, MONTH_SOURCE, relativeTime, TIME_SOUR
 
 /**
  * 时间与日期：相对时间、日期、带时刻的完整时间（title / aria-label），以及时间元素前后的片段。
- * 中文与数字之间加空格：3 天前、2026 年 10 月 26 日、2026 年 10 月 26 日 08:03、10 月 19 日 7:05。
+ * 中文与数字之间加空格：3 天前、2026年10月26日、2026年10月26日 08:03、10月19日 7:05。
  * 完整时间只写日期与时刻：时区与浏览器本地时区相同时不写，不同时写在时刻后的括号里（10:03 (GMT-7)）。
  */
 
@@ -18,12 +18,12 @@ function monthOf(name: string): number {
   return month
 }
 
-/** 年月日 → 2026 年 10 月 26 日；缺年 → 10 月 26 日 */
+/** 年月日 → 2026年10月26日；缺年 → 10月26日 */
 function dateOf(month: string, day: string, year: string): string {
   return formatDate(year ? Number(year) : undefined, monthOf(month), Number(day))
 }
 
-/** 月份与年 → 2024 年 1 月（January 2024） */
+/** 月份与年 → 2024年1月（January 2024） */
 export function formatMonthYear(month: string, year: string): string {
   return formatDate(Number(year), monthOf(month), undefined)
 }
@@ -44,7 +44,7 @@ export function formatClock(hour: string, minute: string, meridiem = '', pad = f
 export const ARIA_DATE_SOURCE = `\\d{1,2}:[0-5]\\d [AP]M (?:today|yesterday|on ${MONTH_SOURCE} \\d{1,2}(?:, \\d{4})?)`
 const ARIA_DATE_RE = new RegExp(`^(\\d{1,2}):([0-5]\\d) ([AP]M) (?:(today|yesterday)|on (${MONTH_SOURCE}) (\\d{1,2})(?:, (\\d{4}))?)$`)
 
-/** 7:05 AM on October 19 → 10 月 19 日 7:05；7:05 AM today → 今天 7:05 */
+/** 7:05 AM on October 19 → 10月19日 7:05；7:05 AM today → 今天 7:05 */
 export function translateAriaDate(text: string): string {
   const match = ARIA_DATE_RE.exec(text)
   if (!match) throw new Error(`无法解析时间：${text}`)
@@ -57,7 +57,7 @@ export function translateAriaDate(text: string): string {
 export const COMPACT_DATE_SOURCE = `\\d{1,2}:[0-5]\\d[AP]M on ${MONTH_SOURCE} \\d{1,2}(?:, \\d{4})?`
 const COMPACT_DATE_RE = new RegExp(`^(\\d{1,2}):([0-5]\\d)([AP]M) on (${MONTH_SOURCE}) (\\d{1,2})(?:, (\\d{4}))?$`)
 
-/** 07:51AM on October 16 → 10 月 16 日 7:51 */
+/** 07:51AM on October 16 → 10月16日 7:51 */
 export function translateCompactDate(text: string): string {
   const match = COMPACT_DATE_RE.exec(text)
   if (!match) throw new Error(`无法解析时间：${text}`)
@@ -156,7 +156,7 @@ export default {
     [new RegExp(`^Created (${TIME_SOURCE})$`), (_, time: string) => joinCjk(translateTime(time), '创建')],
     [new RegExp(`^[Ee]dited (${TIME_SOURCE})$`), (_, time: string) => joinCjk(translateTime(time), '编辑')],
 
-    // 带时刻的完整时间：2026 年 10 月 26 日 08:03；时区不是本地时区时写在时刻后：2026 年 10 月 26 日 10:03 (GMT-7)
+    // 带时刻的完整时间：2026年10月26日 08:03；时区不是本地时区时写在时刻后：2026年10月26日 10:03 (GMT-7)
     [
       DATETIME_RE,
       (_, month: string, day: string, year: string, hour: string, minute: string, meridiem: string, zone: string) => {

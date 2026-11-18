@@ -92,7 +92,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['Switch tab (current)']
   },
   {
-    hits: [["Title can't be longer than 256 characters (currently 300 characters)", '标题不能超过 256 个字符（当前 300 个字符）']],
+    hits: [["Title can't be longer than 256 characters (currently 300 characters)", '标题不能超过256 个字符（当前 300 个字符）']],
     misses: ["Title can't be longer than 256 characters"]
   },
   { hits: [['Pull Request #123', '拉取请求 #123']], misses: ['Pull Request #abc'] },
@@ -209,20 +209,20 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   // mergebox：检查耗时
   {
     hits: [
-      ['Successful in 2m', '成功用时 2 分钟'],
-      ['Successful in 1h 5m', '成功用时 1 小时 5 分钟'],
-      ['Completed in 30s', '完成用时 30 秒'],
-      ['Success in 1d 2h 3m', '成功用时 1 天 2 小时 3 分钟']
+      ['Successful in 2m', '成功用时 2分钟'],
+      ['Successful in 1h 5m', '成功用时 1小时 5分钟'],
+      ['Completed in 30s', '完成用时 30秒'],
+      ['Success in 1d 2h 3m', '成功用时 1天 2小时 3分钟']
     ],
     misses: ['Successful in two minutes']
   },
   {
     hits: [
-      ['Failing after 30s', '30 秒后失败'],
-      ['Failing after 2m 5s', '2 分钟 5 秒后失败'],
-      ['Cancelled after 1m 2s', '1 分钟 2 秒后取消'],
-      ['Timed out after 6h', '6 小时后超时'],
-      ['Neutral after 41s', '41 秒后结果为中性']
+      ['Failing after 30s', '30秒后失败'],
+      ['Failing after 2m 5s', '2分钟 5秒后失败'],
+      ['Cancelled after 1m 2s', '1分钟 2秒后取消'],
+      ['Timed out after 6h', '6小时后超时'],
+      ['Neutral after 41s', '41秒后结果为中性']
     ],
     misses: ['Failing after a while']
   },
@@ -954,10 +954,10 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [['Commits 2 to 5 selected', '已选择第 2 至 5 个提交']], misses: ['Commits 2 to 5'] },
   {
     hits: [
-      ['octocat committed 3 days ago', 'octocat 提交于 3 天前'],
-      ['dependabot[bot] committed 3 days ago', 'dependabot[bot] 提交于 3 天前'],
+      ['octocat committed 3 days ago', 'octocat 提交于 3天前'],
+      ['dependabot[bot] committed 3 days ago', 'dependabot[bot] 提交于 3天前'],
       ['octocat committed yesterday', 'octocat 提交于昨天'],
-      ['octocat committed about 1 year ago', 'octocat 提交于约 1 年前']
+      ['octocat committed about 1 year ago', 'octocat 提交于约1年前']
     ],
     misses: ['octocat committed recently']
   },
@@ -1054,8 +1054,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   // commits
   {
     hits: [
-      ['Commits on Oct 26, 2026', '2026 年 10 月 26 日的提交'],
-      ['Commits on Jan 5', '1 月 5 日的提交']
+      ['Commits on Oct 26, 2026', '2026年10月26日的提交'],
+      ['Commits on Jan 5', '1月5日的提交']
     ],
     misses: ['Commits on main']
   },
@@ -1097,8 +1097,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['in 30s', '用时 30 秒'],
-      ['in 1m 5s', '用时 1 分钟 5 秒']
+      ['in 30s', '用时 30秒'],
+      ['in 1m 5s', '用时 1分钟 5秒']
     ],
     misses: ['in 30 seconds']
   },
@@ -1350,14 +1350,14 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   {
     hits: [
       ["More actions for octocat's comment, 3:45 PM today", 'octocat 的评论的更多操作，今天 15:45'],
-      ['More actions for review, 10:02 AM on October 26, 2025', '审查的更多操作，2025 年 10 月 26 日 10:02']
+      ['More actions for review, 10:02 AM on October 26, 2025', '审查的更多操作，2025年10月26日 10:02']
     ],
     misses: ["More actions for octocat's comment"]
   },
   {
     hits: [
       ["for octocat's review, 9:15 PM yesterday", '关于 octocat 的审查，昨天 21:15'],
-      ['for comment, 3:45 PM on Oct 26', '关于评论，10 月 26 日 15:45']
+      ['for comment, 3:45 PM on Oct 26', '关于评论，10月26日 15:45']
     ],
     misses: ['for octocat']
   },
@@ -1893,7 +1893,7 @@ describe('pulls 正则词条', () => {
     )
     expect(translate(normalizeText(['1', ' / ', '3', ' files viewed'].join('')))).toBe('已查看 1/3 个文件')
     expect(translate(normalizeText(['Bulk update is in progress ', '40', ' %'].join('')))).toBe('批量更新进行中 40%')
-    expect(translate(normalizeText(['Commits on ', 'Oct 26, 2026'].join('')))).toBe('2026 年 10 月 26 日的提交')
+    expect(translate(normalizeText(['Commits on ', 'Oct 26, 2026'].join('')))).toBe('2026年10月26日的提交')
     // Showing {3} of {10}{ loaded}{ comments}、This {comment} cannot be displayed. …
     expect(translate(normalizeText(['Showing ', '3', ' of ', '10', ' loaded', ' comments'].join('')))).toBe('显示 3/10 条已加载的评论')
     expect(translate(normalizeText(['This ', 'review', ' cannot be displayed. Please reload the page to try again.'].join('')))).toBe(

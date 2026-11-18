@@ -274,7 +274,7 @@ export default {
     'Learn more about GitHub Models rate limits': '了解 GitHub 模型速率限制',
     'GitHub Copilot is moving to AI credits': 'GitHub Copilot 将改用 AI 额度计费',
     'Starting June 1, 2026 Copilot usage will be measured and billed in AI credits instead of Premium request units. AI credits give you more granular visibility into your usage across models and features. Preview how this change will affect your billing based on your recent usage.':
-      '自 2026 年 6 月 1 日起，Copilot 使用量将以 AI 额度而非高级请求单位计量和计费。AI 额度可让你更细致地了解各模型和功能的使用情况。可根据近期使用情况预览此变更对计费的影响。',
+      '自 2026年6月1日起，Copilot 使用量将以 AI 额度而非高级请求单位计量和计费。AI 额度可让你更细致地了解各模型和功能的使用情况。可根据近期使用情况预览此变更对计费的影响。',
     'Preview your usage': '预览你的使用情况',
     'Read the blog post': '阅读博客文章',
 
@@ -482,15 +482,15 @@ export default {
     [
       new RegExp(`^Current usage for (${DATE_SOURCE}) - (${DATE_SOURCE})\\. Monthly quota resets in (\\d+) day\\(s\\)\\.$`),
       (_, start: string, end: string, days: string) =>
-        `${joinCjk(`${translateTime(start)} - ${translateTime(end)}`, '的当前使用情况')}。每月配额将在 ${days} 天后重置。`
+        `${joinCjk(`${translateTime(start)} - ${translateTime(end)}`, '的当前使用情况')}。每月配额将在 ${days}天后重置。`
     ],
     [
       new RegExp(`^Resets in (\\d+) days? on (${DATE_SOURCE})$`),
-      (_, days: string, date: string) => joinAll(`${days} 天后于`, translateTime(date), '重置')
+      (_, days: string, date: string) => joinAll(`${days}天后于`, translateTime(date), '重置')
     ],
     [
       /^Included usage limits reset in (\d+) days?(\.?)$/,
-      (_, days: string, dot: string) => `包含的使用量限制将在 ${days} 天后重置${dot ? '。' : ''}`
+      (_, days: string, dot: string) => `包含的使用量限制将在 ${days}天后重置${dot ? '。' : ''}`
     ],
     [/^(\d+) days?$/, '$1 天'],
     // 金额与使用量：「~$3.00 off*」中的约数符号与脚注星号随原文
@@ -498,7 +498,7 @@ export default {
       new RegExp(`^(~?)${MONEY} off(\\*?)$`),
       (_, tilde: string, amount: string, star: string) => `减免${tilde ? '约' : ''} ${amount}${star}`
     ],
-    [new RegExp(`^${MONEY} off per month for (\\d+) years?$`), '$2 年内每月减免 $1'],
+    [new RegExp(`^${MONEY} off per month for (\\d+) years?$`), '$2年内每月减免 $1'],
     [new RegExp(`^${NUMBER} min used / ${NUMBER} min included$`), '已用 $1 分钟 / 包含 $2 分钟'],
     [new RegExp(`^${NUMBER} GB used / ${NUMBER} GB included$`), '已用 $1 GB / 包含 $2 GB'],
     // 包含的使用量明细（产品名译成中文，与 org-settings/billing.ts 同一译法）
@@ -609,7 +609,7 @@ export default {
     // 使用情况报告（句号随原文）
     [
       /^We['’]re preparing your usage report\. It may take ~30 minutes to see usage in your report\. We['’]ll send an email to (\S+@\S+) when it['’]s ready\.$/,
-      '正在准备使用情况报告。使用情况可能约 30 分钟后才会出现在报告中。报告就绪后会发送电子邮件至 $1。'
+      '正在准备使用情况报告。使用情况可能约30分钟后才会出现在报告中。报告就绪后会发送电子邮件至 $1。'
     ],
     [
       /^We['’]re preparing your usage report\. We['’]ll send an email to (\S+@\S+) when it['’]s ready\.$/,

@@ -79,7 +79,7 @@ describe('freshnessOf', () => {
     ['无效', 'Sample text', undefined],
     ['没有', null, undefined]
   ])('%s → %s', (_, datetime, expected) => {
-    expect(freshnessOf(datetime, NOW)).toBe(expected)
+    expect(freshnessOf(datetime, NOW, FRESH_DAYS, RECENT_DAYS)).toBe(expected)
   })
 })
 

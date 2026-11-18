@@ -271,7 +271,7 @@ describe('更新时间着色', () => {
     })
     expect(mergeSettings({ freshnessColors: { fresh: { light: '#CF222E', dark: 'red' } } }).freshnessColors).toEqual({
       ...DEFAULT_SETTINGS.freshnessColors,
-      fresh: { light: '#cf222e', dark: '' }
+      fresh: { light: '#cf222e', dark: 'red' }
     })
     expect(mergeSettings({ freshnessColors: 'Sample text' }).freshnessColors).toEqual(DEFAULT_SETTINGS.freshnessColors)
   })

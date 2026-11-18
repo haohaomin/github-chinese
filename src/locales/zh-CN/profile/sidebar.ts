@@ -4,7 +4,7 @@ import type { PageDictionary } from '../../../core/types'
 function formatOffset(offset: string): string {
   const hours = /(\d+(?:\.\d+)?)h/.exec(offset)?.[1]
   const minutes = /(\d+)m/.exec(offset)?.[1]
-  const parts = [hours === undefined ? '' : `${hours} 小时`, minutes === undefined ? '' : `${minutes} 分钟`]
+  const parts = [hours === undefined ? '' : `${hours}小时`, minutes === undefined ? '' : `${minutes}分钟`]
   return parts.filter(Boolean).join(' ')
 }
 
@@ -149,7 +149,7 @@ export default {
     // 本地时间：- 1h ahead / - 7h behind / - 5h30m ahead（时与分之间不带空格；带空格的写法同样接受）
     [
       /^- (\d+(?:\.\d+)?h(?: ?\d+m)?|\d+m) (ahead|behind)$/,
-      (_, offset, direction) => `- ${direction === 'ahead' ? '快' : '慢'} ${formatOffset(offset)}`
+      (_, offset, direction) => `- ${direction === 'ahead' ? '快' : '慢'}${formatOffset(offset)}`
     ],
     // 组织头像溢出：+ 12 more
     [/^\+ (\d+) more$/, '另有 $1 个'],

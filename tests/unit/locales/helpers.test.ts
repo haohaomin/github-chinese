@@ -16,11 +16,11 @@ import { isLocalZone, zoneOffset } from '../../../src/locales/shared/helpers'
 
 describe('translateRelativeTime', () => {
   it.each([
-    ['3 days ago', '3 天前'],
-    ['a minute ago', '1 分钟前'],
-    ['an hour ago', '1 小时前'],
-    ['about 2 hours ago', '约 2 小时前'],
-    ['in 2 weeks', '2 周后'],
+    ['3 days ago', '3天前'],
+    ['a minute ago', '1分钟前'],
+    ['an hour ago', '1小时前'],
+    ['about 2 hours ago', '约2小时前'],
+    ['in 2 weeks', '2周后'],
     ['yesterday', '昨天'],
     ['Yesterday', '昨天'],
     ['now', '刚刚'],
@@ -32,10 +32,10 @@ describe('translateRelativeTime', () => {
   })
 
   it.each([
-    ['about 1 year ago', '约 1 年前'],
-    ['about 1 day ago', '约 1 天前'],
-    ['almost 2 years ago', '将近 2 年前'],
-    ['over 3 years ago', '超过 3 年前']
+    ['about 1 year ago', '约1年前'],
+    ['about 1 day ago', '约1天前'],
+    ['almost 2 years ago', '将近2年前'],
+    ['over 3 years ago', '超过3年前']
   ])('带前缀时用数字格式：%s → %s', (input, expected) => {
     expect(translateRelativeTime(input)).toBe(expected)
   })
@@ -60,13 +60,13 @@ describe('translateRelativeTime', () => {
 
 describe('translateDate', () => {
   it.each([
-    ['Jan 5, 2024', '2024 年 1 月 5 日'],
-    ['on Jan 5', '1 月 5 日'],
-    ['September 30, 2025', '2025 年 9 月 30 日'],
-    ['January 2024', '2024 年 1 月'],
-    ['5 Jan 2024', '2024 年 1 月 5 日'],
-    ['on January 2024', '2024 年 1 月'],
-    ['on 5 January 2024', '2024 年 1 月 5 日']
+    ['Jan 5, 2024', '2024年1月5日'],
+    ['on Jan 5', '1月5日'],
+    ['September 30, 2025', '2025年9月30日'],
+    ['January 2024', '2024年1月'],
+    ['5 Jan 2024', '2024年1月5日'],
+    ['on January 2024', '2024年1月'],
+    ['on 5 January 2024', '2024年1月5日']
   ])('%s → %s', (input, expected) => {
     expect(translateDate(input)).toBe(expected)
   })
@@ -86,17 +86,17 @@ describe('translateDate', () => {
 
 describe('translateTime', () => {
   it('依次尝试相对时间与日期，都不匹配时原样返回', () => {
-    expect(translateTime('5 days ago')).toBe('5 天前')
-    expect(translateTime('Mar 3, 2023')).toBe('2023 年 3 月 3 日')
+    expect(translateTime('5 days ago')).toBe('5天前')
+    expect(translateTime('Mar 3, 2023')).toBe('2023年3月3日')
     expect(translateTime('sometime')).toBe('sometime')
   })
 })
 
 describe('formatDate', () => {
   it('省略缺失部分', () => {
-    expect(formatDate(2024, 1, 5)).toBe('2024 年 1 月 5 日')
-    expect(formatDate(undefined, 12, 31)).toBe('12 月 31 日')
-    expect(formatDate(2024, 2, undefined)).toBe('2024 年 2 月')
+    expect(formatDate(2024, 1, 5)).toBe('2024年1月5日')
+    expect(formatDate(undefined, 12, 31)).toBe('12月31日')
+    expect(formatDate(2024, 2, undefined)).toBe('2024年2月')
   })
 })
 
@@ -113,9 +113,9 @@ describe('*_SOURCE 片段', () => {
         }
       ]
     ])
-    expect(matcher.translate('Updated 3 days ago', ['common'])).toBe('3 天前更新')
-    expect(matcher.translate('Updated on Jan 5, 2024', ['common'])).toBe('2024 年 1 月 5 日更新')
-    expect(matcher.translate('Due by June 30, 2025', ['common'])).toBe('截止于 2025 年 6 月 30 日')
+    expect(matcher.translate('Updated 3 days ago', ['common'])).toBe('3天前更新')
+    expect(matcher.translate('Updated on Jan 5, 2024', ['common'])).toBe('2024年1月5日更新')
+    expect(matcher.translate('Due by June 30, 2025', ['common'])).toBe('截止于 2025年6月30日')
   })
 })
 
@@ -200,9 +200,9 @@ describe('mergeDictionaries', () => {
 
 describe('spaceDigits', () => {
   it.each([
-    ['3天前', '3 天前'],
-    ['约1年前', '约 1 年前'],
-    ['2024年1月5日', '2024 年 1 月 5 日'],
+    ['3天前', '3天前'],
+    ['约1年前', '约1年前'],
+    ['2024年1月5日', '2024年1月5日'],
     ['昨天', '昨天'],
     ['just now', 'just now']
   ])('%s → %s', (input, expected) => {
@@ -212,9 +212,9 @@ describe('spaceDigits', () => {
 
 describe('joinCjk', () => {
   it.each([
-    ['提交于', '3 天前', '提交于 3 天前'],
+    ['提交于', '3天前', '提交于 3天前'],
     ['提交于', '昨天', '提交于昨天'],
-    ['updated', '3 天前', 'updated3 天前'],
+    ['updated', '3天前', 'updated3天前'],
     ['updated', 'yesterday', 'updatedyesterday']
   ])('joinCjk(%s, %s) → %s', (left, right, expected) => {
     expect(joinCjk(left, right)).toBe(expected)

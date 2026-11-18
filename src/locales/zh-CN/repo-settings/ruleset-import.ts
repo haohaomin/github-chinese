@@ -25,7 +25,7 @@ export default {
     'Delete branch protection rule': '删除分支保护规则',
     'Delete branch protection rules': '删除分支保护规则',
     'Too many rules selected': '所选规则过多',
-    'Selected branch protections would generate more than 75 rulesets.': '所选分支保护将生成超过 75 个规则集。',
+    'Selected branch protections would generate more than 75 rulesets.': '所选分支保护将生成超过75 个规则集。',
     'No rules selected': '未选择规则',
     'You must select at least one branch protection rule to import.': '必须至少选择一条要导入的分支保护规则。',
     'No rules to create': '没有可创建的规则',

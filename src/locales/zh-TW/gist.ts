@@ -254,7 +254,7 @@ export default {
     // 本地时间：- 7h behind / - 5h30m ahead（时与分之间不带空格；带空格的写法同样接受，同 profile/sidebar.ts）
     [
       /^- (\d+(?:\.\d+)?h(?: ?\d+m)?|\d+m) (ahead|behind)$/,
-      (_, offset, direction) => `- ${direction === 'ahead' ? '快' : '慢'} ${formatOffset(offset)}`
+      (_, offset, direction) => `- ${direction === 'ahead' ? '快' : '慢'}${formatOffset(offset)}`
     ]
   ],
   // 用户内容：描述、文件名、全名、公司与所在地、状态消息、搜索语言列表

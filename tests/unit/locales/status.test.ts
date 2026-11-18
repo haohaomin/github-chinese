@@ -300,7 +300,7 @@ const SCOPED_CASES: readonly (readonly [string, Pair])[] = [
     "We recommend choosing another model or selecting 'Auto' to continue using Copilot.",
     ['建议选择其他模型或选择“自动”以继续使用 Copilot。', '建議改用其他模型或選擇「自動」以繼續使用 Copilot。']
   ],
-  ['October', ['10 月', '10 月']]
+  ['October', ['10月', '10月']]
 ]
 
 /** 多句正文：整段没有词条时逐句匹配 */
@@ -1090,7 +1090,7 @@ describe.each(LOCALES)('$name status 页面 DOM', ({ index, bundle, full }) => {
 
   it('首页可用率条提示框：日期、停机时长、组件组计数、相关事件', () => {
     render(COMPONENTS_HTML)
-    expect(text('#tooltip-date')).toBe('2026 年 10 月 28 日')
+    expect(text('#tooltip-date')).toBe('2026年10月28日')
     expect([text('#label-major'), text('#major-hrs'), text('#major-mins'), text('#label-partial')]).toEqual(
       index === 0 ? ['故障', '1 小时', '5 分钟', '降级'] : ['故障', '1 小時', '5 分鐘', '降級']
     )
@@ -1124,7 +1124,7 @@ describe.each(LOCALES)('$name status 页面 DOM', ({ index, bundle, full }) => {
     expect(text('#unresolved-status')).toBe(t(['调查中', '調查中']))
     expect(text('#unresolved-body')).toBe(t(['我们正在调查有关操作性能降低的报告', '我們正在調查有關動作效能降低的回報']))
     // 年份不能当作起始时刻
-    expect(text('#unresolved-time')).toBe(t([`23 小时前。10 月 27 日，2026 年 08:01${utc}`, `23 小時前。10 月 27 日，2026 年 08:01${utc}`]))
+    expect(text('#unresolved-time')).toBe(t([`23 小时前。10月27日，2026 年 08:01${utc}`, `23 小時前。10月27日，2026 年 08:01${utc}`]))
   })
 
   it('首页计划维护：标题、维护时段（含跨日）、<var>Posted on</var> 的发布时间', () => {
@@ -1132,11 +1132,11 @@ describe.each(LOCALES)('$name status 页面 DOM', ({ index, bundle, full }) => {
     expect(text('#maintenance-heading')).toBe(t(['计划维护', '排定維護']))
     expect(text('#maintenance-title')).toBe(t(['代码空间计划维护', '程式碼空間排定維護']))
     expect(attribute('#maintenance-link', 'title')).toBe(t(['代码空间计划维护', '程式碼空間排定維護']))
-    expect(text('#maintenance-window')).toBe(`10 月 28 日，2026 年 04:00-06:00${utc}`)
-    expect(text('#maintenance-window-days')).toBe(`10 月 28 日，2026 年 23:00 - 10 月 29 日，2026 年 01:00${utc}`)
+    expect(text('#maintenance-window')).toBe(`10月28日，2026 年 04:00-06:00${utc}`)
+    expect(text('#maintenance-window-days')).toBe(`10月28日，2026 年 23:00 - 10月29日，2026 年 01:00${utc}`)
     // <var> 里的 Posted on 引擎不处理
     expect(text('#maintenance-posted')).toBe(
-      t([`Posted on 7 天前。10 月 21 日，2026 年 10:05${utc}`, `Posted on 7 天前。10 月 21 日，2026 年 10:05${utc}`])
+      t([`Posted on 7 天前。10月21日，2026 年 10:05${utc}`, `Posted on 7 天前。10月21日，2026 年 10:05${utc}`])
     )
   })
 
@@ -1150,8 +1150,8 @@ describe.each(LOCALES)('$name status 页面 DOM', ({ index, bundle, full }) => {
     expect(text('#filter')).toBe(t(['筛选组件', '篩選元件']))
     expect(attribute('#previous-page', 'aria-label')).toBe(t(['上一页', '上一頁']))
     expect(attribute('#next-page', 'aria-label')).toBe(t(['下一页', '下一頁']))
-    expect(text('#range')).toBe('8 月 2026 至 10 月 2026')
-    expect([text('#month-october'), text('#month-september')]).toEqual(['10 月 2026', '9 月 2026'])
+    expect(text('#range')).toBe('8月 2026 至 10月 2026')
+    expect([text('#month-october'), text('#month-september')]).toEqual(['10月 2026', '9月 2026'])
     expect(text('#title-1')).toBe(t(['操作、议题、API 请求和拉取请求故障', '動作、議題、API 請求和拉取請求故障']))
     expect(text('#message-1')).toBe(
       t([
@@ -1159,10 +1159,10 @@ describe.each(LOCALES)('$name status 页面 DOM', ({ index, bundle, full }) => {
         '此事件已解決。感謝你在我們處理此問題期間的耐心和體諒。詳細的根本原因分析完成後將盡快分享。'
       ])
     )
-    expect(text('#time-1')).toBe(`10 月 26 日 18:48 - 18:57${utc}`)
+    expect(text('#time-1')).toBe(`10月26日 18:48 - 18:57${utc}`)
     // 工程师写的标题、正文保持原文
     expect([text('#title-2'), text('#message-2')]).toEqual(['Sample text', 'Sample text'])
-    expect(text('#time-2')).toBe(`10 月 23 日 23:41 - 10 月 24 日 00:23${utc}`)
+    expect(text('#time-2')).toBe(`10月23日 23:41 - 10月24日 00:23${utc}`)
     // 整句在 <var> 里
     expect(text('#expand')).toBe('+ Show All 20 Incidents')
     expect(text('#empty-month')).toBe(t(['当月没有报告事件。', '當月沒有回報事件。']))
@@ -1179,7 +1179,7 @@ describe.each(LOCALES)('$name status 页面 DOM', ({ index, bundle, full }) => {
     host.lastChild?.remove()
     for (const part of [' had a ', 'major', ' outage.']) host.appendChild(document.createTextNode(part))
     start()
-    expect(text('#month-name')).toBe('9 月 2026')
+    expect(text('#month-name')).toBe('9月 2026')
     expect(text('#react-group-count')).toBe(t(['2 个组件出现严重中断。', '2 個元件發生嚴重中斷。']))
   })
 
@@ -1196,10 +1196,10 @@ describe.each(LOCALES)('$name status 页面 DOM', ({ index, bundle, full }) => {
     )
     expect(text('#update-body-2')).toBe(t(['我们正在调查有关操作性能降低的报告', '我們正在調查有關動作效能降低的回報']))
     expect(text('#posted-1')).toBe(
-      t([`发布于 21 小时前。10 月 27 日，2026 年 08:01${utc}`, `發布於 21 小時前。10 月 27 日，2026 年 08:01${utc}`])
+      t([`发布于 21 小时前。10月27日，2026 年 08:01${utc}`, `發布於 21 小時前。10月27日，2026 年 08:01${utc}`])
     )
     expect(text('#posted-2')).toBe(
-      t([`发布于 1 天前。10 月 26 日，2026 年 18:48${utc}`, `發布於 1 天前。10 月 26 日，2026 年 18:48${utc}`])
+      t([`发布于 1 天前。10月26日，2026 年 18:48${utc}`, `發布於 1 天前。10月26日，2026 年 18:48${utc}`])
     )
     expect(text('#affected')).toBe(t(['此事件影响了：操作、议题、API 请求和拉取请求。', '此事件影響了：動作、議題、API 請求和拉取請求。']))
   })
@@ -1213,15 +1213,15 @@ describe.each(LOCALES)('$name status 页面 DOM', ({ index, bundle, full }) => {
           <var data-var="posted-on">Posted on</var>
         <span class="ago" data-datetime-unix="1792602310000"></span>Oct <var data-var='date'>21</var>, <var data-var='year'>2026</var> - <var data-var='time'>10:05</var> UTC
       </small>`)
-    expect(text('#posted')).toBe(t([`发布于 10 月 27 日，2026 年 08:01${utc}`, `發布於 10 月 27 日，2026 年 08:01${utc}`]))
-    expect(text('#posted-on')).toBe(`Posted on 10 月 21 日，2026 年 10:05${utc}`)
+    expect(text('#posted')).toBe(t([`发布于 10月27日，2026 年 08:01${utc}`, `發布於 10月27日，2026 年 08:01${utc}`]))
+    expect(text('#posted-on')).toBe(`Posted on 10月21日，2026 年 10:05${utc}`)
     document.querySelector('#posted .ago')!.innerHTML = '<var data-var="num">21</var> hours ago. '
     document.querySelector('#posted-on .ago')!.innerHTML = '<var data-var="num">7</var> days ago. '
     await settle()
     expect(text('#posted')).toBe(
-      t([`发布于 21 小时前。10 月 27 日，2026 年 08:01${utc}`, `發布於 21 小時前。10 月 27 日，2026 年 08:01${utc}`])
+      t([`发布于 21 小时前。10月27日，2026 年 08:01${utc}`, `發布於 21 小時前。10月27日，2026 年 08:01${utc}`])
     )
-    expect(text('#posted-on')).toBe(`Posted on 7 天前。10 月 21 日，2026 年 10:05${utc}`)
+    expect(text('#posted-on')).toBe(`Posted on 7 天前。10月21日，2026 年 10:05${utc}`)
   })
 
   it('事件报告页副标题：</a> 后没有空白文本节点时保持原文（实际页面都有换行缩进）', () => {
@@ -1279,8 +1279,8 @@ describe.each(LOCALES)('$name status 页面 DOM', ({ index, bundle, full }) => {
   it('计划维护的事件页：<var>Scheduled for</var> 副标题、状态、受影响组件、维护报告', () => {
     render(MAINTENANCE_HTML)
     // <var> 里的 Scheduled for 引擎不处理，其后补空格
-    expect(text('#scheduled-for')).toBe(`Scheduled for 10 月 28 日 04:00 - 06:00${utc}`)
-    expect(text('#scheduled-for-days')).toBe(`Scheduled for 10 月 28 日 23:00 - 10 月 29 日 01:00${utc}`)
+    expect(text('#scheduled-for')).toBe(`Scheduled for 10月28日 04:00 - 06:00${utc}`)
+    expect(text('#scheduled-for-days')).toBe(`Scheduled for 10月28日 23:00 - 10月29日 01:00${utc}`)
     expect(text('#maintenance-update')).toBe(t(['正在进行', '進行中']))
     expect(text('#maintenance-affected')).toBe(t(['此次计划维护影响：代码空间。', '此次排定維護影響：程式碼空間。']))
     expect(text('#maintenance-report')).toBe(t(['GitHub 计划维护报告', 'GitHub 排定維護報告']))
@@ -1290,9 +1290,9 @@ describe.each(LOCALES)('$name status 页面 DOM', ({ index, bundle, full }) => {
     render(UPTIME_HTML)
     expect(attribute('#select-component', 'aria-label')).toBe(t(['选择组件', '選擇元件']))
     expect(attribute('#select-open', 'aria-label')).toBe(t(['展开', '展開']))
-    expect(text('#month-name')).toBe('9 月 2026')
+    expect(text('#month-name')).toBe('9月 2026')
     expect(text('#month-uptime')).toBe('99.95%')
-    expect(text('#react-date')).toBe('2026 年 10 月 28 日')
+    expect(text('#react-date')).toBe('2026年10月28日')
     expect(text('#react-group-count')).toBe(t(['2 个组件出现严重中断。', '2 個元件發生嚴重中斷。']))
   })
 
@@ -1302,8 +1302,8 @@ describe.each(LOCALES)('$name status 页面 DOM', ({ index, bundle, full }) => {
     try {
       // 新建匹配器：行内句的译文按句型键缓存
       render(HISTORY_HTML, createMatcher(bundle))
-      expect(text('#time-1')).toBe('10 月 26 日 18:48 - 18:57')
-      expect(text('#time-2')).toBe('10 月 23 日 23:41 - 10 月 24 日 00:23')
+      expect(text('#time-1')).toBe('10月26日 18:48 - 18:57')
+      expect(text('#time-2')).toBe('10月23日 23:41 - 10月24日 00:23')
     } finally {
       if (zone === undefined) delete process.env.TZ
       else process.env.TZ = zone

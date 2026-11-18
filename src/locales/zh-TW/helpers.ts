@@ -1,6 +1,6 @@
 /**
  * 繁体词典公用工具：日期、相对时间、中英文拼接（共用部分见 locales/shared/helpers.ts）。
- * 中文与数字之间加空格（如“3 天前”“2024 年 1 月 5 日”），与引擎对 <relative-time lang="zh-TW"> 输出的处理一致。
+ * 中文与数字之间加空格（如“3 天前”“2024年1月5日”），与引擎对 <relative-time lang="zh-TW"> 输出的处理一致。
  */
 
 import { createTimeHelpers } from '../shared/helpers'

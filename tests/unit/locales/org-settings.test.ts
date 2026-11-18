@@ -60,7 +60,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'Deleting the octo-org organization will delete all of its repositories. The octo-org username will be unavailable for 90 days.',
-        '删除 octo-org 组织将删除其所有存储库。octo-org 用户名将在 90 天内不可用。'
+        '删除 octo-org 组织将删除其所有存储库。octo-org 用户名将在 90天内不可用。'
       ]
     ],
     misses: ['Deleting the organization will delete all of its repositories.']
@@ -247,10 +247,10 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['Enabled with about 23 hours remaining.', '已启用剩余约 23 小时。'],
-      ['Enabled with 6 days remaining', '已启用剩余 6 天'],
-      ['Enabled with a month remaining.', '已启用剩余 1 个月。'],
-      ['Enabled with almost 2 years remaining.', '已启用剩余将近 2 年。']
+      ['Enabled with about 23 hours remaining.', '已启用剩余约23小时。'],
+      ['Enabled with 6 days remaining', '已启用剩余6天'],
+      ['Enabled with a month remaining.', '已启用剩余1个月。'],
+      ['Enabled with almost 2 years remaining.', '已启用剩余将近2年。']
     ],
     misses: ['Enabled with some time remaining']
   },
@@ -298,11 +298,11 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'Your request for GitHub Team was declined by an admin on Oct 3, 2025.',
-        '你对 GitHub 团队版的请求已于 2025 年 10 月 3 日被管理员拒绝。'
+        '你对 GitHub 团队版的请求已于 2025年10月3日被管理员拒绝。'
       ],
       [
         'Your request for Advanced Security was declined by an admin on Oct 3, 2025.',
-        '你对高级安全的请求已于 2025 年 10 月 3 日被管理员拒绝。'
+        '你对高级安全的请求已于 2025年10月3日被管理员拒绝。'
       ]
     ],
     misses: ['Your request for GitHub Team was declined by an admin.']
@@ -324,8 +324,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['Gross metered usage for Oct 1 - Oct 31, 2025.', '10 月 1 日 - 2025 年 10 月 31 日的按流量计费的使用情况总额。'],
-      ['Included usage discounts for Oct 1 - Oct 31, 2025', '10 月 1 日 - 2025 年 10 月 31 日的包含的使用量折扣']
+      ['Gross metered usage for Oct 1 - Oct 31, 2025.', '10月1日 - 2025年10月31日的按流量计费的使用情况总额。'],
+      ['Included usage discounts for Oct 1 - Oct 31, 2025', '10月1日 - 2025年10月31日的包含的使用量折扣']
     ],
     misses: ['Gross metered usage for this month.']
   },
@@ -333,16 +333,16 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'Current usage for Oct 1 - Oct 31, 2025. Monthly quota resets in 5 day(s).',
-        '10 月 1 日 - 2025 年 10 月 31 日的当前使用情况。每月配额将在 5 天后重置。'
+        '10月1日 - 2025年10月31日的当前使用情况。每月配额将在 5天后重置。'
       ]
     ],
     misses: ['Current usage for Oct 1 - Oct 31, 2025.']
   },
-  { hits: [['Resets in 5 days on Nov 1, 2025', '5 天后于 2025 年 11 月 1 日重置']], misses: ['Resets in 5 days'] },
+  { hits: [['Resets in 5 days on Nov 1, 2025', '5天后于 2025年11月1日重置']], misses: ['Resets in 5 days'] },
   {
     hits: [
-      ['Included usage limits reset in 5 days.', '包含的使用量限制将在 5 天后重置。'],
-      ['Included usage limits reset in 1 day', '包含的使用量限制将在 1 天后重置']
+      ['Included usage limits reset in 5 days.', '包含的使用量限制将在 5天后重置。'],
+      ['Included usage limits reset in 1 day', '包含的使用量限制将在 1天后重置']
     ],
     misses: ['Included usage limits reset soon']
   },
@@ -360,19 +360,19 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     ],
     misses: ['3.00 off']
   },
-  { hits: [['$4.00 off per month for 1 year', '1 年内每月减免 $4.00']], misses: ['$4.00 off per month for a year'] },
+  { hits: [['$4.00 off per month for 1 year', '1年内每月减免 $4.00']], misses: ['$4.00 off per month for a year'] },
   {
     hits: [
-      ['$4.00 off per month until Dec 31, 2026', '2026 年 12 月 31 日前每月减免 $4.00'],
-      ['$4.00 off per month until Dec 31, 2026.', '2026 年 12 月 31 日前每月减免 $4.00。']
+      ['$4.00 off per month until Dec 31, 2026', '2026年12月31日前每月减免 $4.00'],
+      ['$4.00 off per month until Dec 31, 2026.', '2026年12月31日前每月减免 $4.00。']
     ],
     misses: ['$4.00 off per month until further notice']
   },
   { hits: [['$4.00 off per month', '每月减免 $4.00']], misses: ['4.00 off per month'] },
   {
     hits: [
-      ['until Dec 31, 2026.', '至 2026 年 12 月 31 日。'],
-      ['until Dec 31, 2026', '至 2026 年 12 月 31 日']
+      ['until Dec 31, 2026.', '至 2026年12月31日。'],
+      ['until Dec 31, 2026', '至 2026年12月31日']
     ],
     misses: ['until further notice']
   },
@@ -503,17 +503,17 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['Top ten repositories this month']
   },
   {
-    hits: [['Oct 26, 2025 (All times in UTC)', '2025 年 10 月 26 日（UTC 时间）']],
+    hits: [['Oct 26, 2025 (All times in UTC)', '2025年10月26日（UTC 时间）']],
     misses: ['Today (All times in UTC)']
   },
   {
     hits: [
-      ['Usage for Oct 26, 2025', '2025 年 10 月 26 日的使用情况'],
-      ['Usage for Oct 26, 2025.', '2025 年 10 月 26 日的使用情况。']
+      ['Usage for Oct 26, 2025', '2025年10月26日的使用情况'],
+      ['Usage for Oct 26, 2025.', '2025年10月26日的使用情况。']
     ],
     misses: ['Usage for today']
   },
-  { hits: [['Oct 1 - Oct 31, 2025', '10 月 1 日 - 2025 年 10 月 31 日']], misses: ['Oct 1 - today'] },
+  { hits: [['Oct 1 - Oct 31, 2025', '10月1日 - 2025年10月31日']], misses: ['Oct 1 - today'] },
   {
     hits: [
       ['3 budgets', '3 个预算'],
@@ -528,7 +528,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         "We're preparing your usage report. It may take ~30 minutes to see usage in your report. We'll send an email to mona@example.com when it's ready.",
-        '正在准备使用情况报告。使用情况可能约 30 分钟后才会出现在报告中。报告就绪后会发送电子邮件至 mona@example.com。'
+        '正在准备使用情况报告。使用情况可能约30分钟后才会出现在报告中。报告就绪后会发送电子邮件至 mona@example.com。'
       ]
     ],
     misses: ["We're preparing your usage report. It may take a while."]
@@ -574,15 +574,15 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'You can convert to a paid plan at any time. If you don’t purchase by the end of 30 days, your trial will expire and all private repositories will lose access to Secret Protection and Code Security features.',
-        '你可以随时转为付费计划。如果 30 天内未购买，试用将过期，所有专用存储库都将无法使用机密保护和代码安全功能。'
+        '你可以随时转为付费计划。如果 30天内未购买，试用将过期，所有专用存储库都将无法使用机密保护和代码安全功能。'
       ]
     ],
     misses: ['You can convert to a paid plan at any time.']
   },
   {
     hits: [
-      ['Trial ends on October 31, 2026.', '试用将于 2026 年 10 月 31 日结束。'],
-      ['Trial ended on Jan 5, 2026.', '试用已于 2026 年 1 月 5 日结束。']
+      ['Trial ends on October 31, 2026.', '试用将于 2026年10月31日结束。'],
+      ['Trial ended on Jan 5, 2026.', '试用已于 2026年1月5日结束。']
     ],
     misses: ['Trial ends on the last day of the month.', 'Trial ends soon.']
   },
@@ -602,7 +602,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['Amount based on 12 billable licenses, due by October 31, 2026.', '金额按 12 个可计费许可证计算，应于 2026 年 10 月 31 日前支付。']
+      ['Amount based on 12 billable licenses, due by October 31, 2026.', '金额按 12 个可计费许可证计算，应于 2026年10月31日前支付。']
     ],
     misses: ['Amount based on 12 billable licenses, due by the end of the month.']
   },
@@ -1135,24 +1135,24 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['Expires on Tue, Nov 25 2025', '有效期至 2025 年 11 月 25 日周二'],
-      ['Expired on Mon, Oct 6 2025.', '已于 2025 年 10 月 6 日周一过期。'],
-      ['Expires on Nov 25, 2025', '有效期至 2025 年 11 月 25 日']
+      ['Expires on Tue, Nov 25 2025', '有效期至 2025年11月25日周二'],
+      ['Expired on Mon, Oct 6 2025.', '已于 2025年10月6日周一过期。'],
+      ['Expires on Nov 25, 2025', '有效期至 2025年11月25日']
     ],
     misses: ['Expires on someday']
   },
   {
     hits: [
       ['Last used within the last week', '最近一周内使用过'],
-      ['Last used within the last 3 weeks', '最近 3 周内使用过'],
-      ['Last used within the last 2 months', '最近 2 个月内使用过']
+      ['Last used within the last 3 weeks', '最近 3周内使用过'],
+      ['Last used within the last 2 months', '最近 2个月内使用过']
     ],
     misses: ['Last used within the last decade']
   },
   {
     hits: [
       ['Never used •', '从未使用 •'],
-      ['Last used within the last 6 months •', '最近 6 个月内使用过 •']
+      ['Last used within the last 6 months •', '最近 6个月内使用过 •']
     ],
     misses: ['Unused •']
   },
@@ -1212,7 +1212,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['Added 3 days ago by octocat', '3 天前由 octocat 添加'],
+      ['Added 3 days ago by octocat', '3天前由 octocat 添加'],
       ['Added yesterday by octocat', '昨天由 octocat 添加']
     ],
     misses: ['Added by octocat']
@@ -1697,7 +1697,7 @@ describe('org-settings 页面词条', () => {
     // 分句间的破折号译“——”，不改成逗号
     [
       'will get Copilot access automatically within 24 hours — no action needed. Need it sooner? Pay now.',
-      '将在 24 小时内自动获得 Copilot 访问权限——无需任何操作。需要更快？请立即付款。'
+      '将在 24小时内自动获得 Copilot 访问权限——无需任何操作。需要更快？请立即付款。'
     ],
     // 原文无标点、无逗号的句子与片段，译文不加
     [

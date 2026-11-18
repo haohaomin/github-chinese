@@ -41,7 +41,7 @@ export const DURATION_SOURCE = '\\d+[smhd](?: \\d+[smhd]){0,2}'
 export function duration(text: string): string {
   return text
     .split(' ')
-    .map(part => part.replace(/^(\d+)([smhd])$/, (_, amount: string, unit: string) => `${amount} ${DURATION_UNIT[unit]}`))
+    .map(part => part.replace(/^(\d+)([smhd])$/, (_, amount: string, unit: string) => `${amount}${DURATION_UNIT[unit]}`))
     .join(' ')
 }
 

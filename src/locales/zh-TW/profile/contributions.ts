@@ -35,14 +35,14 @@ const REPOS = 'repositor(?:y|ies)'
 /** 组织登录名 */
 const ORG = '([\\w.-]+)'
 
-/** 月份全称 → 10 月；year 给出时 → 2026 年 10 月；不在表中时原样返回 */
+/** 月份全称 → 10 月；year 给出时 → 2026年10月；不在表中时原样返回 */
 function monthName(month: string, year?: string): string {
   const number = MONTH_NUMBERS[month]
   if (number === undefined) return year === undefined ? month : `${month} ${year}`
   return formatDate(year === undefined ? undefined : Number(year), number, undefined)
 }
 
-/** October 28 → 10 月 28 日 */
+/** October 28 → 10月28日 */
 function monthDay(month: string, day: string): string {
   const number = MONTH_NUMBERS[month]
   return number === undefined ? `${month} ${day}` : formatDate(undefined, number, Number(day))
@@ -128,8 +128,8 @@ export default {
     // 贡献图标题与提示；依组织筛选后带「in <组织>」
     [new RegExp(`^${NUM} contributions? in the last year$`), '過去一年共 $1 次貢獻'],
     [new RegExp(`^${NUM} contributions? in the last year in ${ORG}$`), '過去一年在 $2 中共 $1 次貢獻'],
-    [new RegExp(`^${NUM} contributions? in (\\d{4})$`), '$2 年共 $1 次貢獻'],
-    [new RegExp(`^${NUM} contributions? in (\\d{4}) in ${ORG}$`), '$2 年在 $3 中共 $1 次貢獻'],
+    [new RegExp(`^${NUM} contributions? in (\\d{4})$`), '$2年共 $1 次貢獻'],
+    [new RegExp(`^${NUM} contributions? in (\\d{4}) in ${ORG}$`), '$2年在 $3 中共 $1 次貢獻'],
     [
       new RegExp(`^${NUM} contributions? on (${MONTH_FULL_SOURCE}) (\\d{1,2})(?:st|nd|rd|th)\\.$`),
       (_, count, month, day) => joinCjk(monthDay(month, day), `有 ${count} 次貢獻。`)
@@ -138,7 +138,7 @@ export default {
       new RegExp(`^No contributions on (${MONTH_FULL_SOURCE}) (\\d{1,2})(?:st|nd|rd|th)\\.$`),
       (_, month, day) => joinCjk(monthDay(month, day), '沒有貢獻。')
     ],
-    [/^Contribution activity in (\d{4}), (\d+) of (\d+)$/, '$1 年貢獻活動，$3 項中的第 $2 項'],
+    [/^Contribution activity in (\d{4}), (\d+) of (\d+)$/, '$1年貢獻活動，$3 項中的第 $2 項'],
 
     // 活动总览
     [new RegExp(`^and ${NUM} other ${REPOS}$`), '和其他 $1 個儲存庫'],
