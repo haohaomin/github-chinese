@@ -4,7 +4,7 @@ import { createController, type Controller, type ResetReason } from '../../../sr
 import type { LocaleBundle } from '../../../src/core/types'
 import zhCnTime from '../../../src/locales/zh-CN/common-ui/time'
 import { DEFAULT_AUTO_LOAD_SCOPES } from '../../../src/shared/auto-load'
-import { DEFAULT_FRESHNESS_COLORS } from '../../../src/shared/freshness'
+import { DEFAULT_FRESHNESS_COLORS, DEFAULT_FRESHNESS_DAYS } from '../../../src/shared/freshness'
 import type { Settings } from '../../../src/shared/settings'
 import { $, settle, TEST_BUNDLE } from './helpers'
 import { defineFakeRelativeTime, settleTime } from './time-element'
@@ -37,6 +37,7 @@ const SETTINGS: Settings = {
   chineseReadme: false,
   freshness: false,
   freshnessColors: DEFAULT_FRESHNESS_COLORS,
+  freshnessDays: DEFAULT_FRESHNESS_DAYS,
   categories: [],
   categoryOrder: [],
   removedCategories: [],
