@@ -253,7 +253,7 @@ export default {
 
     // /security/advanced-security/secret-protection：常见问题（首问与视频标题同文）
     'GitHub Secret Protection detects and prevents secret leaks continuously in real-time, proactively blocking sensitive credentials from being pushed to a repository with push protection. With a remarkably low false positive rate and approximately 150 service provider integrations, it enables rapid credential revocation and rotation, enhancing developer productivity.':
-      'GitHub 机密保护持续实时检测并防止机密泄露，通过推送保护主动阻止敏感凭据被推送到存储库。凭借极低的误报率和约150 项服务提供商集成，它能快速撤销和轮换凭据，提升开发人员的工作效率。',
+      'GitHub 机密保护持续实时检测并防止机密泄露，通过推送保护主动阻止敏感凭据被推送到存储库。凭借极低的误报率和约 150 项服务提供商集成，它能快速撤销和轮换凭据，提升开发人员的工作效率。',
     'What is the secret risk assessment?': '什么是机密风险评估？',
     // 答案末尾「Learn more about」+「GitHub security risk assessments」同代码安全页，按句收录
     'The secret risk assessment provides a free, comprehensive overview of an organization’s secret leak footprint across its GitHub repositories.':

@@ -92,7 +92,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['Switch tab (current)']
   },
   {
-    hits: [["Title can't be longer than 256 characters (currently 300 characters)", '标题不能超过256 个字符（当前 300 个字符）']],
+    hits: [["Title can't be longer than 256 characters (currently 300 characters)", '标题不能超过 256 个字符（当前 300 个字符）']],
     misses: ["Title can't be longer than 256 characters"]
   },
   { hits: [['Pull Request #123', '拉取请求 #123']], misses: ['Pull Request #abc'] },

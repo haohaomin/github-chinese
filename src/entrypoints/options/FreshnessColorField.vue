@@ -45,11 +45,11 @@
   import UiButton from '../../components/ui/UiButton.vue'
   import UiInput from '../../components/ui/UiInput.vue'
   import { useI18n } from '../../components/ui-preferences'
-  import { isValidColor, normalizeHexColor } from '../../shared/freshness'
+  import { isGradient, isValidColor, normalizeHexColor } from '../../shared/freshness'
 
   /**
-   * 一项颜色：名称（用当前颜色显示，即预览）、取色器（仅纯 hex 时显示）、颜色写法、重置。
-   * 支持 #rrggbb、#rgb、rgba(...)、渐变等任意 CSS 颜色值。
+   * 一项颜色：名称（用当前颜色显示，即预览）、取色器（仅 #rgb、#rrggbb 时显示）、颜色写法、重置。
+   * 写法为 CSS 颜色（hex、rgb()、hsl()、颜色名等）或渐变，浏览器不认的标为格式不符。
    * 取色器拖动时只预览，关闭时保存；写法在失去焦点、按 Enter、离开标签页时保存；清空为默认
    */
   const props = defineProps<{
@@ -93,19 +93,19 @@
     return normalizeHexColor(text) ?? props.fallback
   })
 
-  /** 名称标签的颜色样式：纯 hex 用 color，渐变用 background-clip；非法时回退默认 */
+  /** 名称标签的样式（即预览）：颜色用 color，渐变用背景裁到文字；不可用时为默认 */
   const previewStyle = computed(() => {
     const text = draft.value.trim()
     if (text === '' || invalid.value) return { color: props.fallback }
     const hex = normalizeHexColor(text)
-    if (hex) return { color: hex }
+    if (hex !== undefined) return { color: hex }
     if (!isValidColor(text)) return { color: props.fallback }
-    // 渐变或其他 CSS 值：用 background-clip: text
+    if (!isGradient(text)) return { color: text }
     return {
-      background: text,
+      backgroundImage: text,
       WebkitBackgroundClip: 'text',
-      WebkitTextFillColor: 'transparent',
-      backgroundClip: 'text'
+      backgroundClip: 'text',
+      WebkitTextFillColor: 'transparent'
     }
   })
 
@@ -134,14 +134,15 @@
       if ('' !== props.color) emit('save', '')
       return
     }
-    // 以 # 开头的必须是合法 hex；其他任意 CSS 值只过滤注入字符
-    if (text.startsWith('#') ? normalizeHexColor(text) === undefined : !isValidColor(text)) {
+    // hex（# 可省）统一写法；其他写法交给浏览器判断
+    const hex = normalizeHexColor(text)
+    if (hex === undefined && !isValidColor(text)) {
       invalid.value = true
       return
     }
     dirty = false
     invalid.value = false
-    draft.value = normalizeHexColor(text) ?? text
+    draft.value = hex ?? text
     if (draft.value !== props.color) emit('save', draft.value)
   }
 

@@ -137,7 +137,7 @@ function translateIncidentTitle(title: string): string | undefined {
   return undefined
 }
 
-/** 月份缩写 → 10 月 */
+/** 月份缩写 → 10月 */
 function monthLabel(abbr: string): string {
   return formatDate(undefined, MONTH_ABBRS.indexOf(abbr) + 1, undefined)
 }
@@ -158,7 +158,7 @@ const TIMESTAMP_RULES: readonly InlineRule[] = [
   [
     new RegExp(`^(Posted)?((?:\\{\\}){1,2})${MONTH_SOURCE} \\{#\\}, \\{#\\} - \\{\\} UTC$`),
     (_, posted: string, slots: string, month: string) =>
-      `${posted ? '發布於 ' : ''}${slots} ${monthLabel(month)}{#}日，{#} 年 {}${utcSuffix(month)}`
+      `${posted ? '發布於 ' : ''}${slots} ${monthLabel(month)}{#}日，{#}年 {}${utcSuffix(month)}`
   ],
   // 事件起止（历史页）；计划维护页副标题前有 <var>Scheduled for</var>
   [
@@ -174,12 +174,12 @@ const TIMESTAMP_RULES: readonly InlineRule[] = [
   // 计划维护时段：Oct <var>28</var>, <var>2026</var> <var>04:00</var>-<var>06:00</var> UTC
   [
     new RegExp(`^${MONTH_SOURCE} \\{#\\}, \\{#\\} \\{\\}-\\{\\} UTC$`),
-    (_, month: string) => `${monthLabel(month)}{#}日，{#} 年 {}-{}${utcSuffix(month)}`
+    (_, month: string) => `${monthLabel(month)}{#}日，{#}年 {}-{}${utcSuffix(month)}`
   ],
   // 跨日的计划维护时段：Oct <var>28</var>, <var>2026</var> <var>23:00</var> - Oct <var>29</var>, …
   [
     new RegExp(`^${MONTH_SOURCE} \\{#\\}, \\{#\\} \\{\\} - ${MONTH_SOURCE} \\{#\\}, \\{#\\} \\{\\} UTC$`),
-    (_, start: string, end: string) => `${monthLabel(start)}{#}日，{#} 年 {} - ${monthLabel(end)}{#}日，{#} 年 {}${utcSuffix(end)}`
+    (_, start: string, end: string) => `${monthLabel(start)}{#}日，{#}年 {} - ${monthLabel(end)}{#}日，{#}年 {}${utcSuffix(end)}`
   ],
   // span.ago：<var>21</var> hours ago.
   [/^\{#\} (minute|hour|day|month|year)s? ago\.$/, (_, unit: string) => `{#} ${AGO_UNITS.get(unit) ?? unit}前。`]
@@ -347,7 +347,7 @@ export default {
     'GitHub is working with our provider to further improve the resiliency of the service to prevent similar incidents in the future.':
       'GitHub 正與我們的提供者合作，進一步提升服務的韌性，以防未來再發生類似事件。',
 
-    // 历史页分页、月份标题（年份在 <var> 里，显示为「10 月 2026」）
+    // 历史页分页、月份标题（年份在 <var> 里，显示为「10月 2026」）
     ...Object.fromEntries(MONTH_NAMES.map((name, i) => [name, formatDate(undefined, i + 1, undefined)]))
   },
   regexp: [

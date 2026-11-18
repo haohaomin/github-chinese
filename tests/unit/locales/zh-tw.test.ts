@@ -313,8 +313,8 @@ describe('跨页面配套词条', () => {
   })
 
   it('代码片段名片的本地时间差：时与分之间不带空格', () => {
-    expect(matcher.translate('- 2h30m behind', GIST)).toBe('- 慢2 小時 30 分鐘')
-    expect(matcher.translate('- 5h 30m ahead', GIST)).toBe('- 快5 小時 30 分鐘')
+    expect(matcher.translate('- 2h30m behind', GIST)).toBe('- 慢 2 小時 30 分鐘')
+    expect(matcher.translate('- 5h 30m ahead', GIST)).toBe('- 快 5 小時 30 分鐘')
   })
 
   it('全站横幅：locked out 同「無法存取帳號」；停用功能预览的两句按句拆开，Please 是全局词条', () => {

@@ -408,7 +408,7 @@ export default {
       new RegExp(`^(~?)${MONEY} off(\\*?)$`),
       (_, tilde: string, amount: string, star: string) => `减免${tilde ? '约' : ''} ${amount}${star}`
     ],
-    [new RegExp(`^${MONEY} off per month for (\\d+) years?$`), '$2年内每月减免 $1'],
+    [new RegExp(`^${MONEY} off per month for (\\d+) years?$`), '$2 年内每月减免 $1'],
     [
       new RegExp(`^${MONEY} off per month until (${DATE_SOURCE})(\\.?)$`),
       (_, amount: string, date: string, dot: string) => `${joinCjk(translateTime(date), '前每月减免')} ${amount}${dot ? '。' : ''}`
@@ -518,7 +518,7 @@ export default {
     [/^Start your free (\d+) day trial$/, '开始 $1 天免费试用'],
     [
       /^You can convert to a paid plan at any time\. If you don[’']t purchase by the end of (\d+) days, your trial will expire and all private repositories will lose access to Secret Protection and Code Security features\.$/,
-      '你可以随时转为付费计划。如果 $1天内未购买，试用将过期，所有专用存储库都将无法使用机密保护和代码安全功能。'
+      '你可以随时转为付费计划。如果 $1 天内未购买，试用将过期，所有专用存储库都将无法使用机密保护和代码安全功能。'
     ],
     // 卡片底部的试用期限：Trial ends on October 31, 2026.
     [

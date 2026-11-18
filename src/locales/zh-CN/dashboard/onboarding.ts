@@ -168,7 +168,7 @@ export default {
     // 入门清单进度：2/3 completed（新手清单）/ 2/3 complete（共享清单组件）
     [/^(\d+)\/(\d+) completed?$/, '已完成 $1/$2'],
     // 资源卡片：Read · Est. 5m / Watch · 9 videos
-    [/^Read · Est\. (\d+)m$/, '阅读 · 约$1 分钟'],
+    [/^Read · Est\. (\d+)m$/, '阅读 · 约 $1分钟'],
     [/^Watch · (\d+) videos?$/, '观看 · $1 个视频']
   ]
 } satisfies PageDictionary

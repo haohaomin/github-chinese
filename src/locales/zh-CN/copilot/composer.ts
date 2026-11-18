@@ -105,7 +105,7 @@ export default {
 
     // 附件
     [/^Couldn['’]t attach (.+?)\. (?:This file type is|These file types are) unsupported\.$/, '无法附加 $1。文件类型不受支持。'],
-    [/^Couldn['’]t attach (.+?)\. (?:This file|These files) must be ([\d.]+ ?[KMG]B) or smaller\.$/, '无法附加 $1。文件不能超过$2。'],
+    [/^Couldn['’]t attach (.+?)\. (?:This file|These files) must be ([\d.]+ ?[KMG]B) or smaller\.$/, '无法附加 $1。文件不能超过 $2。'],
     [
       /^Couldn['’]t attach (.+?)\. You can attach up to (\d+) (documents|files) at a time\.$/,
       (_, names: string, count: string, kind: string) =>

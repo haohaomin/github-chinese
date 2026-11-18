@@ -102,7 +102,7 @@ export default {
     'Enter a valid URL that starts with http:// or https://.': '请输入以 http:// 或 https:// 开头的有效 URL。',
     'Slack conversation': 'Slack 对话',
     'Artifact names must be 255 characters or fewer, start and end with a letter or number, and contain only letters, numbers, spaces, periods, hyphens, and underscores.':
-      '工件名称不得超过255 个字符，须以字母或数字开头和结尾，且只能包含字母、数字、空格、句点、连字符和下划线。',
+      '工件名称不得超过 255 个字符，须以字母或数字开头和结尾，且只能包含字母、数字、空格、句点、连字符和下划线。',
 
     // 起草议题：按钮与确认
     'Review and update': '审查并更新',

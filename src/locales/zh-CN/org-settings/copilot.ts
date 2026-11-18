@@ -49,7 +49,7 @@ export default {
     'Members awaiting Copilot access': '等待 Copilot 访问权限的成员',
     // 「3 members」+「will get … — no action needed. …」：分句间的破折号译“——”
     'will get Copilot access automatically within 24 hours — no action needed. Need it sooner? Pay now.':
-      '将在 24小时内自动获得 Copilot 访问权限——无需任何操作。需要更快？请立即付款。',
+      '将在 24 小时内自动获得 Copilot 访问权限——无需任何操作。需要更快？请立即付款。',
     'Pay now': '立即付款',
     'Confirm purchase': '确认购买',
     'Please confirm you are purchasing the previously assigned licenses.': '请确认你要为之前分配的许可证付款。',

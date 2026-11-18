@@ -498,7 +498,7 @@ export default {
       new RegExp(`^(~?)${MONEY} off(\\*?)$`),
       (_, tilde: string, amount: string, star: string) => `减免${tilde ? '约' : ''} ${amount}${star}`
     ],
-    [new RegExp(`^${MONEY} off per month for (\\d+) years?$`), '$2年内每月减免 $1'],
+    [new RegExp(`^${MONEY} off per month for (\\d+) years?$`), '$2 年内每月减免 $1'],
     [new RegExp(`^${NUMBER} min used / ${NUMBER} min included$`), '已用 $1 分钟 / 包含 $2 分钟'],
     [new RegExp(`^${NUMBER} GB used / ${NUMBER} GB included$`), '已用 $1 GB / 包含 $2 GB'],
     // 包含的使用量明细（产品名译成中文，与 org-settings/billing.ts 同一译法）

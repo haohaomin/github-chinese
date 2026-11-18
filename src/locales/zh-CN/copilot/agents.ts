@@ -729,7 +729,7 @@ export default {
     [/^Assignment failed for #(\d+), #(\d+) and (\d+) others?$/, '#$1、#$2 及其他 $3 个议题分配失败'],
     [
       /^Instructions must be ([\d,]+) characters or fewer\. Current length: ([\d,]+) characters\.$/,
-      '说明不能超过$1 个字符。当前长度：$2 个字符。'
+      '说明不能超过 $1 个字符。当前长度：$2 个字符。'
     ],
     [
       /^Choose which repositories (.+) should be enabled in\. (.+) will only be available where it is enabled for the repository and in the Copilot license policies\.$/,
@@ -801,11 +801,11 @@ export default {
     composerRule([/^You can attach up to (\d+) images per task$/, '每个任务最多可附加 $1 张图片']),
     composerRule([
       /^(\d+) files could not be attached: (.+)\. Text and PDF files must be (.+) or smaller, and you can attach up to (\d+) text, PDF, or image files at a time\.$/,
-      '$1 个文件无法附加：$2。文本和 PDF 文件不能超过$3，且一次最多可附加 $4 个文本、PDF 或图片文件。'
+      '$1 个文件无法附加：$2。文本和 PDF 文件不能超过 $3，且一次最多可附加 $4 个文本、PDF 或图片文件。'
     ]),
     composerRule([
       /^(.+) could not be attached\. Text and PDF files must be (.+) or smaller, and you can attach up to (\d+) text, PDF, or image files at a time\.$/,
-      '无法附加 $1。文本和 PDF 文件不能超过$2，且一次最多可附加 $3 个文本、PDF 或图片文件。'
+      '无法附加 $1。文本和 PDF 文件不能超过 $2，且一次最多可附加 $3 个文本、PDF 或图片文件。'
     ])
   ],
   // 存档确认对话框（agent-sessions 的 ArchiveConfirmationDialog，正文是 Primer Dialog.Body 的直接子节点）：

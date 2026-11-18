@@ -1,6 +1,6 @@
 /**
  * 词典公用工具：日期、相对时间、中英文拼接（共用部分见 locales/shared/helpers.ts）。
- * 中文与数字之间加空格（如“3 天前”“2024年1月5日”），与引擎对 <relative-time> 输出的处理一致。
+ * 相对时间与日期不加空格（如“3天前”“2024年1月5日”），与引擎对 <relative-time> 输出的处理一致。
  *
  * *_SOURCE 常量是不含捕获组的正则片段，可拼进词典规则：
  *   [new RegExp(`^Updated (${TIME_SOURCE})$`), (_, time) => `${translateTime(time)}更新`]

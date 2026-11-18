@@ -43,8 +43,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['+2K educational institutions', '超过2000 所教育机构'],
-      ['+20K educational institutions', '超过2 万所教育机构']
+      ['+2K educational institutions', '超过 2000 所教育机构'],
+      ['+20K educational institutions', '超过 2 万所教育机构']
     ],
     misses: ['2K educational institutions', '+2K institutions']
   },
@@ -65,14 +65,14 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         '2k+ universities, community colleges, secondary schools, and bootcamps use GitHub in the classroom.',
-        '超过2000 所大学、社区学院、中学和训练营在课堂上使用 GitHub。'
+        '超过 2000 所大学、社区学院、中学和训练营在课堂上使用 GitHub。'
       ]
     ],
     misses: ['2k universities, community colleges, secondary schools, and bootcamps use GitHub in the classroom.']
   },
   // /education/partners 数据
   {
-    hits: [['+50% of students will influence their workplaces', '超过50% 的学生将影响其工作场所']],
+    hits: [['+50% of students will influence their workplaces', '超过 50% 的学生将影响其工作场所']],
     misses: ['50% of students will influence their workplaces', '+50% of students']
   },
   {

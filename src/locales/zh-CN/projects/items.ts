@@ -35,7 +35,7 @@ const SCOPED_STATE_LABELS: Readonly<Record<string, string>> = Object.fromEntries
   Object.entries(STATE_LABELS).filter(([label]) => label !== 'Closed as not planned issue')
 )
 
-/** 无后缀距离：about 2 months → 约2 个月；less than a minute → 不到 1 分钟 */
+/** 无后缀距离：about 2 months → 约 2个月；less than a minute → 不到 1分钟 */
 const DISTANCE_UNITS: Readonly<Record<string, string>> = {
   second: '秒',
   minute: '分钟',
@@ -536,7 +536,7 @@ export default {
     ],
     [
       /^More than (\d+) cells are selected\. Deselect some cells to perform bulk edits\.$/,
-      '已选择超过$1 个单元格。取消选择部分单元格后才能批量编辑。'
+      '已选择超过 $1 个单元格。取消选择部分单元格后才能批量编辑。'
     ],
     [/^Unable to assign the following users to the converted issue: (.+)$/, '无法将以下用户分配给转换后的议题：$1'],
     [/^This value must be between (-?\d+) and (-?\d+)$/, '此值必须介于 $1 和 $2 之间'],

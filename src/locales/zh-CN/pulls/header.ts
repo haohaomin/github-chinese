@@ -274,7 +274,7 @@ export default {
     [/^Pull request state: (Open|Closed|Merged|Draft|Queued)$/, (_, state) => `拉取请求状态：${STATE_LABEL[state] ?? state}`],
     [/^Switch tab \(current: (.+)\)$/, (_, tab) => `切换标签页（当前：${TAB_LABEL[tab] ?? tab}）`],
     // 标题校验
-    [/^Title can't be longer than (\d+) characters \(currently (\d+) characters\)$/, '标题不能超过$1 个字符（当前 $2 个字符）'],
+    [/^Title can't be longer than (\d+) characters \(currently (\d+) characters\)$/, '标题不能超过 $1 个字符（当前 $2 个字符）'],
     // 标签页标题片段：Pull Request #123
     [/^Pull Request #(\d+)$/, '拉取请求 #$1'],
     // 代码按钮：Create codespace on feature-branch（产品名按 product-names.md：codespace → 代码空间）

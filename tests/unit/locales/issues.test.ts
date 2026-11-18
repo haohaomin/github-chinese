@@ -337,7 +337,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [[', 45% complete', '，已完成 45%']], misses: [', almost complete'] },
   // metadata：问题字段
   {
-    hits: [['Value cannot be more than 1024 characters (1100)', '值不能超过1024 个字符（当前 1100 个）']],
+    hits: [['Value cannot be more than 1024 characters (1100)', '值不能超过 1024 个字符（当前 1100 个）']],
     misses: ['Value cannot be more than 1024 characters']
   },
   // 字段名是用户内容，不加引号；英文名与中文之间留空格

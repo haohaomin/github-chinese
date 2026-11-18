@@ -1,6 +1,6 @@
 /**
  * 更新时间着色的时段与颜色（设置项 freshnessColors，处理见 core/freshness）。
- * 颜色按时段、GitHub 的浅色与深色主题各一项：值为小写 #rrggbb，空字符串为默认
+ * 颜色按时段、GitHub 的浅色与深色主题各一项：值为 CSS 颜色或渐变（hex 统一为小写 #rrggbb），空字符串为默认
  * （FRESH_DAYS 天内、RECENT_DAYS 天内用主题的成功色、提示色，更早的不变）
  */
 
@@ -54,34 +54,70 @@ export function normalizeHexColor(value: string): string | undefined {
   return `#${hex.length === 3 ? [...hex].map(digit => digit + digit).join('') : hex}`
 }
 
-/**
- * 验证颜色写法是否为合法 CSS 颜色值（宽松验证：非空字符串视为合法）。
- * 支持 #rrggbb、#rgb、rgba(...)、渐变等任意 CSS 颜色。
- * 空字符串表示使用默认颜色。
- */
-/** CSS 注入特征：分号、花括号、url() */
-const UNSAFE_COLOR = /[;{}]|^\s*url\s*\(/i
+/** 浏览器的 CSS 支持检测：属性与值 → 是否支持（同 CSS.supports） */
+export type CssSupports = (property: string, value: string) => boolean
 
-export function isValidColor(value: string): boolean {
-  const trimmed = value.trim()
-  return trimmed !== '' && !UNSAFE_COLOR.test(trimmed)
+/** 当前环境的 CSS.supports；没有 CSS 接口时（后台服务工作线程）只看写法 */
+export function cssSupports(property: string, value: string): boolean {
+  return typeof CSS !== 'undefined' && typeof CSS.supports === 'function' ? CSS.supports(property, value) : true
 }
 
-/** 规范化颜色：空为默认；去掉首尾空白；不做格式验证（由 isValidColor 负责） */
-export function normalizeColor(value: string): string {
-  return value.trim()
+/** 渐变（linear、radial、conic，可带 repeating-）：用 background-image 着色 */
+const GRADIENT_RE = /^(?:repeating-)?(?:linear|radial|conic)-gradient\(/i
+/** hex 写法：#rgb、#rgba、#rrggbb、#rrggbbaa */
+const HEX_SYNTAX = /^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i
+/** 浏览器能否在 light-dark() 里用图像（渐变）的检测样例 */
+const LIGHT_DARK_IMAGE = 'light-dark(linear-gradient(#000, #000), linear-gradient(#000, #000))'
+/** 颜色写法可用的字符：字母、数字、空白与 # ( ) , . % + - * /；引号、分号、花括号、冒号、反斜杠等都不收 */
+const COLOR_CHARS = /^[\w\s#(),.%+\-*/]+$/
+/** 注释、外部资源 */
+const COLOR_UNSAFE = /\/\*|\*\/|url\s*\(/i
+
+/** 是否为渐变写法 */
+export function isGradient(value: string): boolean {
+  return GRADIENT_RE.test(value.trim())
+}
+
+/** 写法检查：只含可用字符，不含注释与外部资源，括号成对（防止写进样式后吞掉后面的规则） */
+function isSafeColorText(text: string): boolean {
+  if (!COLOR_CHARS.test(text) || COLOR_UNSAFE.test(text)) return false
+  let depth = 0
+  for (const char of text) {
+    if (char === '(') depth += 1
+    else if (char === ')') {
+      depth -= 1
+      if (depth < 0) return false
+    }
+  }
+  return depth === 0
+}
+
+/**
+ * 是否为可用的颜色：CSS 颜色（#rgb、#rrggbbaa、rgb()、hsl()、颜色名等）或渐变；空串（默认）不算。
+ * 先查写法，hex 按语法判断，其余由浏览器判断（supports 默认为 CSS.supports）。
+ * 渐变要放进 light-dark() 按主题取值（见 core/freshness）：浏览器须支持在 light-dark() 里用图像，且只能一层
+ * （多层渐变的逗号会让 light-dark() 多出参数）。检测样例不含 var()：含 var() 的值在解析时一律算合法
+ */
+export function isValidColor(value: string, supports: CssSupports = cssSupports): boolean {
+  const text = value.trim()
+  if (text === '' || !isSafeColorText(text)) return false
+  if (text.startsWith('#')) return HEX_SYNTAX.test(text)
+  if (isGradient(text)) {
+    return supports('background-image', LIGHT_DARK_IMAGE) && supports('background-image', `light-dark(${text}, ${text})`)
+  }
+  return supports('color', text)
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
 
+/** 存储里的颜色：只查写法（后台没有 CSS 接口）；hex 统一为小写 #rrggbb，其他写法原样保留 */
 function sanitizeColor(value: unknown): string {
   if (typeof value !== 'string') return ''
-  const trimmed = value.trim()
-  if (UNSAFE_COLOR.test(trimmed)) return ''
-  // 优先按 hex 规范化（保持向后兼容）；非 hex 的任意 CSS 值原样保留
-  return normalizeHexColor(trimmed) ?? trimmed
+  const text = value.trim()
+  if (text === '' || !isSafeColorText(text)) return ''
+  return normalizeHexColor(text) ?? text
 }
 
 /** 读取存储、导入备份：逐项校验，缺失或格式不符的用默认 */

@@ -57,7 +57,7 @@ function countNoun(noun: string): string {
   return '個目標'
 }
 
-/** 计数：超过100 时显示 100+ */
+/** 计数：超过 100 时显示 100+ */
 const COUNT = String.raw`(\d+\+?)`
 const NOUN = '(branch(?:es)?|branch conditions?|tags?|repositor(?:y|ies)|organizations?|targets?)'
 /** 目标短语：N 个对象 / 所有推送 / 分支过多无法显示 */
@@ -430,7 +430,7 @@ export default {
     Unauthorized: '未授權'
   },
   regexp: [
-    // 规则集列表：6 branch rules • targeting 1 branch（超过100 显示 100+）
+    // 规则集列表：6 branch rules • targeting 1 branch（超过 100 显示 100+）
     [
       new RegExp(String.raw`^${COUNT} (branch|tag|push|repository) rules?(?: [•·] targeting ${TARGET})?$`),
       (_, count: string, kind: string, targets: string, noun: string, all: string, many: string) => {

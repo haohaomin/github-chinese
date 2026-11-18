@@ -394,7 +394,7 @@ export default {
     // 里程碑进度（侧栏）
     [/^, (\d+)% complete$/, '，已完成 $1%'],
     // 议题字段（字段名是用户内容，原文无引号，译文不加；与中文之间按 joinName 留空格）
-    [/^Value cannot be more than (\d+) characters \((\d+)\)$/, '值不能超过$1 个字符（当前 $2 个）'],
+    [/^Value cannot be more than (\d+) characters \((\d+)\)$/, '值不能超过 $1 个字符（当前 $2 个）'],
     [/^The value for the (.+) field$/, (_, name) => joinName(name, '字段的值')],
     [/^Toolbar for (.+) field$/, (_, name) => joinName(name, '字段工具栏')],
     [/^Cannot be greater than (-?[\d.,]+)$/, '不能大于 $1'],

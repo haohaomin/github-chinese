@@ -38,7 +38,7 @@ const ABBR_SOURCE = '(AV|AC|AT|PR|UI|VC|VI|VA|SC|SI|SA)'
  * 公告表单的 CVSS 计算器（v3.1 / v4.0）：指标分组、取值按钮、各取值说明，
  * 以及 v4 指标对话框里的规范原文定义。
  * 取值说明以「: 」开头，前面的取值名在 <strong> 里。
- * 超过400 字符的说明采集不到：v3.1 按 FIRST 规范原文（去掉表格引用句与结尾示例句）、
+ * 超过 400 字符的说明采集不到：v3.1 按 FIRST 规范原文（去掉表格引用句与结尾示例句）、
  * v4.0 按 RedHat cvss-v4-calculator 的 metrics.json 补录，未在 GitHub 页面核对；撇号两种写法都收录。
  */
 export default {

@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { createFreshness, FRESHNESS_ATTRIBUTE, freshnessOf, freshnessStyle, type FreshnessMarker } from '../../../src/core/freshness'
 import { DEFAULT_FRESHNESS_COLORS, FRESH_DAYS, RECENT_DAYS, type FreshnessColors } from '../../../src/shared/freshness'
+import { GRADIENT, imageLightDark, LAYERED_GRADIENT, noImageLightDark } from '../shared/fake-css'
 
 const NOW = Date.parse('2026-11-09T12:00:00Z')
 const DAY = 24 * 60 * 60 * 1000
@@ -184,5 +185,39 @@ describe('freshnessStyle', () => {
       stale: { light: 'url(https://example.com/)', dark: '' }
     })
     expect(css).toBe(freshnessStyle(DEFAULT_FRESHNESS_COLORS))
+  })
+
+  /** 渐变：背景裁到文字 */
+  const clip = (level: string, image: string): string =>
+    `relative-time[${FRESHNESS_ATTRIBUTE}="${level}"] { background-image: ${image} !important; ` +
+    '-webkit-background-clip: text !important; background-clip: text !important; -webkit-text-fill-color: transparent !important; }'
+
+  it('渐变：背景裁到文字；另一侧的颜色（含默认）写成单色渐变，light-dark() 的两个值同为图像', () => {
+    const css = freshnessStyle(
+      {
+        fresh: { light: GRADIENT, dark: '' },
+        recent: { light: 'rgba(9, 105, 218, 0.5)', dark: GRADIENT },
+        stale: { light: '', dark: GRADIENT }
+      },
+      imageLightDark
+    )
+    expect(css.split(NEWLINE)).toEqual([
+      clip('fresh', `light-dark(${GRADIENT}, linear-gradient(${SUCCESS}, ${SUCCESS}))`),
+      clip('recent', `light-dark(linear-gradient(rgba(9, 105, 218, 0.5), rgba(9, 105, 218, 0.5)), ${GRADIENT})`),
+      clip('stale', `light-dark(linear-gradient(currentColor, currentColor), ${GRADIENT})`)
+    ])
+  })
+
+  it('浏览器不认的值按默认：不支持在 light-dark() 里用图像时渐变按默认；颜色照常', () => {
+    const colors = {
+      ...DEFAULT_FRESHNESS_COLORS,
+      fresh: { light: GRADIENT, dark: 'red' },
+      recent: { light: 'foo', dark: LAYERED_GRADIENT }
+    }
+    expect(freshnessStyle(colors, noImageLightDark).split(NEWLINE)).toEqual([rule('fresh', `light-dark(${SUCCESS}, red)`), rule('recent', ATTENTION)])
+    expect(freshnessStyle(colors, imageLightDark).split(NEWLINE)).toEqual([
+      clip('fresh', `light-dark(${GRADIENT}, linear-gradient(red, red))`),
+      rule('recent', ATTENTION)
+    ])
   })
 })

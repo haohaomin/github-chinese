@@ -1,7 +1,7 @@
 /**
  * 简体、繁体词典共用的工具：日期、相对时间、中英文拼接、词典合并。
  * 各语言的 helpers.ts 用 createTimeHelpers 生成本语言的相对时间（Intl 与「刚刚 / 约」等用词），并转出其余部分。
- * 中文与数字之间加空格（如“3 天前”“2024年1月5日”），与引擎对 <relative-time> 输出的处理一致。
+ * 相对时间照 Intl 的写法（简体 3天前，繁体 3 天前），日期不加空格（2024年1月5日），与引擎对 <relative-time> 输出的处理一致。
  *
  * *_SOURCE 常量是不含捕获组的正则片段，可拼进词典规则：
  *   [new RegExp(`^Updated (${TIME_SOURCE})$`), (_, time) => `${translateTime(time)}更新`]
@@ -128,9 +128,9 @@ export interface TimeWords {
 }
 
 export interface TimeHelpers {
-  /** Intl 相对时间：relativeTime(-3, 'day') → 3 天前 */
+  /** Intl 相对时间：relativeTime(-3, 'day') → 3天前（繁体 3 天前） */
   relativeTime(amount: number, unit: Intl.RelativeTimeFormatUnit): string
-  /** "3 days ago" → 3 天前；"about 1 year ago" → 约1 年前；"in 2 hours" → 2 小时后；"yesterday" → 昨天 */
+  /** "3 days ago" → 3天前；"about 1 year ago" → 约1年前；"in 2 hours" → 2小时后；"yesterday" → 昨天 */
   translateRelativeTime(text: string): string | undefined
   /** 相对时间或日期；都不匹配时原样返回 */
   translateTime(text: string): string

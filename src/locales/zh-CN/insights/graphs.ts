@@ -90,10 +90,10 @@ export default {
     [/^Contributions per week to (\S+), excluding merge commits$/, '每周对 $1 的贡献，不含合并提交'],
     [
       /^Contributions per week to (\S+), line counts have been omitted because commit count exceeds ([\d,]+)\.$/,
-      '每周对 $1 的贡献，因提交数超过$2 而省略了行数统计。'
+      '每周对 $1 的贡献，因提交数超过 $2 而省略了行数统计。'
     ],
     // 拼接失败时的单节点兜底（同 scoped 的「, excluding merge commits」）
-    [/^, line counts have been omitted because commit count exceeds ([\d,]+)\.$/, '，因提交数超过$1 而省略了行数统计。'],
+    [/^, line counts have been omitted because commit count exceeds ([\d,]+)\.$/, '，因提交数超过 $1 而省略了行数统计。'],
     // 周期按钮：<span>Period</span>: Last 3 months
     [/^: (All|Last month|Last \d+ months|Custom range)$/, (_, name) => `：${translatePeriod(name)}`],
     [/^Last (\d+) months$/, '最近 $1 个月'],

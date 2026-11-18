@@ -71,7 +71,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['Unsupported file type']
   },
   {
-    hits: [['Personal instructions must be 4000 characters or fewer.', '个人说明不能超过4000 个字符。']],
+    hits: [['Personal instructions must be 4000 characters or fewer.', '个人说明不能超过 4000 个字符。']],
     misses: ['Personal instructions must be short.']
   },
   {
@@ -917,7 +917,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'Instructions must be 4,000 characters or fewer. Current length: 4,200 characters.',
-        '说明不能超过4,000 个字符。当前长度：4,200 个字符。'
+        '说明不能超过 4,000 个字符。当前长度：4,200 个字符。'
       ]
     ],
     misses: ['Instructions must be short.']
@@ -1071,7 +1071,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         '2 files could not be attached: a.bin, b.bin. Text and PDF files must be 32 MB or smaller, and you can attach up to 10 text, PDF, or image files at a time.',
-        '2 个文件无法附加：a.bin, b.bin。文本和 PDF 文件不能超过32 MB，且一次最多可附加 10 个文本、PDF 或图片文件。'
+        '2 个文件无法附加：a.bin, b.bin。文本和 PDF 文件不能超过 32 MB，且一次最多可附加 10 个文本、PDF 或图片文件。'
       ]
     ],
     misses: ['Files could not be attached.']
@@ -1080,7 +1080,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'a.bin could not be attached. Text and PDF files must be 32 MB or smaller, and you can attach up to 10 text, PDF, or image files at a time.',
-        '无法附加 a.bin。文本和 PDF 文件不能超过32 MB，且一次最多可附加 10 个文本、PDF 或图片文件。'
+        '无法附加 a.bin。文本和 PDF 文件不能超过 32 MB，且一次最多可附加 10 个文本、PDF 或图片文件。'
       ]
     ],
     misses: ['a.bin could not be attached.']
@@ -1375,7 +1375,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ["Couldn't attach a.exe."]
   },
   {
-    hits: [["Couldn't attach big.pdf. This file must be 32 MB or smaller.", '无法附加 big.pdf。文件不能超过32 MB。']],
+    hits: [["Couldn't attach big.pdf. This file must be 32 MB or smaller.", '无法附加 big.pdf。文件不能超过 32 MB。']],
     misses: ["Couldn't attach big.pdf. This file is too big."]
   },
   {

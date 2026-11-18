@@ -136,7 +136,7 @@ function translateIncidentTitle(title: string): string | undefined {
   return undefined
 }
 
-/** 月份缩写 → 10 月 */
+/** 月份缩写 → 10月 */
 function monthLabel(abbr: string): string {
   return formatDate(undefined, MONTH_ABBRS.indexOf(abbr) + 1, undefined)
 }
@@ -157,7 +157,7 @@ const TIMESTAMP_RULES: readonly InlineRule[] = [
   [
     new RegExp(`^(Posted)?((?:\\{\\}){1,2})${MONTH_SOURCE} \\{#\\}, \\{#\\} - \\{\\} UTC$`),
     (_, posted: string, slots: string, month: string) =>
-      `${posted ? '发布于 ' : ''}${slots} ${monthLabel(month)}{#}日，{#} 年 {}${utcSuffix(month)}`
+      `${posted ? '发布于 ' : ''}${slots} ${monthLabel(month)}{#}日，{#}年 {}${utcSuffix(month)}`
   ],
   // 事件起止（历史页）；计划维护页副标题前有 <var>Scheduled for</var>
   [
@@ -173,15 +173,15 @@ const TIMESTAMP_RULES: readonly InlineRule[] = [
   // 计划维护时段：Oct <var>28</var>, <var>2026</var> <var>04:00</var>-<var>06:00</var> UTC
   [
     new RegExp(`^${MONTH_SOURCE} \\{#\\}, \\{#\\} \\{\\}-\\{\\} UTC$`),
-    (_, month: string) => `${monthLabel(month)}{#}日，{#} 年 {}-{}${utcSuffix(month)}`
+    (_, month: string) => `${monthLabel(month)}{#}日，{#}年 {}-{}${utcSuffix(month)}`
   ],
   // 跨日的计划维护时段：Oct <var>28</var>, <var>2026</var> <var>23:00</var> - Oct <var>29</var>, …
   [
     new RegExp(`^${MONTH_SOURCE} \\{#\\}, \\{#\\} \\{\\} - ${MONTH_SOURCE} \\{#\\}, \\{#\\} \\{\\} UTC$`),
-    (_, start: string, end: string) => `${monthLabel(start)}{#}日，{#} 年 {} - ${monthLabel(end)}{#}日，{#} 年 {}${utcSuffix(end)}`
+    (_, start: string, end: string) => `${monthLabel(start)}{#}日，{#}年 {} - ${monthLabel(end)}{#}日，{#}年 {}${utcSuffix(end)}`
   ],
   // span.ago：<var>21</var> hours ago.
-  [/^\{#\} (minute|hour|day|month|year)s? ago\.$/, (_, unit: string) => `{#} ${AGO_UNITS.get(unit) ?? unit}前。`]
+  [/^\{#\} (minute|hour|day|month|year)s? ago\.$/, (_, unit: string) => `{#}${AGO_UNITS.get(unit) ?? unit}前。`]
 ]
 
 export default {
@@ -346,7 +346,7 @@ export default {
     'GitHub is working with our provider to further improve the resiliency of the service to prevent similar incidents in the future.':
       'GitHub 正在与我们的提供商合作，进一步提高服务的弹性，以防今后再发生类似事件。',
 
-    // 历史页分页、月份标题（年份在 <var> 里，显示为「10 月 2026」）
+    // 历史页分页、月份标题（年份在 <var> 里，显示为「10月 2026」）
     ...Object.fromEntries(MONTH_NAMES.map((name, i) => [name, formatDate(undefined, i + 1, undefined)]))
   },
   regexp: [
@@ -429,8 +429,8 @@ export default {
       '每当 GitHub {}事件、{}事件、{}事件或{}组件状态时，接收 Web 钩子通知。'
     ],
     // 验证码倒计时：Resend OTP in: <span>30</span> seconds；事件订阅弹窗中跟在置灰的「重新发送验证码」链接后
-    ['Resend OTP in: {} seconds', '{} 秒后可重新发送验证码'],
-    ['in {} seconds', '{} 秒后可用'],
+    ['Resend OTP in: {} seconds', '{}秒后可重新发送验证码'],
+    ['in {} seconds', '{}秒后可用'],
     // 条款与隐私
     ['By subscribing you agree to our {}.', '订阅即表示你同意我们的{}。'],
     ['{} This site is protected by reCAPTCHA and the Google {} and {} apply.', '{}本网站受 reCAPTCHA 保护，并适用 Google {}和{}。'],
@@ -445,8 +445,8 @@ export default {
     ['Visit our {}.', '访问我们的{}。'],
     ['Get the {} or {}.', '获取 {}或 {}。'],
     // 组件区：Uptime over the past <var>90</var> days. <a>View historical uptime.</a>；可用率条图例
-    ['Uptime over the past {} days. {}', '过去 {} 天的正常运行时间。{}'],
-    ['{} days ago', '{} 天前'],
+    ['Uptime over the past {} days. {}', '过去 {}天的正常运行时间。{}'],
+    ['{} days ago', '{}天前'],
     ['{} % uptime', '{}% 正常运行时间'],
     // 组件组提示框：<i></i><span>2 components</span> had a major outage.
     ['{} {} had a major outage.', '{}{}出现严重中断。'],

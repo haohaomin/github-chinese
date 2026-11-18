@@ -82,8 +82,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [['Select user to authorize GitHub CLI', '选择要授权 GitHub CLI 的用户']], misses: ['Select user'] },
   {
     hits: [
-      ['More than 1K', '超过1K'],
-      ['More than 10', '超过10']
+      ['More than 1K', '超过 1K'],
+      ['More than 10', '超过 10']
     ],
     misses: ['More than a few']
   },
@@ -94,7 +94,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     ],
     misses: ['Fewer than ten']
   },
-  { hits: [['More than 1K GitHub users', '超过1K 个 GitHub 用户']], misses: ['More than 1K GitLab users'] },
+  { hits: [['More than 1K GitHub users', '超过 1K 个 GitHub 用户']], misses: ['More than 1K GitLab users'] },
   {
     hits: [
       ['Fewer than 10 GitHub users', '少于 10 个 GitHub 用户'],
@@ -169,7 +169,7 @@ describe('auth 正则词条', () => {
       translate(normalizeText(['Username ', 'octocat', ' is not available. ', 'octocat1, or octocat-2', ' are available.'].join('')))
     ).toBe('用户名 octocat 不可用。octocat1、octocat-2 可用。')
     expect(translate(normalizeText(['Created ', '3 years ago'].join('')))).toBe('创建于 3年前')
-    expect(translate(normalizeText(['More than ', '1K', ' GitHub users'].join('')))).toBe('超过1K 个 GitHub 用户')
+    expect(translate(normalizeText(['More than ', '1K', ' GitHub users'].join('')))).toBe('超过 1K 个 GitHub 用户')
     expect(translate(normalizeText(['Fewer than ', '10', ' GitHub users'].join('')))).toBe('少于 10 个 GitHub 用户')
   })
 })
@@ -204,7 +204,7 @@ describe('auth 静态词条', () => {
       '打开双因素身份验证器 (TOTP) 应用或浏览器扩展查看验证码。'
     ],
     ['GitHub support will review your request', 'GitHub 支持团队将审查你的请求'],
-    ['within 1-3 days', '1-3天内'],
+    ['within 1-3 days', '1-3 天内'],
     ['Enter a recovery code', '输入恢复代码'],
     [
       'The file containing your recovery codes may exist on your computer - check for a file named',

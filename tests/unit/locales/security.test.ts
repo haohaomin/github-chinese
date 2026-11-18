@@ -466,7 +466,7 @@ describe('security 静态词条', () => {
     ['Refreshed recently, available again in about 1 hour.', '最近已刷新，约1小时后可再次刷新。'],
     [
       'This score estimates the probability of this vulnerability being exploited within the next 30 days. Data by',
-      '此评分估计该漏洞在未来 30天内被利用的概率。数据来源'
+      '此评分估计该漏洞在未来 30 天内被利用的概率。数据来源'
     ],
     ['National Vulnerability Database', '美国国家漏洞数据库'],
     ['Common weakness enumerator (CWE)', '通用弱点枚举 (CWE)'],

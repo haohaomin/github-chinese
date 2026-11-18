@@ -99,9 +99,9 @@ export default {
     [/^Authorize (.+)$/, '授权 $1'],
     [/^Continue as (\S+)$/, '以 $1 身份继续'],
     [/^Select user to authorize (.+)$/, '选择要授权 $1 的用户'],
-    [/^More than ([\d.,]+[KkMm]?)$/, '超过$1'],
+    [/^More than ([\d.,]+[KkMm]?)$/, '超过 $1'],
     [/^(?:Fewer|Less) than ([\d.,]+[KkMm]?)$/, '少于 $1'],
-    [/^More than ([\d.,]+[KkMm]?) GitHub users$/, '超过$1 个 GitHub 用户'],
+    [/^More than ([\d.,]+[KkMm]?) GitHub users$/, '超过 $1 个 GitHub 用户'],
     [/^(?:Fewer|Less) than ([\d.,]+[KkMm]?) GitHub users$/, '少于 $1 个 GitHub 用户'],
     [/^Verify your GitHub identity \(([\w-]+)\)$/, '验证你的 GitHub 身份 ($1)'],
     [new RegExp(`^Created (${TIME_SOURCE})$`), (_, time: string) => joinCjk('创建于', translateTime(time))]

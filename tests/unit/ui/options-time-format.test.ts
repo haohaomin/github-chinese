@@ -69,6 +69,11 @@ function previewText(wrapper: VueWrapper): string | undefined {
   return found.exists() ? found.text() : undefined
 }
 
+/** 格式符说明表：每行为 [格式符, 含义, 示例] */
+function referenceRows(wrapper: VueWrapper): string[][] {
+  return wrapper.findAll('[data-test="format-reference-row"]').map(row => row.findAll('dt, dd, span').map(cell => cell.text()))
+}
+
 async function savedPattern(): Promise<string> {
   return (await getSettings()).customTimeFormat
 }
@@ -159,5 +164,28 @@ describe.skipIf(!App)('设置页：时间格式', () => {
   it('页面语言为繁体：预览按繁体', async () => {
     const wrapper = await render({ language: 'zh-TW', timeFormat: 'custom', customTimeFormat: 'ddd A h:mm' })
     expect(previewText(wrapper)).toBe('週一 上午 10:03')
+  })
+
+  it('格式符说明表：选自定义时显示；示例为本地 2026-01-05 09:05:08.007（周一）', async () => {
+    const wrapper = await render()
+    expect(referenceRows(wrapper)).toEqual([])
+    await chooseMode(wrapper, '自定义')
+    const rows = referenceRows(wrapper)
+    expect(rows[0]).toEqual(['YYYY', '年（四位）', '2026'])
+    expect(rows).toContainEqual(['M / MM', '月', '1 / 01'])
+    expect(rows).toContainEqual(['H / HH', '时（24 小时制）', '9 / 09'])
+    expect(rows).toContainEqual(['SSS', '毫秒', '007'])
+    expect(rows).toContainEqual(['ddd', '星期（短）', '周一'])
+    expect(rows).toContainEqual(['Z / ZZ', '时区偏移', '+08:00 / +0800'])
+    expect(rows.at(-1)).toEqual(['[文字]', '原样输出', '[今天] → 今天'])
+  })
+
+  it('格式符说明表：含义随界面语言（英文），示例按翻译语言（繁体）', async () => {
+    const wrapper = await render({ uiLanguage: 'en', language: 'zh-TW', timeFormat: 'custom' })
+    const rows = referenceRows(wrapper)
+    expect(rows).toContainEqual(['YY', 'Year (2 digits)', '26'])
+    expect(rows).toContainEqual(['ddd', 'Weekday (short)', '週一'])
+    expect(rows).toContainEqual(['A / a', 'AM / PM', '上午'])
+    expect(rows.at(-1)).toEqual(['[text]', 'Literal text', '[today] → today'])
   })
 })

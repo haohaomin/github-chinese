@@ -43,11 +43,11 @@ export default {
     'Switch to classic dashboard': '切換到傳統儀表板',
 
     // 新版儀表板側邊欄：主頁切換
-    'Make Home your homepage': '將 Home 設為主頁',
-    'Make Feed your homepage': '將 Feed 設為主頁',
-    'Pin your homepage': '置頂主頁',
+    'Make Home your homepage': '將首頁設為主頁',
+    'Make Feed your homepage': '將動態設為主頁',
+    'Pin your homepage': '釘選主頁',
     'Choose whether github.com opens to Home or Feed. Select the pin next to either one.':
-      '選擇 github.com 開啟時顯示 Home 還是 Feed，點選旁邊的置頂圖示即可。',
+      '選擇 github.com 開啟時顯示首頁或動態。選取其中一項旁的釘選圖示。',
 
     // 左侧栏：常用存储库、团队、最近活动
     'Top Repositories': '常用儲存庫',

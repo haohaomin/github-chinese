@@ -117,7 +117,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'Contributions per week to main, line counts have been omitted because commit count exceeds 10,000.',
-        '每周对 main 的贡献，因提交数超过10,000 而省略了行数统计。'
+        '每周对 main 的贡献，因提交数超过 10,000 而省略了行数统计。'
       ]
     ],
     misses: ['Contributions per week to main, line counts have been omitted.']
@@ -125,8 +125,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   // 拼接失败时的单节点兜底：分支名之后的句尾
   {
     hits: [
-      [', line counts have been omitted because commit count exceeds 10,000.', '，因提交数超过10,000 而省略了行数统计。'],
-      [', line counts have been omitted because commit count exceeds 500.', '，因提交数超过500 而省略了行数统计。']
+      [', line counts have been omitted because commit count exceeds 10,000.', '，因提交数超过 10,000 而省略了行数统计。'],
+      [', line counts have been omitted because commit count exceeds 500.', '，因提交数超过 500 而省略了行数统计。']
     ],
     misses: [
       ', line counts have been omitted.',
@@ -391,7 +391,7 @@ describe('insights 正则词条', () => {
     expect(read(['12', 'commits authored by', 'octocat'])).toBe('12 个提交的作者为 octocat')
     expect(read(['Contributions per week to', 'main', ', excluding merge commits'])).toBe('每周贡献到 main ，不含合并提交')
     expect(read(['Contributions per week to', 'main', ', line counts have been omitted because commit count exceeds 10,000.'])).toBe(
-      '每周贡献到 main ，因提交数超过10,000 而省略了行数统计。'
+      '每周贡献到 main ，因提交数超过 10,000 而省略了行数统计。'
     )
   })
 
@@ -400,7 +400,7 @@ describe('insights 正则词条', () => {
     expect(matcher.translateRaw(' to all branches.', PAGES)).toBe(' 到所有分支。')
     // 译文以全角逗号开头：开头的空白不保留
     expect(matcher.translateRaw(' , line counts have been omitted because commit count exceeds 10,000.', PAGES)).toBe(
-      '，因提交数超过10,000 而省略了行数统计。'
+      '，因提交数超过 10,000 而省略了行数统计。'
     )
   })
 })

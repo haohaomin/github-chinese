@@ -56,7 +56,7 @@ function pushTime(time: string): string {
   return translated === time ? spaceDigits(time.replace(/^on /, '')) : translated
 }
 
-/** 剩余时间：23 hours → 剩余 23 小时；about 1 month → 剩余约1 个月（数字与单位之间加空格） */
+/** 剩余时间：23 hours → 剩余 23小时；about 1 month → 剩余约 1个月 */
 function remaining(qualifier: string, amount: string, unit: string): string {
   const count = /^\d+$/.test(amount) ? amount : '1'
   const duration = `${count}${LIMIT_UNITS[unit] ?? unit}`

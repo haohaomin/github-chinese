@@ -52,14 +52,14 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [['Email: octocat@github.com', '电子邮件：octocat@github.com']], misses: ['Email: not provided'] },
   {
     hits: [
-      ['- 1h ahead', '- 快1小时'],
-      ['- 7h behind', '- 慢7小时'],
+      ['- 1h ahead', '- 快 1小时'],
+      ['- 7h behind', '- 慢 7小时'],
       // 脚本写入的半小时时区：时与分之间没有空格
-      ['- 2h30m behind', '- 慢2小时 30分钟'],
-      ['- 5h30m ahead', '- 快5小时 30分钟'],
-      ['- 5h 30m ahead', '- 快5小时 30分钟'],
-      ['- 5.5h ahead', '- 快5.5小时'],
-      ['- 30m behind', '- 慢30分钟']
+      ['- 2h30m behind', '- 慢 2小时 30分钟'],
+      ['- 5h30m ahead', '- 快 5小时 30分钟'],
+      ['- 5h 30m ahead', '- 快 5小时 30分钟'],
+      ['- 5.5h ahead', '- 快 5.5小时'],
+      ['- 30m behind', '- 慢 30分钟']
     ],
     // 时间相同时脚本整段写入「- same time」，不带前导 - 的写法不收录
     misses: ['- 1 hour ahead', '- 2h30 behind', 'same time']

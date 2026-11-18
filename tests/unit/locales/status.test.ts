@@ -1015,11 +1015,11 @@ describe.each(LOCALES)('$name status 页面 DOM', ({ index, bundle, full }) => {
     expect(text('#email-label')).toBe(t(['电子邮件地址：', '電子郵件地址：']))
     expect(text('#email-otp-label')).toBe(t(['输入验证码：', '輸入驗證碼：']))
     expect(text('#resend-email-otp')).toBe(t(['没有收到验证码？重新发送验证码', '沒有收到驗證碼？重新傳送驗證碼']))
-    expect(text('#timer')).toBe(t(['30 秒后可重新发送验证码', '30 秒後可重新傳送驗證碼']))
+    expect(text('#timer')).toBe(t(['30秒后可重新发送验证码', '30 秒後可重新傳送驗證碼']))
     // 页面脚本倒计时时改写数字
     document.querySelector('#email-otp-countdown')!.textContent = '29'
     await settle()
-    expect(text('#email-otp-timer')).toBe(t(['29 秒后可重新发送验证码', '29 秒後可重新傳送驗證碼']))
+    expect(text('#email-otp-timer')).toBe(t(['29秒后可重新发送验证码', '29 秒後可重新傳送驗證碼']))
     expect(text('#country-label')).toBe(t(['国家/地区代码：', '國碼：']))
     expect([...document.querySelectorAll('#phone-country option')].map(option => option.textContent)).toEqual(
       index === 0
@@ -1066,7 +1066,7 @@ describe.each(LOCALES)('$name status 页面 DOM', ({ index, bundle, full }) => {
     render(COMPONENTS_HTML)
     expect(text('#page-status')).toBe(t(['所有系统运行正常', '所有系統正常運作']))
     expect(text('#uptime-link')).toBe(
-      t(['过去 90 天的正常运行时间。查看历史正常运行时间。', '過去 90 天的正常運作時間。查看歷史正常運作時間。'])
+      t(['过去 90天的正常运行时间。查看历史正常运行时间。', '過去 90 天的正常運作時間。查看歷史正常運作時間。'])
     )
     expect([text('#name-git'), text('#name-actions'), text('#name-copilot'), text('#name-codespaces')]).toEqual(
       index === 0 ? ['Git 操作', '操作', 'Copilot', '代码空间'] : ['Git 操作', '動作', 'Copilot', '程式碼空間']
@@ -1081,7 +1081,7 @@ describe.each(LOCALES)('$name status 页面 DOM', ({ index, bundle, full }) => {
       index === 0 ? ['正常', '降级', '故障', '维护中'] : ['正常', '已降級', '故障', '維護中']
     )
     expect([text('#legend-days'), text('#legend-uptime'), text('#legend-today')]).toEqual([
-      '90 天前',
+      t(['90天前', '90 天前']),
       t(['99.95% 正常运行时间', '99.95% 正常運作時間']),
       '今天'
     ])
@@ -1124,7 +1124,7 @@ describe.each(LOCALES)('$name status 页面 DOM', ({ index, bundle, full }) => {
     expect(text('#unresolved-status')).toBe(t(['调查中', '調查中']))
     expect(text('#unresolved-body')).toBe(t(['我们正在调查有关操作性能降低的报告', '我們正在調查有關動作效能降低的回報']))
     // 年份不能当作起始时刻
-    expect(text('#unresolved-time')).toBe(t([`23 小时前。10月27日，2026 年 08:01${utc}`, `23 小時前。10月27日，2026 年 08:01${utc}`]))
+    expect(text('#unresolved-time')).toBe(t([`23小时前。10月27日，2026年 08:01${utc}`, `23 小時前。10月27日，2026年 08:01${utc}`]))
   })
 
   it('首页计划维护：标题、维护时段（含跨日）、<var>Posted on</var> 的发布时间', () => {
@@ -1132,11 +1132,11 @@ describe.each(LOCALES)('$name status 页面 DOM', ({ index, bundle, full }) => {
     expect(text('#maintenance-heading')).toBe(t(['计划维护', '排定維護']))
     expect(text('#maintenance-title')).toBe(t(['代码空间计划维护', '程式碼空間排定維護']))
     expect(attribute('#maintenance-link', 'title')).toBe(t(['代码空间计划维护', '程式碼空間排定維護']))
-    expect(text('#maintenance-window')).toBe(`10月28日，2026 年 04:00-06:00${utc}`)
-    expect(text('#maintenance-window-days')).toBe(`10月28日，2026 年 23:00 - 10月29日，2026 年 01:00${utc}`)
+    expect(text('#maintenance-window')).toBe(`10月28日，2026年 04:00-06:00${utc}`)
+    expect(text('#maintenance-window-days')).toBe(`10月28日，2026年 23:00 - 10月29日，2026年 01:00${utc}`)
     // <var> 里的 Posted on 引擎不处理
     expect(text('#maintenance-posted')).toBe(
-      t([`Posted on 7 天前。10月21日，2026 年 10:05${utc}`, `Posted on 7 天前。10月21日，2026 年 10:05${utc}`])
+      t([`Posted on 7天前。10月21日，2026年 10:05${utc}`, `Posted on 7 天前。10月21日，2026年 10:05${utc}`])
     )
   })
 
@@ -1196,10 +1196,10 @@ describe.each(LOCALES)('$name status 页面 DOM', ({ index, bundle, full }) => {
     )
     expect(text('#update-body-2')).toBe(t(['我们正在调查有关操作性能降低的报告', '我們正在調查有關動作效能降低的回報']))
     expect(text('#posted-1')).toBe(
-      t([`发布于 21 小时前。10月27日，2026 年 08:01${utc}`, `發布於 21 小時前。10月27日，2026 年 08:01${utc}`])
+      t([`发布于 21小时前。10月27日，2026年 08:01${utc}`, `發布於 21 小時前。10月27日，2026年 08:01${utc}`])
     )
     expect(text('#posted-2')).toBe(
-      t([`发布于 1 天前。10月26日，2026 年 18:48${utc}`, `發布於 1 天前。10月26日，2026 年 18:48${utc}`])
+      t([`发布于 1天前。10月26日，2026年 18:48${utc}`, `發布於 1 天前。10月26日，2026年 18:48${utc}`])
     )
     expect(text('#affected')).toBe(t(['此事件影响了：操作、议题、API 请求和拉取请求。', '此事件影響了：動作、議題、API 請求和拉取請求。']))
   })
@@ -1213,15 +1213,15 @@ describe.each(LOCALES)('$name status 页面 DOM', ({ index, bundle, full }) => {
           <var data-var="posted-on">Posted on</var>
         <span class="ago" data-datetime-unix="1792602310000"></span>Oct <var data-var='date'>21</var>, <var data-var='year'>2026</var> - <var data-var='time'>10:05</var> UTC
       </small>`)
-    expect(text('#posted')).toBe(t([`发布于 10月27日，2026 年 08:01${utc}`, `發布於 10月27日，2026 年 08:01${utc}`]))
-    expect(text('#posted-on')).toBe(`Posted on 10月21日，2026 年 10:05${utc}`)
+    expect(text('#posted')).toBe(t([`发布于 10月27日，2026年 08:01${utc}`, `發布於 10月27日，2026年 08:01${utc}`]))
+    expect(text('#posted-on')).toBe(`Posted on 10月21日，2026年 10:05${utc}`)
     document.querySelector('#posted .ago')!.innerHTML = '<var data-var="num">21</var> hours ago. '
     document.querySelector('#posted-on .ago')!.innerHTML = '<var data-var="num">7</var> days ago. '
     await settle()
     expect(text('#posted')).toBe(
-      t([`发布于 21 小时前。10月27日，2026 年 08:01${utc}`, `發布於 21 小時前。10月27日，2026 年 08:01${utc}`])
+      t([`发布于 21小时前。10月27日，2026年 08:01${utc}`, `發布於 21 小時前。10月27日，2026年 08:01${utc}`])
     )
-    expect(text('#posted-on')).toBe(`Posted on 7 天前。10月21日，2026 年 10:05${utc}`)
+    expect(text('#posted-on')).toBe(t([`Posted on 7天前。10月21日，2026年 10:05${utc}`, `Posted on 7 天前。10月21日，2026年 10:05${utc}`]))
   })
 
   it('事件报告页副标题：</a> 后没有空白文本节点时保持原文（实际页面都有换行缩进）', () => {
@@ -1251,7 +1251,7 @@ describe.each(LOCALES)('$name status 页面 DOM', ({ index, bundle, full }) => {
     expect(text('#enter-otp-sent')).toBe(t(['输入收到的验证码', '輸入收到的驗證碼']))
     // 倒计时期间「重新发送验证码」链接置灰，与倒计时并排显示
     expect(text('#resend-otp-abc123')).toBe(t(['重新发送验证码', '重新傳送驗證碼']))
-    expect(text('#timer-incident-abc123')).toBe(t(['30 秒后可用', '30 秒後可用']))
+    expect(text('#timer-incident-abc123')).toBe(t(['30秒后可用', '30 秒後可用']))
     // 与链接之间靠开头的 &nbsp; 隔开
     expect(document.querySelector('#timer-incident-abc123')?.textContent).toMatch(/^\u00a0\S/)
     expect(text('#sms-info')).toBe(

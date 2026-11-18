@@ -151,7 +151,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [['3 of 10 selected', '10 个中已选择 3 个']], misses: ['3 of many selected'] },
   // 反馈对话框
   {
-    hits: [['Please keep your feedback within 1,000 characters or less.', '反馈内容不能超过1,000 个字符。']],
+    hits: [['Please keep your feedback within 1,000 characters or less.', '反馈内容不能超过 1,000 个字符。']],
     misses: ['Please keep your feedback short.']
   },
   { hits: [['Request ID: 9F3C:1A2B:3C4D', '请求 ID：9F3C:1A2B:3C4D']], misses: ['Request ID'] },

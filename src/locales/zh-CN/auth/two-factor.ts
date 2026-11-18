@@ -69,7 +69,7 @@ export default {
     'Verify an email associated with this account.': '验证与此帐户关联的电子邮件。',
     'Verify a device, SSH key or personal access token.': '验证设备、SSH 密钥或个人访问令牌。',
     'GitHub support will review your request': 'GitHub 支持团队将审查你的请求',
-    'within 1-3 days': '1-3天内',
+    'within 1-3 days': '1-3 天内',
     'I understand, get started': '我已了解，开始',
 
     // 帐户恢复 /sessions/recovery

@@ -1135,7 +1135,7 @@ describe('settings-developer 静态词条', () => {
     ['Failed to update budget. Please try again.', '无法更新预算。请重试。'],
     ['Whoops! Try again.', '出错了！请重试。'],
     ['Only images, please. Try again.', '仅支持图片。请重试。'],
-    ['1MB or less, please. Try again.', '图片不能超过1MB。请重试。'],
+    ['1MB or less, please. Try again.', '图片不能超过 1MB。请重试。'],
     [
       'You cannot transform this account into an organization because you have an active GitHub Sponsors account.',
       '你因有活跃的 GitHub 赞助帐户而无法将此帐户转换为组织。'

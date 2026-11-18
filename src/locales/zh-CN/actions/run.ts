@@ -329,7 +329,7 @@ export default {
     ],
     [
       /^This request was automatically failed because there were no enabled runners online to process the request for more than (\d+) days?\.$/,
-      '此请求因超过$1 天没有已启用的在线运行器处理而自动失败。'
+      '此请求因超过 $1 天没有已启用的在线运行器处理而自动失败。'
     ],
     [
       /^The job was not acquired by Runner of type (hosted|self-hosted) even after multiple attempts$/,

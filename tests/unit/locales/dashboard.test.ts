@@ -227,7 +227,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     ],
     misses: ['two of three completed']
   },
-  { hits: [['Read · Est. 5m', '阅读 · 约5 分钟']], misses: ['Read · 5 minutes'] },
+  { hits: [['Read · Est. 5m', '阅读 · 约 5分钟']], misses: ['Read · 5 minutes'] },
   {
     hits: [
       ['Watch · 9 videos', '观看 · 9 个视频'],
@@ -515,6 +515,25 @@ describe('dashboard 静态词条', () => {
     expect(dashboard.static?.Sponsors).toBeUndefined()
     expect(dashboard.scoped?.Sponsors).toBeUndefined()
     expect(translateFull('Sponsors')).toBe('赞助')
+  })
+
+  it('新版侧边栏的主页切换：Home 作「首页」，Feed 作「动态」，pin 作「置顶」；繁体同义', () => {
+    const tw = createMatcher(zhTW)
+    const scopes = ['common', 'dashboard'] as const
+    const cases = [
+      ['Make Home your homepage', '将首页设为主页', '將首頁設為主頁'],
+      ['Make Feed your homepage', '将动态设为主页', '將動態設為主頁'],
+      ['Pin your homepage', '置顶主页', '釘選主頁'],
+      [
+        'Choose whether github.com opens to Home or Feed. Select the pin next to either one.',
+        '选择 github.com 打开时显示首页还是动态。选择其中一项旁边的置顶图标。',
+        '選擇 github.com 開啟時顯示首頁或動態。選取其中一項旁的釘選圖示。'
+      ]
+    ] as const
+    for (const [source, cn, hant] of cases) {
+      expect(bundleMatcher.translate(source, scopes)).toBe(cn)
+      expect(tw.translate(source, scopes)).toBe(hant)
+    }
   })
 
   it('繁体：教程项目标题与同卡片说明', () => {

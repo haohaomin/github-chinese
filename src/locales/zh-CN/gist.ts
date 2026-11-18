@@ -22,7 +22,7 @@ function emptyGists(owner: string, kind: string | undefined): string {
   return `${owner}还没有任何${label}代码片段。`
 }
 
-/** 个人资料侧栏本地时间差：「15h」「5.5h」「5h30m」「30m」→ 15 小时、5.5 小时、5 小时 30 分钟、30 分钟 */
+/** 个人资料侧栏本地时间差：「15h」「5.5h」「5h30m」「30m」→ 15小时、5.5小时、5小时 30分钟、30分钟 */
 function formatOffset(offset: string): string {
   const hours = /(\d+(?:\.\d+)?)h/.exec(offset)?.[1]
   const minutes = /(\d+)m/.exec(offset)?.[1]
@@ -252,7 +252,7 @@ export default {
     // 本地时间：- 7h behind / - 5h30m ahead（时与分之间不带空格；带空格的写法同样接受，同 profile/sidebar.ts）
     [
       /^- (\d+(?:\.\d+)?h(?: ?\d+m)?|\d+m) (ahead|behind)$/,
-      (_, offset, direction) => `- ${direction === 'ahead' ? '快' : '慢'}${formatOffset(offset)}`
+      (_, offset, direction) => `- ${direction === 'ahead' ? '快' : '慢'} ${formatOffset(offset)}`
     ]
   ],
   // 用户内容：描述、文件名、全名、公司与所在地、状态消息、搜索语言列表

@@ -178,12 +178,12 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [['Email: octocat@example.com', '电子邮件：octocat@example.com']], misses: ['Email: not public'] },
   {
     hits: [
-      ['- 15h behind', '- 慢15小时'],
-      ['- 5.5h ahead', '- 快5.5小时'],
+      ['- 15h behind', '- 慢 15小时'],
+      ['- 5.5h ahead', '- 快 5.5小时'],
       // 名片脚本按 `${h}h${m}m` 格式化，时与分之间不带空格；带空格的写法同样接受
-      ['- 2h30m behind', '- 慢2小时 30分钟'],
-      ['- 5h 30m ahead', '- 快5小时 30分钟'],
-      ['- 30m behind', '- 慢30分钟']
+      ['- 2h30m behind', '- 慢 2小时 30分钟'],
+      ['- 5h 30m ahead', '- 快 5小时 30分钟'],
+      ['- 30m behind', '- 慢 30分钟']
     ],
     misses: ['- 15 hours behind', '- 2h30 behind']
   }

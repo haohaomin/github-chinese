@@ -176,7 +176,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'This request was automatically failed because there were no enabled runners online to process the request for more than 1 days.',
-        '此请求因超过1 天没有已启用的在线运行器处理而自动失败。'
+        '此请求因超过 1 天没有已启用的在线运行器处理而自动失败。'
       ]
     ],
     misses: ['This request was automatically failed.']

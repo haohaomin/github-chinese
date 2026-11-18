@@ -433,7 +433,7 @@ export default {
     [new RegExp(`^${COUNT} selected$`), '已选择 $1 个'],
     [new RegExp(`^${COUNT} of ${COUNT} selected$`), '$2 个中已选择 $1 个'],
     // 反馈对话框
-    [/^Please keep your feedback within (\d[\d,]*) characters or less\.$/, '反馈内容不能超过$1 个字符。'],
+    [/^Please keep your feedback within (\d[\d,]*) characters or less\.$/, '反馈内容不能超过 $1 个字符。'],
     [/^Request ID: ([\w:./-]+)$/, '请求 ID：$1']
   ],
   // DataTable 分页的可见范围：数字、读屏用的 through、‒ 与 of 分在多个节点，合并后整段翻译。

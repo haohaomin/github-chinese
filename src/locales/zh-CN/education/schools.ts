@@ -151,7 +151,7 @@ export default {
     // 2k+ universities, community colleges, secondary schools, and bootcamps use GitHub in the classroom.
     [
       /^(\d+)k\+ universities, community colleges, secondary schools, and bootcamps use GitHub in the classroom\.$/,
-      (_, count) => joinCjk(`超过${thousands(count!)}`, '所大学、社区学院、中学和训练营在课堂上使用 GitHub。')
+      (_, count) => joinCjk(`超过 ${thousands(count!)}`, '所大学、社区学院、中学和训练营在课堂上使用 GitHub。')
     ]
   ],
   inline: [

@@ -396,11 +396,11 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [['Unset Todo as default', '取消 Todo 的默认']], misses: ['Unset Todo'] },
   { hits: [['Maximum of 50 options reached', '已达到 50 个选项的上限']], misses: ['Maximum options reached'] },
   {
-    hits: [['Label text must be 100 characters or fewer', '标签文本不能超过100 个字符']],
+    hits: [['Label text must be 100 characters or fewer', '标签文本不能超过 100 个字符']],
     misses: ['Label text must be short']
   },
   {
-    hits: [['Description must be 256 characters or fewer', '描述不能超过256 个字符']],
+    hits: [['Description must be 256 characters or fewer', '描述不能超过 256 个字符']],
     misses: ['Description must be short']
   },
   // 迭代
@@ -409,7 +409,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['Iteration length must be positive']
   },
   {
-    hits: [['Iteration length must be 365 or less', '迭代时长不能超过365']],
+    hits: [['Iteration length must be 365 or less', '迭代时长不能超过 365']],
     misses: ['Iteration length must be 365 or fewer']
   },
   { hits: [['3 Active', '活动 3']], misses: ['Active 3'] },
@@ -628,7 +628,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'More than 100 cells are selected. Deselect some cells to perform bulk edits.',
-        '已选择超过100 个单元格。取消选择部分单元格后才能批量编辑。'
+        '已选择超过 100 个单元格。取消选择部分单元格后才能批量编辑。'
       ]
     ],
     misses: ['More than 100 cells are selected.']

@@ -73,8 +73,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['More than 1M results', '超过1M 个结果'],
-      ['More than 100 files', '超过100 个文件']
+      ['More than 1M results', '超过 1M 个结果'],
+      ['More than 100 files', '超过 100 个文件']
     ],
     misses: ['More than a few results']
   },
@@ -330,7 +330,7 @@ describe('search 静态词条', () => {
     ['Restrict your search to the title by using the in:title qualifier.', '使用 in:title 限定符可只搜索标题。'],
     ["Why wasn't my code found?", '为什么找不到我的代码？'],
     ['Why wasn’t my code found?', '为什么找不到我的代码？'],
-    ['Empty files and files over 350 kiB are excluded', '排除空文件和超过350 kiB 的文件'],
+    ['Empty files and files over 350 kiB are excluded', '排除空文件和超过 350 kiB 的文件'],
     // 原文没有冒号：Note that … 不译出“注意：”
     [
       'Note that we don’t currently support regular expressions in the repo or org qualifiers. For more information on search syntax, see our',

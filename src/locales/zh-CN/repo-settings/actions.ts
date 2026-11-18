@@ -58,7 +58,7 @@ export default {
     'Learn more about the check, workflow run, status, artifact and log retention policy.':
       '了解检查、工作流运行、状态、工件和日志保留策略。',
     'Duration must be 1 or more.': '时长不能少于 1。',
-    'Duration must be 90 or less': '时长不能超过90',
+    'Duration must be 90 or less': '时长不能超过 90',
     'Choose the repository settings for cache.': '选择缓存的存储库设置。',
     'Cache retention': '缓存保留',
     'Cache retention limit': '缓存保留期限',
@@ -267,11 +267,11 @@ export default {
     // 保留期 / 缓存大小的输入校验
     [
       /^Retention period must be (?:less than or equal to (\d+) days|(\d+) days? or more)\.$/,
-      (_, max: string | undefined, min: string | undefined) => (max ? `保留期不能超过 ${max}天。` : `保留期不能少于 ${min ?? ''}天。`)
+      (_, max: string | undefined, min: string | undefined) => (max ? `保留期不能超过 ${max} 天。` : `保留期不能少于 ${min ?? ''} 天。`)
     ],
     [
       /^Cache size must be (?:less than or equal to (\d+) ?GB|(\d+) ?GB or more)\.$/,
-      (_, max: string | undefined, min: string | undefined) => (max ? `缓存大小不能超过 ${max}GB。` : `缓存大小不能少于 ${min ?? ''}GB。`)
+      (_, max: string | undefined, min: string | undefined) => (max ? `缓存大小不能超过 ${max} GB。` : `缓存大小不能少于 ${min ?? ''} GB。`)
     ],
     // 访问
     [/^Accessible from repositories owned by the user ['‘’"“”]?([\w.-]+)['‘’"“”]?$/, '可从用户 $1 拥有的存储库访问'],

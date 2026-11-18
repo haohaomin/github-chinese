@@ -11,6 +11,7 @@ import {
   type FreshnessScheme
 } from '../../../src/shared/freshness'
 import { getSettings, settingsItem, updateSettings } from '../../../src/shared/settings'
+import { GRADIENT, imageLightDark, LAYERED_GRADIENT } from '../shared/fake-css'
 import { mockVersion, openOptionsTab, optionsPanel, seedChineseUi, settle, ZH_SETTINGS } from './helpers'
 import { importSfc, required } from './sfc'
 
@@ -176,6 +177,36 @@ describe.skipIf(!App)('设置页：更新时间着色', () => {
     expect(hex(row).attributes('aria-invalid')).toBeUndefined()
     expect(status(row).text()).toBe('')
     expect(await savedColors()).toEqual({ ...DEFAULT_FRESHNESS_COLORS, recent: { light: '#0969da', dark: '' } })
+  })
+
+  it('CSS 颜色与渐变：浏览器认的保存，名称按值预览（渐变裁到文字）；不认的提示格式错误、不保存', async () => {
+    // happy-dom 每次访问 CSS 都新建实例，改原型上的 supports
+    const prototype = Object.getPrototypeOf(CSS) as { supports: typeof CSS.supports }
+    const supports = vi.spyOn(prototype, 'supports').mockImplementation(((property: string, value?: string) =>
+      imageLightDark(property, value ?? '')) as typeof CSS.supports)
+    onTestFinished(() => supports.mockRestore())
+    await settingsItem.setValue({ ...ZH_SETTINGS, freshness: true })
+    const { scope } = await render()
+    const row = field(scope, 'light', 'fresh')
+
+    await commitHex(row, 'foo')
+    expect(status(row).text()).toBe('格式错误')
+    expect(label(row).element.style.color).toBe(cssColor(FRESHNESS_PREVIEW_COLORS.fresh.light))
+    expect(await savedColors()).toEqual(DEFAULT_FRESHNESS_COLORS)
+
+    await commitHex(row, 'rgba(9, 105, 218, 0.5)')
+    expect(status(row).text()).toBe('')
+    expect(label(row).element.style.color).toBe(cssColor('rgba(9, 105, 218, 0.5)'))
+    expect(row.find('[data-test="color-picker"]').exists()).toBe(false)
+
+    await commitHex(row, GRADIENT)
+    expect(label(row).element.style.backgroundImage).toBe(GRADIENT)
+    expect(label(row).element.style.backgroundClip).toBe('text')
+    expect(await savedColors()).toEqual({ ...DEFAULT_FRESHNESS_COLORS, fresh: { light: GRADIENT, dark: '' } })
+
+    await commitHex(row, LAYERED_GRADIENT)
+    expect(status(row).text()).toBe('格式错误')
+    expect(await savedColors()).toEqual({ ...DEFAULT_FRESHNESS_COLORS, fresh: { light: GRADIENT, dark: '' } })
   })
 
   it('取色器：拖动时只预览，关闭时保存', async () => {

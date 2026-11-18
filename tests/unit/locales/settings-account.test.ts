@@ -626,7 +626,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['12.50 off']
   },
   {
-    hits: [['$4.00 off per month for 1 year', '1年内每月减免 $4.00']],
+    hits: [['$4.00 off per month for 1 year', '1 年内每月减免 $4.00']],
     misses: ['$4.00 off per month for a year']
   },
   {

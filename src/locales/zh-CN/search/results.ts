@@ -303,7 +303,7 @@ export default {
     [/^Search Results · (.+)$/, '搜索结果 · $1'],
     // 结果数（含 1.2B 这类缩写）
     [/^(\d[\d.,]*[kKMB]?) (results?|files?)$/, (_, count, kind) => countLabel(count, kind)],
-    [/^More than (\d[\d.,]*[kKMB]?) (results?|files?)$/, (_, count, kind) => `超过${countLabel(count, kind)}`],
+    [/^More than (\d[\d.,]*[kKMB]?) (results?|files?)$/, (_, count, kind) => `超过 ${countLabel(count, kind)}`],
     // 耗时：React 把「 (」「210」「 」「ms」「)」拆成相邻文本节点，拼接后为 (210 ms)；数字与单位之间加空格：（210 毫秒）
     [/^\((\d+(?:\.\d+)?) ?(ms|s)\)$/, (_, amount, unit) => `（${amount} ${unit === 'ms' ? '毫秒' : '秒'}）`],
     // 排序按钮：「Sort by: 」「Best match」拼接

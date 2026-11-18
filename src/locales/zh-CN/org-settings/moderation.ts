@@ -14,11 +14,11 @@ const DURATION_UNIT: Readonly<Record<string, string>> = {
 
 const DURATION_QUALIFIER: Readonly<Record<string, string>> = { about: '约', almost: '将近', over: '超过' }
 
-/** 交互限制剩余时长：“about 23 hours” → 已启用剩余约23 小时；原文无逗号，译文不加；句号随原文 */
+/** 交互限制剩余时长：“about 23 hours” → 已启用剩余约 23小时；原文无逗号，译文不加；句号随原文 */
 function enabledRemaining(qualifier: string | undefined, amount: string, unit: string, dot: string): string {
   const prefix = qualifier ? (DURATION_QUALIFIER[qualifier] ?? '') : ''
   const count = /^\d+$/.test(amount) ? amount : '1'
-  return `已启用剩余${prefix}${count}${DURATION_UNIT[unit] ?? unit}${dot ? '。' : ''}`
+  return `已启用剩余${prefix} ${count}${DURATION_UNIT[unit] ?? unit}${dot ? '。' : ''}`
 }
 
 /**

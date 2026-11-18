@@ -6,10 +6,13 @@
  * 思路参考 GitHub-Freshness（rational-stars），不搬运代码
  */
 import {
+  cssSupports,
   DEFAULT_FRESHNESS_COLORS,
   DEFAULT_FRESHNESS_DAYS,
   FRESHNESS_LEVELS,
+  isGradient,
   isValidColor,
+  type CssSupports,
   type FreshnessColors,
   type FreshnessDays,
   type FreshnessLevel
@@ -67,35 +70,32 @@ export function freshnessOf(datetime: string | null, now: number, freshDays: num
 
 /**
  * 样式：每个时段一条，都没改过的「更早」不加。改过的用 light-dark() 按页面的 color-scheme
- * （GitHub 按当前主题设置，跟随系统时随系统）取浅色或深色主题的颜色，没改的一侧用默认。
- * 支持任意 CSS 颜色值（#rrggbb、rgba(...)、渐变等）
+ * （GitHub 按当前主题设置，跟随系统时随系统）取浅色或深色主题的值，没改的一侧用默认；浏览器不认的值按默认（见 isValidColor）。
+ * 有一侧是渐变时用 background-image 裁到文字：light-dark() 的两个值须同为颜色或同为图像，另一侧的颜色写成单色渐变
  */
-export function freshnessStyle(colors: FreshnessColors): string {
+export function freshnessStyle(colors: FreshnessColors, supports: CssSupports = cssSupports): string {
   return FRESHNESS_LEVELS.flatMap(level => {
     const fallback = DEFAULT_COLORS[level]
-    const rawLight = colors[level].light.trim()
-    const rawDark = colors[level].dark.trim()
-    const light = isValidColor(rawLight) ? rawLight : undefined
-    const dark = isValidColor(rawDark) ? rawDark : undefined
+    const pick = (value: string): string | undefined => (isValidColor(value, supports) ? value.trim() : undefined)
+    const light = pick(colors[level].light)
+    const dark = pick(colors[level].dark)
+    const selector = `relative-time[${FRESHNESS_ATTRIBUTE}="${level}"]`
     if (light === undefined && dark === undefined) {
-      return level === 'stale' ? [] : [`relative-time[${FRESHNESS_ATTRIBUTE}="${level}"] { color: ${fallback} !important; }`]
+      return level === 'stale' ? [] : [`${selector} { color: ${fallback} !important; }`]
     }
-    // 渐变值不能用 color，改用 background + background-clip
-    const isGradient = (v: string | undefined): boolean => !!v && /gradient/.test(v)
-    if (isGradient(light) || isGradient(dark)) {
-      const lv = light ?? fallback
-      const dv = dark ?? fallback
+    const gradient = (value: string | undefined): value is string => value !== undefined && isGradient(value)
+    if (gradient(light) || gradient(dark)) {
+      const image = (value: string | undefined): string => {
+        if (gradient(value)) return value
+        const color = value ?? fallback
+        return `linear-gradient(${color}, ${color})`
+      }
       return [
-        `relative-time[${FRESHNESS_ATTRIBUTE}="${level}"] {`,
-        `  background: light-dark(${lv}, ${dv}) !important;`,
-        `  -webkit-background-clip: text !important;`,
-        `  -webkit-text-fill-color: transparent !important;`,
-        `  background-clip: text !important;`,
-        `}`
-      ].join('\n')
+        `${selector} { background-image: light-dark(${image(light)}, ${image(dark)}) !important; ` +
+          '-webkit-background-clip: text !important; background-clip: text !important; -webkit-text-fill-color: transparent !important; }'
+      ]
     }
-    const color = `light-dark(${light ?? fallback}, ${dark ?? fallback})`
-    return [`relative-time[${FRESHNESS_ATTRIBUTE}="${level}"] { color: ${color} !important; }`]
+    return [`${selector} { color: light-dark(${light ?? fallback}, ${dark ?? fallback}) !important; }`]
   }).join('\n')
 }
 

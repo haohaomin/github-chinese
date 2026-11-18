@@ -124,7 +124,7 @@ export default {
     'Are you sure you want to delete this?': '确定要删除吗？',
     'Deleting the': '删除',
     'organization will delete all of its repositories. The': '组织将删除其所有存储库。同时',
-    'username will be unavailable for 90 days.': '用户名将在 90天内不可用。',
+    'username will be unavailable for 90 days.': '用户名将在 90 天内不可用。',
     'Before proceeding, please be sure to review the': '继续之前，请务必查看',
     'regarding account deletion.': '中关于删除帐户的内容。',
     'Enter this organization’s name to confirm': '输入此组织的名称以确认',
@@ -192,7 +192,7 @@ export default {
       new RegExp(
         `^Deleting the ${ORG} organization will delete all of its repositories\\. The ${ORG} username will be unavailable for 90 days\\.$`
       ),
-      '删除 $1 组织将删除其所有存储库。$2 用户名将在 90天内不可用。'
+      '删除 $1 组织将删除其所有存储库。$2 用户名将在 90 天内不可用。'
     ],
     [
       new RegExp(

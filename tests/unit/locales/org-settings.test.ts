@@ -60,7 +60,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'Deleting the octo-org organization will delete all of its repositories. The octo-org username will be unavailable for 90 days.',
-        '删除 octo-org 组织将删除其所有存储库。octo-org 用户名将在 90天内不可用。'
+        '删除 octo-org 组织将删除其所有存储库。octo-org 用户名将在 90 天内不可用。'
       ]
     ],
     misses: ['Deleting the organization will delete all of its repositories.']
@@ -247,10 +247,10 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['Enabled with about 23 hours remaining.', '已启用剩余约23小时。'],
-      ['Enabled with 6 days remaining', '已启用剩余6天'],
-      ['Enabled with a month remaining.', '已启用剩余1个月。'],
-      ['Enabled with almost 2 years remaining.', '已启用剩余将近2年。']
+      ['Enabled with about 23 hours remaining.', '已启用剩余约 23小时。'],
+      ['Enabled with 6 days remaining', '已启用剩余 6天'],
+      ['Enabled with a month remaining.', '已启用剩余 1个月。'],
+      ['Enabled with almost 2 years remaining.', '已启用剩余将近 2年。']
     ],
     misses: ['Enabled with some time remaining']
   },
@@ -360,7 +360,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     ],
     misses: ['3.00 off']
   },
-  { hits: [['$4.00 off per month for 1 year', '1年内每月减免 $4.00']], misses: ['$4.00 off per month for a year'] },
+  { hits: [['$4.00 off per month for 1 year', '1 年内每月减免 $4.00']], misses: ['$4.00 off per month for a year'] },
   {
     hits: [
       ['$4.00 off per month until Dec 31, 2026', '2026年12月31日前每月减免 $4.00'],
@@ -574,7 +574,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'You can convert to a paid plan at any time. If you don’t purchase by the end of 30 days, your trial will expire and all private repositories will lose access to Secret Protection and Code Security features.',
-        '你可以随时转为付费计划。如果 30天内未购买，试用将过期，所有专用存储库都将无法使用机密保护和代码安全功能。'
+        '你可以随时转为付费计划。如果 30 天内未购买，试用将过期，所有专用存储库都将无法使用机密保护和代码安全功能。'
       ]
     ],
     misses: ['You can convert to a paid plan at any time.']
@@ -1697,7 +1697,7 @@ describe('org-settings 页面词条', () => {
     // 分句间的破折号译“——”，不改成逗号
     [
       'will get Copilot access automatically within 24 hours — no action needed. Need it sooner? Pay now.',
-      '将在 24小时内自动获得 Copilot 访问权限——无需任何操作。需要更快？请立即付款。'
+      '将在 24 小时内自动获得 Copilot 访问权限——无需任何操作。需要更快？请立即付款。'
     ],
     // 原文无标点、无逗号的句子与片段，译文不加
     [

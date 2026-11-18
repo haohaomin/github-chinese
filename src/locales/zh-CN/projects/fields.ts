@@ -318,12 +318,12 @@ export default {
     [/^Set (.+) as default$/, (_, name: string) => joinCjk(joinCjk('将', name), '设为默认')],
     [/^Unset (.+) as default$/, (_, name: string) => joinCjk(joinCjk('取消', name), '的默认')],
     [/^Maximum of (\d+) options reached$/, '已达到 $1 个选项的上限'],
-    [/^Label text must be (\d+) characters or fewer$/, '标签文本不能超过$1 个字符'],
-    [/^Description must be (\d+) characters or fewer$/, '描述不能超过$1 个字符'],
+    [/^Label text must be (\d+) characters or fewer$/, '标签文本不能超过 $1 个字符'],
+    [/^Description must be (\d+) characters or fewer$/, '描述不能超过 $1 个字符'],
 
     // 迭代
     [/^Iteration length must be (\d+) or more$/, '迭代时长不能少于 $1'],
-    [/^Iteration length must be (\d+) or less$/, '迭代时长不能超过$1'],
+    [/^Iteration length must be (\d+) or less$/, '迭代时长不能超过 $1'],
     [/^(\d+) Active$/, '活动 $1'],
     [/^(\d+) Completed$/, '已完成 $1'],
     [/^(\d+) active iterations? will also be pushed forward\.$/, '$1 个活动迭代也会顺延。'],

@@ -84,8 +84,8 @@ export default {
       '非活动的代码空间会在最后一次停止 30 天后自动删除。你可以设置更短的保留期，它将应用于今后创建的所有代码空间。默认值和最大值均为',
     'Learn about retention setting': '了解保留期设置',
     'Timeout must be 5 minutes or more.': '超时时间不能少于 5 分钟。',
-    'Timeout must be 240 minutes or less.': '超时时间不能超过240 分钟。',
-    'Retention period must be 30 days or less.': '保留期不能超过30 天。',
+    'Timeout must be 240 minutes or less.': '超时时间不能超过 240 分钟。',
+    'Retention period must be 30 days or less.': '保留期不能超过 30 天。',
     'Retention period must be between 0 and 30 days.': '保留期必须介于 0 到 30 天之间。',
 
     // 主机映像版本首选项

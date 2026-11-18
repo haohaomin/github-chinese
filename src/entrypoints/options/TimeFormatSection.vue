@@ -32,7 +32,7 @@
     </div>
 
     <dl v-if="settings.timeFormat === 'custom'" class="format-reference">
-      <div v-for="token in TOKEN_REFERENCE" :key="token.code" class="format-reference-row">
+      <div v-for="token in tokenRows" :key="token.code" class="format-reference-row" data-test="format-reference-row">
         <dt class="format-reference-code">{{ token.code }}</dt>
         <dd class="format-reference-desc">{{ token.desc }}</dd>
         <span class="format-reference-example">{{ token.example }}</span>
@@ -47,6 +47,7 @@
   import UiInput from '../../components/ui/UiInput.vue'
   import UiSelect from '../../components/ui/UiSelect.vue'
   import { useI18n } from '../../components/ui-preferences'
+  import type { MessageKey } from '../../i18n'
   import { languageEnvironment } from '../../shared/language-env'
   import { resolvePageLocale } from '../../shared/locale'
   import {
@@ -66,33 +67,55 @@
   /** 输入停顿多久后保存（毫秒） */
   const SAVE_DELAY_MS = 400
 
-  /** 格式符说明：code 为格式符，desc 为含义，example 为示例输出 */
-  const TOKEN_REFERENCE = [
-    { code: 'YYYY', desc: '年（四位）', example: '2026' },
-    { code: 'YY', desc: '年（两位）', example: '26' },
-    { code: 'M / MM', desc: '月', example: '1 / 01' },
-    { code: 'MMM', desc: '月（短）', example: '1月' },
-    { code: 'MMMM', desc: '月（全）', example: '一月' },
-    { code: 'D / DD', desc: '日', example: '5 / 05' },
-    { code: 'H / HH', desc: '时（24小时）', example: '9 / 09' },
-    { code: 'h / hh', desc: '时（12小时）', example: '9 / 09' },
-    { code: 'A / a', desc: '上午 / 下午', example: '上午' },
-    { code: 'm / mm', desc: '分', example: '5 / 05' },
-    { code: 's / ss', desc: '秒', example: '8 / 08' },
-    { code: 'SSS', desc: '毫秒', example: '007' },
-    { code: 'd', desc: '星期（数字 0–6）', example: '1' },
-    { code: 'dd', desc: '星期（简）', example: '一' },
-    { code: 'ddd', desc: '星期（短）', example: '周一' },
-    { code: 'dddd', desc: '星期（全）', example: '星期一' },
-    { code: 'Z / ZZ', desc: '时区偏移', example: '+08:00 / +0800' },
-    { code: '[文字]', desc: '原样输出', example: '[今天] → 今天' }
-  ] as const
+  /** 格式符说明的一行：code 为格式符，tokens 为示例用到的格式符（多个以 / 隔开），desc 为含义的文案键 */
+  interface TokenRow {
+    readonly code: string
+    readonly tokens: readonly string[]
+    readonly desc: MessageKey
+  }
+
+  const TOKEN_REFERENCE: readonly TokenRow[] = [
+    { code: 'YYYY', tokens: ['YYYY'], desc: 'timeFormatTokenYear4' },
+    { code: 'YY', tokens: ['YY'], desc: 'timeFormatTokenYear2' },
+    { code: 'M / MM', tokens: ['M', 'MM'], desc: 'timeFormatTokenMonth' },
+    { code: 'MMM', tokens: ['MMM'], desc: 'timeFormatTokenMonthShort' },
+    { code: 'MMMM', tokens: ['MMMM'], desc: 'timeFormatTokenMonthLong' },
+    { code: 'D / DD', tokens: ['D', 'DD'], desc: 'timeFormatTokenDay' },
+    { code: 'H / HH', tokens: ['H', 'HH'], desc: 'timeFormatTokenHour24' },
+    { code: 'h / hh', tokens: ['h', 'hh'], desc: 'timeFormatTokenHour12' },
+    { code: 'A / a', tokens: ['A'], desc: 'timeFormatTokenMeridiem' },
+    { code: 'm / mm', tokens: ['m', 'mm'], desc: 'timeFormatTokenMinute' },
+    { code: 's / ss', tokens: ['s', 'ss'], desc: 'timeFormatTokenSecond' },
+    { code: 'SSS', tokens: ['SSS'], desc: 'timeFormatTokenMillisecond' },
+    { code: 'd', tokens: ['d'], desc: 'timeFormatTokenWeekdayNumber' },
+    { code: 'dd', tokens: ['dd'], desc: 'timeFormatTokenWeekdayMin' },
+    { code: 'ddd', tokens: ['ddd'], desc: 'timeFormatTokenWeekdayShort' },
+    { code: 'dddd', tokens: ['dddd'], desc: 'timeFormatTokenWeekdayLong' },
+    { code: 'Z / ZZ', tokens: ['Z', 'ZZ'], desc: 'timeFormatTokenOffset' }
+  ]
+
+  /** 示例时刻：2026-01-05 09:05:08.007（本地时区，周一） */
+  const SAMPLE_TIME = new Date(2026, 0, 5, 9, 5, 8, 7).getTime()
 
   const { t } = useI18n()
   const { settings, ready, save } = useSettingsSave()
   const env = languageEnvironment()
   /** 预览用的时刻：打开页面时 */
   const now = Date.now()
+
+  /** 翻译语言：时间按它写出 */
+  const pageLocale = computed(() => resolvePageLocale(settings.value.language, env))
+
+  /** 说明表：含义随界面语言，示例按翻译语言写出 */
+  const tokenRows = computed(() => {
+    const lang = pageLocale.value
+    const sample = (pattern: string): string => formatTime(pattern, SAMPLE_TIME, { lang })
+    const literal = t('timeFormatLiteralSample')
+    return [
+      ...TOKEN_REFERENCE.map(row => ({ code: row.code, desc: t(row.desc), example: row.tokens.map(sample).join(' / ') })),
+      { code: t('timeFormatLiteralCode'), desc: t('timeFormatTokenLiteral'), example: `[${literal}] → ${sample(`[${literal}]`)}` }
+    ]
+  })
 
   const modeOptions = computed<readonly UiSelectOption[]>(() => [
     { value: 'default', label: t('timeFormatDefault') },
@@ -113,7 +136,7 @@
 
   const preview = computed(() => {
     const pattern = draft.value.trim()
-    return pattern ? formatTime(pattern, now, { lang: resolvePageLocale(settings.value.language, env) }) : ''
+    return pattern ? formatTime(pattern, now, { lang: pageLocale.value }) : ''
   })
 
   function cancelTimer(): void {

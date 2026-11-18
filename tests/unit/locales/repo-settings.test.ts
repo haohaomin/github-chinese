@@ -766,15 +766,15 @@ const REGEXP_CASES: Readonly<Record<PartName, readonly RegExpCase[]>> = {
     },
     {
       hits: [
-        ['Retention period must be less than or equal to 90 days.', '保留期不能超过 90天。'],
-        ['Retention period must be 1 days or more.', '保留期不能少于 1天。']
+        ['Retention period must be less than or equal to 90 days.', '保留期不能超过 90 天。'],
+        ['Retention period must be 1 days or more.', '保留期不能少于 1 天。']
       ],
       misses: ['Retention period must be positive.']
     },
     {
       hits: [
-        ['Cache size must be less than or equal to 10000 GB.', '缓存大小不能超过 10000GB。'],
-        ['Cache size must be 10 GB or more.', '缓存大小不能少于 10GB。']
+        ['Cache size must be less than or equal to 10000 GB.', '缓存大小不能超过 10000 GB。'],
+        ['Cache size must be 10 GB or more.', '缓存大小不能少于 10 GB。']
       ],
       misses: ['Cache size must be positive.']
     },

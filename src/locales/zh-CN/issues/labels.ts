@@ -166,7 +166,7 @@ export default {
     'Optionally add a description': '可添加描述',
     'Maximum 50 characters': '最多 50 个字符',
     'Name is required': '名称为必填项',
-    'Name must be 50 characters or fewer': '名称不能超过50 个字符',
+    'Name must be 50 characters or fewer': '名称不能超过 50 个字符',
     'Name has already been taken': '名称已被使用',
     'Description is too long (maximum is 100 characters)': '描述过长（最多 100 个字符）',
     'Color is required': '颜色为必填项',
