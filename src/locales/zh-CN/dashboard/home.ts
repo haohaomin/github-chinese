@@ -42,6 +42,13 @@ export default {
     'Try the new dashboard experience': '试用新版仪表板',
     'Switch to classic dashboard': '切换到经典仪表板',
 
+    // 新版仪表盘侧边栏：主页切换
+    'Make Home your homepage': '将 Home 设为主页',
+    'Make Feed your homepage': '将 Feed 设为主页',
+    'Pin your homepage': '置顶主页',
+    'Choose whether github.com opens to Home or Feed. Select the pin next to either one.':
+      '选择 github.com 打开时显示 Home 还是 Feed，单击旁边的置顶图标即可。',
+
     // 左侧栏：常用存储库、团队、最近活动
     'Top Repositories': '常用存储库',
     'Your teams': '你的团队',
