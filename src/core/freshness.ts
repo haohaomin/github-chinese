@@ -10,7 +10,6 @@ import {
   DEFAULT_FRESHNESS_DAYS,
   FRESHNESS_LEVELS,
   isValidColor,
-  normalizeHexColor,
   type FreshnessColors,
   type FreshnessDays,
   type FreshnessLevel

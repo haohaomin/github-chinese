@@ -85,7 +85,6 @@
   import { useI18n } from '../../components/ui-preferences'
   import type { MessageKey } from '../../i18n'
   import {
-    FRESH_DAYS,
     FRESHNESS_PREVIEW_COLORS,
     MAX_FRESH_DAYS,
     MIN_FRESH_DAYS,

@@ -30,7 +30,6 @@ import { ELEMENT_NODE, SHOW_TEXT, TIME_TAGS } from './dom'
 
 export const TIME_UPDATED_EVENT = 'relative-time-updated'
 
-const CJK_DIGIT_RE = /(?<=\d)(?=[一-鿿])|(?<=[一-鿿])(?=\d)/g
 const CJK_RE = /[一-鿿]/
 const DATETIME_OPTIONS: MutationObserverInit = { attributes: true, attributeFilter: ['datetime'] }
 const TIME_SELECTOR = [...TIME_TAGS].join(', ')
