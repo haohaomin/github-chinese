@@ -35,6 +35,8 @@ export const COUNT_ATTRIBUTE = 'data-gcn-downloads'
 export const CACHE_TTL_MS = 10 * 60 * 1000
 /** 限额用尽期间再问后台的间隔 */
 export const LIMIT_RECHECK_MS = 60 * 1000
+/** DOM 变动后扫描的防抖间隔：收束连续变动，避免每次变动都做全页查询 */
+export const SCAN_DELAY_MS = 200
 
 const SITE_HOST = 'github.com'
 const STYLE_ID = 'gcn-downloads-style'
@@ -162,7 +164,8 @@ export function createReleaseDownloads(doc: Document, deps: ReleaseDownloadsDeps
   let blockedUntil = 0
   /** 页面上有没有加过：没有时关闭状态下的变动不用查找移除 */
   let rendered = false
-  let scheduled = false
+  /** 防抖定时器：收束连续 DOM 变动，避免每帧都做全页查询 */
+  let debounceTimer: ReturnType<typeof setTimeout> | undefined
   let stopped = false
 
   function enabled(): boolean {
@@ -270,13 +273,13 @@ export function createReleaseDownloads(doc: Document, deps: ReleaseDownloadsDeps
         if (stopped) return
         apply(key, result)
         // 显示结果，接着请求下一个发行版
-        schedule()
+        schedule(true)
       })
       .catch(() => undefined)
   }
 
   function scan(): void {
-    scheduled = false
+    debounceTimer = undefined
     if (stopped) return
     if (!enabled()) {
       removeAll()
@@ -293,24 +296,41 @@ export function createReleaseDownloads(doc: Document, deps: ReleaseDownloadsDeps
     }
   }
 
-  function schedule(): void {
-    if (scheduled || stopped) return
-    scheduled = true
-    queueMicrotask(scan)
+  /** 请求完成后立即扫描；MutationObserver 触发时防抖，收束连续变动 */
+  function schedule(immediate = false): void {
+    if (stopped) return
+    if (immediate) {
+      if (debounceTimer !== undefined) {
+        clearTimeout(debounceTimer)
+        debounceTimer = undefined
+      }
+      queueMicrotask(scan)
+      return
+    }
+    if (debounceTimer !== undefined) clearTimeout(debounceTimer)
+    debounceTimer = setTimeout(scan, SCAN_DELAY_MS)
   }
 
-  const observer = new MutationObserver(schedule)
+  const observer = new MutationObserver(() => schedule())
   observer.observe(doc.documentElement, { childList: true, subtree: true })
   scan()
 
   return {
     refresh() {
       // 界面语言可能变了：按缓存重写（有效期内不再请求）
+      if (debounceTimer !== undefined) {
+        clearTimeout(debounceTimer)
+        debounceTimer = undefined
+      }
       removeAll()
       scan()
     },
     stop() {
       stopped = true
+      if (debounceTimer !== undefined) {
+        clearTimeout(debounceTimer)
+        debounceTimer = undefined
+      }
       observer.disconnect()
       removeAll()
     }

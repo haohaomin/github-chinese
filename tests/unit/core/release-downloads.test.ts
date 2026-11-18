@@ -5,6 +5,7 @@ import {
   COUNT_ATTRIBUTE,
   createReleaseDownloads,
   LIMIT_RECHECK_MS,
+  SCAN_DELAY_MS,
   type ReleaseDownloads,
   type ReleaseDownloadsDeps
 } from '../../../src/core/release-downloads'
@@ -61,8 +62,9 @@ function countOf(row: Element): Element | null {
   return row.querySelector(`[${COUNT_ATTRIBUTE}]`)
 }
 
-/** 等请求（依次发出）与随后的重新扫描完成 */
+/** 等请求（依次发出）与随后的重新扫描完成；含防抖窗口 */
 async function settle(): Promise<void> {
+  await new Promise(done => setTimeout(done, SCAN_DELAY_MS + 10))
   for (let tick = 0; tick < 10; tick++) await new Promise(done => setTimeout(done, 0))
 }
 
