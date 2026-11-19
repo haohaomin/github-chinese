@@ -307,7 +307,7 @@ export default {
     'AI detection with a low rate of false positives': '低误报率的 AI 检测',
     'Custom patterns for secrets': '机密自定义模式',
     'Enterprise-grade policies': '企业级策略',
-    'Security overview for risk insights': '提供风险见解的安全概述',
+    'Security overview for risk insights': '提供风险洞察的安全概述',
     'Copilot Autofix for vulnerabilities': '针对漏洞的 Copilot 自动修复',
     'Security findings for third-party tools': '第三方工具的安全发现',
     'Security campaigns to address security debt': '解决安全债务的安全活动',
@@ -389,8 +389,7 @@ export default {
     ],
     [
       new RegExp(`^Current usage for (${DATE_SOURCE}) - (${DATE_SOURCE})\\. Monthly quota resets in (\\d+) day\\(s\\)\\.$`),
-      (_, start: string, end: string, days: string) =>
-        `${joinCjk(dateRange(start, end), '的当前使用情况。')}每月配额将在 ${days}天后重置。`
+      (_, start: string, end: string, days: string) => `${joinCjk(dateRange(start, end), '的当前使用情况。')}每月配额将在 ${days}天后重置。`
     ],
     [
       new RegExp(`^Resets in (\\d+) days? on (${DATE_SOURCE})$`),

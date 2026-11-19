@@ -135,10 +135,10 @@ const PARENT_STATE: Readonly<Record<string, string>> = {
   Duplicate: '重复'
 }
 
-/** 代理会话耗时单位 */
+/** 智能体会话耗时单位 */
 const ELAPSED_UNIT: Readonly<Record<string, string>> = { d: '天', h: '小时', m: '分钟', s: '秒' }
 
-/** 代理会话状态动词 */
+/** 智能体会话状态动词 */
 const SESSION_VERB: Readonly<Record<string, string>> = { Running: '已运行', Ran: '运行了', Active: '活跃了' }
 
 const ELAPSED_SOURCE = '\\d+[dhms](?: \\d+[dhms])?'
@@ -301,7 +301,7 @@ export default {
     'Initializing session': '正在初始化会话',
     'Could not check for this issue': '无法检查此议题',
     'Not available for this issue': '此议题不可用',
-    'Assign to agent': '分配给代理',
+    'Assign to agent': '分配给智能体',
     'More labels': '更多标签',
     'Link copied.': '链接已复制。',
     'Could not copy link.': '无法复制链接。',
@@ -439,7 +439,7 @@ export default {
     'Unsaved changes': '未保存的更改',
     'No value': '无值',
 
-    // 看板卡片：代理会话、日期令牌、父议题、存储库图标（公共/专用存储库与“在新标签页中打开”由通用词典处理）
+    // 看板卡片：智能体会话、日期令牌、父议题、存储库图标（公共/专用存储库与“在新标签页中打开”由通用词典处理）
     'In progress': '正在进行',
     Complete: '已完成',
     'Created:': '创建时间：',
@@ -565,7 +565,7 @@ export default {
     [/^(?!Reacted by |, )(.+) and (\d+) more$/, '$1 及另外 $2 个'],
     [new RegExp(`^No (${BOARD_FIELD_SOURCE})$`), (_, field) => `无${BOARD_FIELD[field] ?? field}`],
     [/^\((Open|Closed|Completed|Not planned|Duplicate)\)$/, (_, state) => `（${PARENT_STATE[state] ?? state}）`],
-    // 看板卡片的代理会话
+    // 看板卡片的智能体会话
     [/^Open (Copilot|Claude|Codex) session$/, '打开 $1 会话'],
     [/^(Copilot|Claude|Codex) session(:?)$/, (_, agent, colon) => `${agent} 会话${colon ? '：' : ''}`],
     [

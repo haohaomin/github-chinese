@@ -1,12 +1,12 @@
 import type { PageDictionary } from '../../../core/types'
 import { TIME_SOURCE, joinCjk, translateTime } from '../helpers'
 
-/** 代理名称（用于“选择要启用 X 的存储库”等句子）；产品名按用户要求译成中文，表外的名称原样保留 */
+/** 智能体名称（用于“选择要启用 X 的存储库”等句子）；产品名按用户要求译成中文，表外的名称原样保留 */
 const AGENT_NAME: Readonly<Record<string, string>> = {
-  'Cloud agent': '云代理',
-  'Coding agent': '编码代理',
-  'Copilot cloud agent': 'Copilot 云代理',
-  'Copilot coding agent': 'Copilot 编码代理'
+  'Cloud agent': '云端智能体',
+  'Coding agent': '编码智能体',
+  'Copilot cloud agent': 'Copilot 云端智能体',
+  'Copilot coding agent': 'Copilot 编码智能体'
 }
 
 const USAGE_LABEL: Readonly<Record<string, string>> = {
@@ -59,7 +59,7 @@ function enterpriseOwner(name: string): string {
 
 /**
  * Copilot 设置（/settings/copilot/…）：计划状态与使用情况、功能开关与策略说明、模型策略、
- * 公共代码匹配、数据使用、可见性、云代理存储库访问、代理合并、代码审查力度、编程工具、入门清单。
+ * 公共代码匹配、数据使用、可见性、云端智能体存储库访问、智能体合并、代码审查力度、编程工具、入门清单。
  * 产品名、方案名按用户要求译成中文（Copilot Chat → Copilot 聊天、Copilot Spaces → Copilot 空间、Copilot Pro → Copilot 专业版，
  * 见 product-names.md）；单独出现的方案名 Copilot Pro 等由 settings-account/plans.ts 收录。
  */
@@ -102,7 +102,7 @@ export default {
     // 使用情况
     'Premium requests': '高级请求',
     'AI credits included with your plan, reset monthly. Enable additional usage to continue with pay-as-you-go credits once you run out of your included usage.':
-      '计划内含的 AI 额度，每月重置。启用额外使用量以在用完包含的使用量后按量付费继续使用。',
+      '计划内含的 AI 额度，每月重置。启用额外使用量，可在用完包含的使用量后继续按量付费使用。',
     'No usage yet': '暂无使用情况',
     'Pay-as-you-go usage of additional AI credits once you run out of your included usage. Set a budget to cap your maximum monthly spend.':
       '用完包含的使用量后按量付费使用额外 AI 额度。设置预算以限制每月最高支出。',
@@ -167,7 +167,7 @@ export default {
     "You won't have access to the feature": '你将无法使用此功能',
     'You won’t have access to the feature': '你将无法使用此功能',
     'Use Copilot on GitHub.com and GitHub Mobile. Start and continue secure cloud sessions across supported Copilot surfaces. This policy replaces the previous Copilot Chat in GitHub, Copilot Chat in GitHub Mobile, and Cloud Agent policies.':
-      '在 GitHub.com 和 GitHub 移动版上使用 Copilot。在受支持的 Copilot 界面中启动并继续安全的云端会话。此策略取代此前的 GitHub 中的 Copilot 聊天、GitHub 移动版中的 Copilot 聊天和云代理策略。',
+      '在 GitHub.com 和 GitHub 移动版上使用 Copilot。在受支持的 Copilot 界面中启动并继续安全的云端会话。此策略取代此前的 GitHub 中的 Copilot 聊天、GitHub 移动版中的 Copilot 聊天和云端智能体策略。',
     'Semantic indexing for Non-GitHub Repositories': '非 GitHub 存储库的语义索引',
     'to index your non-GitHub repositories in VSCode.': '在 VSCode 中为你的非 GitHub 存储库编制索引。',
     // 「You can use the <a>GitHub Copilot app</a>. Enforcement begins …」（原文只有日期里的逗号，译文不另加）
@@ -187,18 +187,18 @@ export default {
     'Automatic Copilot code review': '自动 Copilot 代码审查',
     'Copilot will automatically review your pull requests.': 'Copilot 将自动审查你的拉取请求。',
     'Learn more about configuring automatic code reviews.': '了解如何配置自动代码审查。',
-    'Delegate tasks to Copilot coding agent in repositories where it is enabled': '在已启用 Copilot 编码代理的存储库中将任务委派给它',
-    'Delegate tasks to Copilot cloud agent in repositories where it is enabled': '在已启用 Copilot 云代理的存储库中将任务委派给它',
+    'Delegate tasks to Copilot coding agent in repositories where it is enabled': '在已启用 Copilot 编码智能体的存储库中将任务委派给它',
+    'Delegate tasks to Copilot cloud agent in repositories where it is enabled': '在已启用 Copilot 云端智能体的存储库中将任务委派给它',
     // 产品名：功能区块标题，也是「You can use <a>Copilot Memory</a> to remember …」中的链接
     'Copilot Memory': 'Copilot 记忆',
-    'to remember repository context across Copilot agent interactions.': '在 Copilot 代理交互中记住存储库上下文。',
+    'to remember repository context across Copilot agent interactions.': '在 Copilot 智能体交互中记住存储库上下文。',
     // 记忆的下拉按钮：「<span>Copilot Memory:</span> User and repository memories allowed」
     'Copilot Memory:': 'Copilot 记忆：',
     'User and repository memories allowed': '允许用户和存储库记忆',
     "Choose which memories Copilot can use in work you start, such as agent sessions and code reviews. If user or repository memory is disabled by organization, enterprise or repository policy, those memories will not be supplied, regardless of your preference. Your preference remains saved and will automatically take effect if the policy later allows memory. Disabling memory does not delete existing memories. While user memories aren't enabled, you can't view or delete them on the Memory page.":
-      '选择 Copilot 在你发起的工作（如代理会话和代码审查）中可以使用哪些记忆。如果组织、企业或存储库策略禁用了用户记忆或存储库记忆，无论你的偏好如何，都不会提供这些记忆。你的偏好会保留，并在策略日后允许记忆时自动生效。禁用记忆不会删除现有记忆。未启用用户记忆时，你无法在记忆页面查看或删除它们。',
+      '选择 Copilot 在你发起的工作（如智能体会话和代码审查）中可以使用哪些记忆。如果组织、企业或存储库策略禁用了用户记忆或存储库记忆，无论你的偏好如何，都不会提供这些记忆。你的偏好会保留，并在策略日后允许记忆时自动生效。禁用记忆不会删除现有记忆。未启用用户记忆时，你无法在记忆页面查看或删除它们。',
     'Choose which memories Copilot can use in work you start, such as agent sessions and code reviews. If user or repository memory is disabled by organization, enterprise or repository policy, those memories will not be supplied, regardless of your preference. Your preference remains saved and will automatically take effect if the policy later allows memory. Disabling memory does not delete existing memories. While user memories aren’t enabled, you can’t view or delete them on the Memory page.':
-      '选择 Copilot 在你发起的工作（如代理会话和代码审查）中可以使用哪些记忆。如果组织、企业或存储库策略禁用了用户记忆或存储库记忆，无论你的偏好如何，都不会提供这些记忆。你的偏好会保留，并在策略日后允许记忆时自动生效。禁用记忆不会删除现有记忆。未启用用户记忆时，你无法在记忆页面查看或删除它们。',
+      '选择 Copilot 在你发起的工作（如智能体会话和代码审查）中可以使用哪些记忆。如果组织、企业或存储库策略禁用了用户记忆或存储库记忆，无论你的偏好如何，都不会提供这些记忆。你的偏好会保留，并在策略日后允许记忆时自动生效。禁用记忆不会删除现有记忆。未启用用户记忆时，你无法在记忆页面查看或删除它们。',
     // Copilot Dreaming（功能名 Dreaming 译「梦境」，见 scoped）；「<strong>Memories are fully managed.</strong> Dreaming applies …」
     'Dreaming works in the background to improve the memories and guidance Copilot uses in future coding sessions and code reviews.':
       '梦境在后台运行，改进 Copilot 在今后的编码会话和代码审查中使用的记忆和指导。',
@@ -217,9 +217,9 @@ export default {
     'GitHub’s pre-release terms': 'GitHub 预发行条款',
     'MCP servers in Copilot': 'Copilot 中的 MCP 服务器',
     'Connect MCP servers to Copilot in all Copilot editors and Coding Agent.':
-      '在所有 Copilot 编辑器和编码代理中将 MCP 服务器连接到 Copilot。',
+      '在所有 Copilot 编辑器和编码智能体中将 MCP 服务器连接到 Copilot。',
     'Connect MCP servers to Copilot in all Copilot editors and Copilot cloud agent.':
-      '在所有 Copilot 编辑器和 Copilot 云代理中将 MCP 服务器连接到 Copilot。',
+      '在所有 Copilot 编辑器和 Copilot 云端智能体中将 MCP 服务器连接到 Copilot。',
     'Copilot-generated commit messages': 'Copilot 生成的提交消息',
     'Allow Copilot to suggest commit messages when you make changes on GitHub.com.':
       '允许 Copilot 为你在 GitHub.com 上所做的更改建议提交消息。',
@@ -262,13 +262,13 @@ export default {
     'When disabled, Copilot will be hidden and unavailable. This setting does not apply to Copilot search on GitHub Docs.':
       '禁用后，Copilot 将隐藏且不可用。此设置不适用于 GitHub 文档上的 Copilot 搜索。',
 
-    // 云代理：说明与存储库访问
+    // 云端智能体：说明与存储库访问
     'With Copilot cloud agent, you can delegate tasks to Copilot, freeing you to focus on the creative, complex, and high-impact work that matters most. Simply assign an issue to Copilot, wait for the agent to request your review, then leave feedback on the pull request to iterate.':
-      '借助 Copilot 云代理，你可以将任务委派给 Copilot，从而专注于最重要的创造性、复杂且影响深远的工作。只需将议题分配给 Copilot，等待代理请求你审查，然后在拉取请求中留下反馈以继续迭代。',
+      '借助 Copilot 云端智能体，你可以将任务委派给 Copilot，从而专注于最重要的创造性、复杂且影响深远的工作。只需将议题分配给 Copilot，等待智能体请求你审查，然后在拉取请求中留下反馈以继续迭代。',
     'With Copilot coding agent, you can delegate tasks to Copilot, freeing you to focus on the creative, complex, and high-impact work that matters most. Simply assign an issue to Copilot, wait for the agent to request your review, then leave feedback on the pull request to iterate.':
-      '借助 Copilot 编码代理，你可以将任务委派给 Copilot，从而专注于最重要的创造性、复杂且影响深远的工作。只需将议题分配给 Copilot，等待代理请求你审查，然后在拉取请求中留下反馈以继续迭代。',
+      '借助 Copilot 编码智能体，你可以将任务委派给 Copilot，从而专注于最重要的创造性、复杂且影响深远的工作。只需将议题分配给 Copilot，等待智能体请求你审查，然后在拉取请求中留下反馈以继续迭代。',
     'With Coding agent, you can delegate tasks to Copilot, freeing you to focus on the creative, complex, and high-impact work that matters most. Simply assign an issue to Copilot, wait for the agent to request your review, then leave feedback on the pull request to iterate.':
-      '借助编码代理，你可以将任务委派给 Copilot，从而专注于最重要的创造性、复杂且影响深远的工作。只需将议题分配给 Copilot，等待代理请求你审查，然后在拉取请求中留下反馈以继续迭代。',
+      '借助编码智能体，你可以将任务委派给 Copilot，从而专注于最重要的创造性、复杂且影响深远的工作。只需将议题分配给 Copilot，等待智能体请求你审查，然后在拉取请求中留下反馈以继续迭代。',
     'Learn more in the docs.': '在文档中了解详情。',
     'Include all current and future repositories': '包括所有当前和未来的存储库',
     'Applies only to specifically selected repositories': '仅适用于明确选定的存储库',
@@ -284,37 +284,37 @@ export default {
     'Public repository:': '公共存储库：',
     'Private repository:': '专用存储库：',
     'Internal repository:': '内部存储库：',
-    'Use of Copilot coding agent is subject to the': '使用 Copilot 编码代理须遵守',
-    'Use of Copilot cloud agent is subject to the': '使用 Copilot 云代理须遵守',
+    'Use of Copilot coding agent is subject to the': '使用 Copilot 编码智能体须遵守',
+    'Use of Copilot cloud agent is subject to the': '使用 Copilot 云端智能体须遵守',
     'Failed to update selection, please try again later.': '无法更新选择，请稍后重试。',
     // because 从句用“因…而…”，不另加逗号
     "You can enable Copilot cloud agent for other users, but you won't be able to assign tasks to Copilot because you don't have a Copilot Pro, Copilot Pro+, Copilot Business or Copilot Enterprise license.":
-      '你可以为其他用户启用 Copilot 云代理，但因没有 Copilot 专业版、Copilot 专业增强版、Copilot 商业版或 Copilot 企业版许可证而无法向 Copilot 分配任务。',
+      '你可以为其他用户启用 Copilot 云端智能体，但因没有 Copilot 专业版、Copilot 专业增强版、Copilot 商业版或 Copilot 企业版许可证而无法向 Copilot 分配任务。',
     "You can enable Copilot coding agent for other users, but you won't be able to assign tasks to Copilot because you don't have a Copilot Pro, Copilot Pro+, Copilot Business or Copilot Enterprise license.":
-      '你可以为其他用户启用 Copilot 编码代理，但因没有 Copilot 专业版、Copilot 专业增强版、Copilot 商业版或 Copilot 企业版许可证而无法向 Copilot 分配任务。',
+      '你可以为其他用户启用 Copilot 编码智能体，但因没有 Copilot 专业版、Copilot 专业增强版、Copilot 商业版或 Copilot 企业版许可证而无法向 Copilot 分配任务。',
     "You can enable Copilot coding agent for other users, but you won't be able to assign tasks to Copilot because you don't have a Copilot Pro+ or Copilot Enterprise license.":
-      '你可以为其他用户启用 Copilot 编码代理，但因没有 Copilot 专业增强版或 Copilot 企业版许可证而无法向 Copilot 分配任务。',
+      '你可以为其他用户启用 Copilot 编码智能体，但因没有 Copilot 专业增强版或 Copilot 企业版许可证而无法向 Copilot 分配任务。',
     "You can enable Copilot coding agent for other users, but you won't be able to assign tasks to Copilot because the Copilot coding agent policy has been disabled by an administrator.":
-      '你可以为其他用户启用 Copilot 编码代理，但因管理员已禁用 Copilot 编码代理策略而无法向 Copilot 分配任务。',
+      '你可以为其他用户启用 Copilot 编码智能体，但因管理员已禁用 Copilot 编码智能体策略而无法向 Copilot 分配任务。',
     "You can enable Copilot cloud agent for other users, but you won't be able to assign tasks to Copilot because the Copilot cloud agent policy has been disabled by an administrator.":
-      '你可以为其他用户启用 Copilot 云代理，但因管理员已禁用 Copilot 云代理策略而无法向 Copilot 分配任务。',
+      '你可以为其他用户启用 Copilot 云端智能体，但因管理员已禁用 Copilot 云端智能体策略而无法向 Copilot 分配任务。',
 
-    // 代理合并
-    'Agent Merge': '代理合并',
+    // 智能体合并
+    'Agent Merge': '智能体合并',
     'With Agent Merge, Copilot can watch your pull requests, get them ready to merge and keep them ready to merge.':
-      '借助代理合并，Copilot 可以跟踪你的拉取请求，使其达到并保持可合并状态。',
+      '借助智能体合并，Copilot 可以跟踪你的拉取请求，使其达到并保持可合并状态。',
     'Your settings could not be saved': '无法保存你的设置',
     'Fix failed Actions workflows': '修复失败的操作工作流',
     'Address review feedback': '处理审查反馈',
-    'Enable Agent Merge automatically for pull requests I create': '为我创建的拉取请求自动启用代理合并',
+    'Enable Agent Merge automatically for pull requests I create': '为我创建的拉取请求自动启用智能体合并',
     'Turn on Agent Merge when I create a pull request in the ready state or mark a draft pull request as ready for review. Applies to pull requests I create in any repository':
-      '在我创建处于就绪状态的拉取请求或将草稿拉取请求标记为可供审查时开启代理合并。适用于我在任何存储库中创建的拉取请求',
-    'No automatic agent merge actions are currently available.': '目前没有可用的自动代理合并操作。',
+      '在我创建处于就绪状态的拉取请求或将草稿拉取请求标记为可供审查时开启智能体合并。适用于我在任何存储库中创建的拉取请求',
+    'No automatic agent merge actions are currently available.': '目前没有可用的自动智能体合并操作。',
     // 原文两句之间缺句号（元素拼接），译文按两句断开
     'Turn on Agent Merge when I create a pull request in the ready state or mark a draft pull request as ready for review. Applies to pull requests I create in any repository No automatic agent merge actions are currently available.':
-      '在我创建处于就绪状态的拉取请求或将草稿拉取请求标记为可供审查时开启代理合并。适用于我在任何存储库中创建的拉取请求。目前没有可用的自动代理合并操作。',
+      '在我创建处于就绪状态的拉取请求或将草稿拉取请求标记为可供审查时开启智能体合并。适用于我在任何存储库中创建的拉取请求。目前没有可用的自动智能体合并操作。',
     'Your automatic agent merge settings could not be updated. Your saved settings are shown.':
-      '无法更新自动代理合并设置。当前显示的是已保存的设置。',
+      '无法更新自动智能体合并设置。当前显示的是已保存的设置。',
 
     // 代码审查力度
     'Default review effort level': '默认审查力度',
@@ -360,7 +360,7 @@ export default {
 
     // 云端 Copilot（/settings/copilot/coding_agent）
     'From researching a repository to reviewing and merging a pull request, Copilot works in a secure, isolated cloud environment. Delegate work to an agent, freeing you to focus on the creative, complex, and high-impact work that matters most.':
-      '从研究存储库到审查并合并拉取请求，Copilot 都在安全、隔离的云环境中工作。将工作委派给代理，让你专注于最重要的创造性、复杂且影响深远的工作。',
+      '从研究存储库到审查并合并拉取请求，Copilot 都在安全、隔离的云环境中工作。将工作委派给智能体，让你专注于最重要的创造性、复杂且影响深远的工作。',
     'Choose which repositories Copilot in the cloud should be enabled in. Cloud will only be an environment option where it is enabled for the repository and in the Copilot license policies.':
       '选择要在哪些存储库中启用云端 Copilot。云端只有在存储库中已启用且 Copilot 许可证策略允许时才会作为环境选项出现。'
   },
@@ -408,7 +408,7 @@ export default {
     Unconfigured: '未配置',
     'No policy': '无策略',
     'Requires preview features': '需要预览功能',
-    'Agent sessions': '代理会话',
+    'Agent sessions': '智能体会话',
     'pre-release terms': '预发行条款',
     'No repositories': '无存储库',
     'Only selected repositories': '仅选定的存储库',
@@ -479,7 +479,7 @@ export default {
     [/^If enabled, you can access and send data to (.+)\.$/, '启用后，你可以访问 $1 并向其发送数据。'],
     [new RegExp(`^(${MODEL_VENDOR} .+) in Copilot$`), 'Copilot 中的 $1'],
 
-    // 云代理：存储库访问（原文无逗号，译文不加）
+    // 云端智能体：存储库访问（原文无逗号，译文不加）
     [
       /^Choose which repositories (.+?) should be enabled in\. (.+?) will only be available where it is enabled for the repository and in the Copilot license policies\.$/,
       (_, agent: string) => {

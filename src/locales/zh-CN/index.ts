@@ -18,6 +18,7 @@ import marketplace from './marketplace'
 import mcp from './mcp'
 import newPages from './new'
 import notifications from './notifications'
+import orgApps from './org-apps'
 import orgSettings from './org-settings'
 import organization from './organization'
 import packages from './packages'
@@ -61,6 +62,7 @@ export const zhCN: LocaleBundle = [
   ['settings', settingsAccount],
   ['settings', settingsDeveloper],
   ['org-settings', orgSettings],
+  ['org-apps', orgApps],
   ['notifications', notifications],
   ['search', search],
   ['new', newPages],

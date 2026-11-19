@@ -240,7 +240,7 @@ export default {
     ],
     [/^Copy ([\w.-]+-latest)( label)?$/, (_, name: string, label: string) => `复制 ${name}${label ? ' 标签' : ''}`],
     // 指标
-    [/^Insights: ([\w.-]+\/[\w.-]+)$/, '见解：$1'],
+    [/^Insights: ([\w.-]+\/[\w.-]+)$/, '洞察：$1'],
     [/^Showing data from (\d{4}\/\d{1,2}\/\d{1,2}) to$/, '数据时段 $1 至'],
     [/^Period: (.+)$/, (_, text: string) => `时段：${period(text)}`],
     [

@@ -1,11 +1,29 @@
 import type { PageDictionary } from '../../../core/types'
-import { TIME_SOURCE, joinCjk, translateTime } from '../helpers'
+import { MONTH_SOURCE, TIME_SOURCE, joinCjk, translateDate, translateTime } from '../helpers'
+
+/** 暂停时间：「October 1st, 2026 at 00:36 (CST)」（不含捕获组） */
+export const SUSPEND_TIME_SOURCE = `${MONTH_SOURCE} \\d{1,2}(?:st|nd|rd|th)?, \\d{4} at \\d{1,2}:\\d{2}(?: [AP]M)? \\([^()]+\\)`
+
+const SUSPEND_TIME_RE = new RegExp(
+  `^(${MONTH_SOURCE}) (\\d{1,2})(?:st|nd|rd|th)?, (\\d{4}) at (\\d{1,2}):(\\d{2})(?: ([AP]M))? \\(([^()]+)\\)$`
+)
+
+/** 「October 1st, 2026 at 00:36 (CST)」→ 2026年10月1日 00:36（CST）；12 小时制换成 24 小时制 */
+export function translateSuspendTime(text: string): string {
+  const match = SUSPEND_TIME_RE.exec(text)
+  const month = match ? translateDate(`${match[1]} ${match[2]}, ${match[3]}`) : undefined
+  if (!match || month === undefined) return text
+  const hour = (Number(match[4]) % (match[6] ? 12 : 24)) + (match[6] === 'PM' ? 12 : 0)
+  return `${month} ${String(hour).padStart(2, '0')}:${match[5]}（${match[7]}）`
+}
 
 /**
  * 开发人员设置：GitHub 应用（/settings/apps、/settings/apps/new、/settings/apps/…）与
  * OAuth 应用（/settings/developers、/settings/applications/new、/settings/applications/…）。
  * 包括注册表单、常规设置（客户端密钥、私钥、显示信息、IP 允许列表）、安装、高级（转让、删除、公共/专用）、
  * 可选功能、Copilot 配置。权限与可订阅事件见 permissions.ts。
+ * 用户规定（2026-11-20）：应用设置页的 Web 钩子 deliveries 作“请求”（Recent deliveries → 最近请求，Redeliver → 重新请求），
+ * 应用的 logo / avatar 作“图标”（上传图标、裁剪新图标、删除此图标）。存储库、组织 Web 钩子页仍作“交付 / 重新传递”。
  */
 export default {
   static: {
@@ -121,8 +139,8 @@ export default {
     'Basic information': '基本信息',
     'Display information': '显示信息',
     'Drag & drop': '拖放',
-    'Upload a logo...': '上传徽标...',
-    'Upload a logo…': '上传徽标…',
+    'Upload a logo...': '上传图标...',
+    'Upload a logo…': '上传图标…',
     'You can also drag and drop a picture from your computer.': '你也可以从电脑拖放图片。',
     // 上传错误：原文两句，第二句「Try again.」单独成句（与下方 Whoops! 等同组提示一致）
     'Only images, please. Try again.': '仅支持图片。请重试。',
@@ -130,7 +148,6 @@ export default {
     'Whoops! Try again.': '出错了！请重试。',
     'File contents don’t match the file extension. Try again.': '文件内容与扩展名不符。请重试。',
     "File contents don't match the file extension. Try again.": '文件内容与扩展名不符。请重试。',
-    'Delete this image': '删除此图片',
     'Badge background color': '徽章背景色',
     'The hex value of the badge background color. Hex colors should only contain numbers and letters from a-f.':
       '徽章背景色的十六进制值。十六进制颜色只能包含数字和字母 a-f。',
@@ -171,8 +188,54 @@ export default {
     'Delete GitHub App?': '删除 GitHub 应用？',
     'be undone. This will permanently delete the': '撤销。这将永久删除',
     // 「This will also uninstall the GitHub App from <strong>3 accounts</strong>.」
-    'This will also uninstall the GitHub App from': '这还会卸载此 GitHub 应用共涉及',
+    'This will also uninstall the GitHub App from': '这还会卸载此 GitHub 应用并影响',
     'Please type in the name of the GitHub App to confirm.': '请输入 GitHub 应用的名称以确认。',
+    'Please type in the name of the GitHub App to confirm': '请输入 GitHub 应用的名称以确认',
+    'Type the name of the GitHub App to confirm:': '输入 GitHub 应用的名称以确认：',
+    "New owner's GitHub username, organization, or enterprise name:": '新所有者的 GitHub 用户名、组织或企业名称：',
+    'New owner’s GitHub username, organization, or enterprise name:': '新所有者的 GitHub 用户名、组织或企业名称：',
+    'Search for new owner': '搜索新所有者',
+    'Job queued to delete GitHub App. It may take a few minutes to complete.': '已排队删除 GitHub 应用。可能需要几分钟才能完成。',
+    'Job queued to delete application. It may take a few minutes to complete.': '已排队删除应用。可能需要几分钟才能完成。',
+
+    // 常规设置：保存失败、客户端密钥、私钥（密钥对）
+    'Application could not be saved. Please check the form for errors.': '无法保存应用。请检查表单中的错误。',
+    'You have no client secrets': '暂无客户端密钥',
+    'Client secrets authenticate this GitHub App using the OAuth client flow.':
+      '客户端密钥用于在 OAuth 客户端流程中验证此 GitHub 应用的身份。',
+    'Delete client secret?': '删除客户端密钥？',
+    'This action cannot be undone. This client secret will stop working immediately. Are you sure you want to delete this client secret?':
+      '此操作无法撤销。此客户端密钥将立即失效。确定要删除此客户端密钥吗？',
+    'Client secret removed': '已删除客户端密钥',
+    'You have no key pairs': '暂无密钥对',
+    'Private key (generating)': '私钥（生成中）',
+    'Delete private key?': '删除私钥？',
+    'This action cannot be undone. This key will stop working immediately. Are you sure you want to delete this private key?':
+      '此操作无法撤销。此密钥将立即失效。确定要删除此私钥吗？',
+    'You cannot delete the only private key. Generate a new key first.': '无法删除唯一的私钥。请先生成新密钥。',
+
+    // IP 允许列表
+    'IP address or CIDR range': 'IP 地址或 CIDR 范围',
+    'IP allow list entry created. IP allow list modifications can take a few minutes to go into effect.':
+      '已创建 IP 允许列表条目。IP 允许列表的修改可能需要几分钟才能生效。',
+    'IP allow list entry updated. IP allow list modifications can take a few minutes to go into effect.':
+      '已更新 IP 允许列表条目。IP 允许列表的修改可能需要几分钟才能生效。',
+    'IP allow list entry deleted. IP allow list modifications can take a few minutes to go into effect.':
+      '已删除 IP 允许列表条目。IP 允许列表的修改可能需要几分钟才能生效。',
+    'Are you sure you want to delete this entry?': '确定要删除此条目吗？',
+    // 「This will permanently delete the IP allow list entry for <strong>IP</strong>.」
+    'This will permanently delete the IP allow list entry for': '这将永久删除 IP 允许列表中的条目',
+    'Yes, delete this IP allow list entry': '是，删除此 IP 允许列表条目',
+    // 检查 IP 地址的结果（IP 在前面的元素里）
+    'is not permitted by the IP allow list.': '未获 IP 允许列表允许。',
+    'not permitted by the IP allow list.': '未获 IP 允许列表允许。',
+    'is permitted by the IP allow list.': '已获 IP 允许列表允许。',
+
+    // OAuth 应用：「You can list your application in the <a>GitHub Marketplace</a> so that other users can discover it.」
+    'You can list your application in the': '你可以将应用上架到',
+    'List this application in the Marketplace': '将此应用上架到市场',
+    'Hex color code': '十六进制颜色代码',
+    'Hex colors should only contain numbers and letters from a-f': '十六进制颜色只能包含数字和字母 a-f',
     'I understand the consequences, delete this GitHub App': '我已了解后果，删除此 GitHub 应用',
     'Make this GitHub App public': '将此 GitHub 应用设为公共',
     'Allow this GitHub App to be installed on other accounts.': '允许在其他帐户上安装此 GitHub 应用。',
@@ -237,8 +300,8 @@ export default {
     'Allow this OAuth App to authorize users via the': '允许此 OAuth 应用使用',
     'Register application': '注册应用',
     'Update application': '更新应用',
-    'Application logo': '应用徽标',
-    'Upload new logo': '上传新徽标',
+    'Application logo': '应用图标',
+    'Upload new logo': '上传新图标',
     'Delete application': '删除应用',
     'Transfer ownership of this application': '转让此应用的所有权',
     'Delete this OAuth application': '删除此 OAuth 应用',
@@ -300,9 +363,14 @@ export default {
     '(not recommended)': '（不推荐）',
     // 「Disabling this option is <a>not recommended</a>.」
     'not recommended': '不推荐',
-    'Recent deliveries': '最近交付',
+    'Recent deliveries': '最近请求',
+    'Recent Deliveries': '最近请求',
     Response: '响应',
-    Redeliver: '重新传递',
+    Redeliver: '重新请求',
+    // 重新请求过的记录的标记、确认对话框
+    redelivery: '重新请求',
+    'Redeliver payload?': '重新请求有效负载？',
+    'Yes, redeliver this payload': '是，重新请求此有效负载',
     Headers: '标头',
     Payload: '有效负载',
 
@@ -315,10 +383,16 @@ export default {
     'Check IP address': '检查 IP 地址',
     'Enter an IP address to check whether it is permitted by enabled entries on the IP allow list.':
       '输入 IP 地址以检查 IP 允许列表中已启用的条目是否允许它。',
-    'Crop your new avatar': '裁剪新头像',
-    'Set new avatar': '设置新头像',
-    'Your avatar has been updated. It may take a few minutes to update across the site.': '头像已更新。全站同步可能需要几分钟。',
-    'This avatar has been deleted.': '已删除此头像。',
+    // 应用图标的上传、裁剪、删除
+    'Crop your new avatar': '裁剪新图标',
+    'Set new avatar': '设置新图标',
+    'Your avatar has been updated. It may take a few minutes to update across the site.': '图标已更新。全站同步可能需要几分钟。',
+    'This avatar has been deleted.': '已删除此图标。',
+    'Delete this image': '删除此图标',
+    'Key pairs': '密钥对',
+    'New key': '新建密钥',
+    'Short description': '简短描述',
+    'contact GitHub': '联系 GitHub',
     'Uploading...': '上传中...',
     'Uploading…': '上传中…',
     all: '所有',
@@ -344,6 +418,16 @@ export default {
     ],
     [/^(\d+) accounts?$/, '$1 个帐户'],
     [/^(\d+) users?$/, '$1 个用户'],
+    // 客户端密钥、私钥：「Added just now by <a>octocat</a>」
+    [new RegExp(`^Added (${TIME_SOURCE}) by$`), (_, time: string) => joinCjk(translateTime(time), '添加，添加者')],
+    // 检查 IP 地址的结果
+    [/^(\S+) is not permitted by the IP allow list\.$/, '$1 未获 IP 允许列表允许。'],
+    [/^(\S+) is permitted by the IP allow list\.$/, '$1 已获 IP 允许列表允许。'],
+    // 被 GitHub 暂停的应用
+    [
+      new RegExp(`^This GitHub App was suspended by GitHub staff on (${SUSPEND_TIME_SOURCE})\\.$`),
+      (_, time: string) => `此 GitHub 应用已于 ${translateSuspendTime(time)}被 GitHub 工作人员暂停。`
+    ],
     // 客户端密钥：「Added 3 days ago by octocat」
     [
       new RegExp(`^Added (${TIME_SOURCE}) by ([\\w-]+)$`),
@@ -354,5 +438,12 @@ export default {
     [/^Choose a feature to activate for (.+):$/, '选择要为 $1 激活的功能：'],
     // 最近交付：交付耗时（与存储库 Web 钩子一致）
     [/^Completed in ([\d.]+) seconds?(\.?)$/, (_, seconds: string, dot: string) => `耗时 ${seconds} 秒${dot ? '。' : ''}`]
+  ],
+  // 删除 GitHub 应用对话框：整句调整语序，未命中时按 static 的片段译文
+  inline: [
+    ['This will also uninstall the GitHub App from {}.', '这还会从 {}中卸载此 GitHub 应用。'],
+    // OAuth 应用的用户数：「<span>0</span> users」
+    ['{#} users', '{#} 个用户'],
+    ['{#} user', '{#} 个用户']
   ]
 } satisfies PageDictionary

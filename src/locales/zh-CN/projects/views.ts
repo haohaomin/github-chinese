@@ -110,7 +110,7 @@ const MACRO_OPERATORS: Readonly<Record<string, string>> = {
 
 /**
  * 迭代宏：Current iteration / Next sprint（字段名小写）。排除同形的通用短语：Next page、Next month 等，
- * 以及项目页上代理会话的 Next step / Previous step、Copilot 的 Next steps、议题查看器的 Next issue
+ * 以及项目页上智能体会话的 Next step / Previous step、Copilot 的 Next steps、议题查看器的 Next issue
  */
 const MACRO_RE = /^(Current|Next|Previous) (?!(?:page|day|week|month|quarter|year|steps?|issue)$)([a-z][\w -]*)$/
 /** 通配宏：iteration starts with... */
@@ -184,7 +184,7 @@ const STATIC: Readonly<Record<string, string>> = {
   'Only rows that have been loaded into this view will be exported.': '只导出此视图中已加载的行。',
   'Generate chart': '生成图表',
   'Show hierarchy': '显示层级',
-  'Show agent sessions': '显示代理会话',
+  'Show agent sessions': '显示智能体会话',
   'Select row height': '选择行高',
   'Switch layout: Table': '切换布局：表格',
   'Switch layout: Board': '切换布局：看板',
@@ -647,7 +647,7 @@ export default {
     ['(Due on {})', '（截止于 {}）']
   ],
   ignore: [
-    // 项目标题（用户内容）。顶栏的项目标题是 SanitizedHtml 渲染的 h1（memex-title.tsx）；项目设置、工作流、见解、
+    // 项目标题（用户内容）。顶栏的项目标题是 SanitizedHtml 渲染的 h1（memex-title.tsx）；项目设置、工作流、洞察、
     // 存档页顶栏的路由标题（RouteTitle，Primer Heading 渲染的 h1，不带 SanitizedHtml__）是界面文字，照常翻译
     '#memex-root [class*="topBar__"] h1[class*="SanitizedHtml__"]',
     // 项目详细信息侧栏的项目标题（side-panel/content.tsx）：浮层版渲染在 Primer 门户里（#memex-root 外），不加前缀

@@ -30,6 +30,11 @@
             <UiTabs v-model="dictionaryTab" :tabs="dictionaryTabs" :label="t('dictionaries')" variant="pill">
               <template #custom><CustomEntriesSection /></template>
               <template #builtin><DictionarySection /></template>
+              <template #actions>
+                <UiButton size="sm" :href="CONTRIBUTE_DICTIONARY_URL" target="_blank" rel="noreferrer" data-test="contribute-dictionary">
+                  {{ t('contributeDictionary') }}
+                </UiButton>
+              </template>
             </UiTabs>
           </div>
         </template>
@@ -79,7 +84,7 @@
   import UpdateCheckButton from '../../components/UpdateCheckButton.vue'
   import { provideUpdateCheck } from '../../components/useUpdateCheck'
   import type { MessageKey } from '../../i18n'
-  import { FEEDBACK_URL, getExtensionVersion, REPOSITORY_URL } from '../../shared/extension'
+  import { CONTRIBUTE_DICTIONARY_URL, FEEDBACK_URL, getExtensionVersion, REPOSITORY_URL } from '../../shared/extension'
   import AccelerateSection from './AccelerateSection.vue'
   import AutoLoadSection from './AutoLoadSection.vue'
   import CustomEntriesSection from './CustomEntriesSection.vue'

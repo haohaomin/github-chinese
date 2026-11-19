@@ -2022,7 +2022,7 @@ describe('pulls 静态词条', () => {
     ['Author has reached the open pull request limit', '作者已达到打开的拉取请求上限'],
     ['Change the pull requests type filter', '更改拉取请求类型筛选器'],
     // 产品名按 product-names.md 译出
-    ['Batch sent to Copilot cloud agent.', '批次已发送给 Copilot 云代理。'],
+    ['Batch sent to Copilot cloud agent.', '批次已发送给 Copilot 云端智能体。'],
     ['Copilot code review comment', 'Copilot 代码审查评论'],
     // 审查者列表中 Copilot 头像链接的读屏文字（与时间线的小写 copilot code review 同译）
     ['Copilot code review', 'Copilot 代码审查'],

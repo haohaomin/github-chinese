@@ -13,7 +13,7 @@ function previewSize(size: string): string {
 
 /**
  * Copilot 沉浸式聊天的工作台（内容预览面板）与资源面板：文件 / 差异 / 图片 / Markdown 预览、
- * Copilot 起草议题的预览与批量创建、聊天中的议题列表卡片，以及工件查看器（HTML 预览、版本历史记录、链接）。
+ * Copilot 起草议题的预览与批量创建、聊天中的议题列表卡片，以及附件查看器（HTML 预览、版本历史记录、链接）。
  */
 export default {
   static: {
@@ -82,17 +82,17 @@ export default {
     'No code matches found.': '找不到相符的程式碼。',
     '1 similar code snippet found': '找到 1 個相似的程式碼片段',
 
-    // 工件查看器：HTML 预览、版本历史记录、链接
-    'Open artifacts': '開啟成品',
-    'More artifacts': '更多成品',
-    'Copy artifact content': '複製成品內容',
-    'HTML artifact view': 'HTML 成品檢視',
+    // 附件查看器：HTML 预览、版本历史记录、链接
+    'Open artifacts': '開啟附件',
+    'More artifacts': '更多附件',
+    'Copy artifact content': '複製附件內容',
+    'HTML artifact view': 'HTML 附件檢視',
     'HTML preview settings': 'HTML 預覽設定',
     'Show preview by default': '預設顯示預覽',
-    'Automatically run HTML artifacts when you open them.': '開啟 HTML 成品時自動執行。',
+    'Automatically run HTML artifacts when you open them.': '開啟 HTML 附件時自動執行。',
     'Previewing runs this code, which may send its contents to external sites.': '預覽會執行此程式碼，可能會將其內容傳送到外部網站。',
-    'Artifact HTML preview.': '成品 HTML 預覽。',
-    'Artifact HTML source': '成品 HTML 原始碼',
+    'Artifact HTML preview.': '附件 HTML 預覽。',
+    'Artifact HTML source': '附件 HTML 原始碼',
     'HTML rendering failed': 'HTML 轉譯失敗',
     'Refresh the page or check the HTML': '重新整理頁面或檢查 HTML',
     'Loading edit history…': '正在載入編輯歷史記錄…',
@@ -104,7 +104,7 @@ export default {
     'Enter a valid URL that starts with http:// or https://.': '輸入以 http:// 或 https:// 開頭的有效 URL。',
     'Slack conversation': 'Slack 對話',
     'Artifact names must be 255 characters or fewer, start and end with a letter or number, and contain only letters, numbers, spaces, periods, hyphens, and underscores.':
-      '成品名稱不得超過 255 個字元，必須以字母或數字開頭和結尾，且只能包含字母、數字、空格、句點、連字號和底線。',
+      '附件名稱不得超過 255 個字元，必須以字母或數字開頭和結尾，且只能包含字母、數字、空格、句點、連字號和底線。',
 
     // 起草议题：按钮与确认
     'Review and update': '審查並更新',
@@ -222,8 +222,8 @@ export default {
     // 预览工具栏的行数单位：整段由 regexp 翻译，未命中时逐节点兜底
     lines: '行',
     line: '行',
-    // 工件查看器
-    Artifacts: '成品',
+    // 附件查看器
+    Artifacts: '附件',
     Current: '目前',
     Source: '原始碼',
     'Edit history': '編輯歷史記錄',
@@ -270,7 +270,7 @@ export default {
     [/^Image not available: (.+)$/, '圖片無法使用：$1'],
     [/^Draft a PR comment for: (.+)$/, '草擬 PR 留言：$1'],
     [/^Send suggestion \(hold (Option|Alt) to insert\)$/, '傳送建議（按住 $1 鍵插入）'],
-    // 工件查看器
+    // 附件查看器
     [/^Version (\d+)$/, '版本 $1'],
     [/^HTML preview: (.+)$/, 'HTML 預覽：$1']
   ]

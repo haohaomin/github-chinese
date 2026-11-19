@@ -267,7 +267,7 @@ export default {
     'that others can see.': '其他人可见的评论。',
 
     // 转移对话框
-    'Results are limited to top repositories, search to find more.': '结果仅包含热门存储库，可搜索查找更多存储库。',
+    'Results are limited to top repositories, search to find more.': '结果仅包含常用存储库，可搜索查找更多存储库。',
     "There aren't any eligible repositories that match your query.": '没有符合查询条件的可用存储库。',
     'There aren’t any eligible repositories that match your query.': '没有符合查询条件的可用存储库。',
 

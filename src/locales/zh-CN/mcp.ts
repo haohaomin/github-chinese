@@ -27,7 +27,7 @@ export default {
     // 卡片页脚与详情页「关于」块：By <所有者>（与 Marketplace 一致）
     By: '来自',
     // 目录页标签页标题「MCP Registry · Connect Agents to tools」的第二段
-    'Connect Agents to tools': '将代理连接到工具'
+    'Connect Agents to tools': '将智能体连接到工具'
   },
   regexp: [
     // 详情页标签页标题「MCP Registry | <服务器名>」只有一段：服务器名保持原文

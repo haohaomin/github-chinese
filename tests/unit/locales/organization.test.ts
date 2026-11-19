@@ -246,7 +246,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['You are viewing the README and pinned repositories as an owner.']
   },
 
-  // 见解：Actions 指标
+  // 洞察：Actions 指标
   { hits: [['Showing data from 2026/10/1 to', '数据时段 2026/10/1 至']], misses: ['Showing data from last month to'] },
   {
     hits: [

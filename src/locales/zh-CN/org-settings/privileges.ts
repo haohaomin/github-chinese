@@ -167,8 +167,8 @@ export default {
     'Members can now create teams.': '成员现在可以创建团队。',
     'Members can no longer create teams.': '成员已无法创建团队。',
     'Member organization permissions': '成员组织权限',
-    'Allow members to view dependency insights': '允许成员查看依赖项见解',
-    'If enabled, members will be able to view dependency insights for this organization.': '启用后，成员可以查看此组织的依赖项见解。',
+    'Allow members to view dependency insights': '允许成员查看依赖项洞察',
+    'If enabled, members will be able to view dependency insights for this organization.': '启用后，成员可以查看此组织的依赖项洞察。',
     'Repository Comments': '存储库评论',
     'Repository comments': '存储库评论',
     "Allow members to see comment author's profile name in private repositories": '允许成员在专用存储库中查看评论作者的个人资料名称',
@@ -220,8 +220,8 @@ export default {
     'If enabled, members with admin permissions for the repository will be able to invite outside collaborators. If disabled, only organization owners can invite outside collaborators.':
       '启用后，拥有存储库管理员权限的成员可以邀请外部协作者。禁用后，只有组织所有者可以邀请外部协作者。',
 
-    // 依赖项见解
-    'Dependency insights': '依赖项见解',
+    // 依赖项洞察
+    'Dependency insights': '依赖项洞察',
 
     // 部署密钥
     'Allow deploy keys': '允许部署密钥',

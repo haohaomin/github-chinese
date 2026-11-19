@@ -305,7 +305,7 @@ describe('packages 页面词条', () => {
     ['Most downloads', '下载最多'],
     ['Least downloads', '下载最少'],
     ['Container', '容器'],
-    ['Linked artifacts', '链接的工件'],
+    ['Linked artifacts', '链接的产物'],
     ['Latest', '最新'],
     ['Latest version', '最新版本'],
     ['Label: Latest version', '标签：最新版本'],

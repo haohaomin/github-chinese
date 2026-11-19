@@ -48,10 +48,10 @@ export default {
   // 本页词条在前，其后沿用 copilot 的 composer、models 词典：同一原文先出现者优先，本页的译法优先
   scoped: mergeTables([
     {
-      // 模式菜单（与 copilot 词典一致；Task 与代理模型名 Auto 只在首页收录，Auto 与全局“Model: Auto”的“模型：自动”同译）
+      // 模式菜单（与 copilot 词典一致；Task 与智能体模型名 Auto 只在首页收录，Auto 与全局“Model: Auto”的“模型：自动”同译）
       Ask: '询问',
       Task: '任务',
-      Agent: '代理',
+      Agent: '智能体',
       Chat: '聊天',
       Cloud: '云端',
       Mode: '模式',

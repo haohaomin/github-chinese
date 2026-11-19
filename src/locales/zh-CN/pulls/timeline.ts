@@ -343,7 +343,7 @@ export default {
     'Activity type': '活动类型',
     'Actor login or ID': '参与者用户名或 ID',
     Actor: '参与者',
-    Since: '自从',
+    Since: '起始时间',
     'No activity': '暂无活动',
     'Activity on this pull request will appear here.': '此拉取请求的活动将显示在这里。',
     'No loaded activity matches the query. Change the query or retry loading activity.':
@@ -464,7 +464,7 @@ export default {
     ],
     [/^Enter a value for (type|actor|since):\.$/, '请输入 $1: 的值。'],
     [/^Use an available since: preset or an ISO timestamp, such as (\S+)\.$/, '请使用可用的 since: 预设或 ISO 时间戳，例如 $1。'],
-    // 代理会话链接：View session <会话 ID>
+    // 智能体会话链接：View session <会话 ID>
     [/^View session ([0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12})$/, '查看会话 $1']
   ],
   inline: [
@@ -485,7 +485,7 @@ export default {
       (_, lead, reason) => `${lead}因${dequeueReason(reason)}将此拉取请求移出{}`
     ],
     [/^(\{\}*)removed this pull request from the \{\} (?:due to|because) \{\}$/, '$1将此拉取请求移出{}的原因是{}'],
-    // 经典时间线编码代理事件：<Copilot> finished work on behalf of <用户> [due to an error] <时间链接>。
+    // 经典时间线编码智能体事件：<Copilot> finished work on behalf of <用户> [due to an error] <时间链接>。
     // 原文无标点，用户名提到动词前（与 copilot/code.ts 的整句正则同一写法）；用户链接后没有文本节点时整句写不进去，
     // 按上方 scoped 片段“代表以下用户完成了工作”逐段翻译
     [

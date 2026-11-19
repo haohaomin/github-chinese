@@ -481,7 +481,7 @@ describe('security 静态词条', () => {
     ['Invalid item type', '无效的项类型'],
     [
       'Before you can use agentic autofix, you need to pick a "Usage billed to" option in your Copilot settings.',
-      '使用代理自动修复前，需要在 Copilot 设置中选择“使用量计费对象”。'
+      '使用智能体自动修复前，需要在 Copilot 设置中选择“使用量计费对象”。'
     ],
     [
       ': Performance is reduced or there are interruptions in resource availability. Even if repeated exploitation of the vulnerability is possible, the attacker does not have the ability to completely deny service to legitimate users. The resources in the Vulnerable System are either partially available all of the time, or fully available only some of the time, but overall there is no direct, serious consequence to the Vulnerable System.',

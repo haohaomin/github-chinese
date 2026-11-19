@@ -48,7 +48,7 @@ export default {
     // 发行版
     'Enable release immutability': '启用不可变发行版',
     'Immutable releases': '不可变发行版',
-    'Disallow assets and tags from being modified once a release is published.': '发行版发布后，禁止修改其资源和标签。',
+    'Disallow assets and tags from being modified once a release is published.': '发行版发布后，禁止修改其资产和标签。',
 
     // 社交预览
     'Social preview': '社交预览',

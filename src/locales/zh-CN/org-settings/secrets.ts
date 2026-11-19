@@ -16,7 +16,7 @@ export default {
       '组织中的公共存储库可以使用此机密。付费 GitHub 计划包含专用存储库。',
     'Organization secrets cannot be used by private repositories with your plan.': '你的计划不支持专用存储库使用组织机密。',
     'This secret may only be used by specifically selected repositories.': '只有明确选定的存储库才能使用此机密。',
-    'Secret repository access': '机密存储库访问权限',
+    'Secret repository access': '机密的存储库访问权限',
     'Select the organization repositories that may use this secret.': '选择可以使用此机密的组织存储库。',
     'This secret may be used by any repository in the organization.': '组织中的任何存储库都可以使用此机密。',
     'This secret may be used by any private repository in the organization.': '组织中的任何专用存储库都可以使用此机密。',
@@ -30,7 +30,7 @@ export default {
       '组织中的公共存储库可以使用此变量。付费 GitHub 计划包含专用存储库。',
     'Organization variables cannot be used by private repositories with your plan.': '你的计划不支持专用存储库使用组织变量。',
     'This variable may only be used by specifically selected repositories.': '只有明确选定的存储库才能使用此变量。',
-    'Variable repository access': '变量存储库访问权限',
+    'Variable repository access': '变量的存储库访问权限',
     'Select the organization repositories that may use this variable.': '选择可以使用此变量的组织存储库。',
 
     // Codespaces 机密

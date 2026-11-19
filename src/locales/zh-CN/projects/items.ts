@@ -5,7 +5,7 @@ import { FIELD_NAMES, pangu, translateFieldName } from './fields'
 /**
  * 项目（新版 Projects）：项。
  * 添加项（omnibar、批量添加）、项菜单与确认框、侧边面板、草稿转议题、项状态、
- * 状态更新、存档项页、批量更新 / 导入提示、子议题、代理任务、日期选择器、反馈对话框。
+ * 状态更新、存档项页、批量更新 / 导入提示、子议题、智能体任务、日期选择器、反馈对话框。
  */
 
 const ITEM_STATES: Readonly<Record<string, string>> = {
@@ -117,7 +117,7 @@ function itemPhrase(phrase: string): string {
   return count ? `这 ${count} 个项` : '此项'
 }
 
-/** 状态更新的状态选项（同时用于代理任务的 Complete） */
+/** 状态更新的状态选项（同时用于智能体任务的 Complete） */
 const STATUS_OPTIONS: Readonly<Record<string, string>> = {
   'On track': '进展顺利',
   'At risk': '存在风险',
@@ -301,7 +301,7 @@ export default {
     'Rate limit exceeded. Please try again later.': '超出速率限制。请稍后重试。',
     'This form has errors': '表单有错误',
     'Unknown item': '未知项',
-    'Agent task': '代理任务',
+    'Agent task': '智能体任务',
     'No valid updates to apply': '没有可应用的有效更新',
     "You don't have permission to edit this field.": '你没有编辑此字段的权限。',
     'Untitled project': '未命名项目',
@@ -336,7 +336,7 @@ export default {
     // 侧边面板
     'Side panel': '侧边面板',
     'Project information': '项目信息',
-    'Agent session': '代理会话',
+    'Agent session': '智能体会话',
     'Close panel': '关闭面板',
     'Item title': '项标题',
     'Item status': '项状态',
@@ -379,11 +379,11 @@ export default {
     'Session options': '会话选项',
     // 产品名按用户要求译成中文（product-names.md）：Copilot Chat → Copilot 聊天
     'Unable to load Copilot Chat. Ensure Copilot is enabled.': '无法加载 Copilot 聊天。请确认已启用 Copilot。',
-    'Agent tasks': '代理任务',
+    'Agent tasks': '智能体任务',
     Failed: '失败',
     Cancelled: '已取消',
     Waiting: '等待中',
-    Agent: '代理',
+    Agent: '智能体',
     // 子议题
     'Add all to project': '全部添加到项目',
     'Add sub-issue': '添加子议题',
@@ -492,7 +492,7 @@ export default {
     'Copy logs': '复制日志',
     'Failed to copy logs.': '日志复制失败。',
     "Please don't include sensitive, confidential, or personal data. Your feedback helps us improve our services in line with our":
-      '请勿包含敏感、机密或个人数据。你的反馈将依据以下政策用于改进服务',
+      '请勿包含敏感、机密或个人数据。你的反馈将用于改进我们的服务，并遵循我们的',
     'Please select a rating.': '请选择评分。',
     'An error occurred while submitting your feedback.': '提交反馈时出错。',
     'This project failed to load': '项目加载失败',

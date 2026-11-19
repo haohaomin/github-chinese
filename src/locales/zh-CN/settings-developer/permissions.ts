@@ -10,10 +10,10 @@ export const PERMISSION_TITLES: Readonly<Record<string, string>> = {
   // 存储库权限
   Actions: '操作',
   Administration: '管理',
-  'Agent secrets': '代理机密',
-  'Agent tasks': '代理任务',
-  'Agent variables': '代理变量',
-  'Artifact metadata': '工件元数据',
+  'Agent secrets': '智能体机密',
+  'Agent tasks': '智能体任务',
+  'Agent variables': '智能体变量',
+  'Artifact metadata': '产物元数据',
   Attestations: '证明',
   Checks: '检查',
   'Code quality': '代码质量',
@@ -24,7 +24,7 @@ export const PERMISSION_TITLES: Readonly<Record<string, string>> = {
   'Codespaces secrets': '代码空间机密',
   'Commit statuses': '提交状态',
   Contents: '内容',
-  'Copilot agent settings': 'Copilot 代理设置',
+  'Copilot agent settings': 'Copilot 智能体设置',
   'Custom properties': '自定义属性',
   'Dependabot alerts': 'Dependabot 警报',
   'Dependabot secrets': 'Dependabot 机密',
@@ -74,7 +74,7 @@ export const PERMISSION_TITLES: Readonly<Record<string, string>> = {
   Starring: '星标',
   Watching: '关注',
   // 组织权限
-  'API Insights': 'API 见解',
+  'API Insights': 'API 洞察',
   'Blocking users': '阻止用户',
   Campaigns: '活动',
   'Copilot Spaces': 'Copilot 空间',
@@ -115,6 +115,7 @@ export const PERMISSION_TITLES: Readonly<Record<string, string>> = {
   'Enterprise billing': '企业计费',
   'Enterprise bypass requests': '企业绕过请求',
   'Enterprise Copilot metrics': '企业 Copilot 指标',
+  'Enterprise Copilot license management': '企业 Copilot 许可证管理',
   'Enterprise credentials': '企业凭据',
   'Enterprise custom organization roles': '企业自定义组织角色',
   'Enterprise custom properties for organizations': '企业的组织自定义属性',
@@ -140,7 +141,7 @@ export const PERMISSION_TITLES: Readonly<Record<string, string>> = {
 const RESOURCE_NAMES: Readonly<Record<string, string>> = {
   actions: '操作',
   administration: '管理',
-  'artifact metadata': '工件元数据',
+  'artifact metadata': '产物元数据',
   attestations: '证明',
   checks: '检查',
   code: '代码',
@@ -422,9 +423,9 @@ const PERMISSION_SECTION: Readonly<Record<string, string>> = {
 export default {
   static: {
     // 存储库权限说明
-    'Workflows, workflow runs and artifacts.': '工作流、工作流运行和工件。',
+    'Workflows, workflow runs and artifacts.': '工作流、工作流运行和产物。',
     'Repository creation, deletion, settings, teams, and collaborators.': '存储库的创建、删除、设置、团队和协作者。',
-    'Create and retrieve artifact metadata for a repository.': '创建和检索存储库的工件元数据。',
+    'Create and retrieve artifact metadata for a repository.': '创建和检索存储库的产物元数据。',
     'Create and retrieve attestations for a repository.': '创建和检索存储库的证明。',
     'Checks on code.': '代码检查。',
     'View and manage code scanning alerts.': '查看和管理代码扫描警报。',
@@ -463,11 +464,11 @@ export default {
     'Manage Actions repository variables.': '管理操作存储库变量。',
     'Manage the post-receive hooks for a repository.': '管理存储库的 Web 钩子。',
     'Update GitHub Action workflow files.': '更新 GitHub 操作工作流文件。',
-    'Manage agent repository secrets.': '管理代理存储库机密。',
-    'View, create, and manage agent tasks in a repository.': '查看、创建和管理存储库中的代理任务。',
-    'Manage agent repository variables.': '管理代理存储库变量。',
+    'Manage agent repository secrets.': '管理智能体存储库机密。',
+    'View, create, and manage agent tasks in a repository.': '查看、创建和管理存储库中的智能体任务。',
+    'Manage agent repository variables.': '管理智能体存储库变量。',
     'Access and manage code quality data for a repository.': '访问和管理存储库的代码质量数据。',
-    'View and manage Copilot cloud agent settings for a repository.': '查看和管理存储库的 Copilot 云代理设置。',
+    'View and manage Copilot cloud agent settings for a repository.': '查看和管理存储库的 Copilot 云端智能体设置。',
     'Manage which GitHub Apps can access a repository': '管理哪些 GitHub 应用可以访问存储库',
     'Retrieve license compliance alerts.': '检索许可证合规警报。',
     'Create repositories.': '创建存储库。',
@@ -553,12 +554,12 @@ export default {
     'Manage team discussions and related comments.': '管理团队讨论及相关评论。',
     'Manage Actions organization variables.': '管理操作组织变量。',
     'Manage the post-receive hooks for an organization.': '管理组织的 Web 钩子。',
-    'Manage agent organization secrets.': '管理代理组织机密。',
-    'Manage agent organization variables.': '管理代理组织变量。',
+    'Manage agent organization secrets.': '管理智能体组织机密。',
+    'Manage agent organization variables.': '管理智能体组织变量。',
     'Allow this GitHub App to make Copilot requests billed to the organization where it is installed. This permission is in public preview and is subject to change.':
       '允许此 GitHub 应用发出由安装它的组织付费的 Copilot 请求。此权限处于公开预览阶段且可能会有变动。',
     'View and manage Copilot Spaces for an organization.': '查看和管理组织的 Copilot 空间。',
-    'Manage Copilot cloud agent settings for an organization.': '管理组织的 Copilot 云代理设置。',
+    'Manage Copilot cloud agent settings for an organization.': '管理组织的 Copilot 云端智能体设置。',
     'Manage Copilot content exclusion rules for the organization.': '管理组织的 Copilot 内容排除规则。',
     'View and edit external custom properties for repositories, and manage the app installations that provide them, at the organization level.':
       '在组织级别查看和编辑存储库的外部自定义属性，并管理提供这些属性的应用安装。',
@@ -592,6 +593,7 @@ export default {
       '在企业级别查看组织自定义属性并管理属性定义。',
     'View and manage innersource vulnerabilities across the enterprise': '查看和管理整个企业的内源漏洞',
     'View and manage the enterprise license policy': '查看和管理企业许可证策略',
+    'View Copilot subscription information and manage enterprise Copilot licenses': '查看 Copilot 订阅信息并管理企业 Copilot 许可证',
     'Manage repository access of GitHub Apps on Enterprise-owned organizations. Requesting this permission will prevent it from being installed on other enterprises.':
       '管理企业所属组织中 GitHub 应用的存储库访问权限。请求此权限将使该应用无法安装到其他企业。',
     'Manage installation of GitHub Apps on Enterprise-owned organizations. Requesting this permission will prevent it from being installed on other enterprises.':
@@ -662,8 +664,8 @@ export default {
     'Label: mandatory': '标签：必选',
     'Label: disabled': '标签：已禁用',
     'This is a mandatory permission and cannot be changed': '必选权限不可更改',
-    "Can't be used for Agentic Apps": '不能用于代理应用',
-    'Can’t be used for Agentic Apps': '不能用于代理应用',
+    "Can't be used for Agentic Apps": '不能用于智能体应用',
+    'Can’t be used for Agentic Apps': '不能用于智能体应用',
     // 权限列表为空时的无障碍标题
     'Permission Blank Slate': '权限空状态',
     // 「These <a>user permissions</a> are granted on an individual user basis as part of the <a>user authorization flow</a>.」

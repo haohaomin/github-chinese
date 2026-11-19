@@ -123,9 +123,9 @@ export default {
     'Failed to assign Copilot': '分配 Copilot 失败',
     'Failed to assign to Copilot': '分配给 Copilot 失败',
     'Failed to assign to Copilot. Please try again.': '分配给 Copilot 失败。请重试。',
-    'Assign agent to alert': '为警报分配代理',
+    'Assign agent to alert': '为警报分配智能体',
     'The agent will analyze this vulnerability and open a draft pull request with a proposed fix, including updating the dependency and resolving any breaking changes introduced by the update.':
-      '代理将分析此漏洞并创建包含修复方案的草稿拉取请求，包括更新依赖项并解决更新引入的破坏性变更。',
+      '智能体将分析此漏洞并创建包含修复方案的草稿拉取请求，包括更新依赖项并解决更新引入的破坏性变更。',
     'Assignee limit reached': '已达受理人上限',
     'Ensure a fix has been generated.': '请确认已生成修复。',
     'Unable to complete the search for assignees. Try again later.': '无法完成受理人搜索。请稍后重试。',

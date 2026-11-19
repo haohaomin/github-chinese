@@ -129,6 +129,8 @@ export default {
     // 状态 open → 開放中，动词 open → 建立）
     'Restrict how many pull requests users without write access can have open at one time and add specific users to a bypass list. These settings stay in effect until you change them.':
       '限制沒有寫入權限的使用者同時可有多少個開放中的拉取請求，並將特定使用者加入繞過清單。這些設定在你變更之前會持續生效。',
+    'Restrict how many pull requests users without write access can have open at one time and add specific users to an exemption list. These settings stay in effect until you change them.':
+      '限制沒有寫入權限的使用者同時可有多少個開放中的拉取請求，並將特定使用者加入豁免清單。這些設定在你變更之前會持續生效。',
     'Currently, users without write access can open an unlimited number of pull requests.':
       '目前，沒有寫入權限的使用者可以建立不限數量的拉取請求。',
     'Currently, users without write access can have up to': '目前，沒有寫入權限的使用者同時最多可有',

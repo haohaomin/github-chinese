@@ -19,7 +19,7 @@ const TRAFFIC_UNIT: Readonly<Record<string, string>> = {
 /**
  * 流量（/graphs/traffic，需推送权限）与 Actions 使用 / 性能指标标题。
  * 指标页属于 actions 页面类型（组织级属于 organization），只有 static 生效；
- * 指标页的列名、筛选等由 actions 词典收录，这里只保留标题与组织见解侧栏。
+ * 指标页的列名、筛选等由 actions 词典收录，这里只保留标题与组织洞察侧栏。
  */
 export default {
   static: {
@@ -49,8 +49,8 @@ export default {
     'Actions Usage Metrics': '操作使用情况指标',
     'Actions Performance Metrics': '操作性能指标',
 
-    // 组织见解侧栏
-    'Insights navigation': '见解导航',
+    // 组织洞察侧栏
+    'Insights navigation': '洞察导航',
     'Copilot impact': 'Copilot 影响',
     'Code generation': '代码生成'
   },

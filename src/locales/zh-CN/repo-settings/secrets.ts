@@ -10,7 +10,7 @@ const ROW_ACTION: Readonly<Record<string, string>> = {
 }
 
 /**
- * 存储库设置 · 机密和变量（操作、代码空间、Dependabot、代理）、部署密钥、自定义属性。
+ * 存储库设置 · 机密和变量（操作、代码空间、Dependabot、智能体）、部署密钥、自定义属性。
  * 译法沿用组织设置机密页（org-settings/secrets.ts）。
  */
 export default {
@@ -44,9 +44,9 @@ export default {
     'Secret names can only contain alphanumeric characters ([a-z], [A-Z], [0-9]) or underscores (_). Spaces are not allowed. Must start with a letter ([a-z], [A-Z]) or underscores (_).':
       '机密名称只能包含字母数字字符 ([a-z], [A-Z], [0-9]) 或下划线 (_)。不允许空格。必须以字母 ([a-z], [A-Z]) 或下划线 (_) 开头。',
 
-    // 代理（Copilot 云代理）机密和变量
+    // 智能体（Copilot 云端智能体）机密和变量
     'Anyone with collaborator access to this repository can use these secrets and variables for the Copilot cloud agent.':
-      '对此存储库拥有协作者权限的任何人都可以为 Copilot 云代理使用这些机密和变量。',
+      '对此存储库拥有协作者权限的任何人都可以为 Copilot 云端智能体使用这些机密和变量。',
 
     // 代码空间 / Dependabot 机密
     'Repository development environment secrets': '存储库开发环境机密',

@@ -2,6 +2,7 @@ import { tableEntries } from '../../../core/table'
 import type { PageDictionary } from '../../../core/types'
 import apps from '../settings-developer/apps'
 import permissions from '../settings-developer/permissions'
+import { APP_DELIVERY_KEYS } from '../org-apps'
 
 /**
  * 不从个人开发人员设置复用的原文：全站 static 或组织设置其他文件已收录且译文相同的（导航、Web 钩子、
@@ -27,9 +28,7 @@ const NOT_REUSED: ReadonlySet<string> = new Set([
   'Secret',
   '(not recommended)',
   'not recommended',
-  'Recent deliveries',
   'Response',
-  'Redeliver',
   'Headers',
   'Payload',
   // security
@@ -52,9 +51,9 @@ const NOT_REUSED: ReadonlySet<string> = new Set([
   'all'
 ])
 
-/** 个人开发人员设置的 scoped 词条去掉不复用的原文 */
+/** 个人开发人员设置的 scoped 词条去掉不复用的原文与 Web 钩子请求记录（组织应用设置页由 org-apps 叠加） */
 function reuse(entries: readonly (readonly [string, string])[]): Record<string, string> {
-  return Object.fromEntries(entries.filter(([key]) => !NOT_REUSED.has(key)))
+  return Object.fromEntries(entries.filter(([key]) => !NOT_REUSED.has(key) && !APP_DELIVERY_KEYS.has(key)))
 }
 
 /** 交付耗时由 webhooks 收录 */

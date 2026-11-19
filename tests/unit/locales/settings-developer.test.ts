@@ -361,7 +361,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'Choose which repositories Copilot cloud agent should be enabled in. Copilot cloud agent will only be available where it is enabled for the repository and in the Copilot license policies.',
-        '选择要启用 Copilot 云代理的存储库。Copilot 云代理只有在存储库中已启用且 Copilot 许可证策略允许时才可用。'
+        '选择要启用 Copilot 云端智能体的存储库。Copilot 云端智能体只有在存储库中已启用且 Copilot 许可证策略允许时才可用。'
       ],
       [
         'Choose which repositories Foo agent should be enabled in. Foo agent will only be available where it is enabled for the repository and in the Copilot license policies.',
@@ -369,7 +369,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       ],
       [
         'Choose which repositories Cloud agent should be enabled in. Cloud agent will only be available where it is enabled for the repository and in the Copilot license policies.',
-        '选择要启用云代理的存储库。云代理只有在存储库中已启用且 Copilot 许可证策略允许时才可用。'
+        '选择要启用云端智能体的存储库。云端智能体只有在存储库中已启用且 Copilot 许可证策略允许时才可用。'
       ]
     ],
     misses: ['Choose which repositories Copilot cloud agent should be enabled in.']
@@ -593,6 +593,13 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
+      ['Your installation was suspended by you on November 20th, 2026 at 03:11 (CST).', '你已于 2026年11月20日 03:11（CST）暂停此安装。'],
+      ['Your installation was suspended by you on May 2nd, 2026 at 3:05 PM (UTC).', '你已于 2026年5月2日 15:05（UTC）暂停此安装。']
+    ],
+    misses: ['Your installation was suspended by you on November 20th, 2026 at 03:11']
+  },
+  {
+    hits: [
       ['Your installation was suspended by you on Jan 5, 2025.', '你已于 2025年1月5日暂停此安装。'],
       ['Your installation was suspended by you on Jan 5, 2025', '你已于 2025年1月5日暂停此安装']
     ],
@@ -714,6 +721,30 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
+      ['Added just now by', '刚刚添加，添加者'],
+      ['Added 3 days ago by', '3天前添加，添加者']
+    ],
+    misses: ['Added by']
+  },
+  {
+    hits: [['203.0.113.7 is not permitted by the IP allow list.', '203.0.113.7 未获 IP 允许列表允许。']],
+    misses: ['is not permitted by the IP allow list']
+  },
+  {
+    hits: [['203.0.113.0/24 is permitted by the IP allow list.', '203.0.113.0/24 已获 IP 允许列表允许。']],
+    misses: ['This address is permitted by the IP allow list']
+  },
+  {
+    hits: [
+      [
+        'This GitHub App was suspended by GitHub staff on October 1st, 2026 at 00:36 (CST).',
+        '此 GitHub 应用已于 2026年10月1日 00:36（CST）被 GitHub 工作人员暂停。'
+      ]
+    ],
+    misses: ['This GitHub App was suspended by GitHub staff.']
+  },
+  {
+    hits: [
       ['Added 3 days ago by octocat', '3天前由 octocat 添加'],
       ['Added on Jan 5, 2024 by octocat', '2024年1月5日由 octocat 添加']
     ],
@@ -781,9 +812,19 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   {
     hits: [
       ['Tue, Nov 25 2025', '2025年11月25日周二'],
-      ['Wed, Dec 3 2025.', '2025年12月3日周三。']
+      ['Wed, Dec 3 2025.', '2025年12月3日周三。'],
+      ['on Sun, Dec 20 2026', '2026年12月20日周日'],
+      ['Sunday, December 20, 2026', '2026年12月20日周日']
     ],
     misses: ['Tue, 25 Nov 2025']
+  },
+  {
+    hits: [
+      ['— admin:enterprise, admin:gpg_key', '— 完全控制企业、完全控制用户公开 GPG 密钥'],
+      ['— repo, workflow, write:packages', '— 完全控制专用存储库、更新 GitHub 操作工作流、向 GitHub 软件包注册表上传软件包'],
+      ['— repo, new:scope', '— 完全控制专用存储库、new:scope']
+    ],
+    misses: ['repo, workflow', '— Admin']
   },
   { hits: [['Limit set by acme organization', '由 acme 组织设定的限制']], misses: ['Limit set by organization'] },
   {
@@ -970,6 +1011,7 @@ describe('settings-developer 工具函数', () => {
   it('translateTokenDate 处理带星期、常规与相对日期', () => {
     expect(translateTokenDate('Tue, Nov 25 2025')).toBe('2025年11月25日周二')
     expect(translateTokenDate('Sat, Jan 3, 2026')).toBe('2026年1月3日周六')
+    expect(translateTokenDate('Sunday, December 20, 2026')).toBe('2026年12月20日周日')
     expect(translateTokenDate('Nov 25, 2025')).toBe('2025年11月25日')
     expect(translateTokenDate('in 3 days')).toBe('3天后')
     expect(translateTokenDate('someday')).toBe('someday')
@@ -1065,7 +1107,7 @@ describe('settings-developer 静态词条', () => {
     ['Generate new token', '生成新令牌'],
     ['Personal access tokens (classic)', '个人访问令牌（经典）'],
     ['Full control of private repositories', '完全控制专用存储库'],
-    ['Workflows, workflow runs and artifacts.', '工作流、工作流运行和工件。'],
+    ['Workflows, workflow runs and artifacts.', '工作流、工作流运行和产物。'],
     ['Choose the minimal permissions necessary for your needs.', '选择满足需求的最小权限。'],
     [
       'Make sure to copy your personal access token now. You won’t be able to see it again!',
@@ -1146,7 +1188,7 @@ describe('settings-developer 静态词条', () => {
     ],
     [
       "You can enable Copilot coding agent for other users, but you won't be able to assign tasks to Copilot because the Copilot coding agent policy has been disabled by an administrator.",
-      '你可以为其他用户启用 Copilot 编码代理，但因管理员已禁用 Copilot 编码代理策略而无法向 Copilot 分配任务。'
+      '你可以为其他用户启用 Copilot 编码智能体，但因管理员已禁用 Copilot 编码智能体策略而无法向 Copilot 分配任务。'
     ],
     ['Any commits you signed with this key will become unverified after removing it.', '你用此密钥签名的所有提交在删除后都将变为未验证。'],
     [
@@ -1359,6 +1401,38 @@ describe('settings-developer 被链接拆开的句子（DOM）', () => {
   })
 })
 
+describe('经典令牌列表的作用域（DOM）', () => {
+  const SCOPE: readonly PageKey[] = ['common', 'settings']
+  let translator: Translator | undefined
+
+  afterEach(() => {
+    translator?.stop()
+    translator = undefined
+    document.body.innerHTML = ''
+  })
+
+  const HTML =
+    '<div class="access-token"><span class="token-description"><strong><a href="/settings/tokens/1">test</a></strong>' +
+    '<span class="color-fg-muted"><em>— <span title="Full control of enterprises">admin:enterprise</span>, ' +
+    '<span title="Full control of public user gpg keys">admin:gpg_key</span>, <span title="Update all user data">user</span></em></span></span></div>' +
+    '<label><input type="checkbox" value="repo"> repo</label>'
+
+  it('简体：作用域代码显示为说明，以顿号分隔；新建表单里的代码不变', () => {
+    document.body.innerHTML = HTML
+    translator = createTranslator({ matcher: createMatcher(zhCN), host: window, resolvePages: () => SCOPE })
+    translator.start()
+    expect(document.querySelector('em')?.textContent).toBe('— 完全控制企业、完全控制用户公开 GPG 密钥、更新所有用户数据')
+    expect(document.querySelector('label')?.textContent?.trim()).toBe('repo')
+  })
+
+  it('繁体', () => {
+    document.body.innerHTML = HTML
+    translator = createTranslator({ matcher: createMatcher(zhTW), host: window, resolvePages: () => SCOPE })
+    translator.start()
+    expect(document.querySelector('em')?.textContent).toBe('— 完全控制企業、完全控制使用者公開 GPG 金鑰、更新所有使用者資料')
+  })
+})
+
 describe('Copilot 记忆与梦境（功能页，DOM）', () => {
   const HTML = `<h3 id="title">Copilot Memory</h3>
     <button id="memory" type="button"><span class="fgColor-muted">Copilot Memory:</span> User and repository memories allowed</button>
@@ -1406,5 +1480,31 @@ describe('Copilot 记忆与梦境（功能页，DOM）', () => {
     expect(shown.get('scope')).toBe(
       '夢境只會在相關記憶範圍及其他必要的政策和功能都已啟用時執行。以工作階段為基礎的夢境還需要上傳工作階段。'
     )
+  })
+})
+
+describe('应用设置页的 Web 钩子请求记录', () => {
+  const cn = createMatcher(zhCN)
+  const tw = createMatcher(zhTW)
+  const PERSONAL: readonly PageKey[] = ['common', 'settings']
+  const ORG_APP: readonly PageKey[] = ['common', 'org-settings', 'org-apps']
+  const ORG_HOOK: readonly PageKey[] = ['common', 'org-settings']
+
+  it.each([
+    ['Recent deliveries', '最近请求', '最近交付'],
+    ['Recent Deliveries', '最近请求', '最近交付'],
+    ['Redeliver', '重新请求', '重新传递'],
+    ['redelivery', '重新请求', '重新传递'],
+    ['Redeliver payload?', '重新请求有效负载？', '重新传递有效负载？'],
+    ['Yes, redeliver this payload', '是，重新请求此有效负载', '是，重新传递此有效负载']
+  ])('%s：个人与组织应用设置页为 %s，组织 Web 钩子页为 %s', (input, app, hook) => {
+    expect(cn.translate(input, PERSONAL)).toBe(app)
+    expect(cn.translate(input, ORG_APP)).toBe(app)
+    expect(cn.translate(input, ORG_HOOK)).toBe(hook)
+  })
+
+  it('繁体沿用“傳遞”', () => {
+    expect(tw.translate('Redeliver', ORG_APP)).toBe('重新傳遞')
+    expect(tw.translate('redelivery', PERSONAL)).toBe('重新傳遞')
   })
 })

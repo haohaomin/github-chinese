@@ -307,10 +307,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   {
     hits: [
       ["You're almost out of your included usage with the free plan.", '免费计划包含的使用量即将用完。'],
-      [
-        "You're out of your included usage with the free plan. Limit resets on Nov 1.",
-        '免费计划包含的使用量已用完。限额将于 11月1日重置。'
-      ]
+      ["You're out of your included usage with the free plan. Limit resets on Nov 1.", '免费计划包含的使用量已用完。限额将于 11月1日重置。']
     ],
     misses: ["You're out of usage."]
   },
@@ -394,10 +391,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      [
-        "You don't have enough AI credits to start a session. Limit resets on Nov 1.",
-        'AI 额度不足，无法开始会话。限额将于 11月1日重置。'
-      ]
+      ["You don't have enough AI credits to start a session. Limit resets on Nov 1.", 'AI 额度不足，无法开始会话。限额将于 11月1日重置。']
     ],
     misses: ['Not enough AI credits. Limit resets on Nov 1.']
   },
@@ -592,8 +586,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [['Drafted issue in octo/app', '已在 octo/app 中起草议题']], misses: ['Drafted issue in the repository'] },
   { hits: [['Fetching metadata from octo/app', '正在获取 octo/app 的元数据']], misses: ['Fetching metadata'] },
   { hits: [['Using metadata from octo/app', '正在使用 octo/app 的元数据']], misses: ['Using metadata'] },
-  { hits: [['Creating agent task in octo/app', '正在 octo/app 中创建代理任务']], misses: ['Creating agent task'] },
-  { hits: [['Created agent task in octo/app', '已在 octo/app 中创建代理任务']], misses: ['Created agent task'] },
+  { hits: [['Creating agent task in octo/app', '正在 octo/app 中创建智能体任务']], misses: ['Creating agent task'] },
+  { hits: [['Created agent task in octo/app', '已在 octo/app 中创建智能体任务']], misses: ['Created agent task'] },
   { hits: [['Researching octo/app', '正在研究 octo/app']], misses: ['Researching the repository'] },
   { hits: [['Research completed for octo/app', '已完成对 octo/app 的研究']], misses: ['Research completed'] },
   {
@@ -819,15 +813,15 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [['Space selected: Docs space', '已选择空间：Docs space']], misses: ['Space selected'] },
   {
     hits: [
-      ['Agent: Copilot', '代理：Copilot'],
-      ['Custom agent: Reviewer', '自定义代理：Reviewer']
+      ['Agent: Copilot', '智能体：Copilot'],
+      ['Custom agent: Reviewer', '自定义智能体：Reviewer']
     ],
     misses: ['Agent:']
   },
   { hits: [['Mode: Plan', '模式：计划']], misses: ['Mode:'] },
   {
     hits: [
-      ['Select CLI agent mode, current: Plan', '选择 CLI 代理模式，当前：计划'],
+      ['Select CLI agent mode, current: Plan', '选择 CLI 智能体模式，当前：计划'],
       ['Select MCP permission mode, current: Ask', '选择 MCP 权限模式，当前：询问']
     ],
     misses: ['Select CLI agent mode']
@@ -850,7 +844,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   { hits: [['Log verbosity: Detailed', '日志详细程度：详细']], misses: ['Log verbosity: Loud'] },
   {
-    hits: [['Information about the Reviewer agent', '关于 Reviewer 代理的信息']],
+    hits: [['Information about the Reviewer agent', '关于 Reviewer 智能体的信息']],
     misses: ['Information about the agent']
   },
   {
@@ -867,8 +861,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [['Creating task in octo/app', '正在 octo/app 中创建任务']], misses: ['Creating tasks'] },
   {
     hits: [
-      ['New agent session in octo/app', '在 octo/app 中新建代理会话'],
-      ['New agent task in octo/app', '在 octo/app 中新建代理会话']
+      ['New agent session in octo/app', '在 octo/app 中新建智能体会话'],
+      ['New agent task in octo/app', '在 octo/app 中新建智能体会话']
     ],
     misses: ['New agent session']
   },
@@ -892,7 +886,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       ],
       [
         'Task creation failed. Before you can use Copilot cloud agent, you need to pick a "Usage billed to" option in your Copilot settings.',
-        '任务创建失败。使用 Copilot 云代理前，需在 Copilot 设置中选择“使用量计费对象”。'
+        '任务创建失败。使用 Copilot 云端智能体前，需在 Copilot 设置中选择“使用量计费对象”。'
       ],
       ['Task creation failed. Internal error', '任务创建失败。Internal error'],
       ['Task creation failed. constructor', '任务创建失败。constructor']
@@ -1000,11 +994,11 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'Copilot will start a background cloud agent session on octo/app. It works independently of this chat.',
-        'Copilot 将在 octo/app 上开始后台云代理会话。它独立于此聊天运行。'
+        'Copilot 将在 octo/app 上开始后台云端智能体会话。它独立于此聊天运行。'
       ],
       [
         'Copilot will start a background cloud agent session on octo/app and open a pull request. It works independently of this chat.',
-        'Copilot 将在 octo/app 上开始后台云代理会话并创建拉取请求。它独立于此聊天运行。'
+        'Copilot 将在 octo/app 上开始后台云端智能体会话并创建拉取请求。它独立于此聊天运行。'
       ]
     ],
     misses: ['Copilot will start a background cloud agent session.']
@@ -1125,7 +1119,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       ['Apply 3 patches', '应用 3 个补丁'],
       ['Edit 2 files', '编辑 2 个文件'],
-      ['Run 2 subagent tasks', '运行 2 个子代理任务'],
+      ['Run 2 subagent tasks', '运行 2 个子智能体任务'],
       ['Reply to 3 comments', '回复 3 条评论']
     ],
     misses: ['Apply 3 files']
@@ -1137,7 +1131,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       ['Run Bash command: npm test', '运行 Bash 命令：npm test'],
       ['Web fetch: https://example.com', '网页获取：https://example.com'],
-      ['Subagent: Explore', '子代理：Explore']
+      ['Subagent: Explore', '子智能体：Explore']
     ],
     misses: ['Run Bash command:']
   },
@@ -1195,8 +1189,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [['GPT-5 could not run: quota exceeded', 'GPT-5 无法运行：quota exceeded']], misses: ['Could not run'] },
   {
     hits: [
-      ['Explore subagent timeline', 'Explore 子代理时间线'],
-      ['Explore subagent activity', 'Explore 子代理活动']
+      ['Explore subagent timeline', 'Explore 子智能体时间线'],
+      ['Explore subagent activity', 'Explore 子智能体活动']
     ],
     misses: ['Subagent timeline']
   },
@@ -1271,8 +1265,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [['Preview of report.html', 'report.html 的预览']], misses: ['Preview of'] },
   {
     hits: [
-      ['2 new artifacts available.', '有 2 个新工件可用。'],
-      ['1 new artifact available.', '有 1 个新工件可用。']
+      ['2 new artifacts available.', '有 2 个新附件可用。'],
+      ['1 new artifact available.', '有 1 个新附件可用。']
     ],
     misses: ['New artifacts available.']
   },
@@ -1607,7 +1601,7 @@ describe('copilot 静态词条', () => {
     ['Fix with Copilot', '使用 Copilot 修复'],
     ['Generate pull request title with Copilot', '使用 Copilot 生成拉取请求标题'],
     ['Comment is not helpful', '评论没有帮助'],
-    ['View agent session', '查看代理会话'],
+    ['View agent session', '查看智能体会话'],
     ['Ask Copilot about this diff', '向 Copilot 询问此差异'],
     ['The AI assistant that builds with you', '与你一起构建的 AI 助手'],
     ['Ask Copilot about this snippet', '向 Copilot 询问此代码片段'],
@@ -1615,11 +1609,11 @@ describe('copilot 静态词条', () => {
     ['Explain code', '解释代码'],
     ['Request review from Copilot', '请求 Copilot 审查'],
     ['Assign to Copilot', '分配给 Copilot'],
-    ['Coding agent', '编码代理'],
-    ['Agent sessions', '代理会话'],
+    ['Coding agent', '编码智能体'],
+    ['Agent sessions', '智能体会话'],
     ['Copilot navigation', 'Copilot 导航'],
     ['Filter by status', '按状态筛选'],
-    ['Copilot cloud agent access disabled', 'Copilot 云代理访问已禁用'],
+    ['Copilot cloud agent access disabled', 'Copilot 云端智能体访问已禁用'],
     ['Search spaces', '搜索空间'],
     ['Edit space', '编辑空间'],
     ['HTML preview settings', 'HTML 预览设置'],
@@ -1627,7 +1621,7 @@ describe('copilot 静态词条', () => {
     ['The session disconnected. Retry to connect.', '会话已断开。请重试连接。'],
     ['Model:', '模型：'],
     ['Write code', '编写代码'],
-    ['Agents (opens a new page)', '代理（打开新页面）'],
+    ['Agents (opens a new page)', '智能体（打开新页面）'],
     ['Create draft pull request', '创建草稿拉取请求'],
     ['Create all linked draft issues?', '创建所有链接的草稿议题？'],
     ['Share conversation', '分享对话'],
@@ -1679,27 +1673,27 @@ describe('copilot 静态词条', () => {
     // 原文没有冒号，译文不加
     [
       'Optionally provide additional context for the agent, like constraints, priorities, or areas to avoid',
-      '可为代理提供更多上下文，如约束、优先级或需避免的方面'
+      '可为智能体提供更多上下文，如约束、优先级或需避免的方面'
     ],
     // 产品名、功能名、方案名按 product-names.md 译出
     ['Actions session', '操作会话'],
-    ['Give Copilot cloud agent a background task', '给 Copilot 云代理分配后台任务'],
+    ['Give Copilot cloud agent a background task', '给 Copilot 云端智能体分配后台任务'],
     ["Chats can't be run on Actions", '聊天无法在操作上运行'],
     ['Create a codespace', '创建代码空间'],
-    ['Copilot coding agent now uses fewer premium requests!', 'Copilot 编码代理现在消耗的高级请求更少了！'],
-    ['Delegate tasks to GitHub Copilot coding agent', '将任务委派给 GitHub Copilot 编码代理'],
-    ['View Copilot Coding Agent capabilities', '查看 Copilot 编码代理的功能'],
+    ['Copilot coding agent now uses fewer premium requests!', 'Copilot 编码智能体现在消耗的高级请求更少了！'],
+    ['Delegate tasks to GitHub Copilot coding agent', '将任务委派给 GitHub Copilot 编码智能体'],
+    ['View Copilot Coding Agent capabilities', '查看 Copilot 编码智能体的功能'],
     [
       'Save time by offloading testing, dependency upgrades, migrations and maintenance to agents. Create pull requests from Copilot Chat, CLI, IDEs or assign an Issue to Copilot to get started.',
-      '将测试、依赖升级、迁移和维护工作交给代理，节省时间。可从 Copilot 聊天、CLI、IDE 创建拉取请求，或将议题分配给 Copilot 来开始使用。'
+      '将测试、依赖升级、迁移和维护工作交给智能体，节省时间。可从 Copilot 聊天、CLI、IDE 创建拉取请求，或将议题分配给 Copilot 来开始使用。'
     ],
     [
       'Fix the selected review comments with Copilot cloud agent. You will be added as co-author on any new commits.',
-      '使用 Copilot 云代理修复所选审查评论。你将成为所有新提交的共同作者。'
+      '使用 Copilot 云端智能体修复所选审查评论。你将成为所有新提交的共同作者。'
     ],
     [
       'Before you can use Copilot cloud agent, you need to pick a "Usage billed to" option in your Copilot settings.',
-      '使用 Copilot 云代理前，需在 Copilot 设置中选择“使用量计费对象”。'
+      '使用 Copilot 云端智能体前，需在 Copilot 设置中选择“使用量计费对象”。'
     ],
     ['Available on Copilot Pro', 'Copilot 专业版可用'],
     ['Copilot Pro+ activated', 'Copilot 专业增强版已激活'],
@@ -1749,7 +1743,7 @@ describe('copilot 静态词条', () => {
     ['Show content below', '显示下方内容'],
     [
       'Are you sure you wish to execute the "Create pull request with Copilot coding agent" tool?',
-      '确定要执行“使用 Copilot 编码代理创建拉取请求”工具吗？'
+      '确定要执行“使用 Copilot 编码智能体创建拉取请求”工具吗？'
     ],
     ['Attach image', '附加图片'],
     ['Are you sure you want to archive this session?', '确定要存档此会话吗？'],
@@ -1805,7 +1799,7 @@ describe('copilot 静态词条', () => {
     // 拉取请求时间线的编码代理会话状态
     expect(matcher.translate('Copilot has failed', ['common', 'repository', 'pulls'])).toBe('Copilot 已失败')
     expect(matcher.translate('Ask Copilot about this snippet', ['common', 'repository', 'code'])).toBe('向 Copilot 询问此代码片段')
-    expect(matcher.translate('Agent session', ['common', 'repository', 'issues'])).toBe('代理会话')
+    expect(matcher.translate('Agent session', ['common', 'repository', 'issues'])).toBe('智能体会话')
     // 停靠聊天的引用预览、经典评论框与失败作业的 Copilot 入口
     expect(matcher.translate('Show content above', ['common', 'repository', 'code'])).toBe('显示上方内容')
     expect(matcher.translate('Copilot actions', ['common', 'repository', 'pulls'])).toBe('Copilot 操作')
@@ -1851,14 +1845,14 @@ describe('copilot 页面词条', () => {
     ['Revert', '还原'],
     ['Spaces', '空间'],
     ['Personal', '个人'],
-    ['Agent', '代理'],
+    ['Agent', '智能体'],
     ['Directory', '目录'],
     ['Model', '模型'],
     ['Active', '进行中'],
     ['View session', '查看会话'],
     ['Input:', '输入：'],
     ['Yours', '你的'],
-    ['Artifacts', '工件'],
+    ['Artifacts', '附件'],
     ['teal', '蓝绿色'],
     ['In progress', '正在进行'],
     ['Files changed', '已更改的文件'],

@@ -84,8 +84,8 @@ export default {
     'Filter issue types': '筛选议题类型',
     'Issue Type results': '议题类型结果',
     'No issue types were found': '未找到议题类型',
-    // 分配代理对话框的默认标题（具名代理见正则）
-    'Assign agent to issue': '将代理分配给议题',
+    // 分配智能体对话框的默认标题（具名智能体见正则）
+    'Assign agent to issue': '将智能体分配给议题',
 
     // 议题字段
     'Something went wrong while setting the field value. Please try again.': '设置字段值时出错。请重试。',
@@ -100,7 +100,7 @@ export default {
     'No fields configured for issues without a type.': '无类型的议题未配置字段。',
     'Field is visible to the public.': '此字段公开可见。',
     'Field is visible to all organizations in this enterprise.': '此字段对此企业中的所有组织可见。',
-    'This status automatically assigns the issue to an agent.': '此状态会自动将议题分配给代理。',
+    'This status automatically assigns the issue to an agent.': '此状态会自动将议题分配给智能体。',
     'Issue field option results': '议题字段选项结果',
 
     // 关系
@@ -144,7 +144,7 @@ export default {
     'Search for branches or pull requests': '搜索分支或拉取请求',
     // 产品名按用户要求译成中文（product-names.md）：codespace → 代码空间
     'Start a codespace with Copilot agent mode for this issue in another repository.':
-      '在其他存储库中为此议题启动使用 Copilot 代理模式的代码空间。',
+      '在其他存储库中为此议题启动使用 Copilot 智能体模式的代码空间。',
     'Could not update linked pull requests': '无法更新链接的拉取请求',
     'Could not update linked branches': '无法更新关联的分支',
 
@@ -265,7 +265,7 @@ export default {
     'No date': '无日期',
     Current: '当前',
     'No option found': '未找到选项',
-    'Auto-assign to agent': '自动分配给代理',
+    'Auto-assign to agent': '自动分配给智能体',
     'Filter option': '筛选选项',
     'Try searching with a different query for results.': '请尝试其他搜索词。',
 
@@ -345,7 +345,7 @@ export default {
     'Return to repository picker': '返回存储库选择器',
     // 产品名按用户要求译成中文（product-names.md）：Copilot Workspace → 工作区、codespace → 代码空间
     'Open in Workspace': '在工作区中打开',
-    'Code with agent mode': '使用代理模式编写代码',
+    'Code with agent mode': '使用智能体模式编写代码',
     'Codespace creation failed.': '代码空间创建失败。',
     'Codespace creation failed': '代码空间创建失败',
     'Failed to link branches': '链接分支失败',
@@ -407,7 +407,7 @@ export default {
     // 选择器
     [/^Cannot edit (.+) right now$/, (_, subject) => joinCjk('暂时无法编辑', PICKER_SUBJECT[subject] ?? subject)],
     [/^You have reached the limit of (\d+) assignees?$/, '已达到 $1 个受理人的上限'],
-    // 分配代理对话框标题（copilot/agents.ts 的同类规则只在 Copilot 页生效；默认标题 Assign agent to issue 见 static）
+    // 分配智能体对话框标题（copilot/agents.ts 的同类规则只在 Copilot 页生效；默认标题 Assign agent to issue 见 static）
     [/^Assign (Copilot|Claude|Codex) to issue$/, '将 $1 分配给议题'],
     [/^Create new label: "(.+)"$/, '新建标签：“$1”'],
     [/^Created and selected label: (.+)\.$/, '已创建并选中标签：$1。'],
@@ -451,7 +451,7 @@ export default {
     ],
     [/^You can[’'`]t add more than (\d+) layers of sub-issues$/, '子议题最多 $1 层'],
     [/^(\d+) tasks?$/, '$1 个任务'],
-    // 受理人选择器中代理的任务数（读屏，后接状态图标）：2 tasks,
+    // 受理人选择器中智能体的任务数（读屏，后接状态图标）：2 tasks,
     [/^(\d+) tasks,$/, '$1 个任务，'],
     [/^(\d+) of (\d+)$/, '$1/$2'],
     // 子议题列表项的无障碍名称（标题、状态等在前，以句号结尾）：Fix bug. Press Control, Shift, U for more actions.

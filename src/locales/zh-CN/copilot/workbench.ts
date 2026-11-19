@@ -13,7 +13,7 @@ function previewSize(size: string): string {
 
 /**
  * Copilot 沉浸式聊天的工作台（内容预览面板）与资源面板：文件 / 差异 / 图片 / Markdown 预览、
- * Copilot 起草议题的预览与批量创建、聊天中的议题列表卡片，以及工件查看器（HTML 预览、版本历史记录、链接）。
+ * Copilot 起草议题的预览与批量创建、聊天中的议题列表卡片，以及附件查看器（HTML 预览、版本历史记录、链接）。
  */
 export default {
   static: {
@@ -73,24 +73,24 @@ export default {
     'Mermaid diagram rendered output container': 'Mermaid 图表渲染输出容器',
     'Image not available': '图片不可用',
     'No details available.': '没有可用的详细信息。',
-    'Code insights': '代码见解',
+    'Code insights': '代码洞察',
     'Find matches across our platform.': '在整个平台中查找匹配项。',
     'Find matches across our platform or check for code vulnerabilities.': '在整个平台中查找匹配项或检查代码漏洞。',
     'Similar to public code': '与公共代码相似',
     'No code matches found.': '未找到匹配的代码。',
     '1 similar code snippet found': '找到 1 个相似的代码片段',
 
-    // 工件查看器：HTML 预览、版本历史记录、链接
-    'Open artifacts': '打开工件',
-    'More artifacts': '更多工件',
-    'Copy artifact content': '复制工件内容',
-    'HTML artifact view': 'HTML 工件视图',
+    // 附件查看器：HTML 预览、版本历史记录、链接
+    'Open artifacts': '打开附件',
+    'More artifacts': '更多附件',
+    'Copy artifact content': '复制附件内容',
+    'HTML artifact view': 'HTML 附件视图',
     'HTML preview settings': 'HTML 预览设置',
     'Show preview by default': '默认显示预览',
-    'Automatically run HTML artifacts when you open them.': '打开 HTML 工件时自动运行。',
+    'Automatically run HTML artifacts when you open them.': '打开 HTML 附件时自动运行。',
     'Previewing runs this code, which may send its contents to external sites.': '预览会运行此代码，可能会将其内容发送到外部网站。',
-    'Artifact HTML preview.': '工件 HTML 预览。',
-    'Artifact HTML source': '工件 HTML 源码',
+    'Artifact HTML preview.': '附件 HTML 预览。',
+    'Artifact HTML source': '附件 HTML 源码',
     'HTML rendering failed': 'HTML 渲染失败',
     'Refresh the page or check the HTML': '请刷新页面或检查 HTML',
     'Loading edit history…': '正在加载编辑历史记录…',
@@ -102,7 +102,7 @@ export default {
     'Enter a valid URL that starts with http:// or https://.': '请输入以 http:// 或 https:// 开头的有效 URL。',
     'Slack conversation': 'Slack 对话',
     'Artifact names must be 255 characters or fewer, start and end with a letter or number, and contain only letters, numbers, spaces, periods, hyphens, and underscores.':
-      '工件名称不得超过 255 个字符，须以字母或数字开头和结尾，且只能包含字母、数字、空格、句点、连字符和下划线。',
+      '附件名称不得超过 255 个字符，须以字母或数字开头和结尾，且只能包含字母、数字、空格、句点、连字符和下划线。',
 
     // 起草议题：按钮与确认
     'Review and update': '审查并更新',
@@ -220,8 +220,8 @@ export default {
     // 预览工具栏的行数单位：整段由 regexp 翻译，未命中时逐节点兜底
     lines: '行',
     line: '行',
-    // 工件查看器
-    Artifacts: '工件',
+    // 附件查看器
+    Artifacts: '附件',
     Current: '当前',
     Source: '源码',
     'Edit history': '编辑历史记录',
@@ -268,7 +268,7 @@ export default {
     [/^Image not available: (.+)$/, '图片不可用：$1'],
     [/^Draft a PR comment for: (.+)$/, '起草 PR 评论：$1'],
     [/^Send suggestion \(hold (Option|Alt) to insert\)$/, '发送建议（按住 $1 键插入）'],
-    // 工件查看器
+    // 附件查看器
     [/^Version (\d+)$/, '版本 $1'],
     [/^HTML preview: (.+)$/, 'HTML 预览：$1']
   ]

@@ -46,10 +46,10 @@ export default {
     'GitHub Packages': 'GitHub 软件包',
     'GitHub sandbox (public preview)': 'GitHub 沙盒（公开预览）',
     'Run agent-generated code safely in isolated, stateful cloud environments with snapshot and resume.':
-      '在隔离的有状态云环境中安全运行代理生成的代码，支持快照和恢复。',
+      '在隔离的有状态云环境中安全运行智能体生成的代码，支持快照和恢复。',
     'Code reviews': '代码审查',
     'Multiple pull request assignees': '拉取请求的多个受理人',
-    'Repository insights': '存储库见解',
+    'Repository insights': '存储库洞察',
     // Scheduled reminders 由 org-settings 收录
     'Automatic code review assignment': '自动分配代码审查',
 
@@ -86,9 +86,9 @@ export default {
     'Create your own patterns and find organization-specific secrets.': '创建你自己的模式，查找组织特有的机密。',
     'Push protection bypass controls': '推送保护绕过控制',
     'Manage who can bypass push protection and when.': '管理谁可以在何时绕过推送保护。',
-    'Insights in security overview': '安全概述见解',
+    'Insights in security overview': '安全概述洞察',
     'Understand how risk is distributed across your organization with security metrics and insight dashboards.':
-      '通过安全指标和见解仪表板，了解风险在组织中的分布。',
+      '通过安全指标和洞察仪表板，了解风险在组织中的分布。',
     'Scan history API': '扫描历史记录 API',
     'Review how and when GitHub scans your repositories for secrets.': '查看 GitHub 何时以及如何扫描存储库中的机密。',
 
@@ -124,7 +124,7 @@ export default {
 
     // 平台安全与合规
     SBOMs: 'SBOM',
-    'Artifact attestations': '工件证明',
+    'Artifact attestations': '产物证明',
     'GitHub Security Advisories': 'GitHub 安全公告',
     'Role-based access control': '基于角色的访问控制',
     'Required 2FA': '强制 2FA',

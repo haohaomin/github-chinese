@@ -96,14 +96,14 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      ['More options for Agent sessions', '代理会话的更多选项'],
+      ['More options for Agent sessions', '智能体会话的更多选项'],
       ['More options for Top repositories', 'Top repositories 的更多选项']
     ],
     misses: ['More options']
   },
   {
     hits: [
-      ['Show Agent sessions', '显示代理会话'],
+      ['Show Agent sessions', '显示智能体会话'],
       ['Show Pull requests', '显示拉取请求']
     ],
     misses: ['Show Top repositories']
@@ -423,7 +423,7 @@ describe('dashboard 静态词条', () => {
     ['Recent activity', '最近活动'],
     ['New', '新建'],
     ['Switch dashboard context', '切换仪表板上下文'],
-    ['Agent sessions options', '代理会话选项'],
+    ['Agent sessions options', '智能体会话选项'],
     ['Hide section', '隐藏分区'],
     ['Hidden', '已隐藏'],
     ['3 months', '3 个月'],
@@ -457,7 +457,7 @@ describe('dashboard 静态词条', () => {
     ['Recommended for you', '为你推荐'],
     ['Latest from our changelog', '更新日志最新动态'],
     ['Popular projects among', '热门项目于'],
-    ['Agent sessions status filter', '代理会话状态筛选器'],
+    ['Agent sessions status filter', '智能体会话状态筛选器'],
     // 产品名按用户要求译成中文（product-names.md）
     ['Open in Copilot Chat', '在 Copilot 聊天中打开'],
     ['Go to organization dashboard', '转到组织仪表板'],

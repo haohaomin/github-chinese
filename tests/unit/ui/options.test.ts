@@ -143,7 +143,7 @@ describe.skipIf(!App)('设置页组件', () => {
         '范围',
         '时段范围',
         '文字颜色',
-        '背景色',
+        '背景颜色',
         '时间格式',
         '更新',
         '关于'
@@ -255,6 +255,23 @@ describe.skipIf(!App)('设置页组件', () => {
       expect(title.element.nextElementSibling).toBe(version.element)
     })
 
+    it('词库、屏蔽规则的标签栏右侧：贡献词库、贡献规则，在新标签页新建议题', async () => {
+      const wrapper = await render()
+      for (const [test, text, template, tablist] of [
+        ['contribute-dictionary', '贡献词库', '1-translation.yml', '词库'],
+        ['contribute-rules', '贡献规则', '4-search-rule.yml', '屏蔽规则']
+      ] as const) {
+        const link = wrapper.get(`[data-test="${test}"]`)
+        expect(link.element.tagName).toBe('A')
+        expect(link.text()).toBe(text)
+        expect(link.attributes('href')).toBe(`${REPOSITORY_URL}/issues/new?template=${template}`)
+        expect(link.attributes('target')).toBe('_blank')
+        expect(link.attributes('rel')).toBe('noreferrer')
+        const tabs = link.element.closest('.ui-tabs-head')?.querySelector('[role="tablist"]')
+        expect(tabs?.getAttribute('aria-label')).toBe(tablist)
+      }
+    })
+
     it('关于：GitHub 存储库地址，在新标签页打开', async () => {
       const wrapper = await render()
       const about = section(wrapper, '关于')
@@ -283,7 +300,7 @@ describe.skipIf(!App)('设置页组件', () => {
           'Scope',
           'Date ranges',
           'Text colors',
-          'Background',
+          'Background colors',
           'Time format',
           'Updates',
           'About'
@@ -306,7 +323,7 @@ describe.skipIf(!App)('设置页组件', () => {
           '範圍',
           '時段範圍',
           '文字顏色',
-          '背景色',
+          '背景顏色',
           '時間格式',
           '更新',
           '關於'

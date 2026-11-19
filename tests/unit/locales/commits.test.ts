@@ -604,7 +604,7 @@ describe('commits 静态词条', () => {
     ['It may be too large to display on GitHub.', '它可能过大而无法在 GitHub 上显示。'],
     ['Sorry, this diff is temporarily unavailable due to heavy server load.', '抱歉，此差异因服务器负载过高而暂时不可用。'],
     ['Thanks for everything, Jim.', '感谢你所做的一切，Jim。'],
-    ['More suggestion batching options', '更多建议批处理选项'],
+    ['More suggestion batching options', '更多建议批量处理选项'],
     ['There was an error trying to commit changes.', '提交更改时出错。'],
     // 「X. Please try again.」句号随原文，不并成逗号句
     ['There was an error locking this conversation. Please try again.', '锁定此对话时出错。请重试。'],

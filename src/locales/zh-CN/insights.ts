@@ -10,7 +10,7 @@ import pulse from './insights/pulse'
 import traffic from './insights/traffic'
 
 /**
- * 页面类型 insights：存储库「见解」标签页（pulse、graphs、network、forks、community、
+ * 页面类型 insights：存储库「洞察」标签页（pulse、graphs、network、forks、community、
  * stargazers、watchers）。
  * 许可证 / 行为准则模板选择器（/community/license/new、/community/code-of-conduct/new）同时属于 code 页面类型，
  * 由 code 词典收录。

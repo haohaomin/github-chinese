@@ -114,7 +114,7 @@ export default {
     'Strengthen your development with AI': '借助 AI 强化开发',
     'Empower your team with native AppSec': '借助原生 AppSec 为团队赋能',
     'Write secure code at scale with AI-driven insights and automated fixes from GitHub Copilot Autofix.':
-      '借助 GitHub Copilot 自动修复提供的 AI 见解与自动化修复，大规模编写安全代码。',
+      '借助 GitHub Copilot 自动修复提供的 AI 洞察与自动化修复，大规模编写安全代码。',
     'Find and fix vulnerabilities in real time by integrating application security right into GitHub.':
       '将应用安全直接集成到 GitHub 中，实时发现并修复漏洞。',
     'Lead developer': '首席开发人员',
@@ -259,7 +259,7 @@ export default {
     'The secret risk assessment provides a free, comprehensive overview of an organization’s secret leak footprint across its GitHub repositories.':
       '机密风险评估免费提供组织在其 GitHub 存储库中机密泄露情况的全面概览。',
     'By analyzing repositories for exposed secrets, it helps admins and developers understand their exposure to potential security risks and offers actionable insights for remediation.':
-      '它通过分析存储库中暴露的机密，帮助管理员和开发人员了解自身面临的潜在安全风险，并提供可付诸行动的修复见解。',
+      '它通过分析存储库中暴露的机密，帮助管理员和开发人员了解自身面临的潜在安全风险，并提供可付诸行动的修复洞察。',
     'What is push protection?': '什么是推送保护？',
     'Push protection is designed to prevent sensitive information, such as secrets or tokens, from being pushed to your repository in the first place. It proactively scans your code for secrets during the push process and blocks the push if any are detected.':
       '推送保护旨在从源头上防止机密或令牌等敏感信息被推送到存储库。它会在推送过程中主动扫描代码中的机密，一旦检测到便阻止推送。',
@@ -285,7 +285,7 @@ export default {
       'Dependabot 根据被利用的可能性、严重性评分和分类规则，优先呈现最关键的前 10% 警报。',
     'Distribute what you build': '分发你的构建成果',
     'Easily sign and verify your builds with artifact attestations—simplifying security and compliance.':
-      '借助工件证明轻松签名和验证构建——简化安全与合规。',
+      '借助产物证明轻松签名和验证构建——简化安全与合规。',
     'From dependencies to deployment, lock down your supply chain.': '从依赖项到部署，全面守护你的供应链。',
     'Understand your supply chain': '了解你的供应链',
     'Identify critical risks faster with EPSS scores and automated alerts. Map dependencies and dependents, including transitive ones, with one-click SBOMs.':
@@ -301,8 +301,8 @@ export default {
     'Explore the Dependency Review Action': '探索依赖项审查操作',
     'Don’t just comply, be secure': '不只合规，更要安全',
     'Easily sign and verify builds with artifact attestations. Meet external compliance frameworks like SOC2 or strengthen internal security with SLSA—up to Build Level 3.':
-      '借助工件证明轻松签名和验证构建。满足 SOC2 等外部合规框架，或借助 SLSA 强化内部安全——最高可达构建级别 3。',
-    'Explore artifact attestations': '探索工件证明',
+      '借助产物证明轻松签名和验证构建。满足 SOC2 等外部合规框架，或借助 SLSA 强化内部安全——最高可达构建级别 3。',
+    'Explore artifact attestations': '探索产物证明',
     'Secure software from the start': '从一开始就保障软件安全',
     'Whether you’re contributing to an open source project or choosing new tools for your team, your security needs are covered with GitHub.':
       '无论你是在为开源项目做贡献，还是在为团队挑选新工具，GitHub 都能满足你的安全需求。',
@@ -332,17 +332,17 @@ export default {
       '与第三方安全附加组件不同，GitHub 的供应链功能完全在开发人员早已熟悉和喜爱的原生 GitHub 工作流中运行。GitHub 让开发人员能够更轻松地边开发边修复漏洞，从而为安全团队腾出时间，专注于保护企业、客户和社区免受应用漏洞威胁的关键策略。',
     'What is SLSA and SLSA level 3?': '什么是 SLSA 和 SLSA 级别 3？',
     // SLSA 答案首段文本节点（整段未命中时逐个节点匹配）
-    'Supply-chain Levels for Software Artifacts (SLSA)': '软件工件供应链级别 (SLSA)',
+    'Supply-chain Levels for Software Artifacts (SLSA)': '软件产物供应链级别 (SLSA)',
     'Supply-chain Levels for Software Artifacts (SLSA) is a framework for improving the end-to-end integrity of a software artifact throughout its development lifecycle.':
-      '软件工件供应链级别 (SLSA) 是一个框架，用于在软件工件的整个开发生命周期中提升其端到端完整性。',
+      '软件产物供应链级别 (SLSA) 是一个框架，用于在软件产物的整个开发生命周期中提升其端到端完整性。',
     'It provides a comprehensive, step-by-step methodology for building integrity and provenance guarantees into your software supply chain.':
       '它提供一套全面、循序渐进的方法，帮助你在软件供应链中建立完整性和来源保证。',
     'SLSA Level 3 signifies a significantly hardened software supply chain where builds are highly isolated, source code history is verified, and provenance is strictly controlled, providing a strong guarantee against tampering and ensuring the integrity of software artifacts.':
-      'SLSA 级别 3 代表经过显著加固的软件供应链：构建高度隔离、源代码历史记录经过验证、来源受到严格控制，从而有力防范篡改，确保软件工件的完整性。',
+      'SLSA 级别 3 代表经过显著加固的软件供应链：构建高度隔离、源代码历史记录经过验证、来源受到严格控制，从而有力防范篡改，确保软件产物的完整性。',
     'GitHub Actions and Artifact Attestations greatly simplify the journey to SLSA Level 3.':
-      'GitHub 操作和工件证明可大大简化达到 SLSA 级别 3 的过程。',
+      'GitHub 操作和产物证明可大大简化达到 SLSA 级别 3 的过程。',
     'GitHub Actions and Artifact Attestations greatly simplify the journey to SLSA Level 3':
-      'GitHub 操作和工件证明可大大简化达到 SLSA 级别 3 的过程',
+      'GitHub 操作和产物证明可大大简化达到 SLSA 级别 3 的过程',
     'Can GitHub create software bill of materials or SBOMs?': 'GitHub 能否创建软件物料清单 (SBOM)？',
     'You can export a software bill of materials or SBOM for your repository from the GitHub dependency graph.':
       '你可以从 GitHub 依赖项关系图为存储库导出软件物料清单 (SBOM)。',
@@ -360,7 +360,7 @@ export default {
     'Explore platform security features': '探索平台安全功能',
     'Securing your code, end to end': '端到端保护你的代码',
     'GitHub safeguards user accounts, branches, tags, and pushes, and supports SBOMs and artifact attestations for SLSA L3 builds.':
-      'GitHub 保护用户帐户、分支、标签和推送，并支持 SBOM 和工件证明，助力实现 SLSA L3 构建。',
+      'GitHub 保护用户帐户、分支、标签和推送，并支持 SBOM 和产物证明，助力实现 SLSA L3 构建。',
 
     // /security/plans：功能对比表（与 new/plans.ts 的 scoped 同名同译；Provider patterns、Generic patterns、
     // Dependency graph 已由其他文件的 static 收录；单元格的屏幕阅读器文字 Included / Not included）
@@ -386,9 +386,9 @@ export default {
       '检测来自未知提供程序的令牌，包括 HTTP 身份验证标头、连接字符串和私钥。',
     'Push protection bypass controls': '推送保护绕过控制',
     'Manage who can bypass push protection and when.': '管理谁可以在何时绕过推送保护。',
-    'Insights in security overview': '安全概述见解',
+    'Insights in security overview': '安全概述洞察',
     'Understand how risk is distributed across your organization with security metrics and insight dashboards.':
-      '通过安全指标和见解仪表板，了解风险在组织中的分布。',
+      '通过安全指标和洞察仪表板，了解风险在组织中的分布。',
     'Scan history API': '扫描历史记录 API',
     'Review how and when GitHub scans your repositories for secrets.': '查看 GitHub 何时以及如何扫描存储库中的机密。',
     'Copilot Autofix': 'Copilot 自动修复',

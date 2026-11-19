@@ -50,7 +50,7 @@ function commentLabel(text: string, suffix = ''): string {
 
 /**
  * 评论面板与批次管理：新版“已更改的文件”与概述页的评论列表（筛选、排序、空状态、线程预览与标题）、
- * 评论操作（隐藏、最小化、编辑历史记录）、批次管理面板（提交建议、交给 Copilot 修复）、工件标签页、堆栈详细信息、单文件模式提示。
+ * 评论操作（隐藏、最小化、编辑历史记录）、批次管理面板（提交建议、交给 Copilot 修复）、附件标签页、堆栈详细信息、单文件模式提示。
  */
 export default {
   static: {
@@ -119,9 +119,9 @@ export default {
     'Batch actions unavailable': '批次操作不可用',
     'There was an error sending the batch to Copilot': '将批次发送给 Copilot 时出错',
     'Additional instructions cleared for the new batch.': '已为新批次清除附加说明。',
-    // 产品名按 product-names.md 译出：Copilot cloud agent → Copilot 云代理
-    'Batch sent to Copilot cloud agent.': '批次已发送给 Copilot 云代理。',
-    'Ask Copilot cloud agent to address the comments in this batch.': '让 Copilot 云代理处理此批次中的评论。',
+    // 产品名按 product-names.md 译出：Copilot cloud agent → Copilot 云端智能体
+    'Batch sent to Copilot cloud agent.': '批次已发送给 Copilot 云端智能体。',
+    'Ask Copilot cloud agent to address the comments in this batch.': '让 Copilot 云端智能体处理此批次中的评论。',
     'will be added as co-author on any new commits.': '将作为共同作者添加到所有新提交中。',
     'Additional instructions for Copilot': '给 Copilot 的附加说明',
     'Add additional instructions for Copilot...': '为 Copilot 添加附加说明...',
@@ -134,13 +134,13 @@ export default {
     'This batch contains items other than committable suggestions, so it can’t be committed.': '此批次包含可提交建议以外的项，无法提交。',
     'Manage batch action mode': '批次操作模式',
 
-    // 工件标签页
-    'Loading artifacts…': '正在加载工件…',
-    'Unable to load artifacts': '无法加载工件',
-    'No artifacts yet': '暂无工件',
-    'Artifacts created for this pull request will appear here': '为此拉取请求创建的工件将显示在这里',
-    'Artifact not found': '未找到工件',
-    'Select an artifact from the sidebar': '从侧栏中选择一个工件'
+    // 附件标签页
+    'Loading artifacts…': '正在加载附件…',
+    'Unable to load artifacts': '无法加载附件',
+    'No artifacts yet': '暂无附件',
+    'Artifacts created for this pull request will appear here': '为此拉取请求创建的附件将显示在这里',
+    'Artifact not found': '未找到附件',
+    'Select an artifact from the sidebar': '从侧栏中选择一个附件'
   },
   scoped: {
     'No comments yet': '暂无评论',

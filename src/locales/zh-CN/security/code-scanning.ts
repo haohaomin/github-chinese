@@ -219,11 +219,11 @@ export default {
     // 自动修复
     // Speed up the remediation of this alert with <agentic autofix | Copilot Autofix for CodeQL>
     'Speed up the remediation of this alert with': '使用以下功能加快此警报的修复',
-    'Speed up the remediation of this alert with agentic autofix': '使用代理自动修复加快此警报的修复',
+    'Speed up the remediation of this alert with agentic autofix': '使用智能体自动修复加快此警报的修复',
     'Copilot Autofix for CodeQL': 'CodeQL 的 Copilot 自动修复',
-    'Agentic fixes use AI credits.': '代理修复会消耗 AI 额度。',
+    'Agentic fixes use AI credits.': '智能体修复会消耗 AI 额度。',
     'Learn more about AI credit usage': '了解 AI 额度使用情况',
-    'Agentic autofix': '代理自动修复',
+    'Agentic autofix': '智能体自动修复',
     // <Copilot> is creating a pull request…
     'is creating a pull request…': '正在创建拉取请求…',
     'is creating a pull request...': '正在创建拉取请求...',
@@ -237,20 +237,20 @@ export default {
     'GitHub Advanced Security license billing': 'GitHub 高级安全许可证计费',
     'AI usage, like scanning and fixing, is blocked by your organization.': '你的组织已禁止扫描、修复等 AI 用途。',
     'There are no AI credits available to start an agentic autofix. This may be because the budget has been exceeded or because metered billing has not been set up by the repository owner. See':
-      '没有可用于启动代理自动修复的 AI 额度。可能是预算已超出或存储库所有者尚未设置按流量计费。请参阅',
-    'for more information about how agentic autofix is billed.': '了解代理自动修复的计费方式。',
+      '没有可用于启动智能体自动修复的 AI 额度。可能是预算已超出或存储库所有者尚未设置按流量计费。请参阅',
+    'for more information about how agentic autofix is billed.': '了解智能体自动修复的计费方式。',
     'Before you can use agentic autofix, you need to pick a "Usage billed to" option in your Copilot settings.':
-      '使用代理自动修复前，需要在 Copilot 设置中选择“使用量计费对象”。',
+      '使用智能体自动修复前，需要在 Copilot 设置中选择“使用量计费对象”。',
     'Agentic autofix encountered an error and was unable to start working on the alert. This may be caused by a repository ruleset violation. See':
-      '代理自动修复出错且无法开始处理此警报。可能是违反了存储库规则集。请参阅',
-    'granting bypass permissions for the agent': '为代理授予绕过权限',
+      '智能体自动修复出错且无法开始处理此警报。可能是违反了存储库规则集。请参阅',
+    'granting bypass permissions for the agent': '为智能体授予绕过权限',
     'Manage rulesets': '管理规则集',
     'Agentic autofix encountered an error and was unable to start working on the alert. You have exceeded the maximum number of queued jobs. Please try again later.':
-      '代理自动修复出错且无法开始处理此警报。排队作业已超过上限。请稍后重试。',
-    'Agentic autofix could not be started because you do not have access to Copilot.': '因你无权使用 Copilot 而无法启动代理自动修复。',
+      '智能体自动修复出错且无法开始处理此警报。排队作业已超过上限。请稍后重试。',
+    'Agentic autofix could not be started because you do not have access to Copilot.': '因你无权使用 Copilot 而无法启动智能体自动修复。',
     'Agentic autofix could not be started because Copilot cloud agent is not enabled for you or this repository. See':
-      '因你或此存储库未启用 Copilot 云代理而无法启动代理自动修复。请参阅',
-    'Copilot cloud agent access management': 'Copilot 云代理访问管理',
+      '因你或此存储库未启用 Copilot 云端智能体而无法启动智能体自动修复。请参阅',
+    'Copilot cloud agent access management': 'Copilot 云端智能体访问管理',
 
     // 分支：在 GitHub Desktop 中打开 / 本地检出
     'Opening branch in GitHub Desktop...': '正在 GitHub 桌面版中打开分支...',
@@ -336,7 +336,7 @@ export default {
     // 自动修复
     [/^Commit autofix(?:es)? to (new )?branch$/, (_, isNew: string | undefined) => `将自动修复提交到${isNew ? '新' : ''}分支`],
     [/^Copilot failed to create a pull request\. (.+)\.$/, 'Copilot 创建拉取请求失败。$1。'],
-    // 代理自动修复横幅：Failed to create pull request: <错误信息>.
+    // 智能体自动修复横幅：Failed to create pull request: <错误信息>.
     [/^Failed to create pull request: (.+)\.$/, '创建拉取请求失败：$1。'],
     // AI 扫描不可用的说明（{scanName} = standard scan / deep scan）
     [

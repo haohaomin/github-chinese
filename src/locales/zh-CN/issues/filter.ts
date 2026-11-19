@@ -63,12 +63,12 @@ const FILTER_KEY: Readonly<Record<string, string>> = {
   'Sub-issue': '子议题',
   Suggestions: '建议',
   Team: '团队',
-  'Team review requested': '请求团队审查',
+  'Team review requested': '已请求团队审查',
   Text: '文本',
   Type: '类型',
   'Update date': '更新日期',
   User: '用户',
-  'User review requested': '请求用户审查'
+  'User review requested': '已请求用户审查'
 }
 
 /** 筛选器说明（item 指议题、拉取请求或项目项，与 projects 词典同译“项”） */

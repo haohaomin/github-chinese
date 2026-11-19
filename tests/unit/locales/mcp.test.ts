@@ -96,7 +96,7 @@ describe('mcp 静态词条', () => {
   it('By、标题第二段只在本页面生效（scoped）', () => {
     expect(dict.static?.['By']).toBeUndefined()
     expect(dict.scoped?.['By']).toBe('来自')
-    expect(dict.scoped?.['Connect Agents to tools']).toBe('将代理连接到工具')
+    expect(dict.scoped?.['Connect Agents to tools']).toBe('将智能体连接到工具')
     expect(matcher.translate('By', ['common'])).toBeUndefined()
     expect(translate('By')).toBe('来自')
   })
@@ -125,7 +125,7 @@ describe('mcp 标签页标题', () => {
   const translateInBundle = (text: string) => bundleMatcher.translate(text, MCP)
 
   it('目录页：两段都翻译', () => {
-    expect(translateTitleText('MCP Registry · Connect Agents to tools', translateInBundle, '/mcp')).toBe('MCP 注册表 · 将代理连接到工具')
+    expect(translateTitleText('MCP Registry · Connect Agents to tools', translateInBundle, '/mcp')).toBe('MCP 注册表 · 将智能体连接到工具')
   })
 
   it.each([

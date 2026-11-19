@@ -19,7 +19,7 @@ const PICKER_VALUE: Readonly<Record<string, string>> = {
   'Loading branch...': '正在加载分支...',
   Personal: '个人',
   Ask: '询问',
-  Agent: '代理'
+  Agent: '智能体'
 }
 
 /** 日志详细程度 */
@@ -42,7 +42,7 @@ const ENV_STATUS: Readonly<Record<string, string>> = {
   Disconnected: '已断开'
 }
 
-/** 代理显示名（Copilot、Claude、OpenAI Codex 等，最多 4 个词），避免匹配会话标题等长文本 */
+/** 智能体显示名（Copilot、Claude、OpenAI Codex 等，最多 4 个词），避免匹配会话标题等长文本 */
 const AGENT_NAME = '[\\w.+-]+(?: [\\w.+-]+){0,3}'
 
 function pickerValue(value: string): string {
@@ -86,16 +86,16 @@ function composerRule(rule: RegExpRule): RegExpRule {
 }
 
 /**
- * Copilot 代理：代理会话列表与筛选、会话页头部与详细信息、分享 / 置顶 / 存档 / 删除、引导（steering）限制、
- * 继续于其他客户端、新建任务与分配给代理、任务创建失败的横幅与读屏播报、
- * 代理 / 范围 / 存储库 / 环境 / 权限选择器、授权与第三方代理设置。
- * 页面：/copilot/agents（代理首页）、/{owner}/{repo}/agents（存储库代理页）、
- * /{owner}/{repo}/tasks/{id}（代理会话页）；会话页也出现在拉取请求下（/pull/N/agent-sessions/…），长句放 static。
+ * Copilot 智能体：智能体会话列表与筛选、会话页头部与详细信息、分享 / 置顶 / 存档 / 删除、引导（steering）限制、
+ * 继续于其他客户端、新建任务与分配给智能体、任务创建失败的横幅与读屏播报、
+ * 智能体 / 范围 / 存储库 / 环境 / 权限选择器、授权与第三方智能体设置。
+ * 页面：/copilot/agents（智能体首页）、/{owner}/{repo}/agents（存储库智能体页）、
+ * /{owner}/{repo}/tasks/{id}（智能体会话页）；会话页也出现在拉取请求下（/pull/N/agent-sessions/…），长句放 static。
  */
 export default {
   static: {
     // 会话类型与客户端
-    'Cloud agents': '云代理',
+    'Cloud agents': '云端智能体',
     'Cloud session': '云端会话',
     'Environment session': '环境会话',
     'CLI session': 'CLI 会话',
@@ -120,7 +120,7 @@ export default {
 
     // 新建任务
     'New task': '新建任务',
-    'Give Copilot cloud agent a background task': '给 Copilot 云代理分配后台任务',
+    'Give Copilot cloud agent a background task': '给 Copilot 云端智能体分配后台任务',
     'Give Copilot a background task to work on': '给 Copilot 分配一个后台任务',
     'Explain this repository and help me understand the codebase': '解释此存储库并帮我理解代码库',
     'Analyze test coverage and add missing tests': '分析测试覆盖率并补充缺失的测试',
@@ -130,14 +130,14 @@ export default {
     'Setting up your cloud session…': '正在设置云端会话…',
     'Preparing repository…': '正在准备存储库…',
     'Repository preparation failed.': '存储库准备失败。',
-    'Starting agent…': '正在启动代理…',
+    'Starting agent…': '正在启动智能体…',
     'Copilot is working…': 'Copilot 正在工作…',
     'Copilot is working...': 'Copilot 正在工作...',
     'Waking compute…': '正在唤醒计算资源…',
     'Waiting for session…': '正在等待会话…',
-    'Waiting for agent to start session...': '正在等待代理开始会话...',
-    'Retry starting agent': '重试启动代理',
-    'Agent startup did not finish': '代理启动未完成',
+    'Waiting for agent to start session...': '正在等待智能体开始会话...',
+    'Retry starting agent': '重试启动智能体',
+    'Agent startup did not finish': '智能体启动未完成',
     'Task creation failed': '任务创建失败',
     'Task started': '任务已开始',
     'Starting task…': '正在开始任务…',
@@ -228,22 +228,22 @@ export default {
     'Find a space': '查找空间',
     'Resolving…': '解析中…',
 
-    // 代理选择器
-    'Select an agent': '选择代理',
-    'Custom agents': '自定义代理',
-    'Custom agent': '自定义代理',
-    'Create a custom agent': '创建自定义代理',
-    'This repository has no custom agents': '此存储库没有自定义代理',
-    'No custom agents available': '没有可用的自定义代理',
-    'Custom agents are reusable instructions and tools in your repository.': '自定义代理是存储库中可复用的说明和工具。',
-    'Custom agents come from a repository. Select one to use its agents.': '自定义代理来自存储库。选择一个存储库以使用其中的代理。',
-    'Loading agents': '正在加载代理',
-    'Loading agent': '正在加载代理',
-    'Loading agent…': '正在加载代理…',
-    'Agent unavailable': '代理不可用',
+    // 智能体选择器
+    'Select an agent': '选择智能体',
+    'Custom agents': '自定义智能体',
+    'Custom agent': '自定义智能体',
+    'Create a custom agent': '创建自定义智能体',
+    'This repository has no custom agents': '此存储库没有自定义智能体',
+    'No custom agents available': '没有可用的自定义智能体',
+    'Custom agents are reusable instructions and tools in your repository.': '自定义智能体是存储库中可复用的说明和工具。',
+    'Custom agents come from a repository. Select one to use its agents.': '自定义智能体来自存储库。选择一个存储库以使用其中的智能体。',
+    'Loading agents': '正在加载智能体',
+    'Loading agent': '正在加载智能体',
+    'Loading agent…': '正在加载智能体…',
+    'Agent unavailable': '智能体不可用',
     'Requires authorization': '需要授权',
     'Your organization has removed access for this agent. Contact your administrator for more information.':
-      '你的组织已删除此代理的访问权限。请联系管理员了解详情。',
+      '你的组织已删除此智能体的访问权限。请联系管理员了解详情。',
 
     // 模式与工具权限
     'Step-by-step collaboration': '逐步协作',
@@ -281,7 +281,7 @@ export default {
     'Tool permissions are not reported for this session.': '此会话未报告工具权限。',
 
     // 会话页头部与详细信息
-    'Agent session header': '代理会话标题栏',
+    'Agent session header': '智能体会话标题栏',
     'Manage session': '管理会话',
     'Task actions': '任务操作',
     'Toggle sidebar': '切换侧栏',
@@ -370,7 +370,7 @@ export default {
       '在开始此会话的位置打开它以继续，或在云端开始新会话。',
     'Open this session where it was started to continue.': '在开始此会话的位置打开它以继续。',
     'New cloud session': '新建云端会话',
-    'Respond to the agent prompt in your local CLI session to continue.': '请在本地 CLI 会话中回复代理的提示以继续。',
+    'Respond to the agent prompt in your local CLI session to continue.': '请在本地 CLI 会话中回复智能体的提示以继续。',
 
     // 重新连接与只读
     "We couldn't reconnect": '无法重新连接',
@@ -413,7 +413,7 @@ export default {
     // 引导（steering）
     'Steering is not available for this session': '此会话不支持引导',
     'Only the session owner can steer this session': '只有会话所有者才能引导此会话',
-    'Steer active session while agent is working': '在代理工作时引导当前会话',
+    'Steer active session while agent is working': '在智能体工作时引导当前会话',
     'Steer active turn': '引导当前轮次',
     'Steering Copilot requires an active subscription': '引导 Copilot 需要有效的订阅',
     'Steering Copilot requires an active subscription.': '引导 Copilot 需要有效的订阅。',
@@ -444,7 +444,7 @@ export default {
     'Queued message could not be removed.': '无法删除排队的消息。',
     'Queued message could not be sent now.': '无法立即发送排队的消息。',
     'Queued in saved history.': '已在保存的历史记录中排队。',
-    'Queued message waiting for agent': '排队的消息正在等待代理',
+    'Queued message waiting for agent': '排队的消息正在等待智能体',
     'Remove from queue': '从队列中删除',
     'Removing queued message': '正在删除排队的消息',
     'Sending queued message now': '正在立即发送排队的消息',
@@ -453,7 +453,7 @@ export default {
     'Queued for Copilot': '已排队等待 Copilot',
     'Message with attachments': '带附件的消息',
     'Steering message': '引导消息',
-    'Steering message waiting for agent': '引导消息正在等待代理',
+    'Steering message waiting for agent': '引导消息正在等待智能体',
 
     // 分享
     'Share session': '分享会话',
@@ -514,22 +514,22 @@ export default {
     'Are you sure you want to delete this session? This action cannot be undone.': '确定要删除此会话吗？此操作无法撤销。',
     'Failed to delete session. Please try again.': '删除会话失败。请重试。',
 
-    // 分配给代理
-    'Assign to Agent': '分配给代理',
+    // 分配给智能体
+    'Assign to Agent': '分配给智能体',
     'Target repository': '目标存储库',
     'Base branch': '基础分支',
     'Optional prompt': '可选提示',
     'Select base branch': '选择基础分支',
     // 输入框占位文字（原文无冒号）
     'Optionally provide additional context for the agent, like constraints, priorities, or areas to avoid':
-      '可为代理提供更多上下文，如约束、优先级或需避免的方面',
+      '可为智能体提供更多上下文，如约束、优先级或需避免的方面',
     'A new branch will be created based on the selected branch': '将基于所选分支创建新分支',
     'The agent will use the issue description, comments, and any additional prompt you provide to get started. Select a custom agent for specialized tasks.':
-      '代理将根据议题描述、评论以及你提供的额外提示开始工作。处理专门任务时可选择自定义代理。',
+      '智能体将根据议题描述、评论以及你提供的额外提示开始工作。处理专门任务时可选择自定义智能体。',
     "You're assigning the agent to perform work in a different organization. The issue description will be visible to users outside this repository.":
-      '你正在分配代理到其他组织中工作。议题描述将对此存储库以外的用户可见。',
+      '你正在分配智能体到其他组织中工作。议题描述将对此存储库以外的用户可见。',
     "You're assigning the agent to perform work in a public repository. The issue description will be visible to users outside this repository.":
-      '你正在分配代理到公共存储库中工作。议题描述将对此存储库以外的用户可见。',
+      '你正在分配智能体到公共存储库中工作。议题描述将对此存储库以外的用户可见。',
     "The selected repo has no commits or branches so there's no valid base branch to create a PR against.":
       '所选存储库没有任何提交或分支，没有可用于创建 PR 的有效基础分支。',
     'Insufficient quota. Assignment is temporarily unavailable until additional usage is available.':
@@ -541,11 +541,11 @@ export default {
     'Authorizing…': '授权中…',
     'to complete authentication, then returned here.': '完成身份验证，然后返回此处。',
 
-    // Copilot 设置：dotfiles、存储库访问、第三方代理
+    // Copilot 设置：dotfiles、存储库访问、第三方智能体
     'Failed to save changes': '保存更改失败',
     'Repository access': '存储库访问权限',
-    'Failed to update third-party agent settings, please try again later.': '更新第三方代理设置失败，请稍后重试。',
-    "Agent installation is blocked because the partner agent's app is already installed": '已安装合作方代理的应用，因此无法安装此代理',
+    'Failed to update third-party agent settings, please try again later.': '更新第三方智能体设置失败，请稍后重试。',
+    "Agent installation is blocked because the partner agent's app is already installed": '已安装合作方智能体的应用，因此无法安装此智能体',
     'Learn more about Claude on GitHub': '了解 GitHub 上的 Claude',
     'Learn more about Codex on GitHub': '了解 GitHub 上的 Codex',
     'Using this alongside the Claude app may cause conflicts or confusion. Since both use "@Claude" for mentions, enabling both may lead to mixed or incorrect responses.':
@@ -555,9 +555,9 @@ export default {
 
     // 后台云端会话（聊天中的工具）
     'Start a cloud session': '开始云端会话',
-    'Start a cloud agent session?': '开始云代理会话？',
+    'Start a cloud agent session?': '开始云端智能体会话？',
     'Start session': '开始会话',
-    'Started a cloud agent session': '已开始云代理会话',
+    'Started a cloud agent session': '已开始云端智能体会话',
     'Failed to start a session': '无法开始会话',
     'Did not start a session': '未开始会话',
     'Open a session': '打开会话',
@@ -693,15 +693,15 @@ export default {
     composerRule([/^Resolving space: (.+)$/, '正在解析空间：$1']),
     composerRule([/^Space selected: (.+)$/, '已选择空间：$1']),
 
-    // 代理与模式
+    // 智能体与模式
     composerRule([
       /^(Agent|Custom agent): (.+)$/,
-      (_, kind: string, name: string) => `${kind === 'Agent' ? '代理' : '自定义代理'}：${name}`
+      (_, kind: string, name: string) => `${kind === 'Agent' ? '智能体' : '自定义智能体'}：${name}`
     ]),
     composerRule([/^Mode: (.+)$/, (_, mode: string) => `模式：${pickerValue(mode)}`]),
     composerRule([
       /^Select (CLI agent|MCP permission) mode, current: (.+)$/,
-      (_, kind: string, mode: string) => `选择${kind === 'CLI agent' ? ' CLI 代理' : ' MCP 权限'}模式，当前：${pickerValue(mode)}`
+      (_, kind: string, mode: string) => `选择${kind === 'CLI agent' ? ' CLI 智能体' : ' MCP 权限'}模式，当前：${pickerValue(mode)}`
     ]),
     [/^Tool permissions (?:are )?set to “(.+)”\.$/, (_, mode: string) => `工具权限已设为“${pickerValue(mode)}”。`],
     composerRule([
@@ -709,7 +709,7 @@ export default {
       (_, mode: string) => `工具权限：“${pickerValue(mode)}”不适用于此会话。请选择可用选项以继续。`
     ]),
     [/^Log verbosity: (Minimal|Balanced|Detailed)$/, (_, level: string) => `日志详细程度：${VERBOSITY[level] ?? level}`],
-    [/^Information about the (.+) agent$/, '关于 $1 代理的信息'],
+    [/^Information about the (.+) agent$/, '关于 $1 智能体的信息'],
     [
       new RegExp(`^(${AGENT_NAME}) requires authorization( first\\.)?$`),
       (_, agent: string, first: string) => `${agent} 需要${first ? '先' : ''}授权${first ? '。' : ''}`
@@ -718,7 +718,7 @@ export default {
 
     // 任务与分配
     [/^Creating task in ([\w.-]+\/[\w.-]+)$/, '正在 $1 中创建任务'],
-    [/^New agent (?:session|task) in ([\w.-]+\/[\w.-]+)$/, '在 $1 中新建代理会话'],
+    [/^New agent (?:session|task) in ([\w.-]+\/[\w.-]+)$/, '在 $1 中新建智能体会话'],
     ...TASK_FAILURE_RULES.map(composerRule),
     // 任务创建失败的读屏播报：Task creation failed. + 横幅说明
     [/^Task creation failed\. (.+)$/, (_, description: string) => `任务创建失败。${translateTaskFailure(description)}`],
@@ -771,7 +771,8 @@ export default {
     [/^Listed (\d+) sessions$/, '已列出 $1 个会话'],
     [
       /^Copilot will start a background cloud agent session on ([\w.-]+\/[\w.-]+)( and open a pull request)?\. It works independently of this chat\.$/,
-      (_, repo: string, pull: string) => `Copilot 将在 ${repo} 上开始后台云代理会话${pull ? '并创建拉取请求' : ''}。它独立于此聊天运行。`
+      (_, repo: string, pull: string) =>
+        `Copilot 将在 ${repo} 上开始后台云端智能体会话${pull ? '并创建拉取请求' : ''}。它独立于此聊天运行。`
     ],
     // 代码审查会话的标题：Review of <拉取请求标题>
     [/^Review of (.+)$/, '审查 $1'],

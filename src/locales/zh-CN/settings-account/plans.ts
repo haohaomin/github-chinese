@@ -324,7 +324,7 @@ export default {
     'Updated your optional contact information, it will show up on your next receipt.': '已更新可选联系信息，将显示在你的下一张收据上。',
 
     // 付款信息：发票、Azure 订阅（“billing information section” 为链接）
-    'Receive an invoice for your GitHub purchases': '接收 GitHub 购买的发票',
+    'Receive an invoice for your GitHub purchases': '接收你在 GitHub 上消费的发票',
     'The data from Billing Information, such as your address and VAT/GST ID will appear on your invoices.':
       '账单信息中的地址和 VAT/GST 税号等数据将显示在发票上。',
     'Update your information displayed on your invoices in the': '更新发票上显示的信息请前往',
@@ -484,7 +484,7 @@ export default {
     'Repository rules': '存储库规则',
     'Draft pull requests': '草稿拉取请求',
     'Multiple pull request assignees': '拉取请求的多个受理人',
-    'Repository insights': '存储库见解',
+    'Repository insights': '存储库洞察',
     'Automatic code review assignment': '自动分配代码审查',
     'Environment protection rules': '环境保护规则',
     'Environment deployment branches and secrets': '环境部署分支和机密',
@@ -495,7 +495,7 @@ export default {
     'Pages and wikis': '页面和 Wiki',
     'Multiple issue assignees': '议题的多个受理人',
     'Repository rulesets': '存储库规则集',
-    'Artifact attestations': '工件证明',
+    'Artifact attestations': '产物证明',
     'GitHub Security Advisories': 'GitHub 安全公告',
     'Role-based access control': '基于角色的访问控制',
     'Required 2FA': '强制 2FA',

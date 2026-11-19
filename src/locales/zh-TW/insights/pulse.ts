@@ -30,7 +30,7 @@ const DATA_TYPE: Readonly<Record<string, string>> = {
  */
 export default {
   static: {
-    Pulse: '脈動',
+    Pulse: '統計',
     'Period:': '期間：',
     'Merged pull requests': '已合併的拉取請求',
     'Open pull requests': '開放中的拉取請求',

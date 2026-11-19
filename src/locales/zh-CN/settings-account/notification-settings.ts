@@ -28,7 +28,7 @@ function joinItems(list: string, names: Readonly<Record<string, string>>): strin
 
 /**
  * 通知设置（/settings/notifications、/settings/notifications/custom_routing）：默认通知电子邮件、自动关注、
- * 订阅（正在关注、参与和 @提及、自定义电子邮件更新、已忽略的存储库）、系统（Actions、Dependabot、安全活动、部署密钥、代理任务）、
+ * 订阅（正在关注、参与和 @提及、自定义电子邮件更新、已忽略的存储库）、系统（Actions、Dependabot、安全活动、部署密钥、智能体任务）、
  * 自定义路由。「Subscriptions」「Notification settings」由 notifications 收录，「In-product messages」由组织设置收录。
  */
 export default {
@@ -96,8 +96,8 @@ export default {
     'Notifications for workflow runs on repositories set up with GitHub Actions.': '已设置 GitHub 操作的存储库中的工作流运行通知。',
     'Only notify for failed workflows': '仅在工作流失败时通知',
     'Failed workflows only': '仅失败的工作流',
-    'Agent tasks': '代理任务',
-    'Notifications for agent sessions that you started.': '你启动的代理会话的通知。',
+    'Agent tasks': '智能体任务',
+    'Notifications for agent sessions that you started.': '你启动的智能体会话的通知。',
 
     // 系统：Dependabot（说明被 “Dependabot alerts” 链接拆开，链接后无逗号，译文不加）
     // → “当你获得 <Dependabot 警报> 的访问权限后将自动收到你的依赖项中发现新漏洞的通知。”

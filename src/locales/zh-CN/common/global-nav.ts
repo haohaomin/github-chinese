@@ -5,7 +5,7 @@ const ORG_INVITE_VERB: Readonly<Record<string, string>> = {
   Add: '添加成员到'
 }
 
-/** 登录后全局导航栏：头部按钮、全局导航侧栏、用户菜单、新建菜单、Copilot 与代理菜单、存储库标签导航 */
+/** 登录后全局导航栏：头部按钮、全局导航侧栏、用户菜单、新建菜单、Copilot 与智能体菜单、存储库标签导航 */
 export default {
   static: {
     // 头部
@@ -55,7 +55,7 @@ export default {
     'Open Copilot…': '打开 Copilot…',
     'Open Copilot...': '打开 Copilot...',
     'Open Copilot menu': '打开 Copilot 菜单',
-    'Open agents panel': '打开代理面板',
+    'Open agents panel': '打开智能体面板',
     'Ask Copilot…': '询问 Copilot…',
     'In immersive chat': '在沉浸式聊天中',
     'In a space': '在空间中',
@@ -76,8 +76,8 @@ export default {
     'Opening Copilot': '正在打开 Copilot',
     'Unable to open Copilot. Please try again.': '无法打开 Copilot。请重试。',
 
-    // 代理菜单
-    Agents: '代理',
+    // 智能体菜单
+    Agents: '智能体',
     'Recent sessions': '最近的会话',
     'New session': '新建会话',
     'Open Copilot settings': '打开 Copilot 设置',
@@ -92,14 +92,14 @@ export default {
     'Describe your task in natural language. Copilot will work in the background and open a pull request for your review.':
       '用自然语言描述任务。Copilot 会在后台工作，并创建拉取请求供你审查。',
     'Describe a coding task to work on': '描述要处理的编程任务',
-    'Learn more about Copilot cloud agent': '了解 Copilot 云代理',
+    'Learn more about Copilot cloud agent': '了解 Copilot 云端智能体',
     'Recent tasks': '最近的任务',
     'Tasks couldn’t be loaded': '无法加载任务',
     'uses AI. Check for mistakes.': '使用 AI，请检查是否有误。',
-    // 产品名按用户要求译成中文：Copilot cloud agent → Copilot 云代理
-    'Copilot cloud agent': 'Copilot 云代理',
-    // 标题由 “Start a task with ” 与代理名两个相邻文本节点组成，整体匹配
-    'Start a task with Copilot cloud agent': '使用 Copilot 云代理开始任务',
+    // 产品名按用户要求译成中文：Copilot cloud agent → Copilot 云端智能体
+    'Copilot cloud agent': 'Copilot 云端智能体',
+    // 标题由 “Start a task with ” 与智能体名两个相邻文本节点组成，整体匹配
+    'Start a task with Copilot cloud agent': '使用 Copilot 云端智能体开始任务',
     'Copilot works in the cloud and opens a pull request for your review. Enjoy up to 5 free uses this month with your Copilot Free plan.':
       'Copilot 在云端工作，并创建拉取请求供你审查。本月你的 Copilot 免费版计划可免费使用最多 5 次。',
     // 会话状态（列表项说明文字）
@@ -111,8 +111,8 @@ export default {
     'New issue': '新建议题',
     'New repository': '新建存储库',
     'Import repository': '导入存储库',
-    'New agent session': '新建代理会话',
-    'New agent task': '新建代理任务',
+    'New agent session': '新建智能体会话',
+    'New agent task': '新建智能体任务',
     'New spark': '新建 Spark',
     'New codespace': '新建代码空间',
     'New doc': '新建文档',
@@ -217,7 +217,7 @@ export default {
     Codespaces: '代码空间',
     Models: '模型',
     'Security and quality': '安全和质量',
-    Insights: '见解'
+    Insights: '洞察'
   },
   regexp: [
     // 已登录头部搜索按钮的无障碍名称与按钮文字（快捷键不是 / 时）
@@ -232,7 +232,7 @@ export default {
     [/^Data residency: ([^-]+?) - Users managed by (.+)$/, '数据驻留：$1 - 由 $2 托管的用户'],
     [/^Viewing as ([\w-]+)$/, '以 $1 身份查看'],
     [/^Users managed by (.+)$/, '由 $1 托管的用户'],
-    // 代理菜单：会话数播报、正在创建的任务
+    // 智能体菜单：会话数播报、正在创建的任务
     [/^(\d+) recent sessions?$/, '$1 个最近的会话'],
     [/^Creating task in ([\w.-]+\/[\w.-]+)$/, '正在 $1 中创建任务']
   ]

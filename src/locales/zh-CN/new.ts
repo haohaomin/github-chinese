@@ -31,7 +31,7 @@ const VISIBILITY_VERB: Readonly<Record<string, string>> = {
  * 选择计划页的比较功能表见 new/plans.ts。
  * 产品名、方案名译成中文（用户决定，2026-10-27）：计划名 Free / Team / Enterprise → 免费版 / 团队版 / 企业版（scoped），
  * GitHub Actions / Codespaces / Packages / Pages / Marketplace → GitHub 操作 / 代码空间 / 软件包 / 页面 / 市场，
- * Enterprise Cloud / Server → 企业云 / 企业服务器，Copilot Business / cloud agent / coding agent → Copilot 商业版 / 云代理 / 编码代理。
+ * Enterprise Cloud / Server → 企业云 / 企业服务器，Copilot Business / cloud agent / coding agent → Copilot 商业版 / 云端智能体 / 编码智能体。
  * 自造品牌词（GitHub、Copilot、Dependabot、CodeQL、Git）与技术缩写（SSO、SCIM、USD）保留。
  */
 const base = {
@@ -136,11 +136,11 @@ const base = {
     'what you want to build in this repository. After creation, Copilot will open a pull request with generated files - such as a basic app, starter code, or other features you describe - then request your review when it’s ready.':
       '你想在此存储库中构建什么。创建后，Copilot 会创建一个包含生成文件（如基础应用、起始代码或你描述的其他功能）的拉取请求，并在就绪后请求你审查。',
     "Tell Copilot cloud agent what you want to build in this repository. After creation, Copilot will open a pull request with generated files - such as a basic app, starter code, or other features you describe - then request your review when it's ready.":
-      '告诉 Copilot 云代理你想在此存储库中构建什么。创建后，Copilot 会创建一个包含生成文件（如基础应用、起始代码或你描述的其他功能）的拉取请求，并在就绪后请求你审查。',
+      '告诉 Copilot 云端智能体你想在此存储库中构建什么。创建后，Copilot 会创建一个包含生成文件（如基础应用、起始代码或你描述的其他功能）的拉取请求，并在就绪后请求你审查。',
     'Tell Copilot cloud agent what you want to build in this repository. After creation, Copilot will open a pull request with generated files - such as a basic app, starter code, or other features you describe - then request your review when it’s ready.':
-      '告诉 Copilot 云代理你想在此存储库中构建什么。创建后，Copilot 会创建一个包含生成文件（如基础应用、起始代码或你描述的其他功能）的拉取请求，并在就绪后请求你审查。',
-    'About Copilot coding agent': '关于 Copilot 编码代理',
-    'About Copilot cloud agent': '关于 Copilot 云代理',
+      '告诉 Copilot 云端智能体你想在此存储库中构建什么。创建后，Copilot 会创建一个包含生成文件（如基础应用、起始代码或你描述的其他功能）的拉取请求，并在就绪后请求你审查。',
+    'About Copilot coding agent': '关于 Copilot 编码智能体',
+    'About Copilot cloud agent': '关于 Copilot 云端智能体',
     'Describe what you want Copilot to build': '描述你想让 Copilot 构建的内容',
 
     // 新建存储库：组织必填的自定义属性
@@ -304,7 +304,7 @@ const base = {
     'Select one of my organizations': '选择我的组织',
     'Specify an organization or username': '指定组织或用户名',
     'and accepts the transfer, they will lose access to private repository features:': '并接受转让，将无法再使用以下专用存储库功能：',
-    'Pulse, Contributors, Community, Traffic, Commits, Code Frequency, Network,': '脉搏、贡献者、社区、流量、提交、代码频率、网络',
+    'Pulse, Contributors, Community, Traffic, Commits, Code Frequency, Network,': '统计、贡献者、社区、流量、提交、代码频率、网络',
     'Multiple assignees': '多个受理人',
     'Multiple reviewers': '多个审查者',
     'Branch and tag protection rules': '分支和标签保护规则',
@@ -498,7 +498,7 @@ const base = {
       'GitHub 企业云支持创建企业帐户，便于多个组织协作，为管理员提供统一的查看和管理入口，并为同时属于多个组织的用户节省许可证费用。',
     'Environment protection rules': '环境保护规则',
     'Enforce branch and tag protections, as well as push rules across your enterprise. Rule insights allow you to assess impact of rules before and during enforcement.':
-      '在整个企业中强制实施分支和标签保护以及推送规则。规则见解可帮助你在强制实施前和强制实施期间评估规则的影响。',
+      '在整个企业中强制实施分支和标签保护以及推送规则。规则洞察可帮助你在强制实施前和强制实施期间评估规则的影响。',
     'Audit Log API': '审核日志 API',
     'As a GitHub Enterprise Cloud organization administrator, you can now access log events using our GraphQL API and monitor the activity in your organization.':
       '作为 GitHub 企业云组织管理员，你可以使用 GraphQL API 访问日志事件并监控组织中的活动。',

@@ -3,7 +3,7 @@ import { DATE_SOURCE, joinCjk, TIME_SOURCE, translateDate, translateTime } from 
 import { DURATION_SOURCE, formatDuration, RUN_STATUS, TRIGGER_EVENTS } from './format'
 
 /**
- * 工作流运行详情：摘要页、作业列表、运行图、注释、工件、部署保护规则、
+ * 工作流运行详情：摘要页、作业列表、运行图、注释、产物、部署保护规则、
  * 作业日志页（步骤、工具栏）、重新运行对话框、使用情况页、工作流文件页、锁定文件页。
  * Actions 的 annotation 按术语表作「標註」（不作「註解」），artifact 作「成品」。
  */
@@ -148,7 +148,7 @@ export default {
     // 等待核准（分叉的拉取請求）：此工作流程正在 / 等待維護者核准 / 所屬拉取請求 / #123
     'This workflow is': '此工作流程正在',
     'awaiting approval': '等待維護者核准',
-    'from a maintainer in': '所屬拉取請求',
+    'from a maintainer in': '於拉取請求',
 
     // 部署保护规则（标题见 scoped，与储存库设置的环境页共用）
     'Reviewers, timers, and other rules protecting deployments in this run': '保護此執行中部署的審查者、計時器和其他規則',

@@ -12,82 +12,95 @@
       </li>
     </ul>
 
-    <section class="section" aria-labelledby="freshness-range-title">
-      <h2 id="freshness-range-title" class="section-title">{{ t('freshnessRange') }}</h2>
-      <ol class="ranges" aria-labelledby="freshness-range-title" data-test="freshness-ranges">
-        <li v-for="(range, index) in config.ranges" :key="index" class="range" data-test="freshness-range">
-          <UiInput
-            type="number"
-            class="range-input"
-            mono
-            :model-value="String(range.days)"
-            :min="String(MIN_FRESH_DAYS)"
-            :max="String(MAX_FRESH_DAYS)"
-            :aria-label="t('freshnessDays')"
-            :aria-describedby="duplicate === index ? 'freshness-range-status' : undefined"
-            :disabled="!editable"
-            data-test="freshness-days"
-            @change="setDays(index, $event)"
-          />
-          <span class="range-unit">{{ t('freshnessDaysUnit') }}</span>
-          <UiButton
-            size="sm"
-            class="range-remove"
-            :disabled="!editable || config.ranges.length <= MIN_FRESHNESS_RANGES"
-            :aria-label="`${t('delete')} ${rangeLabel(range.days)}`"
-            data-test="freshness-remove"
-            @click="remove(index)"
+    <UiTabs v-model="tab" :tabs="tabs" :label="t('freshness')" variant="pill" data-test="freshness-tabs">
+      <template #ranges>
+        <section class="section" aria-labelledby="freshness-range-title">
+          <div class="section-head">
+            <h2 id="freshness-range-title" class="section-title">{{ t('freshnessRange') }}</h2>
+            <UiButton size="sm" :disabled="!editable || nextRangeDays(config) === undefined" data-test="freshness-add" @click="add">
+              {{ t('freshnessAddRange') }}
+            </UiButton>
+          </div>
+          <ol
+            class="ranges"
+            :style="{ '--ranges-rows': MAX_FRESHNESS_RANGES + 1 }"
+            aria-labelledby="freshness-range-title"
+            data-test="freshness-ranges"
           >
-            {{ t('delete') }}
-          </UiButton>
-        </li>
-        <li class="range range-stale" data-test="freshness-range-stale">{{ t('freshnessStale') }}</li>
-      </ol>
-      <p id="freshness-range-status" class="range-status" role="status" data-test="freshness-range-status">
-        {{ duplicate === undefined ? '' : t('freshnessDuplicate') }}
-      </p>
-      <div>
-        <UiButton size="sm" :disabled="!editable || nextRangeDays(config) === undefined" data-test="freshness-add" @click="add">
-          {{ t('freshnessAddRange') }}
-        </UiButton>
-      </div>
-    </section>
+            <li v-for="(range, index) in config.ranges" :key="index" class="range" data-test="freshness-range">
+              <UiInput
+                type="number"
+                class="range-input"
+                mono
+                :model-value="String(range.days)"
+                :min="String(MIN_FRESH_DAYS)"
+                :max="String(MAX_FRESH_DAYS)"
+                :aria-label="t('freshnessDays')"
+                :aria-describedby="duplicate === index ? 'freshness-range-status' : undefined"
+                :disabled="!editable"
+                data-test="freshness-days"
+                @change="setDays(index, $event)"
+              />
+              <span class="range-unit">{{ t('freshnessDaysUnit') }}</span>
+              <UiButton
+                size="sm"
+                class="range-remove"
+                :disabled="!editable || config.ranges.length <= MIN_FRESHNESS_RANGES"
+                :aria-label="`${t('delete')} ${rangeLabel(range.days)}`"
+                data-test="freshness-remove"
+                @click="remove(index)"
+              >
+                {{ t('delete') }}
+              </UiButton>
+            </li>
+            <li class="range range-stale" data-test="freshness-range-stale">{{ t('freshnessStale') }}</li>
+          </ol>
+          <p id="freshness-range-status" class="range-status" role="status" data-test="freshness-range-status">
+            {{ duplicate === undefined ? '' : t('freshnessDuplicate') }}
+          </p>
+        </section>
+      </template>
 
-    <section class="section" aria-labelledby="freshness-text-title">
-      <h2 id="freshness-text-title" class="section-title">{{ t('freshnessColors') }}</h2>
-      <FreshnessColorGroups
-        kind="text"
-        title-id="freshness-text-title"
-        :segments="segments"
-        :background="settings.freshnessBackground"
-        :disabled="!editable"
-        @save="setColor"
-      />
-    </section>
+      <template #colors>
+        <div class="section">
+          <section class="section" aria-labelledby="freshness-text-title">
+            <h2 id="freshness-text-title" class="section-title">{{ t('freshnessColors') }}</h2>
+            <FreshnessColorGroups
+              kind="text"
+              title-id="freshness-text-title"
+              :segments="segments"
+              :background="settings.freshnessBackground"
+              :disabled="!editable"
+              @save="setColor"
+            />
+          </section>
 
-    <section class="section" aria-labelledby="freshness-background-title">
-      <h2 id="freshness-background-title" class="section-title">{{ t('freshnessBackground') }}</h2>
-      <ul class="switches">
-        <li>
-          <UiSwitch
-            :label="t('enable')"
-            :checked="settings.freshnessBackground"
-            :disabled="!editable"
-            data-test="freshness-background"
-            @change="save({ freshnessBackground: $event })"
-          />
-        </li>
-      </ul>
-      <FreshnessColorGroups
-        v-if="settings.freshnessBackground"
-        kind="background"
-        title-id="freshness-background-title"
-        :segments="segments"
-        background
-        :disabled="!editable"
-        @save="setColor"
-      />
-    </section>
+          <section class="section" aria-labelledby="freshness-background-title">
+            <h2 id="freshness-background-title" class="section-title">{{ t('freshnessBackground') }}</h2>
+            <ul class="switches">
+              <li>
+                <UiSwitch
+                  :label="t('enable')"
+                  :checked="settings.freshnessBackground"
+                  :disabled="!editable"
+                  data-test="freshness-background"
+                  @change="save({ freshnessBackground: $event })"
+                />
+              </li>
+            </ul>
+            <FreshnessColorGroups
+              v-if="settings.freshnessBackground"
+              kind="background"
+              title-id="freshness-background-title"
+              :segments="segments"
+              background
+              :disabled="!editable"
+              @save="setColor"
+            />
+          </section>
+        </div>
+      </template>
+    </UiTabs>
   </div>
 </template>
 
@@ -96,10 +109,13 @@
   import UiButton from '../../components/ui/UiButton.vue'
   import UiInput from '../../components/ui/UiInput.vue'
   import UiSwitch from '../../components/ui/UiSwitch.vue'
+  import UiTabs from '../../components/ui/UiTabs.vue'
   import { useI18n } from '../../components/ui-preferences'
+  import type { MessageKey } from '../../i18n'
   import {
     canSetRangeDays,
     MAX_FRESH_DAYS,
+    MAX_FRESHNESS_RANGES,
     MIN_FRESH_DAYS,
     MIN_FRESHNESS_RANGES,
     nextRangeDays,
@@ -115,11 +131,20 @@
   import { useSettingsSave } from './useSettingsSave'
 
   /**
-   * 更新时间着色：开关；时段（「N 天内」可增删、改天数，其后为「更早」）；各时段的文字颜色、背景色（浅色、深色主题各一组）。
+   * 更新时间着色：开关；两个标签页——时段范围（「N 天内」可增删、改天数，其后为「更早」；列表固定为最多行数的高度）、
+   * 时间着色（各时段的文字颜色、背景颜色，浅色、深色主题各一组）。
    * 天数与其他时段重复时不保存、恢复原值并提示；改后按天数重新排序
    */
   const { t } = useI18n()
   const { settings, ready, save } = useSettingsSave()
+
+  type FreshnessTab = 'ranges' | 'colors'
+  const TABS: readonly { readonly value: FreshnessTab; readonly label: MessageKey }[] = [
+    { value: 'ranges', label: 'freshnessRange' },
+    { value: 'colors', label: 'freshnessColoring' }
+  ]
+  const tab = ref<FreshnessTab>('ranges')
+  const tabs = computed(() => TABS.map(item => ({ value: item.value, label: t(item.label) })))
 
   const config = computed(() => settings.value.freshnessRanges)
   const editable = computed(() => ready.value && settings.value.freshness)
@@ -178,9 +203,11 @@
 </script>
 
 <style scoped>
-  /* 时段：天数、单位、删除一行；末行为「更早」 */
+  /* 时段：天数、单位、删除一行；末行为「更早」。高度固定为最多行数（时段上限加「更早」），增删时不跳动 */
   .ranges {
     display: grid;
+    grid-template-rows: repeat(var(--ranges-rows), 48px);
+    align-content: start;
     margin: 0;
     padding: 0 16px;
     list-style: none;
@@ -192,7 +219,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    min-height: 48px;
+    min-height: 0;
     padding: 6px 0;
   }
 

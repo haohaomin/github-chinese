@@ -995,7 +995,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     ],
     misses: ['Item added to project: Paused']
   },
-  // 见解
+  // 洞察
   {
     hits: [
       ['Sum of Estimate', '估算总和'],
@@ -1265,13 +1265,13 @@ describe('projects 静态词条', () => {
       '燃起图展示项目项随时间的进度，包括已完成和剩余的工作量。可用于查看进度、发现趋势和识别瓶颈以推进项目。'
     ],
     // 产品名、方案名按用户要求译成中文（product-names.md）
-    ['Historical insights (Team or Enterprise plans only)', '历史见解（仅限团队版或企业版计划）'],
+    ['Historical insights (Team or Enterprise plans only)', '历史洞察（仅限团队版或企业版计划）'],
     // 组织 / 用户项目列表（Rails）：介绍区、空状态、搜索、模板视图
     ['Welcome to Projects', '欢迎使用项目'],
     ['Welcome to projects', '欢迎使用项目'],
     [
       'Built to be flexible and adaptable, Projects gives you a live canvas to filter, sort, and group issues and pull requests in a table, board, or roadmap. Tailor them to your needs with custom fields, saved views, workflows, and insights.',
-      '项目灵活且适应性强，为你提供实时画布，可在表格、看板或路线图中筛选、排序和分组议题与拉取请求。可使用自定义字段、已保存的视图、工作流和见解按需定制。'
+      '项目灵活且适应性强，为你提供实时画布，可在表格、看板或路线图中筛选、排序和分组议题与拉取请求。可使用自定义字段、已保存的视图、工作流和洞察按需定制。'
     ],
     ['Learn more about projects', '了解项目'],
     ["You don't have any projects yet.", '你还没有任何项目。'],
@@ -1729,7 +1729,7 @@ describe('projects 被元素拆开的句子（DOM）', () => {
 
   it('删除项目对话框：cannot、项目名、草稿问题数三处槽位的整句分别译出', () => {
     render(DELETE_PROJECT_DIALOG)
-    expect(text('warning')).toBe('此操作无法撤销。这将永久删除 Q4 Roadmap 项目及其保存的视图、自定义字段及相关值和见解数据。')
+    expect(text('warning')).toBe('此操作无法撤销。这将永久删除 Q4 Roadmap 项目及其保存的视图、自定义字段及相关值和洞察数据。')
     expect(text('drafts')).toBe('这还将删除在此项目中创建的 3 个草稿议题。')
     expect(text('keep')).toBe('议题和拉取请求本身不会被删除。')
     expect(text('confirm')).toBe('请输入 Q4 Roadmap 以确认。')
@@ -1743,7 +1743,7 @@ describe('projects 被元素拆开的句子（DOM）', () => {
   it('删除项目对话框：项目名照原文显示（须照原文输入才能确认），默认标题也不翻译', () => {
     const name = "@octocat's untitled project"
     render(DELETE_PROJECT_DIALOG.replaceAll('Q4 Roadmap', name))
-    expect(text('warning')).toBe(`此操作无法撤销。这将永久删除 ${name} 项目及其保存的视图、自定义字段及相关值和见解数据。`)
+    expect(text('warning')).toBe(`此操作无法撤销。这将永久删除 ${name} 项目及其保存的视图、自定义字段及相关值和洞察数据。`)
     expect(text('confirm')).toBe(`请输入 ${name} 以确认。`)
     expect(translate(name)).toBe('@octocat 的未命名项目')
   })
@@ -1855,7 +1855,7 @@ function overlayInfoPanel(name: string): string {
 
 /**
  * 顶栏（top-bar）：项目标题是 SanitizedHtml 渲染的 h1（memex-title.tsx）；
- * 项目设置、工作流、见解、存档页的路由标题是 RouteTitle（Primer Heading 渲染的 h1）
+ * 项目设置、工作流、洞察、存档页的路由标题是 RouteTitle（Primer Heading 渲染的 h1）
  */
 function topBar(heading: string): string {
   return (
@@ -1882,7 +1882,7 @@ const TITLE_LOCALES: readonly TitleLocale[] = [
     routes: [
       ['Settings', '设置'],
       ['Workflows', '工作流'],
-      ['Insights', '见解'],
+      ['Insights', '洞察'],
       ['Archive', '存档']
     ]
   },

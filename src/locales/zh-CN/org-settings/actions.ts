@@ -3,9 +3,9 @@ import type { PageDictionary } from '../../../core/types'
 const ORG = '([\\w.-]+)'
 
 /**
- * 组织 Actions 设置：常规（策略、存储库级自托管运行器、工件与日志保留、复刻拉取请求工作流、
+ * 组织 Actions 设置：常规（策略、存储库级自托管运行器、产物与日志保留、复刻拉取请求工作流、
  * 工作流权限）、运行器、运行器组、缓存。
- * 与存储库 Actions 设置同名的短词放 scoped；存储库设置已收录为 static 的句子（Actions 策略、工件和日志保留、
+ * 与存储库 Actions 设置同名的短词放 scoped；存储库设置已收录为 static 的句子（Actions 策略、产物和日志保留、
  * 复刻拉取请求工作流、工作流权限、运行器说明等）不再重复，译法以那里为准。
  * 产品名、方案名译成中文（见 nav.ts 文件头）：Actions / GitHub Actions → 操作 / GitHub 操作，Team / Enterprise → 团队版 / 企业版。
  */
@@ -31,7 +31,7 @@ export default {
     'Repo-level self-hosted runners settings changed.': '已更改存储库级自托管运行器设置。',
 
     // 常规：保留、复刻拉取请求
-    'Choose the default repository settings for artifacts and logs.': '选择工件和日志的默认存储库设置。',
+    'Choose the default repository settings for artifacts and logs.': '选择产物和日志的默认存储库设置。',
     'Fork pull request workflows in private repositories': '专用存储库中的复刻拉取请求工作流',
     'These settings apply to private repositories. Repository administrators will only be able to change the settings that are enabled here.':
       '这些设置适用于专用存储库。存储库管理员只能更改此处已启用的设置。',

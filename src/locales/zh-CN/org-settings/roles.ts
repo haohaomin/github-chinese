@@ -80,7 +80,7 @@ const ORGANIZATION_PERMISSIONS: Readonly<Record<string, string>> = {
   'Manage the organization’s custom properties definitions': '管理组织的自定义属性定义',
   'Access to create and edit custom property definitions for the organization.': '可为组织创建和编辑自定义属性定义。',
   'Manage organization ref update rules and rulesets': '管理组织引用更新规则和规则集',
-  'Access to manage rulesets and view ruleset insights at the organization level.': '可在组织级别管理规则集并查看规则集见解。',
+  'Access to manage rulesets and view ruleset insights at the organization level.': '可在组织级别管理规则集并查看规则集洞察。',
   'View organization audit log': '查看组织审核日志',
   'Access to the audit log for the organization. The audit log may contain metadata for repositories in the organization.':
     '可访问组织的审核日志。审核日志可能包含组织内存储库的元数据。',

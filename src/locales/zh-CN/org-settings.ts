@@ -26,7 +26,7 @@ import rulesets from './repo-settings/rulesets'
  * 组织设置（/organizations/<组织>/settings/…、/orgs/<组织>/settings/…）。
  * 人员、团队页属于 organization 页面类型，只能靠本区域的 static 词条生效。
  * 组织规则集页（/organizations/<组织>/settings/rules）与存储库规则集同一组件：合并存储库设置的规则集、规则、
- * 见解、导入词典，放在本组子词典之后；同名 scoped 译法与规则集一致。
+ * 洞察、导入词典，放在本组子词典之后；同名 scoped 译法与规则集一致。
  */
 export default mergeDictionaries(
   nav,

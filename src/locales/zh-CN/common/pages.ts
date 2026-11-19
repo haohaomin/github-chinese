@@ -544,7 +544,7 @@ export default {
     'Code owners in private repos': '专用存储库中的代码所有者',
     'Pages in private repos': '专用存储库中的页面',
     'Protected branches in private repos': '专用存储库中的受保护分支',
-    'Repository insights in private repos': '专用存储库中的存储库见解',
+    'Repository insights in private repos': '专用存储库中的存储库洞察',
     'Required reviewers in private repos': '专用存储库中的必需审查者',
     'Wikis in private repos': '专用存储库中的 Wiki',
     '2GB of GitHub Packages storage': '2GB GitHub 软件包存储空间',
@@ -558,17 +558,17 @@ export default {
     // 未登录首页 /：首屏、注册表单与轮播标签页（Code / Plan / Collaborate / Automate / Secure）
     'The future of building happens together': '构建的未来在于协作',
     'Tools and trends evolve, but collaboration endures. With GitHub, developers, agents, and code come together on one platform.':
-      '工具与趋势不断演变，但协作恒久不变。在 GitHub 上，开发人员、代理和代码汇聚于同一平台。',
+      '工具与趋势不断演变，但协作恒久不变。在 GitHub 上，开发人员、智能体和代码汇聚于同一平台。',
     'Enter your email': '输入电子邮件',
     'Download GitHub Copilot app': '下载 GitHub Copilot 应用',
     'Try GitHub Copilot free': '免费试用 GitHub Copilot',
     'Write, test, and fix code quickly with GitHub Copilot, from simple boilerplate to complex features.':
       '借助 GitHub Copilot，从简单的样板代码到复杂功能，都能快速编写、测试和修复。',
     'Align your team from idea to launch with tools that track work, visualize roadmaps, and gather insights.':
-      '借助可跟踪工作、可视化路线图并收集见解的工具，让团队从构想到发布始终步调一致。',
+      '借助可跟踪工作、可视化路线图并收集洞察的工具，让团队从构想到发布始终步调一致。',
     Collaborate: '协作',
     'Enable your team to collaborate with agents to plan, code, and test the next big thing.':
-      '让团队与代理协作，规划、编码和测试下一个重大创新。',
+      '让团队与智能体协作，规划、编码和测试下一个重大创新。',
     Automate: '自动化',
     'Improve your software development process by automating builds, tests, and deployments with CI/CD.':
       '借助 CI/CD 自动执行构建、测试和部署，改进软件开发流程。',

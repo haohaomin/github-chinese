@@ -123,6 +123,8 @@ export default {
     // 拉取请求限制（「Pull request limits」「Count draft pull requests toward the limit」由 org-settings 收录）
     'Restrict how many pull requests users without write access can have open at one time and add specific users to a bypass list. These settings stay in effect until you change them.':
       '限制无写入访问权限的用户可同时打开的拉取请求数量，并可将特定用户添加到绕过列表。这些设置在你更改前一直有效。',
+    'Restrict how many pull requests users without write access can have open at one time and add specific users to an exemption list. These settings stay in effect until you change them.':
+      '限制无写入访问权限的用户可同时打开的拉取请求数量，并可将特定用户添加到豁免列表。这些设置在你更改前一直有效。',
     'Currently, users without write access can open an unlimited number of pull requests.':
       '目前，无写入访问权限的用户可以创建任意数量的拉取请求。',
     'Currently, users without write access can have up to': '目前，无写入访问权限的用户最多可同时有',

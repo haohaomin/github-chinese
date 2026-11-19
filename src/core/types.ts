@@ -135,6 +135,8 @@ export const PAGE_KEYS = [
   'repo-settings',
   'settings',
   'org-settings',
+  // 组织拥有的应用设置页（/organizations/<组织>/settings/apps/*、applications/*），叠加在 org-settings 之上
+  'org-apps',
   'notifications',
   'search',
   'new',

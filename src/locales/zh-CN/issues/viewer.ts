@@ -2,10 +2,10 @@ import type { PageDictionary } from '../../../core/types'
 import { joinCjk } from '../helpers'
 import { joinName } from './list'
 
-/** 代理建议的置信度 */
+/** 智能体建议的置信度 */
 const CONFIDENCE: Readonly<Record<string, string>> = { High: '高', Medium: '中', Low: '低' }
 
-/** 代理建议的字段名（建议条 aria-label，已应用时为小写） */
+/** 智能体建议的字段名（建议条 aria-label，已应用时为小写） */
 const SUGGESTION_FIELD: Readonly<Record<string, string>> = {
   type: '类型',
   label: '标签',
@@ -63,7 +63,7 @@ function withStatus(prefix: string, name: string): string {
   return joinName(prefix, statusName(name))
 }
 
-/** 头部代理会话摘要的状态分组：1 session running、2 sessions needs input, 1 failed */
+/** 头部智能体会话摘要的状态分组：1 session running、2 sessions needs input, 1 failed */
 const SESSION_GROUP: Readonly<Record<string, string>> = {
   'needs input': '需要输入',
   running: '运行中',
@@ -86,7 +86,7 @@ function sessionRest(count: string | undefined, name: string | undefined): strin
 
 /**
  * 议题详情页：头部（标题、状态、导航、吸顶头部）、正文头部、关闭 / 重新打开、议题操作（锁定、置顶、转移、
- * 转为讨论、删除、克隆）、通知设置、活动筛选、代理建议、工件、错误与登录提示。
+ * 转为讨论、删除、克隆）、通知设置、活动筛选、智能体建议、附件、错误与登录提示。
  * 侧栏元数据见 metadata.ts，时间线事件见 timeline.ts。
  */
 export default {
@@ -279,9 +279,9 @@ export default {
     // 反馈
     'Give feedback on Issues': '对议题提供反馈',
 
-    // 代理任务与建议
+    // 智能体任务与建议
     'Session log is private to its creator': '会话日志仅创建者可见',
-    'Agent suggestions': '代理建议',
+    'Agent suggestions': '智能体建议',
     'Could not accept suggestions': '无法接受建议',
     'Could not accept all suggestions': '无法接受全部建议',
     'Could not decline suggestions': '无法拒绝建议',
@@ -296,29 +296,29 @@ export default {
     // 产品名按用户要求译成中文（product-names.md）：Copilot Chat → Copilot 聊天（与 projects/items.ts 同句一致）
     'Unable to load Copilot Chat. Ensure Copilot is enabled.': '无法加载 Copilot 聊天。请确认已启用 Copilot。',
 
-    // 工件
-    'Collapse artifacts': '折叠工件',
-    'Expand artifacts': '展开工件',
-    'Add artifact': '添加工件',
-    'Create artifact': '创建工件',
-    'Create HTML artifact': '创建 HTML 工件',
-    'Create new artifact': '新建工件',
-    'Edit artifact': '编辑工件',
-    'Saving artifact': '正在保存工件',
-    'Creating artifact': '正在创建工件',
-    'Artifact title': '工件标题',
-    'Invalid artifact name': '工件名称无效',
-    'Unable to update artifact': '无法更新工件',
-    'Unable to create artifact': '无法创建工件',
-    'Artifact updated successfully.': '工件已更新。',
-    'Artifact could not be updated. Try again.': '无法更新工件。请重试。',
-    'Artifact could not be created. Try again.': '无法创建工件。请重试。',
+    // 附件
+    'Collapse artifacts': '折叠附件',
+    'Expand artifacts': '展开附件',
+    'Add artifact': '添加附件',
+    'Create artifact': '创建附件',
+    'Create HTML artifact': '创建 HTML 附件',
+    'Create new artifact': '新建附件',
+    'Edit artifact': '编辑附件',
+    'Saving artifact': '正在保存附件',
+    'Creating artifact': '正在创建附件',
+    'Artifact title': '附件标题',
+    'Invalid artifact name': '附件名称无效',
+    'Unable to update artifact': '无法更新附件',
+    'Unable to create artifact': '无法创建附件',
+    'Artifact updated successfully.': '附件已更新。',
+    'Artifact could not be updated. Try again.': '无法更新附件。请重试。',
+    'Artifact could not be created. Try again.': '无法创建附件。请重试。',
     'Use up to 255 characters: letters, numbers, spaces, periods, hyphens, or underscores. Start and end with a letter or number.':
       '最多 255 个字符：字母、数字、空格、句点、连字符或下划线。须以字母或数字开头和结尾。',
     'HTML source': 'HTML 源码',
     'Paste HTML source...': '粘贴 HTML 源码...',
     'Write markdown...': '编写 Markdown...',
-    'Unable to reorder artifact. Previous order restored.': '无法调整工件顺序。已恢复原顺序。',
+    'Unable to reorder artifact. Previous order restored.': '无法调整附件顺序。已恢复原顺序。',
     'Link could not be updated. Try again.': '无法更新链接。请重试。',
     'Link could not be added. Try again.': '无法添加链接。请重试。'
   },
@@ -398,10 +398,10 @@ export default {
     Like: '喜欢',
     Love: '非常喜欢',
 
-    // 代理任务（会话状态：Working、Idle 等由通用词典处理）
-    Agent: '代理',
-    'Agent session': '代理会话',
-    'Agent sessions': '代理会话',
+    // 智能体任务（会话状态：Working、Idle 等由通用词典处理）
+    Agent: '智能体',
+    'Agent session': '智能体会话',
+    'Agent sessions': '智能体会话',
     'Loading tasks': '正在加载任务',
     'needs input': '需要输入',
     'Ready for review': '可供审查',
@@ -413,7 +413,7 @@ export default {
     'View latest session': '查看最新会话',
     'View session': '查看会话',
 
-    // 代理建议
+    // 智能体建议
     'Decline all': '全部拒绝',
     'Accept all': '全部接受',
     'Never show this again': '不再显示',
@@ -422,8 +422,8 @@ export default {
     'Duplicate of': '重复于',
     'duplicate of': '重复于',
 
-    // 工件
-    Artifacts: '工件',
+    // 附件
+    Artifacts: '附件',
     'Add link': '添加链接',
     'Edit link': '编辑链接',
     'Saving link': '正在保存链接',
@@ -452,12 +452,12 @@ export default {
     [/^Alert: #(\d+)$/, '警报：#$1'],
     [/^Alert: (.+)$/, '警报：$1'],
     [/^View pull request #(\d+)$/, '查看拉取请求 #$1'],
-    [/^Agents assigned by ([\w-]+(?:\[bot\])?)$/, '由 $1 分配的代理'],
-    // 头部代理会话摘要（按钮文字与 aria-label）：2 sessions needs input, 1 failed
+    [/^Agents assigned by ([\w-]+(?:\[bot\])?)$/, '由 $1 分配的智能体'],
+    // 头部智能体会话摘要（按钮文字与 aria-label）：2 sessions needs input, 1 failed
     [
       new RegExp(`^(Agent sessions: )?(\\d+) sessions? (${SESSION_GROUP_SOURCE})(?:, (\\d+) (${SESSION_GROUP_SOURCE}|others?))?$`),
       (_, prefix, count, group, restCount, restName) =>
-        `${prefix ? '代理会话：' : ''}${count} 个会话${sessionGroup(group)}${sessionRest(restCount, restName)}`
+        `${prefix ? '智能体会话：' : ''}${count} 个会话${sessionGroup(group)}${sessionRest(restCount, restName)}`
     ],
     // 关闭 / 状态
     [/^Close as duplicate of #(\d+)$/, '以 #$1 的重复项关闭'],
@@ -487,7 +487,7 @@ export default {
       /^Sort (comments|activity): (Oldest|Newest)$/,
       (_, subject, order) => `${SORT_SUBJECT[subject] ?? subject}排序：${order === 'Oldest' ? '最早' : '最新'}`
     ],
-    // 代理建议
+    // 智能体建议
     [/^(High|Medium|Low) confidence$/, (_, level) => `置信度${CONFIDENCE[level] ?? level}`],
     [/^(\d+) suggestions approved$/, '已接受 $1 条建议'],
     [/^(\d+) suggestions rejected$/, '已拒绝 $1 条建议'],
@@ -504,8 +504,8 @@ export default {
       (_, field, value, rationale) => `${joinCjk('已应用', suggestionField(field))}：${value}${rationale ? '。查看理由' : ''}`
     ],
     [/^duplicate of ([\w.-]+\/[\w.-]+#\d+)$/, '重复于 $1'],
-    // 工件
-    [/^Edit artifact: (.+)$/, '编辑工件：$1'],
+    // 附件
+    [/^Edit artifact: (.+)$/, '编辑附件：$1'],
     [/^More actions for (.+)$/, '$1 的更多操作']
   ]
 } satisfies PageDictionary

@@ -37,9 +37,9 @@ const TOOL_NAME: Readonly<Record<string, string>> = {
   'Start next task': '开始下一个任务',
   'Propose work': '提议工作',
   'Proposed work': '提议的工作',
-  Subagent: '子代理',
-  'Read agent': '读取代理',
-  'Message agent': '向代理发送消息'
+  Subagent: '子智能体',
+  'Read agent': '读取智能体',
+  'Message agent': '向智能体发送消息'
 }
 
 /** 不是文件名的常见词（避免把 “Read more” 之类当成工具调用汇总） */
@@ -60,9 +60,9 @@ const TIMES_VERB: Readonly<Record<string, string>> = {
   'Search code': '搜索代码',
   'Web search': '网页搜索',
   Thought: '思考',
-  'Read agents': '读取代理',
-  'Message agents': '向代理发送消息',
-  'List agents': '列出代理'
+  'Read agents': '读取智能体',
+  'Message agents': '向智能体发送消息',
+  'List agents': '列出智能体'
 }
 
 /** 按数量汇总的工具调用：原文模板 → 译文模板（# 为数量） */
@@ -77,7 +77,7 @@ const COUNT_ACTION: Readonly<Record<string, string>> = {
   'Review # changes': '审查 # 次更改',
   'Activate # skills': '激活 # 个技能',
   'Reply to # comments': '回复 # 条评论',
-  'Run # subagent tasks': '运行 # 个子代理任务'
+  'Run # subagent tasks': '运行 # 个子智能体任务'
 }
 
 const COUNT_ACTION_SOURCE = Object.keys(COUNT_ACTION)
@@ -119,8 +119,8 @@ function removedParts(removed: string): string {
 }
 
 /**
- * Copilot 代理会话日志：工具调用标题与汇总、计划审查、权限请求、问答、差异面板、后台 shell / 子代理、
- * 取消 / 超时 / 出错状态、工件预览、内置工具（Playwright、GitHub MCP、Slack、Teams）的显示名。
+ * Copilot 智能体会话日志：工具调用标题与汇总、计划审查、权限请求、问答、差异面板、后台 shell / 子智能体、
+ * 取消 / 超时 / 出错状态、附件预览、内置工具（Playwright、GitHub MCP、Slack、Teams）的显示名。
  */
 export default {
   static: {
@@ -149,7 +149,7 @@ export default {
     'Conversation compacted': '对话已压缩',
     'Conversation compacted.': '对话已压缩。',
     "Couldn't compact the conversation.": '无法压缩对话。',
-    'Persisted subagent history is unavailable.': '已保存的子代理历史记录不可用。',
+    'Persisted subagent history is unavailable.': '已保存的子智能体历史记录不可用。',
     ', intermediate steps': '，中间步骤',
     'No logs to display': '没有可显示的日志',
     'There was an error loading the logs. Please try again later.': '加载日志时出错。请稍后重试。',
@@ -158,7 +158,7 @@ export default {
     'This session’s environment is offline. Its history will be available in an upcoming release.':
       '此会话的环境已离线。其历史记录将在后续版本中提供。',
     'Error parsing tool call arguments': '解析工具调用参数出错',
-    'Subagent prompt': '子代理提示',
+    'Subagent prompt': '子智能体提示',
 
     // 取消、超时、出错
     'Session cancelled': '会话已取消',
@@ -200,7 +200,7 @@ export default {
     'Edit file(s)': '编辑文件',
     'Task complete': '任务完成',
     'Create draft pull request': '创建草稿拉取请求',
-    'List agents': '列出代理',
+    'List agents': '列出智能体',
     'Insert lines at': '插入行于',
     'Undo edit': '撤销编辑',
     'with matches': '有匹配项',
@@ -265,9 +265,9 @@ export default {
     'CodeQL scan:': 'CodeQL 扫描：',
     'Create pull request:': '创建拉取请求：',
     'Parallel validation:': '并行验证：',
-    'Read agent:': '读取代理：',
-    'Message agent:': '向代理发送消息：',
-    'List agents:': '列出代理：',
+    'Read agent:': '读取智能体：',
+    'Message agent:': '向智能体发送消息：',
+    'List agents:': '列出智能体：',
     'Tool output:': '工具输出：',
     'MCP tool:': 'MCP 工具：',
 
@@ -286,7 +286,7 @@ export default {
     'Copilot will implement the plan autonomously': 'Copilot 将自主实现该计划',
     'Copilot will ask for confirmation at each step': 'Copilot 将在每一步征求确认',
     'You will take over and prompt Copilot yourself': '由你接手并自行提示 Copilot',
-    'Run plan across multiple agents in parallel': '由多个代理并行执行计划',
+    'Run plan across multiple agents in parallel': '由多个智能体并行执行计划',
     'Plan review': '计划审查',
     'Plan approved': '计划已批准',
     'Plan dismissed': '计划已关闭',
@@ -329,7 +329,7 @@ export default {
 
     // 差异面板
     'Changed files': '已更改的文件',
-    'Changes the agent makes will appear here.': '代理所做的更改将显示在这里。',
+    'Changes the agent makes will appear here.': '智能体所做的更改将显示在这里。',
     'No changes found.': '未发现更改。',
     'Loading diff…': '正在加载差异…',
     'Could not load the diff for this file.': '无法加载此文件的差异。',
@@ -354,11 +354,11 @@ export default {
     'Failed to apply a changeset update.': '应用变更集更新失败。',
     'Failed to subscribe to the changeset.': '订阅变更集失败。',
 
-    // 工件与预览
-    'Task artifacts': '任务工件',
-    'Show artifacts': '显示工件',
-    'Hide artifacts': '隐藏工件',
-    'This artifact is unavailable': '此工件不可用',
+    // 附件与预览
+    'Task artifacts': '任务附件',
+    'Show artifacts': '显示附件',
+    'Hide artifacts': '隐藏附件',
+    'This artifact is unavailable': '此附件不可用',
     'Azure DevOps resource': 'Azure DevOps 资源',
     'No preview available for this file.': '此文件无法预览。',
     'Unable to load the latest content for this file.': '无法加载此文件的最新内容。',
@@ -377,7 +377,7 @@ export default {
     'Select repository to explore': '选择要浏览的存储库',
     'Close repo explorer': '关闭存储库浏览器',
 
-    // 后台 shell 与子代理
+    // 后台 shell 与子智能体
     'Background activity': '后台活动',
     'Loading output…': '正在加载输出…',
     'No output yet': '暂无输出',
@@ -424,13 +424,13 @@ export default {
     'Get pull request status from GitHub': '从 GitHub 获取拉取请求状态',
     'Search issues on GitHub': '在 GitHub 上搜索议题',
     'Get pull request reviews from GitHub': '从 GitHub 获取拉取请求审查',
-    'Download GitHub Actions workflow run artifact': '下载 GitHub 操作工作流运行工件',
+    'Download GitHub Actions workflow run artifact': '下载 GitHub 操作工作流运行产物',
     'Get GitHub Actions job logs': '获取 GitHub 操作作业日志',
     'Get GitHub Actions workflow run': '获取 GitHub 操作工作流运行',
     'Get GitHub Actions workflow run logs': '获取 GitHub 操作工作流运行日志',
     'Get GitHub Actions workflow usage': '获取 GitHub 操作工作流使用情况',
     'List GitHub Actions workflow jobs': '列出 GitHub 操作工作流作业',
-    'List GitHub Actions workflow run artifacts': '列出 GitHub 操作工作流运行工件',
+    'List GitHub Actions workflow run artifacts': '列出 GitHub 操作工作流运行产物',
     'List GitHub Actions workflow runs': '列出 GitHub 操作工作流运行',
     'List GitHub Actions workflows': '列出 GitHub 操作工作流',
     'Check new dependencies against the GitHub Advisory Database': '对照 GitHub 公告数据库检查新依赖项',
@@ -532,7 +532,10 @@ export default {
     [/^Conversation compacted, removing (.+)\.$/, (_, removed: string) => `对话已压缩，删除了 ${removedParts(removed)}。`],
     [/^The model could not run: (.+)$/, '模型无法运行：$1'],
     [/^(.+) could not run: (.+)$/, '$1 无法运行：$2'],
-    [/^(.+) subagent (timeline|activity)$/, (_, name: string, kind: string) => `${name} 子代理${kind === 'timeline' ? '时间线' : '活动'}`],
+    [
+      /^(.+) subagent (timeline|activity)$/,
+      (_, name: string, kind: string) => `${name} 子智能体${kind === 'timeline' ? '时间线' : '活动'}`
+    ],
     [/^Expand diff to show all (\d+) lines$/, '展开差异以显示全部 $1 行'],
     [/^Collapse (\d+) lines$/, '折叠 $1 行'],
     [/^Show all (\d+) lines$/, '显示全部 $1 行'],
@@ -565,7 +568,7 @@ export default {
     [/^(.+) output is no longer updating\.$/, '$1 输出已停止更新。'],
     [/^Open (.+) output$/, '打开 $1 输出'],
     [/^Preview of (.+)$/, '$1 的预览'],
-    [/^(\d+) new artifacts? available\.$/, '有 $1 个新工件可用。'],
+    [/^(\d+) new artifacts? available\.$/, '有 $1 个新附件可用。'],
     [/^Unable to submit messages?$/, '无法提交消息'],
     [/^Copilot finished the session before it could pick up (?:this|these) messages?$/, 'Copilot 在处理该消息前已结束会话']
   ],

@@ -133,7 +133,7 @@ GitHub 没有官方繁体中文界面或文档（docs.github.com 只有简体中
 | Copilot Chat / Spaces / Memory / Autofix / Workspace / Extensions | Copilot 聊天 / 空間 / 記憶 / 自動修正 / 工作區 / 擴充功能 | VS Code 繁中「聊天」「工作區」；fix → 修正。Copilot code review / cloud agent / coding agent → Copilot 程式碼審查 / 雲端代理 / 程式開發代理（iThome「程式開發代理」8 次） |
 | Mission Control / Copilot in the cloud | 任務控制中心 / 雲端 Copilot | 代理的任务控制中心 |
 | Enterprise Cloud / Enterprise Server / Enterprise Managed Users (EMU) | 企業雲端 / 企業伺服器 / 企業受控使用者 (EMU) | managed 取微软繁中「受控」（受控識別、受控裝置）。GitHub Enterprise Cloud → GitHub 企業雲端 |
-| Premium support / Pulse / Beta | 進階支援 / 脈動 / 測試版 | premium 取 VS Code 繁中 Copilot 的「進階」（「進階要求」），微软方案名同样把 Premium 译「進階」；与 advanced 同译，两者不在同一元素上出现。Premium Plus Support → 進階增強支援。Pulse 取「脈動」（「掌握產業脈動」的脈動，指近期动态；简体「脉搏」是生理用语，繁体不照搬）。Preview 仍 → 預覽 |
+| Premium support / Pulse / Beta | 進階支援 / 統計 / 測試版 | premium 取 VS Code 繁中 Copilot 的「進階」（「進階要求」），微软方案名同样把 Premium 译「進階」；与 advanced 同译，两者不在同一元素上出现。Premium Plus Support → 進階增強支援。Pulse 取「脈動」（「掌握產業脈動」的脈動，指近期动态；简体「脉搏」是生理用语，繁体不照搬）。Preview 仍 → 預覽 |
 | Code Quality / GitHub Stars | 程式碼品質 / GitHub 之星 | GitHub Stars 是社群计划，与星号无关；GitHub Universe（活动名）保留 |
 | 第三方产品名 | 原文 | Microsoft Teams、Gemini Pro、Team Foundation Version Control、Visual Studio Code 等不属于 GitHub 的产品名保留 |
 
@@ -190,24 +190,24 @@ GitHub App、OAuth app → GitHub 應用程式、OAuth 應用程式。现有繁�
 | notification / inbox | 通知 / 收件匣 | Gmail、Outlook 繁中「收件匣」。Notification settings → 通知設定；Manage notifications → 管理通知；participating notifications → 參與的通知；Done → 完成；Saved → 已儲存；Mark as read / unread → 標示為已讀 / 未讀 |
 | subscribe / unsubscribe / subscription | 訂閱 / 取消訂閱 / 訂閱 | Subscribed → 已訂閱；计费义 subscription 同作「訂閱」；Manage subscription → 管理訂閱 |
 | dashboard / feed | 儀表板 / 動態 | personal dashboard → 個人儀表板；For you → 為你推薦 |
-| profile / profile picture / avatar | 個人檔案 / 頭像 / 頭像 | profile 取社群网站通行的「個人檔案」（Facebook、Instagram 繁中）；「個人資料」在台湾指个人数据（個資），不用。头像取台港澳都通用的「頭像」（香港 Facebook 繁中，台湾 Discord、Steam 繁中）；「大頭貼」源自大头贴拍照机，属口语，在港澳多指贴纸照片，不用（取舍原则 5）。Your profile → 你的個人檔案；Edit profile → 編輯個人檔案；Change your avatar → 更換頭像；organization profile → 組織資料（「組織檔案」易读成组织的档案文件；「個人檔案」是社群网站的固定说法，不类推）；Remove photo → 移除相片 |
+| profile / profile picture / avatar | 個人檔案 / 頭像 / 頭像 | profile 取社群网站通行的「個人檔案」（Facebook、Instagram 繁中）；「個人資料」在台湾指个人数据（個資），不用。头像取台港澳都通用的「頭像」（香港 Facebook 繁中，台湾 Discord、Steam 繁中）；「大頭貼」源自大头贴拍照机，属口语，在港澳多指贴纸照片，不用（取舍原则 5）。Your profile → 你的個人檔案；Edit profile → 編輯個人檔案；Change your avatar → 更換頭像；organization profile → 組織資料（「組織檔案」易读成组织的档案文件；「個人檔案」是社群网站的固定说法，不类推）；Remove photo → 移除相片。GitHub 应用、OAuth 应用的 logo / avatar → 標誌：Upload new logo → 上傳新標誌；Crop your new avatar → 裁切新標誌；Set new avatar → 設定新標誌；Delete this image → 刪除此標誌 |
 | settings | 設定 | General → 一般；Access → 存取；Code, planning, and automation → 程式碼、規劃和自動化；Integrations → 整合；Danger Zone → 危險區域 |
 | account | 帳號 | iThome 帳號 292 / 帳戶 2；Apple 繁中「Apple 帳號」，Facebook、LINE 同；现有繁体表同。微软、Google 繁中界面作「帳戶」，不采用。personal / organization / enterprise account → 個人帳號 / 組織帳號 / 企業帳號；Switch account → 切換帳號 |
 | billing / plan / licensing | 帳務 / 方案 / 授權 | 改（现有繁体表 billing →「帳單」）。iThome 报道 GitHub 服务异常写「帳務及授權頁面」（即 Billing and licensing）。功能区、设定、角色用「帳務」，账单本身的内容用「帳單」，收费方式用「計費」。Billing and licensing → 帳務和授權；Billing settings → 帳務設定；billing manager → 帳務管理員；billing email / Billing information / billing address → 帳單電子郵件 / 帳單資訊 / 帳單地址；billing cycle → 帳單週期；Payment information / Payment method → 付款資訊 / 付款方式；Upgrade plan / Downgrade plan → 升級方案 / 降級方案；invoice billing → 發票付款；Switch to invoiced billing → 切換為發票付款；usage-based billing / metered billing → 依用量計費；价格义 Free → 免費；Copilot 的 Plan 模式与代理计划见表末繁体补充 |
 | sponsor | 贊助 / 贊助者 | 按钮、动词 Sponsor → 贊助；人 → 贊助者（N sponsors → N 位贊助者）；Sponsoring（分页、已赞助按钮）→ 贊助中；tier → 等級（Sponsor tiers → 贊助等級；Select a tier → 選擇等級）；Sponsor / Sponsoring owner/repo（无障碍名称）→ 贊助 owner/repo / 正在贊助 owner/repo；Sponsoring as → 贊助身分；sponsored developer → 受贊助的開發人員；Private Sponsor → 不公開的贊助者（「私人贊助者」在台湾会读成个人（非企业）赞助者；与组织成员身分 Private → 不公開一致） |
-| marketplace | 市集 | 用户规定（第 3 节）；iThome「延伸套件市集」。Search Marketplace → 搜尋市集；Marketplace apps → 市集應用程式；其中的 action / app → 動作 / 應用程式 |
+| marketplace | 市集 | 用户规定（第 3 节）；iThome「延伸套件市集」。Search Marketplace → 搜尋市集；Marketplace apps → 市集應用程式；其中的 action / app → 動作 / 應用程式；listing → 上架資訊：Create draft listing → 建立上架資訊草稿；页头 Edit X → 編輯 X |
 | explore / trending | 探索 / 熱門 | 现有繁体表同。Trending repositories / developers → 熱門儲存庫 / 熱門開發人員；趋势页分页 Repositories / Developers → 儲存庫 / 開發人員；See more trending developers → 查看更多熱門開發人員；Today / This week / This month → 今天 / 本週 / 本月 |
 | topic / collection | 主題 / 精選集 | collection 是人工挑选的储存库清单，取「精選集」（现有繁体表）。Manage topics → 管理主題；外观的 theme 作「佈景主題」，不与 topic 同名 |
 | workflow / run / job / step | 工作流程 / 執行 / 作業 / 步驟 | iThome 工作流程 63 次、「工作流」0 次；VS Code 繁中同。All workflows → 所有工作流程；Run workflow → 執行工作流程；workflow run → 工作流程執行；Re-run jobs / Re-run all jobs → 重新執行作業 / 重新執行所有作業；Cancel run → 取消執行；N runs → N 次執行 |
 | Queued / In progress / Success / Failure / Cancelled / Skipped | 已排入佇列 / 進行中 / 成功 / 失敗 / 已取消 / 已略過 | 运行、检查、部署状态。佇列、略過、逾時、擱置取 VS Code 繁中（佇列 20、略過 44、逾時 13、擱置 24）。Completed → 已完成；Timed out → 已逾時；Action required → 需要採取動作；Startup failure → 啟動失敗；Neutral → 中性；Stale → 過時；Expected → 等待回報；Waiting for status to be reported → 正在等待回報狀態；Waiting → 等待中；Pending（检查、作业、部署）→ 擱置中；pending runs / requests / review comments / invitations → 待處理；pending collaborators → 待加入的協作者 |
-| runner / artifact / cache | 執行器 / 成品 / 快取 | iThome 執行器 12 次；VS Code 繁中 成品 23、快取 84。GitHub-hosted runner → GitHub 代管的執行器（hosted 取微软「代管」，iThome「代管執行環境」）；self-hosted runner → 自架執行器（iThome「自架執行器」「自架Runner」）；larger runners → 較大型執行器；runner group → 執行器群組；artifact attestations → 成品證明 |
+| runner / artifact / cache | 執行器 / 成品 / 快取 | iThome 執行器 12 次；VS Code 繁中 成品 23、快取 84。GitHub-hosted runner → GitHub 代管的執行器（hosted 取微软「代管」，iThome「代管執行環境」）；self-hosted runner → 自架執行器（iThome「自架執行器」「自架Runner」）；larger runners → 較大型執行器；runner group → 執行器群組；artifact attestations → 成品證明；Copilot、議題、拉取請求中的 artifact 作「附件」（同简体） |
 | secret / variable | 機密 / 變數 | 改（现有繁体表「祕密」取自微软繁中）。凭据类 secret 取台湾媒体的「機密」（iThome「Actions機密憑證」「CI/CD機密」）。Secrets and variables → 機密和變數；Repository secrets / Environment secrets → 儲存庫機密 / 環境機密；secret scanning → 機密掃描；client secret → 用戶端密碼（微软繁中）。表示「不公开」的 secret 另作「祕密」：secret gist → 祕密程式碼片段；secret team → 祕密團隊 |
 | environment / deployment | 環境 / 部署 | Review deployments → 審查部署；Approve and deploy → 核准並部署；deployment protection rules → 部署保護規則；deployment history → 部署歷史記錄 |
 | package / container / registry / image | 套件 / 容器 / 登錄庫 / 映像檔 | iThome 套件 283 次、「NPM登錄庫」「Docker映像檔」；现有繁体表同（image 本版补）。Packages → 套件；N packages → N 個套件；package manager → 套件管理員；Container registry → 容器登錄庫；container image → 容器映像檔；Custom images → 自訂映像檔；runner image → 執行器映像檔；Base images → 基底映像檔；Image version → 映像檔版本；host image → 主機映像檔；图片义 image → 圖片；mirror → 鏡像（与 image 分开） |
 | security / advisory / vulnerability / alert | 安全性 / 公告 / 漏洞 / 警示 | 功能、分页名 Security → 安全性（VS Code 繁中）；iThome 漏洞 534 / 弱點 17；alert → 警示（VS Code 繁中、iThome）。Security and quality → 安全性和品質；security advisory → 安全性公告；private vulnerability reporting → 私下回報漏洞；Dependabot alerts → Dependabot 警示；警示列表 Open / Closed → 未解決 / 已關閉；严重性 Critical / High / Moderate / Low → 重大 / 高 / 中 / 低（iThome「重大層級漏洞」）；bug、漏洞的 report → 回報 |
 | code scanning / secret scanning / push protection | 程式碼掃描 / 機密掃描 / 推送保護 | 改（现有繁体表「祕密掃描」），随 secret 行。「推送保護」见 VS Code 繁中 GitHub 扩展。bypass → 繞過（iThome 19 次）：Bypass push protection → 繞過推送保護；bypass list → 繞過清單；Add bypass → 新增繞過；bypass request → 繞過請求；skip 另作「略過」 |
 | dependency graph / dependents | 相依性圖表 / 被相依項目 | dependency 取「相依」（iThome 相依 26 / 依賴 7；VS Code 繁中「相依性」）。Dependencies → 相依項目；Dependents → 被相依項目（改：现有繁体表「相依項目」与 Dependencies 同名；不用「相依者」，易读成人）。Used by（侧栏计数）→ 採用者：不作「使用者」（台湾指 user），不作「使用此儲存庫」（偏长，后接计数不成句） |
-| insights / traffic / network / Pulse | 洞察 / 流量 / 網路 / 脈動 | insights 取「洞察」（现有繁体表；微软「深入解析」偏长，不用）；Pulse → 脈動（第 3 节）。Insights → 洞察；Community insights → 社群洞察；Network graph → 網路圖表；Clones / Visitors → 複製次數 / 訪客；Referring sites → 參照網站；Popular content → 熱門內容 |
+| insights / traffic / network / Pulse | 洞察 / 流量 / 網路 / 統計 | insights 取「洞察」（现有繁体表；微软「深入解析」偏长，不用）；Pulse → 統計（用户规定，与简体「统计」一致）。Insights → 洞察；Community insights → 社群洞察；Network graph → 網路圖表；Clones / Visitors → 複製次數 / 訪客；Referring sites → 參照網站；Popular content → 熱門內容 |
 | code / file / folder / directory | 程式碼 / 檔案 / 資料夾 / 目錄 | Go to file → 前往檔案；Add file → 新增檔案；Create new file → 建立新檔案；Upload files → 上傳檔案；root directory → 根目錄；file extension → 副檔名 |
 | blame / raw / history | 追溯 / 原始檔 / 歷史記錄 | blame 台湾没有通行译法，取「追溯」（逐行追溯来源；现有繁体表同）。history 取 Chromium 繁中「歷史記錄」108 次（VS Code 繁中作「歷程記錄」）；改（现有繁体表「歷史紀錄」，记字统一作「記錄」）。History → 歷史記錄；View raw → 查看原始檔；commit history → 提交歷史記錄 |
 | diff / patch | 差異 / 修補檔 | Load diff → 載入差異 |
@@ -240,7 +240,7 @@ GitHub App、OAuth app → GitHub 應用程式、OAuth 應用程式。现有繁�
 | recovery codes | 復原碼 | 微软繁中。Download recovery codes → 下載復原碼 |
 | SSH key / GPG key / deploy key | SSH 金鑰 / GPG 金鑰 / 部署金鑰 | SSH and GPG keys → SSH 和 GPG 金鑰；New SSH key → 新增 SSH 金鑰；Add deploy key → 新增部署金鑰；Allow write access → 允許寫入權限；signing key → 簽署金鑰；signature → 簽章 |
 | vigilant mode / verified | 警戒模式 / 已驗證 | Partially verified → 部分驗證；Unverified → 未驗證 |
-| personal access token / fine-grained | 個人存取權杖 / 精細 | iThome 個人存取權杖 5、「精細度存取權杖」3；權杖 65 / 令牌 19；VS Code 繁中「權杖」75。改（现有繁体表「細粒度」偏学术）。Fine-grained tokens → 精細權杖；Tokens (classic) → 權杖（傳統）；token → 權杖（含 OAuth token、模型用量的 token）：N tokens → N 個權杖，input / output tokens → 輸入 / 輸出權杖 |
+| personal access token / fine-grained | 個人存取權杖 / 精細 | iThome 個人存取權杖 5、「精細度存取權杖」3；權杖 65 / 令牌 19；VS Code 繁中「權杖」75。改（现有繁体表「細粒度」偏学术）。Fine-grained tokens → 精細權杖；Tokens (classic) → 權杖（傳統）；token → 權杖（含 OAuth token、模型用量的 token）：N tokens → N 個權杖，input / output tokens → 輸入 / 輸出權杖。经典令牌列表的作用域代码显示为说明、以顿号分隔（admin:enterprise, admin:gpg_key → 完全控制企業、完全控制使用者公開 GPG 金鑰），新建、编辑表单里的代码不译 |
 | ruleset / branch protection rule | 規則集 / 分支保護規則 | New branch ruleset / New tag ruleset → 新增分支規則集 / 新增標記規則集；Add classic branch protection rule → 新增傳統分支保護規則；Branch name pattern → 分支名稱模式；protected branch → 受保護的分支；classic → 傳統 |
 | enforce | 強制執行 | Enforcement status → 強制執行狀態；Enforce HTTPS → 強制使用 HTTPS |
 | app / integration | 應用程式 / 整合 | 改（现有繁体表 GitHub App、OAuth App 保留），见第 3 节。GitHub App → GitHub 應用程式；OAuth app → OAuth 應用程式；Authorized OAuth Apps → 已授權的 OAuth 應用程式；Authorized GitHub Apps → 已授權的 GitHub 應用程式；Install / Configure / Suspend → 安裝 / 設定 / 暫停 |
@@ -278,7 +278,7 @@ GitHub App、OAuth app → GitHub 應用程式、OAuth 應用程式。现有繁�
 | keyboard shortcuts / accessibility | 鍵盤快速鍵 / 無障礙 | VS Code 繁中「鍵盤快速鍵」31 次；accessibility 取 Chromium 繁中「無障礙」（台湾政府与网页通行；微软作「協助工具」，Apple 作「輔助使用」） |
 | codespace / prebuild | 程式碼空間 / 預先建置 | 用户规定（第 3 节）。Create codespace → 建立程式碼空間；Your codespaces → 你的程式碼空間；Prebuild configuration → 預先建置設定；dev container → 開發容器 |
 | build | 建置 | VS Code 繁中、iThome（建置 56 次、「構建」0 次）。没有例外：页面（Pages）设定 Build and deployment → 建置和部署 |
-| webhook / payload | Web 鉤子 / 承載 | 用户规定（2026-10-28 简体作「Web 钩子」，繁体保留同样的 Web + 中文结构）。hook 不取微软繁中的「勾點」（VS Code 繁中 勾點 100 / 鉤點 15）：「鉤子」与简体「钩子」一一对应，一般读者更易懂；「鉤」用教育部标准字，不写「鈎」。payload 取微软繁中「承載」。Webhooks → Web 鉤子；Add webhook → 新增 Web 鉤子；Payload URL → 承載 URL；Recent Deliveries → 最近傳遞；Deliveries → 傳遞記錄；Redeliver → 重新傳遞；hook → 鉤子（指 webhook 时 → Web 鉤子）；pre-receive hook → 預先接收鉤子 |
+| webhook / payload | Web 鉤子 / 承載 | 用户规定（2026-10-28 简体作「Web 钩子」，繁体保留同样的 Web + 中文结构）。hook 不取微软繁中的「勾點」（VS Code 繁中 勾點 100 / 鉤點 15）：「鉤子」与简体「钩子」一一对应，一般读者更易懂；「鉤」用教育部标准字，不写「鈎」。payload 取微软繁中「承載」。Webhooks → Web 鉤子；Add webhook → 新增 Web 鉤子；Payload URL → 承載 URL；Recent Deliveries → 最近傳遞；Deliveries → 傳遞記錄；Redeliver → 重新傳遞；hook → 鉤子（指 webhook 时 → Web 鉤子）；pre-receive hook → 預先接收鉤子。GitHub 应用、OAuth 应用设置页同样作「傳遞」（简体作“请求”） |
 | gist / wiki / README | 程式碼片段 / Wiki / 讀我檔案 | gist、README 按用户规定（2026-10-28）译出，GitHub Gist → GitHub 程式碼片段；README 取微软繁中术语的「讀我檔案」；Wiki 是技术词，保留（第 3 节）。New gist → 新增程式碼片段；public gist / secret gist → 公開程式碼片段 / 祕密程式碼片段；Fork gist → 分叉程式碼片段；Add a README → 新增讀我檔案；profile README → 個人檔案讀我檔案；README.md 等文件名、gist.github.com 等网址照原文 |
 | single sign-on / identity provider | 單一登入 / 身分識別提供者 | 微软繁中。SSO、SAML、IdP 保留 |
 | code owner / achievement | 程式碼擁有者 / 成就 | CODEOWNERS 保留；成就名保留英文 |
@@ -448,7 +448,7 @@ export default {
 | 高级（advanced、premium） | 進階 | |
 | 工作流 | 工作流程 | |
 | 运行（run）、运行器 | 執行、執行器 | |
-| 工件、制品 | 成品 | |
+| 产物 | 成品 | |
 | 已排队、正在进行、挂起、超时、跳过 | 已排入佇列、進行中、擱置中、逾時、略過 | |
 | 包（package） | 套件 | |
 | 注册表 | 登錄庫 | |
@@ -458,7 +458,7 @@ export default {
 | 被依赖 | 被相依項目 | |
 | 使用者（Used by） | 採用者 | 只指 Used by；user 仍作「使用者」 |
 | 见解 | 洞察 | |
-| 脉搏 | 脈動 | |
+| 统计（Pulse） | 統計 | |
 | 概述、概览、概观（overview） | 總覽 | |
 | 克隆（clone） | 複製 | 单独出现时写「複製儲存庫」；流量图 Clones 作「複製次數」 |
 | 检出（checkout） | 簽出 | 购买流程的 checkout 作「結帳」 |

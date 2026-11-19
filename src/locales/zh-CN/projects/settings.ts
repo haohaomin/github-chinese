@@ -78,7 +78,7 @@ export default {
     // 删除项目对话框：整句由下方 inline 规则译出，不构成行内句时按以下片段翻译
     'Delete project warning': '删除项目警告',
     'I understand the consequences, delete this project': '我了解后果，删除此项目',
-    'project, saved views, custom fields and associated values, and Insights data.': '项目及其保存的视图、自定义字段及相关值和见解数据。',
+    'project, saved views, custom fields and associated values, and Insights data.': '项目及其保存的视图、自定义字段及相关值和洞察数据。',
     'This will not delete issues or pull requests themselves.': '议题和拉取请求本身不会被删除。',
 
     // 访问权限
@@ -229,7 +229,7 @@ export default {
     // <p>This action <span>cannot</span> be undone. This will permanently delete the <span>项目名</span> project, saved views, …</p>
     [
       'This action {} be undone. This will permanently delete the {} project, saved views, custom fields and associated values, and Insights data.',
-      '此操作{}撤销。这将永久删除 {} 项目及其保存的视图、自定义字段及相关值和见解数据。'
+      '此操作{}撤销。这将永久删除 {} 项目及其保存的视图、自定义字段及相关值和洞察数据。'
     ],
     // <p>This will also delete <span>3 draft issues</span> that were created in this project.</p>
     [/^This will also delete \{\} that (?:were|was) created in this project\.$/, '这还将删除在此项目中创建的 {}。'],

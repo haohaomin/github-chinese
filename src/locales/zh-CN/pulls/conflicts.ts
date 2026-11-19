@@ -17,7 +17,7 @@ export default {
     'Accept current change': '接受当前更改',
     'Accept incoming change': '接受传入更改',
     'Accept both changes': '接受双方更改',
-    'Remove all conflict markers to resolve this file': '删除所有冲突标记以解决此文件',
+    'Remove all conflict markers to resolve this file': '删除所有冲突标记以解决此文件的冲突',
     // 提交合并对话框
     'Sign off and commit merge': '签署并提交合并',
     'Committing merge…': '正在提交合并…',
@@ -43,7 +43,7 @@ export default {
     // You are <signing off> on this commit as …
     'You are': '你正在',
     // 缩进模式下拉框（与 code、gist 一致）。拉取请求页没有其他单独的 Spaces / Tabs：
-    // Copilot 导航的 Spaces（空间）只在代理会话页，该页作用域含 copilot，以 copilot 的译法为准
+    // Copilot 导航的 Spaces（空间）只在智能体会话页，该页作用域含 copilot，以 copilot 的译法为准
     Spaces: '空格',
     Tabs: '制表符'
   },

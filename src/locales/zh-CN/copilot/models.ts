@@ -225,7 +225,7 @@ export default {
     'Copilot billing settings': 'Copilot 计费设置',
     'The billing entity you have selected has no premium quota remaining.': '所选计费实体已没有剩余的高级配额。',
     'Before you can use Copilot cloud agent, you need to pick a "Usage billed to" option in your Copilot settings.':
-      '使用 Copilot 云代理前，需在 Copilot 设置中选择“使用量计费对象”。',
+      '使用 Copilot 云端智能体前，需在 Copilot 设置中选择“使用量计费对象”。',
 
     // 使用量横幅：被链接拆开的片段
     'Enable additional usage': '启用额外使用量',
@@ -329,7 +329,7 @@ export default {
     // 会话令牌使用情况：输入：<1,234 tokens>
     [/^([\d,]+) tokens?$/, '$1 个令牌'],
     [/^(\d+) premium requests?$/, '$1 个高级请求'],
-    // 代理会话页标题栏的用量：分隔符、数字与单位是同一 span 里的相邻文本节点
+    // 智能体会话页标题栏的用量：分隔符、数字与单位是同一 span 里的相邻文本节点
     [/^· (\d+) premium requests?$/, '· $1 个高级请求'],
     [/^Included credits: (\d+(?:\.\d+)?)% used$/, '包含的额度：已使用 $1%'],
     [/^Additional usage: (\d+(?:\.\d+)?)% used$/, '额外使用量：已使用 $1%'],

@@ -502,7 +502,7 @@ const REGEXP_CASES: Readonly<Record<PartName, readonly RegExpCase[]>> = {
       hits: [
         ['- This ruleset will be enforced', '- 将强制实施此规则集'],
         ['- This ruleset will not be enforced', '- 不会强制实施此规则集'],
-        ['- Evaluate this ruleset to trial rules and view insights', '- 评估此规则集以试用规则并查看见解']
+        ['- Evaluate this ruleset to trial rules and view insights', '- 评估此规则集以试用规则并查看洞察']
       ],
       misses: ['- This ruleset will be ignored']
     },
@@ -535,7 +535,7 @@ const REGEXP_CASES: Readonly<Record<PartName, readonly RegExpCase[]>> = {
     {
       hits: [
         ['View history for the ruleset named main-protection', '查看规则集 main-protection 的历史记录'],
-        ['View insights for the ruleset named Release rules', '查看规则集 Release rules 的见解']
+        ['View insights for the ruleset named Release rules', '查看规则集 Release rules 的洞察']
       ],
       misses: ['View history for the ruleset']
     },
@@ -1185,7 +1185,7 @@ describe('repo-settings 静态词条', () => {
     ['Restrict commit metadata', '限制提交元数据'],
     ['Require code scanning results', '要求代码扫描结果'],
     ['Restore ruleset', '恢复规则集'],
-    ['Repository ruleset insights', '存储库规则集见解'],
+    ['Repository ruleset insights', '存储库规则集洞察'],
     ['Import branch protection rules', '导入分支保护规则'],
     ['Convert to ruleset', '转换为规则集'],
     ['Allow all actions and reusable workflows', '允许所有操作和可复用工作流'],
@@ -1203,7 +1203,7 @@ describe('repo-settings 静态词条', () => {
     ['Enable CodeQL', '启用 CodeQL'],
     ['Access to alerts', '警报访问权限'],
     ['New repository secret', '新建存储库机密'],
-    ['Agents secrets and variables', '代理机密和变量'],
+    ['Agents secrets and variables', '智能体机密和变量'],
     ['Add deploy key', '添加部署密钥'],
     ['Enable automatic code review', '启用自动代码审查'],
     ['Automation level', '自动化级别'],
@@ -1244,14 +1244,14 @@ describe('repo-settings 静态词条', () => {
     ['Allow actions by Marketplace', '允许市场'],
     ['Copilot Autofix enablement', 'Copilot 自动修复启用状态'],
     ['Learn more about Copilot code review.', '了解 Copilot 代码审查。'],
-    ['Learn more about Copilot coding agent', '了解 Copilot 编码代理'],
+    ['Learn more about Copilot coding agent', '了解 Copilot 编码智能体'],
     [
       'Check new dependencies against the GitHub Advisory Database for known vulnerabilities.',
       '对照 GitHub 公告数据库检查新依赖项是否存在已知漏洞。'
     ],
     [
       'Anyone with collaborator access to this repository can use these secrets and variables for the Copilot cloud agent.',
-      '对此存储库拥有协作者权限的任何人都可以为 Copilot 云代理使用这些机密和变量。'
+      '对此存储库拥有协作者权限的任何人都可以为 Copilot 云端智能体使用这些机密和变量。'
     ],
     ['Code scanning with GitHub Actions is not available for this repository.', '此存储库无法使用基于 GitHub 操作的代码扫描。'],
     ['This limit does not apply to Git Large File Storage (Git LFS).', '此限制不适用于 Git 大文件存储 (Git LFS)。'],
@@ -1302,7 +1302,22 @@ describe('repo-settings 静态词条', () => {
     ['Disable content reporting for all users', '为所有用户禁用内容报告'],
     ['Abuse reports', '滥用行为报告'],
     ['Reported Content', '报告的内容'],
-    ["There aren't any resolved content reports for this repository.", '此存储库没有已解决的内容报告。']
+    ["There aren't any resolved content reports for this repository.", '此存储库没有已解决的内容报告。'],
+    // 高级安全：AI 扫描的说明
+    ['Identify code security findings using AI. All features consume AI credits.', '使用 AI 识别代码安全问题。所有功能都会消耗 AI 额度。'],
+    [
+      'Scan this repository with AI for additional security findings. Only scans the default branch.',
+      '使用 AI 扫描此存储库，发现更多安全问题。仅扫描默认分支。'
+    ],
+    [
+      'Find risks such as indirect prompt injection in AI applications and agents, in any language. Only scans pull requests.',
+      '查找 AI 应用程序和智能体中的间接提示注入等风险，不限语言。仅扫描拉取请求。'
+    ],
+    // 拉取请求限制：bypass list 改称 exemption list
+    [
+      'Restrict how many pull requests users without write access can have open at one time and add specific users to an exemption list. These settings stay in effect until you change them.',
+      '限制无写入访问权限的用户可同时打开的拉取请求数量，并可将特定用户添加到豁免列表。这些设置在你更改前一直有效。'
+    ]
   ])('%s → %s', (input, expected) => {
     expect(dict.static?.[input]).toBe(expected)
     expect(translate(input)).toBe(expected)
@@ -1568,7 +1583,7 @@ describe('repo-settings 行内句', () => {
     return `<a href="/octo-org/hello-world/activity?ref=${name}" class="prc-BranchName-BranchName-CMTaU" data-component="BranchName">${name}</a>`
   }
 
-  it('规则见解运行记录的分支重命名注记按整句翻译', () => {
+  it('规则洞察运行记录的分支重命名注记按整句翻译', () => {
     // repos-rules RuleSuiteRow：<span>deleted </span><BranchName/><span> (renamed to <BranchName/>)</span>
     render(`
       <span id="deleted"><span>deleted </span>${branch('main')}<span id="to"> (renamed to ${branch('trunk')})</span></span>
@@ -1613,6 +1628,27 @@ describe('repo-settings 繁体（zh-TW 语言包）', () => {
     ],
     // 安全设置页「Dependabot rules」行的齿轮按钮（static，组织安全设置页同样生效）
     [['common', 'repository', 'repo-settings'], 'Configure Dependabot rules', '設定 Dependabot 規則'],
+    // 高级安全：AI 扫描的说明；拉取请求限制
+    [
+      ['common', 'repository', 'repo-settings'],
+      'Identify code security findings using AI. All features consume AI credits.',
+      '使用 AI 識別程式碼安全性發現項目。所有功能都會耗用 AI 點數。'
+    ],
+    [
+      ['common', 'repository', 'repo-settings'],
+      'Scan this repository with AI for additional security findings. Only scans the default branch.',
+      '使用 AI 掃描此儲存庫，找出更多安全性發現項目。僅掃描預設分支。'
+    ],
+    [
+      ['common', 'repository', 'repo-settings'],
+      'Find risks such as indirect prompt injection in AI applications and agents, in any language. Only scans pull requests.',
+      '找出 AI 應用程式與代理中的間接提示注入等風險，不限語言。僅掃描拉取請求。'
+    ],
+    [
+      ['common', 'repository', 'repo-settings'],
+      'Restrict how many pull requests users without write access can have open at one time and add specific users to an exemption list. These settings stay in effect until you change them.',
+      '限制沒有寫入權限的使用者同時可有多少個開放中的拉取請求，並將特定使用者加入豁免清單。這些設定在你變更之前會持續生效。'
+    ],
     [['common', 'org-settings'], 'Configure Dependabot rules', '設定 Dependabot 規則'],
     // 推送保护绕过列表标题（与组织设置同译）
     [['common', 'repository', 'repo-settings'], '3 actors', '3 個執行者'],

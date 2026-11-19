@@ -1,5 +1,6 @@
 import type { PageDictionary } from '../../../core/types'
 import { DATE_SOURCE, TIME_SOURCE, joinCjk, translateTime } from '../helpers'
+import { SUSPEND_TIME_SOURCE, translateSuspendTime } from './apps'
 import { USAGE_SOURCE, translateUsage } from './keys'
 
 /**
@@ -37,6 +38,8 @@ export default {
     'Read more about connecting with third-party applications at': '有关连接第三方应用的详情请参阅',
     'Read more about connecting with third-party applications at GitHub Help.': '有关连接第三方应用的详情请参阅 GitHub 帮助。',
     'App Suspended': '应用已暂停',
+    'This integration has been suspended. Repository access can be modified once the integration is reinstated.':
+      '此集成已暂停。恢复后才能修改存储库访问权限。',
     'Label: App Suspended': '标签：应用已暂停',
 
     // 权限更新请求
@@ -179,6 +182,10 @@ export default {
 
     // 安装配置页
     [new RegExp(`^Installed (${TIME_SOURCE})$`), (_, time: string) => joinCjk(translateTime(time), '安装')],
+    [
+      new RegExp(`^Your installation was suspended by you on (${SUSPEND_TIME_SOURCE})\\.$`),
+      (_, time: string) => `你已于 ${translateSuspendTime(time)}暂停此安装。`
+    ],
     [
       new RegExp(`^Your installation was suspended by you on (${DATE_SOURCE})(\\.?)$`),
       (_, date: string, dot: string) => `${joinCjk(joinCjk('你已于', translateTime(date)), '暂停此安装')}${dot ? '。' : ''}`

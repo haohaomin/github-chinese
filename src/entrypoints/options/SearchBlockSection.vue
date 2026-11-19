@@ -19,16 +19,23 @@
         />
       </template>
       <template #builtin><BuiltinRulesList :enabled="settings.purifyBuiltin" /></template>
+      <template #actions>
+        <UiButton size="sm" :href="CONTRIBUTE_RULES_URL" target="_blank" rel="noreferrer" data-test="contribute-rules">
+          {{ t('contributeRules') }}
+        </UiButton>
+      </template>
     </UiTabs>
   </div>
 </template>
 
 <script setup lang="ts">
   import { computed, ref } from 'vue'
+  import UiButton from '../../components/ui/UiButton.vue'
   import type { UiTab } from '../../components/ui/types'
   import UiSwitch from '../../components/ui/UiSwitch.vue'
   import UiTabs from '../../components/ui/UiTabs.vue'
   import { useI18n } from '../../components/ui-preferences'
+  import { CONTRIBUTE_RULES_URL } from '../../shared/extension'
   import BuiltinRulesList from './BuiltinRulesList.vue'
   import TextList from './TextList.vue'
   import TransferTools from './TransferTools.vue'

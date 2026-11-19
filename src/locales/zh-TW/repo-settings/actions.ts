@@ -4,7 +4,7 @@ import type { PageDictionary } from '../../../core/types'
 const OWNER = '([\\w.-]+)'
 
 /**
- * 存储库设置 · 操作：常规（操作权限、工件和日志保留、缓存、复刻拉取请求工作流、工作流权限、访问）、
+ * 存储库设置 · 操作：常规（操作权限、产物和日志保留、缓存、复刻拉取请求工作流、工作流权限、访问）、
  * 运行器（列表、详细信息、新建自托管运行器）、策略、OIDC、模型。
  * 与组织设置共用的文字沿用 org-settings 的译法；组织设置只放 scoped 的条目在此以 static 收录。
  * 运行器列表与操作运行器页（actions 页面类型）共用的说明放 scoped。
@@ -50,7 +50,7 @@ export default {
     'This setting has been disabled by organization administrators.': '組織管理員已停用此設定。',
     'This setting has been disabled by enterprise administrators.': '企業管理員已停用此設定。',
 
-    // 检查、工作流运行、状态、工件和日志保留，缓存
+    // 检查、工作流运行、状态、产物和日志保留，缓存
     'Artifact and log retention': '成品和記錄保留',
     'Choose the repository settings for artifacts and logs.': '選擇成品和記錄的儲存庫設定。',
     'Check, workflow run, status, artifact and log retention': '檢查、工作流程執行、狀態、成品和記錄保留',

@@ -243,7 +243,7 @@ describe('explore 静态词条', () => {
     ['All developers', '所有开发者'],
     ['GitHub Sponsors participation', 'GitHub 赞助参与情况'],
     ['Browse popular topics on GitHub.', '浏览 GitHub 上的热门主题。'],
-    ['Curated lists and insight into burgeoning industries, topics, and communities.', '精选列表，以及对新兴行业、主题和社区的见解。'],
+    ['Curated lists and insight into burgeoning industries, topics, and communities.', '精选列表，以及对新兴行业、主题和社区的洞察。'],
     ['Sort:', '排序：'],
     ['Least recently updated', '最久未更新'],
     ['Latest release', '最新发行版'],

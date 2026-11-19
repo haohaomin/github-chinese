@@ -20,7 +20,7 @@ export const COMPOSER_SHARED_RULES: readonly RegExpRule[] = [
 export default {
   static: {
     // 导航侧栏
-    'Agent sessions and chats': '代理会话和聊天',
+    'Agent sessions and chats': '智能体会话和聊天',
     'Expand sidebar': '展开侧栏',
     'Collapse sidebar': '折叠侧栏',
     'Quick links': '快捷链接',
@@ -308,7 +308,7 @@ export default {
     'Show content below': '显示下方内容',
     // 工具调用确认卡片的说明（服务器下发；其他工具名见 regexp）
     'Are you sure you wish to execute the "Create pull request with Copilot coding agent" tool?':
-      '确定要执行“使用 Copilot 编码代理创建拉取请求”工具吗？',
+      '确定要执行“使用 Copilot 编码智能体创建拉取请求”工具吗？',
 
     // 反馈
     'Good response': '回复不错',
@@ -465,7 +465,7 @@ export default {
     "This response has been filtered because it violates GitHub's safety policies.": '此回复因违反 GitHub 的安全政策已被过滤。',
     'Describe this image': '描述这张图片',
     "Only one agent is allowed per thread, and their context can't be shared. If you want to interact with another agent, please start a new thread and @ mention the new agent.":
-      '每个对话只能使用一个代理，且上下文无法共享。如需与其他代理交互，请开始新对话并 @ 提及该代理。',
+      '每个对话只能使用一个智能体，且上下文无法共享。如需与其他智能体交互，请开始新对话并 @ 提及该智能体。',
     'Copilot Chat in GitHub.com must be enabled to upload images. Please request access from your administrator and try again.':
       '必须启用 GitHub.com 中的 Copilot 聊天才能上传图片。请向管理员申请访问权限后重试。',
     'Copilot in GitHub.com preview features must be enabled to upload images. Please request access from your administrator and try again.':
@@ -545,9 +545,9 @@ export default {
     'Automate a recurring task': '自动化重复任务',
     'Identify what can be automated and plan the implementation.': '找出可自动化的部分并规划实现。',
     'Improve my workflow': '改进我的工作流',
-    'Recent agent sessions': '最近的代理会话',
+    'Recent agent sessions': '最近的智能体会话',
     'Dismiss suggestions': '关闭建议',
-    'Get started with agents': '开始使用代理',
+    'Get started with agents': '开始使用智能体',
     'Explain repository': '解释存储库',
     'Understand the codebase and where to start': '了解代码库及从何入手',
     'Create a plan': '制定计划',
@@ -600,7 +600,7 @@ export default {
     Conversation: '对话',
     Chat: '聊天',
     Ask: '询问',
-    Agent: '代理',
+    Agent: '智能体',
     Spaces: '空间',
     Space: '空间',
     Instructions: '说明',

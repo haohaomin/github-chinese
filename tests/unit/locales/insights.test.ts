@@ -101,7 +101,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['Commit data path is not available']
   },
   // 侧栏、标题、贡献者
-  { hits: [['Insights: octo-org/hello-world', '见解：octo-org/hello-world']], misses: ['Insights: octo-org'] },
+  { hits: [['Insights: octo-org/hello-world', '洞察：octo-org/hello-world']], misses: ['Insights: octo-org'] },
   {
     hits: [['Contributors to octo-org/hello-world', 'octo-org/hello-world 的贡献者']],
     misses: ['Contributors to octo-org']
@@ -373,7 +373,7 @@ describe('insights 正则词条', () => {
     )
   })
 
-  it('脉搏摘要片段按顺序读通', () => {
+  it('统计摘要片段按顺序读通', () => {
     const parts = ['Excluding merges,', '3 authors', 'have pushed', '12 commits', 'to main and', '40 commits', 'to all branches.']
     expect(parts.map(part => translate(part) ?? part).join(' ')).toBe(
       '不计合并提交， 3 个作者 推送了 12 个提交 到 main 以及 40 个提交 到所有分支。'
@@ -429,8 +429,8 @@ describe('insights 贡献者页说明（繁体）', () => {
 
 describe('insights 静态词条', () => {
   it.each([
-    // 产品名、功能名按用户规定译成中文（见解侧栏的 Pulse、操作指标、市场）
-    ['Pulse', '脉搏'],
+    // 产品名、功能名按用户规定译成中文（洞察侧栏的 Pulse、操作指标、市场）
+    ['Pulse', '统计'],
     ['View in Marketplace', '在市场中查看'],
     ['Detect additional dependencies with GitHub Actions', '使用 GitHub 操作检测更多依赖项'],
     [
@@ -484,7 +484,7 @@ describe('insights 静态词条', () => {
     ['Writing a README', '编写自述文件'],
     ['Dependency graph is disabled', '依赖项关系图已禁用'],
     ['No one has forked this repository yet.', '还没有人复刻此存储库。'],
-    ['Insights navigation', '见解导航'],
+    ['Insights navigation', '洞察导航'],
     ['Code generation', '代码生成'],
     ['Actions usage metrics', '操作使用情况指标'],
     ['Try changing your filters, or search for', '尝试更改筛选器，或搜索'],
@@ -574,7 +574,7 @@ describe('insights 忽略选择器', () => {
   })
 })
 
-describe('insights 脉搏拆分的文本节点', () => {
+describe('insights 统计拆分的文本节点', () => {
   let translator: Translator | undefined
 
   afterEach(() => {

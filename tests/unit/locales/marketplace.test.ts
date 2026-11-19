@@ -266,7 +266,40 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     ],
     misses: ['Codecov can also request users permission to the following resources.']
   },
-  { hits: [['Install Codecov', '安装 Codecov']], misses: ['install Codecov'] }
+  { hits: [['Install Codecov', '安装 Codecov']], misses: ['install Codecov'] },
+  // 上架项的创建与编辑：标题、页头、交易页标题段
+  {
+    hits: [['Edit 1651asduhaiuh - GitHub Marketplace', '编辑 1651asduhaiuh - GitHub 市场']],
+    misses: ['Editing 1651asduhaiuh - GitHub Marketplace']
+  },
+  { hits: [['Edit 1651asduhaiuh', '编辑 1651asduhaiuh']], misses: ['Editing 1651asduhaiuh'] },
+  { hits: [['1651asduhaiuh Transactions', '1651asduhaiuh 交易']], misses: ['1651asduhaiuh transactions'] },
+  { hits: [['Create draft listing for Stb', '为 Stb 创建上架项草稿']], misses: ['Create draft listing for'] },
+  // 字数限制与剩余
+  {
+    hits: [
+      ['Limit 255 characters.', '限 255 个字符。'],
+      ['Limit 1,000 characters.', '限 1,000 个字符。']
+    ],
+    misses: ['Limit 255 characters']
+  },
+  { hits: [['252 remaining.', '还剩 252 个字符。']], misses: ['252 remaining'] },
+  { hits: [['Limit 255 characters. 252 remaining.', '限 255 个字符。还剩 252 个字符。']], misses: ['Limit 255 characters 252 remaining.'] },
+  // 步骤进度
+  { hits: [['1 of 5', '1 / 5']], misses: ['Step 1 of 5'] },
+  // 开发人员协议
+  {
+    hits: [['GitHub Marketplace Developer Agreement v2.4', 'GitHub 市场开发人员协议 v2.4']],
+    misses: ['GitHub Marketplace Developer Agreement 2.4']
+  },
+  {
+    hits: [['signed the GitHub Marketplace Developer Agreement version v2.3', '签署 GitHub 市场开发人员协议 v2.3 版于']],
+    misses: ['signed the GitHub Marketplace Developer Agreement']
+  },
+  {
+    hits: [['This is a list of the financial transactions for 1651asduhaiuh.', '1651asduhaiuh 的财务交易列表。']],
+    misses: ['This is a list of the financial transactions.']
+  }
 ]
 
 const HITS = REGEXP_CASES.flatMap(item => item.hits)
@@ -727,12 +760,13 @@ describe('marketplace 标点随原文', () => {
     expect(entries.flatMap(([source, translation]) => extraPunctuation(source, translation))).toEqual([])
   })
 
-  /** 原文句数：句末标点后接空白和大写字母处断句，编号标题（1. Publisher）不算 */
-  const sourceSentences = (text: string): number => text.split(/(?<=[A-Za-z)'’"”][.!?])\s+(?=[A-Z"'(“‘])/).length
+  /** 原文句数：句末标点后接空白和大写字母处断句，编号标题（1. Publisher）、单字母缩写（P.O. Box）不算 */
+  const sourceSentences = (text: string): number => text.split(/(?<=(?:[A-Za-z]{2}|[)'’"”])[.!?])\s+(?=[A-Z"'(“‘])/).length
 
   it('不把原文的几句合成一句（合并处的逗号是原文没有的）', () => {
     expect(sourceSentences('Sorry, we couldn’t find it. Here’s the latest version.')).toBe(2)
     expect(sourceSentences('1. Publisher')).toBe(1)
+    expect(sourceSentences('Individual traders can use a P.O. Box.')).toBe(1)
     const entries = [...Object.entries(dict.static ?? {}), ...Object.entries(dict.scoped ?? {})]
     expect(entries.filter(([source, translation]) => splitTranslation(translation).length < sourceSentences(source))).toEqual([])
   })

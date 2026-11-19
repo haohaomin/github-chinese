@@ -4,7 +4,7 @@ import type { PageDictionary } from '../../../core/types'
 const OWNER = '([\\w.-]+)'
 
 /**
- * 存储库设置 · 操作：常规（操作权限、工件和日志保留、缓存、复刻拉取请求工作流、工作流权限、访问）、
+ * 存储库设置 · 操作：常规（操作权限、产物和日志保留、缓存、复刻拉取请求工作流、工作流权限、访问）、
  * 运行器（列表、详细信息、新建自托管运行器）、策略、OIDC、模型。
  * 与组织设置共用的文字沿用 org-settings 的译法；组织设置只放 scoped 的条目在此以 static 收录。
  * 运行器列表与操作运行器页（actions 页面类型）共用的说明放 scoped。
@@ -45,18 +45,18 @@ export default {
     'This setting has been disabled by organization administrators.': '组织管理员已禁用此设置。',
     'This setting has been disabled by enterprise administrators.': '企业管理员已禁用此设置。',
 
-    // 检查、工作流运行、状态、工件和日志保留，缓存
-    'Artifact and log retention': '工件和日志保留',
-    'Choose the repository settings for artifacts and logs.': '选择工件和日志的存储库设置。',
-    'Check, workflow run, status, artifact and log retention': '检查、工作流运行、状态、工件和日志保留',
+    // 检查、工作流运行、状态、产物和日志保留，缓存
+    'Artifact and log retention': '产物和日志保留',
+    'Choose the repository settings for artifacts and logs.': '选择产物和日志的存储库设置。',
+    'Check, workflow run, status, artifact and log retention': '检查、工作流运行、状态、产物和日志保留',
     'Choose the repository settings for checks, workflow runs, statuses, artifacts, and logs.':
-      '选择检查、工作流运行、状态、工件和日志的存储库设置。',
-    'Save artifact and log retention setting': '保存工件和日志保留设置',
+      '选择检查、工作流运行、状态、产物和日志的存储库设置。',
+    'Save artifact and log retention setting': '保存产物和日志保留设置',
     'There is a maximum limit of': '上限为',
     'Your organization has set a maximum limit of': '你的组织设置的上限为',
-    'Learn more about the artifact and log retention policy.': '了解工件和日志保留策略。',
+    'Learn more about the artifact and log retention policy.': '了解产物和日志保留策略。',
     'Learn more about the check, workflow run, status, artifact and log retention policy.':
-      '了解检查、工作流运行、状态、工件和日志保留策略。',
+      '了解检查、工作流运行、状态、产物和日志保留策略。',
     'Duration must be 1 or more.': '时长不能少于 1。',
     'Duration must be 90 or less': '时长不能超过 90',
     'Choose the repository settings for cache.': '选择缓存的存储库设置。',

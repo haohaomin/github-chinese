@@ -345,7 +345,7 @@ export default {
     'If enabled, your enterprise will be billed for additional AI credits usage after your included credits have been exhausted.':
       '启用后，包含的额度用尽后的额外 AI 额度使用量将向你的企业计费。',
     'Code Review model': '代码审查模型',
-    'Coding Agent model': '编码代理模型',
+    'Coding Agent model': '编码智能体模型',
     'Each GitHub AI credit costs $0.01.': '每个 GitHub AI 额度的费用为 $0.01。',
     'New Copilot AI Credits': '新的 Copilot AI 额度',
     'Overage spend': '超额支出',
@@ -395,7 +395,7 @@ export default {
     'All Premium Request SKUs': '所有高级请求 SKU',
     'A budget for all SKUs that consume premium requests': '适用于所有消耗高级请求的 SKU 的预算',
     'Supported SKUs:': '支持的 SKU：',
-    'Coding Agent premium requests': '编码代理高级请求',
+    'Coding Agent premium requests': '编码智能体高级请求',
     'Budget scope': '预算范围',
     'Select the scope of spending for this budget.': '选择此预算的支出范围。',
     'Scoped budgets track spending for a single repository': '范围预算跟踪单个存储库的支出',

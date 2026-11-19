@@ -180,7 +180,7 @@ export default {
     'Files changed': '變更的檔案',
     Walkthrough: '逐步解說',
     Findings: '發現項目',
-    Artifacts: '成品',
+    Artifacts: '附件',
 
     // 标题与分支
     "Title can't be blank": '標題不能空白',

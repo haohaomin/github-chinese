@@ -8,7 +8,7 @@ export const METRIC: Readonly<Record<string, string>> = {
   Deletions: '删除'
 }
 
-/** 见解页 ChartCard 的固定标题 */
+/** 洞察页 ChartCard 的固定标题 */
 const CHART_TITLE: Readonly<Record<string, string>> = {
   'Top committers': '主要提交者',
   'Code frequency': '代码频率',
@@ -98,7 +98,7 @@ function axisDisplaying(name: string, axis: string): string {
 const AXIS_VALUE = '(-?[\\d,.]+|\\d{4}-\\d{2}-\\d{2}(?: \\d{2}:\\d{2}:\\d{2})?)'
 
 /**
- * ChartCard（见解页各图表的卡片外壳）与 Highcharts 无障碍文字：
+ * ChartCard（洞察页各图表的卡片外壳）与 Highcharts 无障碍文字：
  * 图表菜单、自定义设置对话框、屏幕阅读器描述、导航器手柄。
  * SVG 内的坐标轴标签、提示框不在翻译范围内。
  */

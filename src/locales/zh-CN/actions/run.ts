@@ -3,7 +3,7 @@ import { DATE_SOURCE, joinCjk, TIME_SOURCE, translateDate, translateTime } from 
 import { DURATION_SOURCE, formatDuration, RUN_STATUS, TRIGGER_EVENTS } from './format'
 
 /**
- * 工作流运行详情：摘要页、作业列表、运行图、注释、工件、部署保护规则、
+ * 工作流运行详情：摘要页、作业列表、运行图、注释、产物、部署保护规则、
  * 作业日志页（步骤、工具栏）、重新运行对话框、使用情况页、工作流文件页、锁定文件页。
  */
 
@@ -86,7 +86,7 @@ export default {
     'There are no jobs with this status': '没有此状态的作业',
     'Run details': '运行详细信息',
     'Workflow file': '工作流文件',
-    'Agentic Workflow file': '代理工作流文件',
+    'Agentic Workflow file': '智能体工作流文件',
     'Re-run job': '重新运行作业',
     'Show all jobs': '显示所有作业',
     'Sign in to view logs': '登录以查看日志',
@@ -107,7 +107,7 @@ export default {
     'A new attempt of this workflow will be started, including': '将启动此工作流的新尝试，包括',
     'all the jobs': '所有作业',
     'all failed jobs': '所有失败的作业',
-    'and dependents:': '及其依赖作业：',
+    'and dependents:': '及其下游作业：',
     'debug logging': '调试日志',
     'Cancel workflow': '取消工作流',
     'You have successfully requested the workflow to be canceled.': '已请求取消工作流。',
@@ -124,8 +124,8 @@ export default {
     'Billable time': '计费时间',
     'Run and billable time': '运行和计费时间',
     'Produced during runtime': '运行期间生成',
-    'Copy artifact digest': '复制工件摘要',
-    'This artifact has expired and you can no longer download it': '此工件已过期且无法再下载',
+    'Copy artifact digest': '复制产物摘要',
+    'This artifact has expired and you can no longer download it': '此产物已过期且无法再下载',
     'Open job annotations': '展开作业注释',
     'Close job annotations': '收起作业注释',
     'Job summary generated at run-time': '运行时生成的作业摘要',
@@ -147,7 +147,7 @@ export default {
     // 等待批准（复刻拉取请求）
     'This workflow is': '此工作流正在',
     'awaiting approval': '等待维护者批准',
-    'from a maintainer in': '所在拉取请求',
+    'from a maintainer in': '于拉取请求',
 
     // 部署保护规则（标题见 scoped，与存储库设置的环境页共用）
     'Reviewers, timers, and other rules protecting deployments in this run': '保护此运行中部署的审查者、计时器和其他规则',
@@ -218,7 +218,7 @@ export default {
     Jobs: '作业',
     Job: '作业',
     Annotations: '注释',
-    Artifacts: '工件',
+    Artifacts: '产物',
     Size: '大小',
     Digest: '摘要',
     Event: '事件',
@@ -320,7 +320,7 @@ export default {
     [/^Input required and not supplied: (.+)$/, '缺少必需的输入：$1'],
     [
       /^No files were found with the provided path: (.+)\. No artifacts will be uploaded\.$/,
-      '在提供的路径中未找到文件：$1。不会上传任何工件。'
+      '在提供的路径中未找到文件：$1。不会上传任何产物。'
     ],
     [/^Branch "(.+)" is not allowed to deploy to (.+) due to environment protection rules\.$/, '分支“$1”因环境保护规则不允许部署到 $2。'],
     [
@@ -396,9 +396,9 @@ export default {
     'annotation-message a > strong',
     // 使用情况页的作业名
     'a[href*="check_suite_focus=true"]',
-    // 工件名
+    // 产物名
     'tr[data-artifact-id] > td:first-child :is(a, .text-bold)',
-    // 工件文件浏览器的文件路径（下载时按此文本匹配文件，不能改动）
+    // 产物文件浏览器的文件路径（下载时按此文本匹配文件，不能改动）
     '.js-artifact-files-list .flex-auto',
     // 部署保护规则中的环境名
     'a[href*="/deployments/activity_log?environment="]'

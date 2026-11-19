@@ -13,8 +13,8 @@ import spaces from './copilot/spaces'
 import workbench from './copilot/workbench'
 
 /**
- * Copilot 页：聊天与输入框、模型与使用量、技能调用、工作台与工件、代理任务与会话日志、空间、
- * 应用外壳与代理首页、代码 / 拉取请求中的 Copilot 入口，以及订阅与试用页（/github-copilot/…）。
+ * Copilot 页：聊天与输入框、模型与使用量、技能调用、工作台与附件、智能体任务与会话日志、空间、
+ * 应用外壳与智能体首页、代码 / 拉取请求中的 Copilot 入口，以及订阅与试用页（/github-copilot/…）。
  * 停靠聊天面板与存储库页入口在各页面复用，整句放 static；含变量的正则仅在 Copilot 页生效。
  */
 export default mergeDictionaries(

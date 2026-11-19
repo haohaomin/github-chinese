@@ -1,6 +1,6 @@
 import type { PageDictionary } from '../../../core/types'
 
-/** 代理会话的状态 */
+/** 智能体会话的状态 */
 const SESSION_STATES: Readonly<Record<string, string>> = {
   Working: '工作中',
   'Ready for review': '可供审查',
@@ -19,7 +19,7 @@ const SESSION_STATES: Readonly<Record<string, string>> = {
 
 /** 新版首页的分区名（自定义分区对话框的“更多选项”“显示”按钮） */
 const SECTIONS: Readonly<Record<string, string>> = {
-  'Agent sessions': '代理会话',
+  'Agent sessions': '智能体会话',
   'Pull requests': '拉取请求',
   Issues: '议题',
   Repositories: '存储库',
@@ -29,7 +29,7 @@ const SECTIONS: Readonly<Record<string, string>> = {
 /**
  * 登录后首页 /、/dashboard 的框架与新版首页分区：
  * 仪表板上下文切换、左侧常用存储库与团队、右侧最新变更与探索存储库、
- * 代理会话 / 拉取请求 / 议题列表、反馈对话框，
+ * 智能体会话 / 拉取请求 / 议题列表、反馈对话框，
  * 旧版首页的仪表板菜单与满意度反馈，组织仪表板的新成员提示。
  * Copilot 输入框见 composer.ts。
  */
@@ -65,16 +65,16 @@ export default {
     'Explore repositories': '探索存储库',
     'Explore more →': '探索更多 →',
 
-    // 代理会话列表
-    'Start an agent session to create new work or iterate on an existing project.': '启动代理会话以开始新工作或迭代现有项目。',
+    // 智能体会话列表
+    'Start an agent session to create new work or iterate on an existing project.': '启动智能体会话以开始新工作或迭代现有项目。',
     'No sessions found. Create one by sending a prompt above.': '未找到会话。在上方发送提示即可创建。',
     // 名词 filter → 筛选器（分区菜单里的筛选选项）
     'No sessions found. Try a different filter, or': '未找到会话。请尝试其他筛选器，或',
     'start a session': '开始会话',
-    'Unable to load agent tasks, try again later.': '无法加载代理任务，请稍后重试。',
-    'Agent sessions options': '代理会话选项',
-    'Agent sessions to include': '包含的代理会话',
-    'Agent sessions status filter': '代理会话状态筛选器',
+    'Unable to load agent tasks, try again later.': '无法加载智能体任务，请稍后重试。',
+    'Agent sessions options': '智能体会话选项',
+    'Agent sessions to include': '包含的智能体会话',
+    'Agent sessions status filter': '智能体会话状态筛选器',
     'Open session in VS Code': '在 VS Code 中打开会话',
 
     // 拉取请求与议题列表
@@ -129,7 +129,7 @@ export default {
     'View organization': '查看组织',
     "Browse organization's repositories": '浏览组织的存储库',
     'Browse organization’s repositories': '浏览组织的存储库',
-    'See all owners': '查看所有所有者',
+    'See all owners': '查看全部所有者',
     'View your teams': '查看你的团队',
     'View and create teams': '查看和创建团队',
     'Member statuses': '成员状态'
@@ -182,7 +182,7 @@ export default {
       /^(\S+#\d+) · Opened by (\S+) · (Updated|Created)$/,
       (_, ref, author, label) => `${ref} · 由 ${author} 创建 · ${label === 'Updated' ? '更新于' : '创建于'}`
     ],
-    // 代理会话条目说明：<relative-time> · 2 revisions · Ready for review
+    // 智能体会话条目说明：<relative-time> · 2 revisions · Ready for review
     [
       /^· (?:([\d,]+) revisions · )?(Working|Ready for review|Done|Failed|Idle|Needs attention|Timed out|Cancelled|Queued|Unknown|Merged|Closed|Queued to merge)$/,
       (_, revisions, state) => `· ${revisions ? `${revisions} 次修订 · ` : ''}${SESSION_STATES[state] ?? state}`

@@ -26,14 +26,14 @@ function translateResults(match: string): string {
 }
 
 /**
- * 存储库设置 · 规则见解：筛选栏、规则运行记录（推送、创建、删除、合并队列、工作流运行）、
+ * 存储库设置 · 规则洞察：筛选栏、规则运行记录（推送、创建、删除、合并队列、工作流运行）、
  * 运行详细信息对话框（规则集结果、堆栈与合并队列详细信息、评估耗时、绕过请求）、升级提示与空状态。
  * 规则显示名称（Restrict deletions 等）见 ruleset-rules.ts 与 branches.ts。
  */
 export default {
   static: {
     // 页面与升级提示
-    'Repository ruleset insights': '存储库规则集见解',
+    'Repository ruleset insights': '存储库规则集洞察',
     'See how rulesets are affecting this repository': '查看规则集对此存储库的影响',
     'See how rulesets are affecting this organization': '查看规则集对此组织的影响',
     'See how rulesets are affecting this enterprise': '查看规则集对此企业的影响',
@@ -41,7 +41,7 @@ export default {
       '企业帐户可让你根据规则集审查提交，跟踪通过、失败或绕过状态，以加强监督和了解。',
 
     // 筛选与空状态
-    'Filter rules insights': '筛选规则见解',
+    'Filter rules insights': '筛选规则洞察',
     'Rule status': '规则状态',
     'Commit SHA': '提交 SHA',
     'Filter by commit SHA': '按提交 SHA 筛选',
@@ -50,11 +50,11 @@ export default {
     'No rule evaluations matched your search': '没有与搜索匹配的规则评估',
     'Try adjusting your filters or reducing the time range of your search': '尝试调整筛选器或缩小搜索的时间范围',
     'Try expanding your search or creating a new ruleset in evaluate mode': '尝试扩大搜索范围或以评估模式新建规则集',
-    'Rule insights search timed out': '规则见解搜索超时',
-    "Rule insights couldn't be loaded": '无法加载规则见解',
+    'Rule insights search timed out': '规则洞察搜索超时',
+    "Rule insights couldn't be loaded": '无法加载规则洞察',
     'Something went wrong while loading rule evaluations. Try reloading in a few moments.': '加载规则评估时出错。请稍后重新加载。',
     "Rule insights couldn't be loaded. Something went wrong while loading rule evaluations. Try reloading in a few moments.":
-      '无法加载规则见解。加载规则评估时出错。请稍后重新加载。',
+      '无法加载规则洞察。加载规则评估时出错。请稍后重新加载。',
     'Successes, failures, and bypasses over time': '成功、失败与绕过趋势',
     'Top bypassers': '绕过最多的参与者',
 

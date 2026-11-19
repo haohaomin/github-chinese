@@ -319,7 +319,8 @@ export default {
     'Automatically enable for repositories added to secret scanning': '为添加到机密扫描的存储库自动启用',
     'Add a resource link in the CLI and web UI when a commit is blocked': '提交被阻止时在 CLI 和网页界面中添加资源链接',
     'Add a resource link in the CLI and the web UI when a commit is blocked': '提交被阻止时在 CLI 和网页界面中添加资源链接',
-    'Link will show in addition to': '链接将附加显示在',
+    // 「Link will show in addition to」+「the message GitHub displays」
+    'Link will show in addition to': '链接将附加到',
     'the message GitHub displays': 'GitHub 显示的消息',
     'Save link': '保存链接',
     'Save Link': '保存链接',

@@ -18,7 +18,7 @@ const ENFORCEMENT: Readonly<Record<string, string>> = {
 /** 强制实施状态说明（只读页「Active - This ruleset will be enforced」）：英文 → 中文 */
 const ENFORCEMENT_DESCRIPTION: Readonly<Record<string, string>> = {
   'This ruleset will be enforced': '将强制实施此规则集',
-  'Evaluate this ruleset to trial rules and view insights': '评估此规则集以试用规则并查看见解',
+  'Evaluate this ruleset to trial rules and view insights': '评估此规则集以试用规则并查看洞察',
   'This ruleset will not be enforced': '不会强制实施此规则集'
 }
 
@@ -34,7 +34,7 @@ const ACTOR_CATEGORY: Readonly<Record<string, string>> = {
   teams: '团队',
   apps: '应用',
   users: '用户',
-  agents: '代理',
+  agents: '智能体',
   'other actors': '其他参与者'
 }
 
@@ -74,7 +74,7 @@ function targeting(count: string, noun: string, all: string, many: string, inRep
 /**
  * 存储库设置 · 规则集：规则集列表、新建 / 导入 / 导出 / 删除、编辑器（名称、强制实施状态、绕过列表、
  * 目标分支 / 标签 / 存储库 / 组织 / 工作流）、保存提示、历史记录、升级提示。
- * 规则与参数见 ruleset-rules.ts，规则见解见 ruleset-insights.ts，导入 / 转换分支保护规则见 ruleset-import.ts。
+ * 规则与参数见 ruleset-rules.ts，规则洞察见 ruleset-insights.ts，导入 / 转换分支保护规则见 ruleset-import.ts。
  * 组织设置的规则集页面同样使用这些文字（static 全局生效；scoped 与 regexp 只在存储库设置页生效）；
  * 与经典分支保护同名的规则（Require signed commits 等）见 branches.ts；
  * 「Filter items」「Select items」「Default」「None」等选择面板通用词由 common-ui 收录。
@@ -163,8 +163,8 @@ export default {
     'Enable Organization Ruleset': '启用组织规则集',
     'Enforce this ruleset on targeted repositories.': '对目标存储库强制实施此规则集。',
     'I want rules enforced on targeted repositories in this ruleset.': '我希望在此规则集针对的存储库上强制实施规则。',
-    'Evaluate this ruleset to trial rules and view insights': '评估此规则集以试用规则并查看见解',
-    'Evaluate Rulesets to trial rules and view insights': '评估规则集以试用规则并查看见解',
+    'Evaluate this ruleset to trial rules and view insights': '评估此规则集以试用规则并查看洞察',
+    'Evaluate Rulesets to trial rules and view insights': '评估规则集以试用规则并查看洞察',
     'Evaluate mode is only available to Enterprise organizations.': '评估模式仅适用于企业版组织。',
     'Upgrade to Enterprise to use this mode.': '升级到企业版即可使用此模式。',
     'Do not evaluate or enforce rules': '不评估也不强制实施规则',
@@ -179,20 +179,20 @@ export default {
     'Exempt roles, teams, or apps from this ruleset by adding them to the bypass list.':
       '将角色、团队或应用添加到绕过列表，使其不受此规则集约束。',
     'Exempt roles, teams, agents, apps, and users from this ruleset by adding them to the bypass list.':
-      '将角色、团队、代理、应用和用户添加到绕过列表，使其不受此规则集约束。',
+      '将角色、团队、智能体、应用和用户添加到绕过列表，使其不受此规则集约束。',
     'Exempt roles, teams, agents, and apps from this ruleset by adding them to the bypass list.':
-      '将角色、团队、代理和应用添加到绕过列表，使其不受此规则集约束。',
+      '将角色、团队、智能体和应用添加到绕过列表，使其不受此规则集约束。',
     'Exempt roles, teams, agents, and apps from this ruleset by adding them to the allow list.':
-      '将角色、团队、代理和应用添加到允许列表，使其不受此规则集约束。',
+      '将角色、团队、智能体和应用添加到允许列表，使其不受此规则集约束。',
     'Exempt roles or teams from this ruleset by adding them to the bypass list': '添加到绕过列表的角色或团队不受此规则集约束',
     'Select the roles and teams that can bypass and also approve bypass requests. Add the bots and agents that can bypass this ruleset.':
-      '选择可以绕过并审批绕过请求的角色和团队。添加可以绕过此规则集的机器人和代理。',
+      '选择可以绕过并审批绕过请求的角色和团队。添加可以绕过此规则集的机器人和智能体。',
     'Select the roles that can bypass and also approve bypass requests.': '选择可以绕过并审批绕过请求的角色。',
     'Add bypass': '添加绕过',
     'Add actors': '添加参与者',
     'Choose which roles, teams, and apps can bypass this ruleset': '选择可以绕过此规则集的角色、团队和应用',
-    'Choose which roles, teams, agents, apps, and users can bypass this ruleset': '选择可以绕过此规则集的角色、团队、代理、应用和用户',
-    'Choose which roles, teams, agents, and apps can bypass this ruleset': '选择可以绕过此规则集的角色、团队、代理和应用',
+    'Choose which roles, teams, agents, apps, and users can bypass this ruleset': '选择可以绕过此规则集的角色、团队、智能体、应用和用户',
+    'Choose which roles, teams, agents, and apps can bypass this ruleset': '选择可以绕过此规则集的角色、团队、智能体和应用',
     'Filter actors': '筛选参与者',
     'Filter bypass actors': '筛选绕过参与者',
     'Filter actors by category': '按类别筛选参与者',
@@ -491,7 +491,7 @@ export default {
     // 操作菜单读屏名称：View history for the ruleset named main-protection
     [
       /^View (history|insights) for the ruleset named (.{1,100})$/,
-      (_, kind: string, name: string) => `查看规则集 ${name} 的${kind === 'history' ? '历史记录' : '见解'}`
+      (_, kind: string, name: string) => `查看规则集 ${name} 的${kind === 'history' ? '历史记录' : '洞察'}`
     ],
     // 导入失败：Error importing ruleset: <服务端消息>
     [/^Error importing ruleset: (.{1,200})$/, '导入规则集时出错：$1'],

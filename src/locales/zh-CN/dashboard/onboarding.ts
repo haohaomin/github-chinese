@@ -51,9 +51,9 @@ export default {
       '与 Copilot 聊天，搭建你的第一个网站、排查代码问题，或在 GitHub 之旅中获得指引。',
     'Download GitHub for Desktop': '下载 GitHub 桌面版',
     'GitHub Desktop simplifies Git workflows and brings core GitHub features to your desktop, helping developers of all levels focus on building and collaborating effectively.':
-      'GitHub 桌面版简化 Git 工作流程，把 GitHub 核心功能带到桌面，帮助各水平的开发人员专注构建、高效协作。',
+      'GitHub 桌面版简化 Git 工作流，把 GitHub 核心功能带到桌面，帮助各水平的开发人员专注构建、高效协作。',
     "Whether you're new to Git or a seasoned user, GitHub Desktop enables collaboration from your desktop and can simplify your development workflow.":
-      '无论你是 Git 新手还是老手，GitHub 桌面版都能让你在桌面上协作，简化开发工作流程。',
+      '无论你是 Git 新手还是老手，GitHub 桌面版都能让你在桌面上协作，简化开发工作流。',
     'Visual Studio Code with Copilot': '集成 Copilot 的 Visual Studio Code',
     'Customizable. Contextual. AI-powerful. GitHub Copilot can use your code and custom instructions to code the way you prefer.':
       '可定制，懂上下文，AI 驱动。GitHub Copilot 能结合你的代码和自定义说明，按你喜欢的方式编写代码。',
@@ -99,7 +99,7 @@ export default {
     // 旧版首页：使用行业工具（拉取请求的动词 open → 创建）
     'Use tools of the trade': '使用行业工具',
     "You're seeing this because you haven't opened a pull request in a while.": '你看到此内容是因为你有一段时间没有创建拉取请求了。',
-    'Simplify your development workflow with a GUI': '用图形界面简化开发工作流程',
+    'Simplify your development workflow with a GUI': '用图形界面简化开发工作流',
     'Install GitHub Desktop': '安装 GitHub 桌面版',
     'to visualize, commit, and push changes without ever touching the command line.': '，无需命令行即可可视化、提交和推送更改。',
     'Get AI-based coding suggestions': '获取 AI 编程建议',
@@ -112,7 +112,7 @@ export default {
     'is a multi-platform code editor optimized for building and debugging software.': '是一款为构建和调试软件而优化的跨平台代码编辑器。',
     'Set up your local dev environment': '设置本地开发环境',
     'set up Git': '设置 Git',
-    ', simplify your dev workflow with': '，简化开发工作流程可使用',
+    ', simplify your dev workflow with': '，简化开发工作流可使用',
     'bring GitHub to the command line': '把 GitHub 带到命令行',
 
     // 旧版首页：开始使用 GitHub
@@ -123,14 +123,14 @@ export default {
       '创建个人资料自述文件分享你的信息，它会显示在个人资料页顶部。',
     'Follow this exercise to try the GitHub flow': '跟随此练习体验 GitHub 流程',
     'GitHub’s “Hello World” tutorial teaches you essentials, where you create your own repository and learn GitHub’s pull request workflow for creating and reviewing code.':
-      'GitHub 的“Hello World”教程讲解基础知识，你将创建自己的存储库，并学习用于创建和审查代码的拉取请求工作流程。',
+      'GitHub 的“Hello World”教程讲解基础知识，你将创建自己的存储库，并学习用于创建和审查代码的拉取请求工作流。',
     "GitHub's “Hello World” tutorial teaches you essentials, where you create your own repository and learn GitHub's pull request workflow for creating and reviewing code.":
-      'GitHub 的“Hello World”教程讲解基础知识，你将创建自己的存储库，并学习用于创建和审查代码的拉取请求工作流程。',
+      'GitHub 的“Hello World”教程讲解基础知识，你将创建自己的存储库，并学习用于创建和审查代码的拉取请求工作流。',
     'Try the GitHub flow': '体验 GitHub 流程',
     'About version control and Git': '关于版本控制和 Git',
     'Learn about the version control system, Git, and how it works with GitHub.': '了解版本控制系统 Git，以及它如何与 GitHub 配合使用。',
     'The GitHub Flow': 'GitHub 流程',
-    "Adopt GitHub's lightweight, branch-based workflow to collaborate on projects.": '采用 GitHub 基于分支的轻量工作流程协作开发项目。',
+    "Adopt GitHub's lightweight, branch-based workflow to collaborate on projects.": '采用 GitHub 基于分支的轻量工作流协作开发项目。',
 
     // 旧版新手提示
     'Learn Git and GitHub without any code!': '无需编写代码即可学习 Git 和 GitHub！',

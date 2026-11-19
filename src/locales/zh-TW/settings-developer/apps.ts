@@ -1,5 +1,21 @@
 import type { PageDictionary } from '../../../core/types'
-import { TIME_SOURCE, joinCjk, translateTime } from '../helpers'
+import { MONTH_SOURCE, TIME_SOURCE, joinCjk, translateDate, translateTime } from '../helpers'
+
+/** 暂停时间：「October 1st, 2026 at 00:36 (CST)」（不含捕获组） */
+export const SUSPEND_TIME_SOURCE = `${MONTH_SOURCE} \\d{1,2}(?:st|nd|rd|th)?, \\d{4} at \\d{1,2}:\\d{2}(?: [AP]M)? \\([^()]+\\)`
+
+const SUSPEND_TIME_RE = new RegExp(
+  `^(${MONTH_SOURCE}) (\\d{1,2})(?:st|nd|rd|th)?, (\\d{4}) at (\\d{1,2}):(\\d{2})(?: ([AP]M))? \\(([^()]+)\\)$`
+)
+
+/** 「October 1st, 2026 at 00:36 (CST)」→ 2026年10月1日 00:36（CST）；12 小时制换成 24 小时制 */
+export function translateSuspendTime(text: string): string {
+  const match = SUSPEND_TIME_RE.exec(text)
+  const month = match ? translateDate(`${match[1]} ${match[2]}, ${match[3]}`) : undefined
+  if (!match || month === undefined) return text
+  const hour = (Number(match[4]) % (match[6] ? 12 : 24)) + (match[6] === 'PM' ? 12 : 0)
+  return `${month} ${String(hour).padStart(2, '0')}:${match[5]}（${match[7]}）`
+}
 
 /**
  * 开发人员设置：GitHub 应用（/settings/apps、/settings/apps/new、/settings/apps/…）与
@@ -137,7 +153,6 @@ export default {
     'Whoops! Try again.': '發生錯誤！請再試一次。',
     'File contents don’t match the file extension. Try again.': '檔案內容與副檔名不符。請再試一次。',
     "File contents don't match the file extension. Try again.": '檔案內容與副檔名不符。請再試一次。',
-    'Delete this image': '刪除此圖片',
     'Badge background color': '徽章背景顏色',
     'The hex value of the badge background color. Hex colors should only contain numbers and letters from a-f.':
       '徽章背景顏色的十六進位值。十六進位色碼只能包含數字和字母 a-f。',
@@ -180,8 +195,55 @@ export default {
     // 「This action <strong>CANNOT</strong> be undone. This will permanently delete the <strong>应用</strong> GitHub App.」
     'be undone. This will permanently delete the': '復原。這將永久刪除',
     // 「This will also uninstall the GitHub App from <strong>3 accounts</strong>.」：原文无逗号，译文不加
-    'This will also uninstall the GitHub App from': '這也會解除安裝此 GitHub 應用程式共涉及',
+    'This will also uninstall the GitHub App from': '這也會解除安裝此 GitHub 應用程式並影響',
     'Please type in the name of the GitHub App to confirm.': '請輸入 GitHub 應用程式的名稱以確認。',
+    'Please type in the name of the GitHub App to confirm': '請輸入 GitHub 應用程式的名稱以確認',
+    'Type the name of the GitHub App to confirm:': '輸入 GitHub 應用程式的名稱以確認：',
+    "New owner's GitHub username, organization, or enterprise name:": '新擁有者的 GitHub 使用者名稱、組織或企業名稱：',
+    'New owner’s GitHub username, organization, or enterprise name:': '新擁有者的 GitHub 使用者名稱、組織或企業名稱：',
+    'Search for new owner': '搜尋新擁有者',
+    'Job queued to delete GitHub App. It may take a few minutes to complete.':
+      '已將刪除 GitHub 應用程式的作業排入佇列。可能需要幾分鐘才能完成。',
+    'Job queued to delete application. It may take a few minutes to complete.': '已將刪除應用程式的作業排入佇列。可能需要幾分鐘才能完成。',
+
+    // 常规设置：保存失败、用户端密码、私密金钥（金钥组）
+    'Application could not be saved. Please check the form for errors.': '無法儲存應用程式。請檢查表單中的錯誤。',
+    'You have no client secrets': '沒有用戶端密碼',
+    'Client secrets authenticate this GitHub App using the OAuth client flow.':
+      '用戶端密碼會透過 OAuth 用戶端流程驗證此 GitHub 應用程式的身分。',
+    'Delete client secret?': '刪除用戶端密碼？',
+    'This action cannot be undone. This client secret will stop working immediately. Are you sure you want to delete this client secret?':
+      '此動作無法復原。此用戶端密碼將立即失效。確定要刪除此用戶端密碼嗎？',
+    'Client secret removed': '已刪除用戶端密碼',
+    'You have no key pairs': '沒有金鑰組',
+    'Private key (generating)': '私密金鑰（產生中）',
+    'Delete private key?': '刪除私密金鑰？',
+    'This action cannot be undone. This key will stop working immediately. Are you sure you want to delete this private key?':
+      '此動作無法復原。此金鑰將立即失效。確定要刪除此私密金鑰嗎？',
+    'You cannot delete the only private key. Generate a new key first.': '無法刪除唯一的私密金鑰。請先產生新金鑰。',
+
+    // IP 允许清单
+    'IP address or CIDR range': 'IP 位址或 CIDR 範圍',
+    'IP allow list entry created. IP allow list modifications can take a few minutes to go into effect.':
+      '已建立 IP 允許清單項目。IP 允許清單的修改可能需要幾分鐘才會生效。',
+    'IP allow list entry updated. IP allow list modifications can take a few minutes to go into effect.':
+      '已更新 IP 允許清單項目。IP 允許清單的修改可能需要幾分鐘才會生效。',
+    'IP allow list entry deleted. IP allow list modifications can take a few minutes to go into effect.':
+      '已刪除 IP 允許清單項目。IP 允許清單的修改可能需要幾分鐘才會生效。',
+    'Are you sure you want to delete this entry?': '確定要刪除此項目嗎？',
+    // 「This will permanently delete the IP allow list entry for <strong>IP</strong>.」
+    'This will permanently delete the IP allow list entry for': '這將永久刪除 IP 允許清單中的項目',
+    'Yes, delete this IP allow list entry': '是，刪除此 IP 允許清單項目',
+    // 检查 IP 地址的结果（IP 在前面的元素里）
+    'is not permitted by the IP allow list.': '未獲 IP 允許清單允許。',
+    'not permitted by the IP allow list.': '未獲 IP 允許清單允許。',
+    'is permitted by the IP allow list.': '已獲 IP 允許清單允許。',
+
+    // OAuth 应用：「You can list your application in the <a>GitHub Marketplace</a> so that other users can discover it.」
+    'You can list your application in the': '你可以將應用程式上架到',
+    'List this application in the Marketplace': '將此應用程式上架到市集',
+    'Hex color code': '十六進位色碼',
+    'Hex colors should only contain numbers and letters from a-f': '十六進位色碼只能包含數字和字母 a-f',
     'I understand the consequences, delete this GitHub App': '我瞭解後果，刪除此 GitHub 應用程式',
     'Make this GitHub App public': '將此 GitHub 應用程式設為公開',
     'Allow this GitHub App to be installed on other accounts.': '允許在其他帳號上安裝此 GitHub 應用程式。',
@@ -312,8 +374,13 @@ export default {
     // 「Disabling this option is <a>not recommended</a>.」
     'not recommended': '不建議',
     'Recent deliveries': '最近傳遞',
+    'Recent Deliveries': '最近傳遞',
     Response: '回應',
     Redeliver: '重新傳遞',
+    // 重新傳遞過的紀錄的標記、確認對話框
+    redelivery: '重新傳遞',
+    'Redeliver payload?': '重新傳遞承載？',
+    'Yes, redeliver this payload': '是，重新傳遞此承載',
     Headers: '標頭',
     Payload: '承載',
 
@@ -326,10 +393,16 @@ export default {
     'Check IP address': '檢查 IP 位址',
     'Enter an IP address to check whether it is permitted by enabled entries on the IP allow list.':
       '輸入 IP 位址以檢查 IP 允許清單中已啟用的項目是否允許該位址。',
-    'Crop your new avatar': '裁切新頭像',
-    'Set new avatar': '設定新頭像',
-    'Your avatar has been updated. It may take a few minutes to update across the site.': '頭像已更新。全站更新可能需要幾分鐘。',
-    'This avatar has been deleted.': '已刪除此頭像。',
+    // 应用标志的上传、裁切、删除（avatar 指应用标志）
+    'Crop your new avatar': '裁切新標誌',
+    'Set new avatar': '設定新標誌',
+    'Your avatar has been updated. It may take a few minutes to update across the site.': '標誌已更新。全站更新可能需要幾分鐘。',
+    'This avatar has been deleted.': '已刪除此標誌。',
+    'Delete this image': '刪除此標誌',
+    'Key pairs': '金鑰組',
+    'New key': '新增金鑰',
+    'Short description': '簡短描述',
+    'contact GitHub': '聯絡 GitHub',
     'Uploading...': '上傳中...',
     'Uploading…': '上傳中…',
     // 「Are you sure you want to revoke <strong>all</strong> user tokens for this application?」
@@ -356,6 +429,16 @@ export default {
     ],
     [/^(\d+) accounts?$/, '$1 個帳號'],
     [/^(\d+) users?$/, '$1 位使用者'],
+    // 用户端密码、私密金钥：「Added just now by <a>octocat</a>」
+    [new RegExp(`^Added (${TIME_SOURCE}) by$`), (_, time: string) => joinCjk(translateTime(time), '新增，新增者')],
+    // 检查 IP 位址的结果
+    [/^(\S+) is not permitted by the IP allow list\.$/, '$1 未獲 IP 允許清單允許。'],
+    [/^(\S+) is permitted by the IP allow list\.$/, '$1 已獲 IP 允許清單允許。'],
+    // 被 GitHub 暂停的应用
+    [
+      new RegExp(`^This GitHub App was suspended by GitHub staff on (${SUSPEND_TIME_SOURCE})\\.$`),
+      (_, time: string) => `此 GitHub 應用程式已於 ${translateSuspendTime(time)}遭 GitHub 工作人員暫停。`
+    ],
     // 客户端密钥：「Added 3 days ago by octocat」
     [
       new RegExp(`^Added (${TIME_SOURCE}) by ([\\w-]+)$`),
@@ -366,5 +449,12 @@ export default {
     [/^Choose a feature to activate for (.+):$/, '選擇要為 $1 啟用的功能：'],
     // 最近传递：传递耗时（与存储库 Web 钩子一致）
     [/^Completed in ([\d.]+) seconds?(\.?)$/, (_, seconds: string, dot: string) => `耗時 ${seconds} 秒${dot ? '。' : ''}`]
+  ],
+  // 删除 GitHub 应用对话框：整句调整语序，未命中时按 static 的片段译文
+  inline: [
+    ['This will also uninstall the GitHub App from {}.', '這也會從 {}解除安裝此 GitHub 應用程式。'],
+    // OAuth 应用的使用者数：「<span>0</span> users」
+    ['{#} users', '{#} 位使用者'],
+    ['{#} user', '{#} 位使用者']
   ]
 } satisfies PageDictionary

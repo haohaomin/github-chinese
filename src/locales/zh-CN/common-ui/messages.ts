@@ -23,6 +23,7 @@ export default {
     Updating: '更新中',
     'Updating...': '更新中...',
     'Creating...': '创建中...',
+    'Creating…': '创建中…',
     Deleting: '删除中',
     Submitting: '提交中',
     'Submitting…': '提交中…',

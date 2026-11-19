@@ -39,7 +39,7 @@ export default {
     'Explore topics': '探索主题',
 
     // 集合
-    'Curated lists and insight into burgeoning industries, topics, and communities.': '精选列表，以及对新兴行业、主题和社区的见解。',
+    'Curated lists and insight into burgeoning industries, topics, and communities.': '精选列表，以及对新兴行业、主题和社区的洞察。',
     'Open Source, AI & Coding Repo Collections on GitHub': 'GitHub 上的开源、AI 与编程存储库集合'
   },
   scoped: {

@@ -133,6 +133,10 @@ describe('detectPages', () => {
     ['https://github.com/enterprises/acme/settings/security_analysis', ['common']],
     ['https://github.com/enterprises/acme/constructor', ['common']],
     ['https://github.com/organizations/vuejs/settings/security_products', ['common', 'org-settings']],
+    // 组织拥有的应用设置页叠加 org-apps，组织 Web 钩子页不叠加
+    ['https://github.com/organizations/vuejs/settings/apps/my-app/advanced', ['common', 'org-settings', 'org-apps']],
+    ['https://github.com/organizations/vuejs/settings/applications/123/advanced', ['common', 'org-settings', 'org-apps']],
+    ['https://github.com/organizations/vuejs/settings/hooks/1', ['common', 'org-settings']],
     // 个人主页的项目标签页
     ['https://github.com/octocat?tab=projects', ['common', 'profile', 'organization', 'projects']],
     ['https://github.com/octocat?tab=projects&query=is%3Aopen', ['common', 'profile', 'organization', 'projects']],

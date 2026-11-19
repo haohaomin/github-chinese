@@ -215,7 +215,7 @@ export default {
     // 侧栏与筛选（组织软件包页侧栏：Packages 标题下的 GitHub Packages、Linked artifacts）
     Packages: '软件包',
     'GitHub Packages': 'GitHub 软件包',
-    'Linked artifacts': '链接的工件',
+    'Linked artifacts': '链接的产物',
     'Type:': '类型：',
     'Select type': '选择类型',
     'Close type options': '关闭类型选项',
@@ -285,9 +285,9 @@ export default {
     'Add Repository': '添加存储库',
     'Add repository': '添加存储库',
     'Add repositories': '添加存储库',
-    'Invite teams or people': '邀请团队或成员',
+    'Invite teams or people': '邀请团队或人员',
     // Invite teams or people to <strong>name</strong>
-    'Invite teams or people to': '邀请团队或成员访问',
+    'Invite teams or people to': '邀请团队或人员访问',
     'Search by username, full name, or email': '按用户名、全名或电子邮件搜索',
     'Confirm you want to remove this user': '确认移除此用户',
     'Role:': '角色：',

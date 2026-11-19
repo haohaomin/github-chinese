@@ -87,7 +87,7 @@ const STATIC_CASES: readonly (readonly [string, Pair])[] = [
     'Play video. Thumbnail description: What is GitHub Secret Protection?',
     ['播放视频。缩略图说明：什么是 GitHub 机密保护？', '播放影片。縮圖說明：什麼是 GitHub 機密保護？']
   ],
-  ['Supply-chain Levels for Software Artifacts (SLSA)', ['软件工件供应链级别 (SLSA)', '軟體成品供應鏈等級 (SLSA)']],
+  ['Supply-chain Levels for Software Artifacts (SLSA)', ['软件产物供应链级别 (SLSA)', '軟體成品供應鏈等級 (SLSA)']],
   [
     'GitHub’s API stays secure with ISO, SOC 2, and GDPR.',
     ['GitHub 的 API 符合 ISO、SOC 2 和 GDPR 要求，始终安全。', 'GitHub 的 API 符合 ISO、SOC 2 和 GDPR 規範，安全無虞。']
@@ -107,7 +107,7 @@ const STATIC_CASES: readonly (readonly [string, Pair])[] = [
   ['Learn more about GitHub security risk assessments', ['了解 GitHub 安全风险评估', '瞭解 GitHub 安全性風險評估']],
   [
     'GitHub Actions and Artifact Attestations greatly simplify the journey to SLSA Level 3',
-    ['GitHub 操作和工件证明可大大简化达到 SLSA 级别 3 的过程', 'GitHub 動作和成品證明可大幅簡化達成 SLSA 等級 3 的過程']
+    ['GitHub 操作和产物证明可大大简化达到 SLSA 级别 3 的过程', 'GitHub 動作和成品證明可大幅簡化達成 SLSA 等級 3 的過程']
   ],
   ['empowers our developers', ['为我们的开发人员提供有力支持', '為我們的開發人員提供強大助力']],
   ['GitHub security risk assessments', ['GitHub 安全风险评估', 'GitHub 安全性風險評估']]
@@ -506,7 +506,7 @@ describe.each(LOCALES)('$name 安全产品介绍页', ({ index, full }) => {
     ])
     expect(shown('a-risk')).toBe(
       t([
-        '机密风险评估免费提供组织在其 GitHub 存储库中机密泄露情况的全面概览。它通过分析存储库中暴露的机密，帮助管理员和开发人员了解自身面临的潜在安全风险，并提供可付诸行动的修复见解。了解 GitHub 安全风险评估。',
+        '机密风险评估免费提供组织在其 GitHub 存储库中机密泄露情况的全面概览。它通过分析存储库中暴露的机密，帮助管理员和开发人员了解自身面临的潜在安全风险，并提供可付诸行动的修复洞察。了解 GitHub 安全风险评估。',
         '機密風險評估會免費提供組織在其 GitHub 儲存庫中機密外洩情況的全面總覽。它會分析儲存庫中暴露的機密，協助管理員和開發人員瞭解自身面臨的潛在安全性風險，並提供可據以修復的實用洞察。瞭解 GitHub 安全性風險評估。'
       ])
     )
@@ -517,7 +517,7 @@ describe.each(LOCALES)('$name 安全产品介绍页', ({ index, full }) => {
     expect(shown('a-features')).toBe(t(JOINED_CASES[0]![1]))
     expect(shown('a-slsa')).toBe(
       t([
-        '软件工件供应链级别 (SLSA) 是一个框架，用于在软件工件的整个开发生命周期中提升其端到端完整性。它提供一套全面、循序渐进的方法，帮助你在软件供应链中建立完整性和来源保证。SLSA 级别 3 代表经过显著加固的软件供应链：构建高度隔离、源代码历史记录经过验证、来源受到严格控制，从而有力防范篡改，确保软件工件的完整性。GitHub 操作和工件证明可大大简化达到 SLSA 级别 3 的过程。',
+        '软件产物供应链级别 (SLSA) 是一个框架，用于在软件产物的整个开发生命周期中提升其端到端完整性。它提供一套全面、循序渐进的方法，帮助你在软件供应链中建立完整性和来源保证。SLSA 级别 3 代表经过显著加固的软件供应链：构建高度隔离、源代码历史记录经过验证、来源受到严格控制，从而有力防范篡改，确保软件产物的完整性。GitHub 操作和产物证明可大大简化达到 SLSA 级别 3 的过程。',
         '軟體成品供應鏈等級 (SLSA) 是一套架構，用於在軟體成品的整個開發生命週期中提升其端對端完整性。它提供一套全面且循序漸進的方法，協助你在軟體供應鏈中建立完整性和來源保證。SLSA 等級 3 代表經過大幅強化的軟體供應鏈：建置高度隔離、原始碼歷史記錄經過驗證、來源受到嚴格控管，能有效防範竄改，確保軟體成品的完整性。GitHub 動作和成品證明可大幅簡化達成 SLSA 等級 3 的過程。'
       ])
     )

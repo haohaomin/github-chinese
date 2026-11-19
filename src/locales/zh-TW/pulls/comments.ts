@@ -50,8 +50,8 @@ function commentLabel(text: string, suffix = ''): string {
 
 /**
  * 评论面板与批次管理：新版“已更改的文件”与概述页的评论列表（筛选、排序、空状态、线程预览与标题）、
- * 评论操作（隐藏、最小化、编辑历史记录）、批次管理面板（提交建议、交给 Copilot 修复）、工件标签页、堆栈详细信息、单文件模式提示。
- * comment 作「留言」（量词「則」），thread 作「討論串」，artifact 作「成品」，Newest / Oldest first 作「由新到舊 / 由舊到新」。
+ * 评论操作（隐藏、最小化、编辑历史记录）、批次管理面板（提交建议、交给 Copilot 修复）、附件标签页、堆栈详细信息、单文件模式提示。
+ * comment 作「留言」（量词「則」），thread 作「討論串」，artifact 作「附件」，Newest / Oldest first 作「由新到舊 / 由舊到新」。
  */
 export default {
   static: {
@@ -137,13 +137,13 @@ export default {
       '此批次包含可提交建議以外的項目，因此無法提交。',
     'Manage batch action mode': '管理批次動作模式',
 
-    // 工件标签页
-    'Loading artifacts…': '正在載入成品…',
-    'Unable to load artifacts': '無法載入成品',
-    'No artifacts yet': '尚無成品',
-    'Artifacts created for this pull request will appear here': '為此拉取請求建立的成品會顯示在這裡',
-    'Artifact not found': '找不到成品',
-    'Select an artifact from the sidebar': '從側邊欄選取成品'
+    // 附件标签页
+    'Loading artifacts…': '正在載入附件…',
+    'Unable to load artifacts': '無法載入附件',
+    'No artifacts yet': '尚無附件',
+    'Artifacts created for this pull request will appear here': '為此拉取請求建立的附件會顯示在這裡',
+    'Artifact not found': '找不到附件',
+    'Select an artifact from the sidebar': '從側邊欄選取附件'
   },
   scoped: {
     'No comments yet': '尚無留言',

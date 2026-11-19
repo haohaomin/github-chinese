@@ -10,7 +10,7 @@ import type { PageDictionary } from '../../../core/types'
  * Codespaces / codespace → 代码空间、Pages → 页面、Advanced Security → 高级安全、Secret Protection → 机密保护、
  * Models → 模型、Marketplace → 市场、Sponsors → 赞助、Packages → 软件包、Beta → 测试版；带 GitHub 前缀的全名同样译出
  * 后半部分（GitHub 操作、GitHub 页面、GitHub 高级安全、GitHub 公告数据库）；Copilot 功能名译出后半部分
- * （Copilot 代码审查、Copilot 云代理、Copilot 编码代理、Copilot 自动修复）。原文只写 Actions 而指整个产品的句子
+ * （Copilot 代码审查、Copilot 云端智能体、Copilot 编码智能体、Copilot 自动修复）。原文只写 Actions 而指整个产品的句子
  * 补上 GitHub 前缀（禁用 GitHub 操作）。只有自造品牌词（GitHub、Git、Copilot、Dependabot、CodeQL）与技术词
  * （OIDC、MCP、Wiki、LFS 等）保留英文。方案名 Free / Pro / Pro+ / Team / Enterprise / Business →
  * 免费版 / 专业版 / 专业增强版 / 团队版 / 企业版 / 商业版，品牌前缀保留（GitHub 团队版、Copilot 商业版）。
@@ -29,21 +29,21 @@ export default {
     'Email notifications': '电子邮件通知',
     'Autolink references': '自动链接引用',
     'MCP servers': 'MCP 服务器',
-    'Agent suggestions for issues': '议题的代理建议',
+    'Agent suggestions for issues': '议题的智能体建议',
 
     // 标签页标题片段
     'Actions settings': '操作设置',
     'Actions policies': '操作策略',
-    'Actions policy insights': '操作策略见解',
+    'Actions policy insights': '操作策略洞察',
     'Actions secrets': '操作机密',
     'Actions variables': '操作变量',
     'Add Actions secret': '添加操作机密',
     'Add Actions variable': '添加操作变量',
-    'Agents secrets': '代理机密',
-    'Agents variables': '代理变量',
-    'Agents secrets and variables': '代理机密和变量',
-    'Add Agents secret': '添加代理机密',
-    'Add Agents variable': '添加代理变量',
+    'Agents secrets': '智能体机密',
+    'Agents variables': '智能体变量',
+    'Agents secrets and variables': '智能体机密和变量',
+    'Add Agents secret': '添加智能体机密',
+    'Add Agents variable': '添加智能体变量',
     'Codespaces secrets': '代码空间机密',
     'Add Codespaces secret': '添加代码空间机密',
     'Dependabot secrets': 'Dependabot 机密',
@@ -79,10 +79,10 @@ export default {
     Rulesets: '规则集',
     Runners: '运行器',
     Policies: '策略',
-    'Policy insights': '策略见解',
+    'Policy insights': '策略洞察',
     Webhooks: 'Web 钩子',
-    'Coding agent': '编码代理',
-    'Cloud agent': '云代理',
+    'Coding agent': '编码智能体',
+    'Cloud agent': '云端智能体',
     Cloud: '云端',
     'Internet access': '互联网访问',
     Planning: '规划',
@@ -97,8 +97,8 @@ export default {
     'Secrets and variables': '机密和变量',
     'Private registries': '专用注册表',
     'GitHub Apps': 'GitHub 应用',
-    'Rule insights': '规则见解',
-    'Rule Insights': '规则见解'
+    'Rule insights': '规则洞察',
+    'Rule Insights': '规则洞察'
   },
   regexp: [
     // 侧栏标题（读屏）：Settings: owner/repo

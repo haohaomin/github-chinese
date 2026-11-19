@@ -233,6 +233,9 @@ const REPO_SUBPAGE: Readonly<Record<string, readonly PageKey[]>> = {
   'pull/agent-sessions': ['pulls', 'copilot']
 }
 
+/** 组织设置下的应用设置页（/organizations/<组织>/settings/apps/*、applications/*）：在 org-settings 上叠加 org-apps */
+const ORG_APP_SECTIONS: ReadonlySet<string> = new Set(['apps', 'applications'])
+
 /** /organizations/ 下不是组织名的二级段 */
 const ORGANIZATIONS_PAGES = new Set(['new', 'plan', 'enterprise_plan'])
 
@@ -260,7 +263,8 @@ function detectOwnerScope(kind: string, parts: readonly string[]): readonly Page
     if (section === 'repositories' && parts[3] === 'new') return ['new']
     // 组织计划页与个人设置的计划页同一组件
     if (section === 'billing') return ['settings', 'org-settings']
-    return section === 'settings' ? ['org-settings'] : ['organization']
+    if (section !== 'settings') return ['organization']
+    return ORG_APP_SECTIONS.has(parts[3] ?? '') ? ['org-settings', 'org-apps'] : ['org-settings']
   }
   const base: PageKey = kind === 'users' ? 'profile' : 'organization'
   return [base, ...(own(OWNER_SECTION, section) ?? [])]

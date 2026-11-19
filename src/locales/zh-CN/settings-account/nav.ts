@@ -73,8 +73,8 @@ export default {
     'Blocked users': '已阻止的用户',
     'Interaction limits': '交互限制',
     'Code review limits': '代码审查限制',
-    'Coding agent': '编码代理',
-    'Cloud agent': '云代理',
+    'Coding agent': '编码智能体',
+    'Cloud agent': '云端智能体',
     // Copilot 下的子菜单项（与存储库设置一致）
     Cloud: '云端',
     Memory: '记忆',
@@ -84,6 +84,10 @@ export default {
     Codespaces: '代码空间',
     Applications: '应用',
     'Scheduled reminders': '预定提醒',
+    // 规划分组（与组织设置一致）
+    Planning: '规划',
+    'Issue types': '议题类型',
+    'Issue fields': '议题字段',
     'Developer settings': '开发人员设置',
     'Developer Settings': '开发人员设置'
   },

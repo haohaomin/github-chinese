@@ -4,7 +4,7 @@ import type { PageDictionary } from '../../../core/types'
 const ENTITY_TYPES: Readonly<Record<string, string>> = { enterprise: '企业', organization: '组织' }
 
 /**
- * 组织 Copilot 设置：访问（席位分配）、策略、模型、云代理（存储库访问、合作伙伴代理、互联网访问、
+ * 组织 Copilot 设置：访问（席位分配）、策略、模型、云端智能体（存储库访问、合作伙伴智能体、互联网访问、
  * 运行器类型）、代码审查、内容排除、Copilot Memory 管理。
  * 与个人 Copilot 设置、存储库 Copilot 设置同名的条目放 scoped；
  * 个人设置、存储库设置已收录为 static 的策略名、审查力度文案等不再重复，译法以那里为准。
@@ -121,17 +121,17 @@ export default {
     'Save runner selection': '保存运行器选择',
     'Allow repositories to customize the runner type': '允许存储库自定义运行器类型',
 
-    // 合作伙伴代理
-    'Partner agents': '合作伙伴代理',
+    // 合作伙伴智能体
+    'Partner agents': '合作伙伴智能体',
     'Allow automations': '允许自动化',
 
-    // 编码代理 / 云代理：存储库访问
+    // 编码智能体 / 云端智能体：存储库访问
     'Choose which repositories Copilot coding agent should be enabled in. Copilot coding agent will only be available where it is enabled for the repository and in the Copilot license policies.':
-      '选择要在哪些存储库中启用 Copilot 编码代理。只有在存储库和 Copilot 许可证策略中都已启用的地方，才能使用 Copilot 编码代理。',
+      '选择要在哪些存储库中启用 Copilot 编码智能体。只有在存储库和 Copilot 许可证策略中都已启用的地方，才能使用 Copilot 编码智能体。',
     'Choose which repositories Coding agent should be enabled in. Coding agent will only be available where it is enabled for the repository and in the Copilot license policies.':
-      '选择要在哪些存储库中启用编码代理。只有在存储库和 Copilot 许可证策略中都已启用的地方，才能使用编码代理。',
+      '选择要在哪些存储库中启用编码智能体。只有在存储库和 Copilot 许可证策略中都已启用的地方，才能使用编码智能体。',
     'Choose which repositories Copilot cloud agent should be enabled in. Copilot cloud agent will only be available where it is enabled for the repository and in the Copilot license policies.':
-      '选择要在哪些存储库中启用 Copilot 云代理。只有在存储库和 Copilot 许可证策略中都已启用的地方，才能使用 Copilot 云代理。',
+      '选择要在哪些存储库中启用 Copilot 云端智能体。只有在存储库和 Copilot 许可证策略中都已启用的地方，才能使用 Copilot 云端智能体。',
 
     // 策略、模型
     'Configure custom models': '配置自定义模型',
@@ -164,8 +164,8 @@ export default {
       '启用后，用户将看到对部分 Copilot 功能提供反馈的选项。',
     'If enabled, users can test new Copilot features that are not yet generally available. Be aware that previews of features may have flaws, and the features may be changed or discontinued at any time.':
       '启用后，用户可以试用尚未正式发布的 Copilot 新功能。请注意，预览功能可能存在缺陷，并可能随时更改或停用。',
-    'Agent apps': '代理应用',
-    // 状态用“已+动词”，与规则集见解一致
+    'Agent apps': '智能体应用',
+    // 状态用“已+动词”，与规则集洞察一致
     Allowed: '已允许',
     Blocked: '已阻止',
     Unconfigured: '未配置',
@@ -197,7 +197,7 @@ export default {
     Max: '最高',
     Auto: '自动',
 
-    // 云代理（与存储库设置共用）
+    // 云端智能体（与存储库设置共用）
     'No repositories': '无存储库',
     'Only selected repositories': '仅选定的存储库',
     'Enable firewall': '启用防火墙',
@@ -272,9 +272,9 @@ export default {
     'Review effort': '审查力度',
     'Default (Balanced)': '默认（均衡）',
 
-    // 云代理、内容排除
-    'Coding agent policies': '编码代理策略',
-    'Third-party agents': '第三方代理',
+    // 云端智能体、内容排除
+    'Coding agent policies': '编码智能体策略',
+    'Third-party agents': '第三方智能体',
     Firewall: '防火墙',
     Allowlist: '允许列表',
     'Paths to exclude': '要排除的路径',

@@ -120,7 +120,7 @@ function removedParts(removed: string): string {
 
 /**
  * Copilot 代理会话日志：工具调用标题与汇总、计划审查、权限请求、问答、差异面板、后台 shell / 子代理、
- * 取消 / 超时 / 出错状态、工件预览、内置工具（Playwright、GitHub MCP、Slack、Teams）的显示名。
+ * 取消 / 超时 / 出错状态、附件预览、内置工具（Playwright、GitHub MCP、Slack、Teams）的显示名。
  */
 export default {
   static: {
@@ -354,11 +354,11 @@ export default {
     'Failed to apply a changeset update.': '無法套用變更集更新。',
     'Failed to subscribe to the changeset.': '無法訂閱變更集。',
 
-    // 工件与预览
-    'Task artifacts': '任務成品',
-    'Show artifacts': '顯示成品',
-    'Hide artifacts': '隱藏成品',
-    'This artifact is unavailable': '此成品無法使用',
+    // 附件与预览
+    'Task artifacts': '任務附件',
+    'Show artifacts': '顯示附件',
+    'Hide artifacts': '隱藏附件',
+    'This artifact is unavailable': '此附件無法使用',
     'Azure DevOps resource': 'Azure DevOps 資源',
     'No preview available for this file.': '此檔案無法預覽。',
     'Unable to load the latest content for this file.': '無法載入此檔案的最新內容。',
@@ -565,7 +565,7 @@ export default {
     [/^(.+) output is no longer updating\.$/, '$1 輸出已停止更新。'],
     [/^Open (.+) output$/, '開啟 $1 輸出'],
     [/^Preview of (.+)$/, '$1 的預覽'],
-    [/^(\d+) new artifacts? available\.$/, '有 $1 個新成品可用。'],
+    [/^(\d+) new artifacts? available\.$/, '有 $1 個新附件可用。'],
     [/^Unable to submit messages?$/, '無法送出訊息'],
     [/^Copilot finished the session before it could pick up (?:this|these) messages?$/, 'Copilot 在處理訊息前已結束工作階段']
   ],

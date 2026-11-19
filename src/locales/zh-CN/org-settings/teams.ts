@@ -9,7 +9,7 @@ import type { PageDictionary } from '../../../core/types'
 export default {
   static: {
     // 团队列表（无团队时的介绍）
-    'Seamless communication with teams': '团队间无缝沟通',
+    'Seamless communication with teams': '借助团队无缝沟通',
     'Teams are a great way for groups of people to communicate and work on code together. Take a look at why they’re great.':
       '团队是一群人沟通并协作处理代码的好方式。看看团队的优势。',
     "Teams are a great way for groups of people to communicate and work on code together. Take a look at why they're great.":

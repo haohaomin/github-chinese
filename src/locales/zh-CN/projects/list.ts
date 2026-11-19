@@ -57,7 +57,7 @@ export default {
     'Welcome to Projects': '欢迎使用项目',
     'Welcome to projects': '欢迎使用项目',
     'Built to be flexible and adaptable, Projects gives you a live canvas to filter, sort, and group issues and pull requests in a table, board, or roadmap. Tailor them to your needs with custom fields, saved views, workflows, and insights.':
-      '项目灵活且适应性强，为你提供实时画布，可在表格、看板或路线图中筛选、排序和分组议题与拉取请求。可使用自定义字段、已保存的视图、工作流和见解按需定制。',
+      '项目灵活且适应性强，为你提供实时画布，可在表格、看板或路线图中筛选、排序和分组议题与拉取请求。可使用自定义字段、已保存的视图、工作流和洞察按需定制。',
     // 较早的介绍文案
     'Built like a spreadsheet, project tables give you a live canvas to filter, sort, and group issues and pull requests. Tailor them to your needs with custom fields and saved views.':
       '项目表格如同电子表格，为你提供实时画布，可对议题和拉取请求进行筛选、排序和分组。还可通过自定义字段和已保存的视图按需定制表格。',
@@ -70,7 +70,7 @@ export default {
     // 复制项目对话框
     'Copy project': '复制项目',
     'Make a copy of this project that can be used as a starting point for another project.': '创建此项目的副本作为其他项目的起点。',
-    'Views, custom fields, insights, and workflows will be copied.': '将复制视图、自定义字段、见解和工作流。',
+    'Views, custom fields, insights, and workflows will be copied.': '将复制视图、自定义字段、洞察和工作流。',
     'Issues and pull requests will not be copied.': '不会复制议题和拉取请求。',
     'Draft issues will be copied if selected': '勾选后将复制草稿议题',
     'Owner for the new project': '新项目的所有者',

@@ -115,6 +115,7 @@ export const PERMISSION_TITLES: Readonly<Record<string, string>> = {
   'Enterprise billing': '企業帳務',
   'Enterprise bypass requests': '企業繞過請求',
   'Enterprise Copilot metrics': '企業 Copilot 指標',
+  'Enterprise Copilot license management': '企業 Copilot 授權管理',
   'Enterprise credentials': '企業認證資訊',
   'Enterprise custom organization roles': '企業自訂組織角色',
   'Enterprise custom properties for organizations': '企業的組織自訂屬性',
@@ -594,6 +595,7 @@ export default {
     'View organization custom properties and administer definitions at the enterprise level.': '在企業層級查看組織自訂屬性並管理屬性定義。',
     'View and manage innersource vulnerabilities across the enterprise': '查看並管理整個企業的內部開源漏洞',
     'View and manage the enterprise license policy': '查看並管理企業授權條款政策',
+    'View Copilot subscription information and manage enterprise Copilot licenses': '查看 Copilot 訂閱資訊並管理企業 Copilot 授權',
     'Manage repository access of GitHub Apps on Enterprise-owned organizations. Requesting this permission will prevent it from being installed on other enterprises.':
       '管理企業擁有的組織中 GitHub 應用程式的儲存庫存取權。請求此權限後，該應用程式將無法安裝到其他企業。',
     'Manage installation of GitHub Apps on Enterprise-owned organizations. Requesting this permission will prevent it from being installed on other enterprises.':

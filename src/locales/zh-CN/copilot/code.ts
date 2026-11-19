@@ -1,6 +1,6 @@
 import type { PageDictionary } from '../../../core/types'
 
-/** 编码代理时间线事件的动作 */
+/** 编码智能体时间线事件的动作 */
 const WORK_EVENT: Readonly<Record<string, string>> = {
   started: '开始工作',
   finished: '完成了工作',
@@ -92,10 +92,10 @@ export default {
     'go to settings': '请转到设置',
     'For more information, see the': '详情请参阅',
     'Fix the selected review comments with Copilot cloud agent. You will be added as co-author on any new commits.':
-      '使用 Copilot 云代理修复所选审查评论。你将成为所有新提交的共同作者。',
+      '使用 Copilot 云端智能体修复所选审查评论。你将成为所有新提交的共同作者。',
     'Additional instructions': '附加说明',
     'Add additional instructions...': '添加附加说明...',
-    'View agent session': '查看代理会话',
+    'View agent session': '查看智能体会话',
     'Comments to fix': '待修复的评论',
     'Suggested changeset': '建议的变更集',
     'Fixing…': '修复中…',
@@ -137,15 +137,15 @@ export default {
     'Configure coding tools': '配置编程工具',
     'Copilot avatar': 'Copilot 头像',
     'Start new session': '开始新会话',
-    // 代码审查与编码代理
+    // 代码审查与编码智能体
     'Request review from Copilot': '请求 Copilot 审查',
     'Re-request review from Copilot': '重新请求 Copilot 审查',
     'Assign to Copilot': '分配给 Copilot',
-    'Coding agent': '编码代理',
-    // 编码代理创建的拉取请求：时间线事件（单个文本节点时）、经典对话页评论区的提示
+    'Coding agent': '编码智能体',
+    // 编码智能体创建的拉取请求：时间线事件（单个文本节点时）、经典对话页评论区的提示
     'Copilot started work': 'Copilot 开始工作',
     'Mention @copilot in a comment to make changes to this pull request.': '在评论中提及 @copilot 以更改此拉取请求。',
-    // 编码代理会话状态
+    // 编码智能体会话状态
     'Copilot is done': 'Copilot 已完成',
     'Copilot has failed': 'Copilot 已失败',
 
@@ -179,7 +179,7 @@ export default {
       (_, reviewed: string, total: string, comments: string) =>
         `Copilot 审查了此拉取请求 ${total} 个已更改文件中的 ${reviewed} 个，${comments === 'no' ? '未生成评论' : `生成了 ${comments} 条评论`}。`
     ],
-    // 编码代理的时间线事件（原文无标点，出错原因并入句中）
+    // 编码智能体的时间线事件（原文无标点，出错原因并入句中）
     [
       /^Copilot (started|finished|stopped) work on behalf of ([\w-]+)( due to an error)?$/,
       (_, verb: string, user: string, error = '') => `Copilot 代表 ${user} ${error ? '因出错' : ''}${WORK_EVENT[verb] ?? verb}`

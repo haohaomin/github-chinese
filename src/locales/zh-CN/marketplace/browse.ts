@@ -10,7 +10,7 @@ import { joinCjk } from '../helpers'
 
 /** 侧栏类别名 */
 export const CATEGORIES: Readonly<Record<string, string>> = {
-  'Agent apps': '代理应用',
+  'Agent apps': '智能体应用',
   'AI Assisted': 'AI 辅助',
   'API management': 'API 管理',
   'Backup Utilities': '备份工具',

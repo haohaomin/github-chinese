@@ -179,7 +179,7 @@ export default {
     'Files changed': '已更改的文件',
     Walkthrough: '导览',
     Findings: '发现',
-    Artifacts: '工件',
+    Artifacts: '附件',
 
     // 标题与分支
     "Title can't be blank": '标题不能为空',

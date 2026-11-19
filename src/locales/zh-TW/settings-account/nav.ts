@@ -87,6 +87,10 @@ export default {
     Codespaces: '程式碼空間',
     Applications: '應用程式',
     'Scheduled reminders': '排定的提醒',
+    // 规划分组（与组织设置一致）
+    Planning: '規劃',
+    'Issue types': '議題類型',
+    'Issue fields': '議題欄位',
     'Developer settings': '開發人員設定',
     'Developer Settings': '開發人員設定'
   },

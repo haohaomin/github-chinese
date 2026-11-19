@@ -140,7 +140,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       [
         'No files were found with the provided path: dist/. No artifacts will be uploaded.',
-        '在提供的路径中未找到文件：dist/。不会上传任何工件。'
+        '在提供的路径中未找到文件：dist/。不会上传任何产物。'
       ]
     ],
     misses: ['No files were found with the provided path: dist/']
@@ -382,7 +382,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     ],
     misses: ['Copy ubuntu-22.04']
   },
-  { hits: [['Insights: octo-org/hello-world', '见解：octo-org/hello-world']], misses: ['Insights: octo-org'] },
+  { hits: [['Insights: octo-org/hello-world', '洞察：octo-org/hello-world']], misses: ['Insights: octo-org'] },
   { hits: [['Showing data from 2026/10/1 to', '数据时段 2026/10/1 至']], misses: ['Showing data from to'] },
   {
     hits: [
@@ -784,7 +784,7 @@ describe('actions 静态词条', () => {
     ['All jobs', '所有作业'],
     ['Run details', '运行详细信息'],
     ['Workflow file', '工作流文件'],
-    ['Agentic Workflow file', '代理工作流文件'],
+    ['Agentic Workflow file', '智能体工作流文件'],
     ['Re-run all jobs', '重新运行所有作业'],
     ['Re-run failed jobs', '重新运行失败的作业'],
     ['Re-running...', '重新运行中...'],
@@ -792,11 +792,11 @@ describe('actions 静态词条', () => {
     ['Re-running jobs...', '正在重新运行作业...'],
     ['Re-running jobs…', '正在重新运行作业…'],
     ['A new attempt of this workflow will be started, including', '将启动此工作流的新尝试，包括'],
-    ['and dependents:', '及其依赖作业：'],
+    ['and dependents:', '及其下游作业：'],
     ['Total duration', '总时长'],
     ['Billable time', '计费时间'],
     ['Produced during runtime', '运行期间生成'],
-    ['Copy artifact digest', '复制工件摘要'],
+    ['Copy artifact digest', '复制产物摘要'],
     ['This run and associated checks have been archived and are scheduled for deletion.', '此运行及相关检查已存档并计划删除。'],
     ['Oh hello! Nice to see you.', '你好呀！很高兴见到你。'],
     ['This workflow is', '此工作流正在'],
@@ -896,7 +896,7 @@ describe('actions 页面词条', () => {
     ['Usage', '使用情况'],
     ['Jobs', '作业'],
     ['Annotations', '注释'],
-    ['Artifacts', '工件'],
+    ['Artifacts', '产物'],
     ['Digest', '摘要'],
     ['Event', '事件'],
     ['Actor', '参与者'],
@@ -974,7 +974,7 @@ describe('actions 页面词条', () => {
     expect(['This workflow is', 'awaiting approval', 'from a maintainer in'].map(translate)).toEqual([
       '此工作流正在',
       '等待维护者批准',
-      '所在拉取请求'
+      '于拉取请求'
     ])
   })
 
@@ -986,7 +986,7 @@ describe('actions 页面词条', () => {
     expect(matcher.translate('Pin ci', ['common', 'repository'])).toBeUndefined()
     expect(matcher.translate('Not found', ['common', 'repository'])).toBeUndefined()
     expect(matcher.translate('Branch:', ['common', 'repository', 'commits'])).toBeUndefined()
-    // 组织见解的指标页（organization）没有时长规则，<1s 与 45s 一样保留原文
+    // 组织洞察的指标页（organization）没有时长规则，<1s 与 45s 一样保留原文
     expect(matcher.translate('<1s', ['common', 'organization'])).toBeUndefined()
   })
 })

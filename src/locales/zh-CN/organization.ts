@@ -5,7 +5,7 @@ import reposFilter from './organization/repos-filter'
 import reposList from './organization/repos-list'
 
 /**
- * 组织页与个人存储库列表（/repos）：组织头部与概述、人员、团队、项目列表、关注者、赞助、见解，
+ * 组织页与个人存储库列表（/repos）：组织头部与概述、人员、团队、项目列表、关注者、赞助、洞察，
  * 以及两处共用的 React 存储库列表与筛选框。
  * 「Repositories」「Projects」「Teams」「Insights」「Settings」「Discussions」由 common 收录；
  * 个人主页与组织主页共用的词条（Overview、Packages、Pinned、followers 等）在 profile 词典。

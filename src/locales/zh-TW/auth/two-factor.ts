@@ -219,7 +219,7 @@ export default {
     'SMS/Text message': '簡訊',
     'Recovery options': '復原選項',
     'Two-factor methods': '雙重驗證方式',
-    'SMS number': '簡訊號碼',
+    'SMS number': '手機號碼',
     Passkeys: '密碼金鑰',
     Emails: '電子郵件',
     'Verified emails': '已驗證的電子郵件',

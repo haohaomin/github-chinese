@@ -5,7 +5,7 @@ import { translateOptionName } from './templates'
 /**
  * 项目（新版 Projects）：工作流。
  * 默认工作流名称、工作流编辑器（触发条件、操作块、筛选器校验）、自动添加 / 自动存档确认、
- * 代理自动分配、看板列上的工作流指示。
+ * 智能体自动分配、看板列上的工作流指示。
  */
 
 /** 默认工作流名称（服务端数据，可被用户改名） */
@@ -101,14 +101,14 @@ export default {
     'Maximum number of auto-add workflows reached. Delete a workflow or upgrade your plan to continue.':
       '自动添加工作流数量已达上限。删除工作流或升级计划后才能继续。',
 
-    // 代理自动分配（原文没有的逗号不加）
-    'Auto-assign issues to agent': '自动将议题分配给代理',
-    'Assigns maximum 5 agents at once. Respects column limits.': '一次最多分配 5 个代理。遵守列上限。',
-    'The agent assigned to work on issues in this project': '负责处理此项目议题的代理',
+    // 智能体自动分配（原文没有的逗号不加）
+    'Auto-assign issues to agent': '自动将议题分配给智能体',
+    'Assigns maximum 5 agents at once. Respects column limits.': '一次最多分配 5 个智能体。遵守列上限。',
+    'The agent assigned to work on issues in this project': '负责处理此项目议题的智能体',
     'The configured model is no longer available. Future auto-assign runs will use the default model until a valid model is selected.':
       '已配置的模型不再可用。选择有效模型之前自动分配将使用默认模型。',
     'Source column': '来源列',
-    'Auto-assign to agent': '自动分配给代理',
+    'Auto-assign to agent': '自动分配给智能体',
     'Auto-assign enabled': '自动分配已启用',
     'Auto-assign disabled': '自动分配已禁用',
     'Add auto-assign workflow': '添加自动分配工作流',
@@ -129,15 +129,15 @@ export default {
     'Filter contains invalid syntax': '筛选器包含无效语法',
     'Close the issue': '关闭议题',
     'Save and enable': '保存并启用',
-    'Assign agent': '分配代理',
+    'Assign agent': '分配智能体',
     'starts and moves to': '开始并移到',
-    'The AI model used by the agent to complete work': '代理完成工作所用的 AI 模型',
+    'The AI model used by the agent to complete work': '智能体完成工作所用的 AI 模型',
     'Select a repository to choose a specific model': '选择存储库后才能指定模型',
     'Filter models': '筛选模型',
-    'The repository the agent will work in. Set to auto-detect from the issue': '代理工作的存储库。设为根据议题自动检测',
+    'The repository the agent will work in. Set to auto-detect from the issue': '智能体工作的存储库。设为根据议题自动检测',
     'Set by issue': '由议题决定',
-    'Additional instructions for this agent': '给此代理的附加说明',
-    'Provide additional instructions for the agent': '为代理提供附加说明',
+    'Additional instructions for this agent': '给此智能体的附加说明',
+    'Provide additional instructions for the agent': '为智能体提供附加说明',
     'Prompt cannot be longer than 4000 characters': '提示不能超过 4000 个字符',
     Workflows: '工作流',
     'is added': '已添加',

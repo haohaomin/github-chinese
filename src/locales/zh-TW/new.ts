@@ -308,7 +308,7 @@ const base = {
     'Specify an organization or username': '指定組織或使用者名稱',
     'and accepts the transfer, they will lose access to private repository features:': '並接受轉移，將無法再使用下列私人儲存庫功能：',
     // 其后是 and <strong>Forks</strong>：「和」前不加顿号
-    'Pulse, Contributors, Community, Traffic, Commits, Code Frequency, Network,': '脈動、貢獻者、社群、流量、提交、程式碼頻率、網路',
+    'Pulse, Contributors, Community, Traffic, Commits, Code Frequency, Network,': '統計、貢獻者、社群、流量、提交、程式碼頻率、網路',
     'Multiple assignees': '多位負責人',
     'Multiple reviewers': '多位審查者',
     'Branch and tag protection rules': '分支和標記保護規則',

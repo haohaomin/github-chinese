@@ -317,7 +317,7 @@ describe('common 正则词条', () => {
     expect(join(['Limit of ', '50', ' saved searches reached. Please delete an existing saved search before creating a new one.'])).toBe(
       '已达到 50 个已保存搜索的上限。请先删除现有的已保存搜索再创建新的。'
     )
-    expect(join(['Start a task with ', 'Copilot cloud agent'])).toBe('使用 Copilot 云代理开始任务')
+    expect(join(['Start a task with ', 'Copilot cloud agent'])).toBe('使用 Copilot 云端智能体开始任务')
     expect(join(['(', 'g then d', ')'])).toBe('（g 再按 d）')
     expect(join(['Requested ', '3 days', ' ago'])).toBe('3天前申请')
     // Copilot 预算横幅：<strong> 前后的文字各自拼接
@@ -422,8 +422,8 @@ describe('common 静态词条', () => {
     ['Code security', '代码安全'],
     ['Copilot Chat', 'Copilot 聊天'],
     ['Open Copilot Chat (immersive mode)', '打开 Copilot 聊天（沉浸模式）'],
-    ['Copilot cloud agent', 'Copilot 云代理'],
-    ['Learn more about Copilot cloud agent', '了解 Copilot 云代理'],
+    ['Copilot cloud agent', 'Copilot 云端智能体'],
+    ['Learn more about Copilot cloud agent', '了解 Copilot 云端智能体'],
     ['Free', '免费版'],
     // Copilot 菜单的计划标签（教育福利身份选项 Student 由 settings-account 的 scoped 译“学生”）
     ['Student', '学生版'],
@@ -578,7 +578,7 @@ describe('common 全局产品名（整包词典）', () => {
     ['GitHub Packages', 'GitHub 软件包'],
     ['GitHub Models', 'GitHub 模型'],
     ['Advanced Security', '高级安全'],
-    ['Copilot coding agent', 'Copilot 编码代理'],
+    ['Copilot coding agent', 'Copilot 编码智能体'],
     ['Copilot Code review', 'Copilot 代码审查'],
     ['GitHub Stars', 'GitHub 之星'],
     ['Beta', '测试版'],

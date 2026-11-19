@@ -296,14 +296,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
-      [
-        'Your request for GitHub Team was declined by an admin on Oct 3, 2025.',
-        '你对 GitHub 团队版的请求已于 2025年10月3日被管理员拒绝。'
-      ],
-      [
-        'Your request for Advanced Security was declined by an admin on Oct 3, 2025.',
-        '你对高级安全的请求已于 2025年10月3日被管理员拒绝。'
-      ]
+      ['Your request for GitHub Team was declined by an admin on Oct 3, 2025.', '你对 GitHub 团队版的请求已于 2025年10月3日被管理员拒绝。'],
+      ['Your request for Advanced Security was declined by an admin on Oct 3, 2025.', '你对高级安全的请求已于 2025年10月3日被管理员拒绝。']
     ],
     misses: ['Your request for GitHub Team was declined by an admin.']
   },
@@ -601,9 +595,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['Amount based on usage.']
   },
   {
-    hits: [
-      ['Amount based on 12 billable licenses, due by October 31, 2026.', '金额按 12 个可计费许可证计算，应于 2026年10月31日前支付。']
-    ],
+    hits: [['Amount based on 12 billable licenses, due by October 31, 2026.', '金额按 12 个可计费许可证计算，应于 2026年10月31日前支付。']],
     misses: ['Amount based on 12 billable licenses, due by the end of the month.']
   },
   { hits: [['$19.00/month each', '每个 $19.00/月']], misses: ['19.00/month each'] },
@@ -1212,6 +1204,30 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [
+      ['Added just now by', '刚刚添加，添加者'],
+      ['Added 3 days ago by', '3天前添加，添加者']
+    ],
+    misses: ['Added by']
+  },
+  {
+    hits: [['203.0.113.7 is not permitted by the IP allow list.', '203.0.113.7 未获 IP 允许列表允许。']],
+    misses: ['is not permitted by the IP allow list']
+  },
+  {
+    hits: [['203.0.113.0/24 is permitted by the IP allow list.', '203.0.113.0/24 已获 IP 允许列表允许。']],
+    misses: ['This address is permitted by the IP allow list']
+  },
+  {
+    hits: [
+      [
+        'This GitHub App was suspended by GitHub staff on October 1st, 2026 at 00:36 (CST).',
+        '此 GitHub 应用已于 2026年10月1日 00:36（CST）被 GitHub 工作人员暂停。'
+      ]
+    ],
+    misses: ['This GitHub App was suspended by GitHub staff.']
+  },
+  {
+    hits: [
       ['Added 3 days ago by octocat', '3天前由 octocat 添加'],
       ['Added yesterday by octocat', '昨天由 octocat 添加']
     ],
@@ -1545,7 +1561,7 @@ describe('org-settings 页面词条', () => {
     ['Close all open issues, pull requests, and discussions opened by this user', '关闭此用户创建的所有议题、拉取请求和讨论'],
     ['Enforced', '已强制实施'],
     ['Copilot usage metrics', 'Copilot 使用情况指标'],
-    ['Dependency insights', '依赖项见解'],
+    ['Dependency insights', '依赖项洞察'],
     ['Metered billing via Azure', '通过 Azure 进行按流量计费'],
     ['Email recipients', '电子邮件收件人'],
     ['Emails', '电子邮件']
@@ -1851,7 +1867,7 @@ describe('org-settings 页面词条', () => {
   })
 
   it.each([
-    ['Artifact metadata', '工件元数据'],
+    ['Artifact metadata', '产物元数据'],
     ['Organization IP allow list', '组织 IP 允许列表'],
     ['Branch protection rule', '分支保护规则'],
     ['Watching', '关注'],

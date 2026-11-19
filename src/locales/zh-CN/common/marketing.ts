@@ -32,7 +32,7 @@ export default {
     'AI CODE CREATION': 'AI 代码创作',
     'Write better code with AI': '借助 AI 写出更好的代码',
     'GitHub Copilot app': 'GitHub Copilot 应用',
-    'Direct agents from issue to merge': '从议题到合并全程指挥代理',
+    'Direct agents from issue to merge': '从议题到合并全程指挥智能体',
     'MCP Registry': 'MCP 注册表',
     'MCP Registry (New)': 'MCP 注册表（新）',
     'Integrate external tools': '集成外部工具',
@@ -75,7 +75,7 @@ export default {
     'GitHub Models': 'GitHub 模型',
     'GitHub Code Quality': 'GitHub 代码质量',
     'Advanced Security': '高级安全',
-    'Copilot coding agent': 'Copilot 编码代理',
+    'Copilot coding agent': 'Copilot 编码智能体',
     'Copilot Code review': 'Copilot 代码审查',
     'Premium support': '高级支持',
     // 社区项目页脚的 GitHub Stars 计划（与星标无关）
@@ -130,7 +130,7 @@ export default {
     'Events & webinars': '活动与网络研讨会',
     'Ebooks & reports': '电子书与报告',
     'Ebooks & Whitepapers': '电子书与白皮书',
-    'Business insights': '商业见解',
+    'Business insights': '商业洞察',
     'GitHub Skills': 'GitHub 技能',
     'SUPPORT & SERVICES': '支持与服务',
     'Customer support': '客户支持',
@@ -176,8 +176,8 @@ export default {
 
     // 新版导航（信息架构改版）。分组标题 Build 与 Actions 作业名等用户内容同形，不收录
     Products: '产品',
-    'AI coding agent for tasks, projects and automated work': '面向任务、项目和自动化工作的 AI 编码代理',
-    'AI coding agent for tasks, projects, and automated work': '面向任务、项目和自动化工作的 AI 编码代理',
+    'AI coding agent for tasks, projects and automated work': '面向任务、项目和自动化工作的 AI 编码智能体',
+    'AI coding agent for tasks, projects, and automated work': '面向任务、项目和自动化工作的 AI 编码智能体',
     'Developer articles': '开发人员文章',
     'Copilot for business': 'Copilot 商业版',
     'Cloud development environments': '云端开发环境',

@@ -8,7 +8,7 @@ import { DATE_SOURCE, joinCjk, translateTime } from '../helpers'
 export default {
   static: {
     'Dependency graph': '依赖项关系图',
-    'Dependency Insights menu': '依赖项见解菜单',
+    'Dependency Insights menu': '依赖项洞察菜单',
     Dependencies: '依赖项',
     Dependents: '被依赖',
     'Network Dependents': '被依赖',
@@ -32,12 +32,12 @@ export default {
     'Show dependency options': '显示依赖项选项',
     'No dependencies found.': '未找到依赖项。',
     // To view your dependency graph, … define dependencies in <one of the supported manifest file types>, like …
-    'To view your dependency graph, your repository must define dependencies in': '要查看依赖项关系图，存储库须在以下文件中定义依赖项',
+    'To view your dependency graph, your repository must define dependencies in': '要查看依赖项关系图，存储库须将依赖项定义在',
     'Detect additional dependencies with GitHub Actions': '使用 GitHub 操作检测更多依赖项',
     // … GitHub Actions adds your dependencies using the <dependency submission API> so you can receive …
     'Not all dependencies are automatically detected for ecosystems like Gradle. GitHub Actions adds your dependencies using the':
-      'Gradle 等生态系统的依赖项并非都能被自动检测。GitHub 操作可通过以下接口添加依赖项',
-    'so you can receive Dependabot alerts for known vulnerabilities.': '以便接收已知漏洞的 Dependabot 警报。',
+      'Gradle 等生态系统的依赖项并非都能被自动检测。GitHub 操作可使用',
+    'so you can receive Dependabot alerts for known vulnerabilities.': '添加依赖项，以便接收已知漏洞的 Dependabot 警报。',
     'View in Marketplace': '在市场中查看',
     // These dependencies are defined in <owner/repo>’s manifest files, such as …
     'These dependencies are defined in': '这些依赖项定义在',
@@ -115,7 +115,7 @@ export default {
     'Recent jobs': '最近的作业'
   },
   scoped: {
-    'one of the supported manifest file types': '支持的清单文件类型之一',
+    'one of the supported manifest file types': '任一受支持的清单文件中',
     ', like': '，例如',
     'dependency submission API': '依赖项提交 API',
     'dependency graph': '依赖项关系图',

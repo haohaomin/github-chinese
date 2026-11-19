@@ -234,7 +234,7 @@ describe.skipIf(!App)('设置页：更新时间着色', () => {
 
   it('开关默认关闭；「文字颜色」分浅色、深色两组（各按 GitHub 该主题的配色），三个时段默认为空、显示默认颜色，关闭时不可用', async () => {
     const { scope } = await render()
-    expect(scope.findAll('h2').map(item => item.text())).toEqual(['时段范围', '文字颜色', '背景色'])
+    expect(scope.findAll('h2').map(item => item.text())).toEqual(['时段范围', '文字颜色', '背景颜色'])
     expect(switchOf(scope, '更新时间着色').attributes('aria-checked')).toBe('false')
     expect(scope.findAll('h3').map(item => item.text())).toEqual(['浅色', '深色'])
     for (const scheme of FRESHNESS_SCHEMES) {
@@ -613,7 +613,7 @@ describe.skipIf(!App)('设置页：更新时间着色', () => {
     expect(add.element.disabled).toBe(true)
   })
 
-  it('背景色：默认关闭；开启后各时段（含更早）可改，名称按文字颜色加背景色预览', async () => {
+  it('背景颜色：默认关闭；开启后各时段（含更早）可改，名称按文字颜色加背景色预览', async () => {
     await settingsItem.setValue({ ...ZH_SETTINGS, freshness: true })
     const { scope } = await render()
     const toggle = switchOf(scope, '启用')
@@ -627,7 +627,7 @@ describe.skipIf(!App)('设置页：更新时间着色', () => {
     expect(groupLabels(scope, 'background-light')).toEqual(['30 天内', '365 天内', '更早'])
     const success = FRESHNESS_PREVIEW_COLORS.success.background.light
     const row = backgroundField(scope, 'light', '0')
-    expect(labelledBy(hex(row).element)).toBe('背景色 浅色 30 天内')
+    expect(labelledBy(hex(row).element)).toBe('背景颜色 浅色 30 天内')
     expect(label(row).element.style.color).toBe(cssColor(PREVIEW.fresh.light))
     expect(label(row).element.style.backgroundImage).toBe(cssImage(`linear-gradient(${success}, ${success})`))
     // 文字颜色一组也带上背景色
@@ -642,5 +642,30 @@ describe.skipIf(!App)('设置页：更新时间着色', () => {
 
     await commitHex(backgroundField(scope, 'dark', 'stale'), '#30363d')
     expect((await getSettings()).freshnessRanges.stale.background).toEqual({ light: '', dark: '#30363d' })
+  })
+
+  it('分时段范围、时间着色两个标签；添加时段在「时段范围」标题右侧；时段列表固定为最多行数的高度', async () => {
+    await settingsItem.setValue({ ...ZH_SETTINGS, freshness: true })
+    const { scope } = await render()
+    const tablist = scope.get('[role="tablist"][aria-label="更新时间着色"]')
+    const tabs = tablist.findAll('[role="tab"]')
+    expect(tabs.map(item => item.text())).toEqual(['时段范围', '时间着色'])
+    expect(tabs.map(item => item.attributes('aria-selected'))).toEqual(['true', 'false'])
+    const panelOf = (index: number): Element => document.getElementById(tabs[index]!.attributes('aria-controls') ?? '')!
+    expect(panelOf(0).contains(scope.get('[data-test="freshness-ranges"]').element)).toBe(true)
+    expect(panelOf(1).contains(scope.get('[data-test="freshness-text-light"]').element)).toBe(true)
+    expect(panelOf(1).contains(scope.get('[data-test="freshness-background"]').element)).toBe(true)
+
+    const head = scope.get('[data-test="freshness-add"]').element.parentElement!
+    expect(head.classList.contains('section-head')).toBe(true)
+    expect(head.querySelector('h2')?.textContent).toBe('时段范围')
+    expect(scope.get<HTMLElement>('[data-test="freshness-ranges"]').element.style.getPropertyValue('--ranges-rows')).toBe(
+      String(MAX_FRESHNESS_RANGES + 1)
+    )
+
+    await tabs[1]!.trigger('click')
+    await settle()
+    expect(tabs.map(item => item.attributes('aria-selected'))).toEqual(['false', 'true'])
+    expect((panelOf(0) as HTMLElement).hidden || (panelOf(0) as HTMLElement).style.display === 'none').toBe(true)
   })
 })

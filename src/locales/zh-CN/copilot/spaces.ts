@@ -28,7 +28,7 @@ export default {
     'Create and share a custom Copilot experience using a collection of GitHub repositories, files, and other content.':
       '使用一组 GitHub 存储库、文件和其他内容，创建并分享自定义的 Copilot 体验。',
     'Spaces lets you create shared research environments where you and your team can collaborate, explore topics, and exchange insights—all powered by AI-driven search and summarization.':
-      '借助空间，你可以创建共享的研究环境，与团队一起协作、探索主题并交流见解——这一切都由 AI 驱动的搜索和总结提供支持。',
+      '借助空间，你可以创建共享的研究环境，与团队一起协作、探索主题并交流洞察——这一切都由 AI 驱动的搜索和总结提供支持。',
 
     // 新建空间
     'New Space': '新建空间',

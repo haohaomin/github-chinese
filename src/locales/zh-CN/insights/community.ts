@@ -1,6 +1,6 @@
 import type { PageDictionary } from '../../../core/types'
 
-/** 社区标准（/community）、社区见解图（/graphs/community）、见解功能升级提示 */
+/** 社区标准（/community）、社区洞察图（/graphs/community）、洞察功能升级提示 */
 export default {
   static: {
     'Community standards': '社区标准',
@@ -32,19 +32,19 @@ export default {
     'Writing contributing guidelines': '编写贡献指南',
     'Choosing a license': '选择许可证',
 
-    // 专用存储库的见解功能
+    // 专用存储库的洞察功能
     'Upgrade to GitHub Pro or make this repository public to enable this feature.':
       '升级到 GitHub 专业版或将此存储库设为公共以启用此功能。',
     'Contact an administrator to upgrade to GitHub Team or make this repository public to enable this feature.':
       '请联系管理员升级到 GitHub 团队版或将此存储库设为公共以启用此功能。',
     'We want to know how these insights are helping you and where they could be improved.':
-      '我们想了解这些见解对你有何帮助以及哪些地方可以改进。',
+      '我们想了解这些洞察对你有何帮助以及哪些地方可以改进。',
 
-    // 社区见解图（启用讨论的存储库）
-    'Enable Discussions to unlock Community Insights!': '启用讨论以解锁社区见解！',
+    // 社区洞察图（启用讨论的存储库）
+    'Enable Discussions to unlock Community Insights!': '启用讨论以解锁社区洞察！',
     'Discussions is the central space for your community to share announcements, ask questions, and host conversations.':
       '讨论是社区发布公告、提问和交流的中心空间。',
-    'Community insights': '社区见解',
+    'Community insights': '社区洞察',
     'Count of total contribution activity to Discussions, Issues, and PRs': '讨论、议题和 PR 中的贡献活动总数',
     'We tried our best, but the graph wouldn’t load. Try reloading the page.': '图表无法加载，请尝试重新加载页面。',
     "We tried our best, but the graph wouldn't load. Try reloading the page.": '图表无法加载，请尝试重新加载页面。',
@@ -52,7 +52,7 @@ export default {
     'Total page views to Discussions segmented by logged in vs anonymous users.': '按已登录用户与匿名用户区分的讨论页面总浏览量。',
     'Not enough data yet.': '数据尚不足。',
     'It usually takes about a week to populate this chart.': '通常需要约一周时间才能生成此图表。',
-    'Read more about insights': '了解见解',
+    'Read more about insights': '了解洞察',
     'Discussions daily contributors': '讨论每日贡献者',
     'Count of unique users who have reacted, upvoted, marked an answer, commented, or posted in the selected period.':
       '所选时间段内做出反应、投票、标记答案、评论或发帖的独立用户数。',

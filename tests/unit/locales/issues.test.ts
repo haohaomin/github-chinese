@@ -79,14 +79,14 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['Alert: ']
   },
   { hits: [['View pull request #77', '查看拉取请求 #77']], misses: ['View pull request #abc'] },
-  { hits: [['Agents assigned by octocat', '由 octocat 分配的代理']], misses: ['Agents assigned by Mona Lisa'] },
+  { hits: [['Agents assigned by octocat', '由 octocat 分配的智能体']], misses: ['Agents assigned by Mona Lisa'] },
   // viewer：头部代理会话摘要
   {
     hits: [
       ['1 session running', '1 个会话运行中'],
       ['2 sessions needs input, 1 failed', '2 个会话需要输入，1 个失败'],
       ['3 sessions complete, 2 others', '3 个会话已完成，其他 2 个'],
-      ['Agent sessions: 1 session needs input, 1 other', '代理会话：1 个会话需要输入，其他 1 个']
+      ['Agent sessions: 1 session needs input, 1 other', '智能体会话：1 个会话需要输入，其他 1 个']
     ],
     misses: ['1 session paused', '2 sessions running, 1 paused']
   },
@@ -189,8 +189,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['Applied type Bug']
   },
   { hits: [['duplicate of octo-org/octo-repo#12', '重复于 octo-org/octo-repo#12']], misses: ['duplicate of #12'] },
-  // viewer：工件
-  { hits: [['Edit artifact: Design spec', '编辑工件：Design spec']], misses: ['Edit artifact Design spec'] },
+  // viewer：附件
+  { hits: [['Edit artifact: Design spec', '编辑附件：Design spec']], misses: ['Edit artifact Design spec'] },
   { hits: [['More actions for Design spec', 'Design spec 的更多操作']], misses: ['More actions for'] },
 
   // timeline：锁定
@@ -1446,7 +1446,7 @@ describe('issues 静态词条', () => {
     ['Could not delete the issue. Please try again.', '无法删除议题。请重试。'],
     ['Link could not be added. Try again.', '无法添加链接。请重试。'],
     ['Issue transfer has started. This action might take a while.', '议题转移已开始。此操作可能需要一些时间。'],
-    ['Unable to reorder artifact. Previous order restored.', '无法调整工件顺序。已恢复原顺序。'],
+    ['Unable to reorder artifact. Previous order restored.', '无法调整附件顺序。已恢复原顺序。'],
     // 经典页的四项写法、首字母大写变体、置顶与删除提示
     ["Won't fix, can't repro, duplicate, stale", '不修复、无法复现、重复、已过时'],
     ['Reopen Issue', '重新打开议题'],
@@ -1470,7 +1470,7 @@ describe('issues 静态词条', () => {
     // 产品名按用户要求译成中文（product-names.md）：codespace → 代码空间、Copilot Chat → Copilot 聊天
     [
       'Start a codespace with Copilot agent mode for this issue in another repository.',
-      '在其他存储库中为此议题启动使用 Copilot 代理模式的代码空间。'
+      '在其他存储库中为此议题启动使用 Copilot 智能体模式的代码空间。'
     ],
     ['Unable to load Copilot Chat. Ensure Copilot is enabled.', '无法加载 Copilot 聊天。请确认已启用 Copilot。'],
     // 项目项（item → 项）
@@ -1478,7 +1478,7 @@ describe('issues 静态词条', () => {
     // 开发分区说明、分配代理对话框的默认标题
     ['Shows branches and pull requests linked to this issue.', '显示链接到此议题的分支和拉取请求。'],
     ['Search for branches or pull requests', '搜索分支或拉取请求'],
-    ['Assign agent to issue', '将代理分配给议题'],
+    ['Assign agent to issue', '将智能体分配给议题'],
     // create
     ['Choose an Issue Template', '选择议题模板'],
     ['Blank issue', '空白议题'],
@@ -2169,7 +2169,7 @@ const GAP_CASES: readonly (readonly [string, string, string])[] = [
   ['deleted this from', '从以下位置删除了此议题', '從以下位置刪除了此議題'],
   // metadata
   ['Assign Copilot to issue', '将 Copilot 分配给议题', '將 Copilot 指派給議題'],
-  ['Assign agent to issue', '将代理分配给议题', '將代理指派給議題'],
+  ['Assign agent to issue', '将智能体分配给议题', '將代理指派給議題'],
   ['Change branch source', '更改分支来源', '變更分支來源'],
   ['Link a pull request from this repository', '链接此存储库中的拉取请求', '連結此儲存庫中的拉取請求'],
   // create
@@ -2220,7 +2220,7 @@ const GAP_SCOPE_CASES: readonly (readonly [readonly PageKey[], string, string | 
   ],
   [['common', 'repository', 'repo-settings'], 'Add template:', '添加模板：', '新增範本：'],
   [['common', 'repository', 'releases'], 'Preview and edit', '预览并编辑', '預覽並編輯'],
-  [['common', 'repository', 'copilot'], 'Assign agent to issue', '将代理分配给议题', '將代理指派給議題'],
+  [['common', 'repository', 'copilot'], 'Assign agent to issue', '将智能体分配给议题', '將代理指派給議題'],
   [['common', 'repository', 'pulls'], 'as', undefined, undefined],
   [['common', 'repository', 'pulls'], 'select', undefined, undefined]
 ]

@@ -23,7 +23,7 @@ export default {
     'Collaborate securely on public and private projects.': '在公共和专用项目上安全协作。',
     'Boost code quality with built-in review tools.': '使用内置审查工具提升代码质量。',
     'Save time with CI/CD integrations and GitHub Actions.': '借助 CI/CD 集成和 GitHub 操作节省时间。',
-    'Connect with developers worldwide for instant feedback and insights.': '与全球开发人员交流，即时获取反馈和见解。',
+    'Connect with developers worldwide for instant feedback and insights.': '与全球开发人员交流，即时获取反馈和洞察。',
 
     // 注册表单
     'Already have an account?': '已有帐户？',

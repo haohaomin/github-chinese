@@ -86,7 +86,7 @@ function sessionRest(count: string | undefined, name: string | undefined): strin
 
 /**
  * 议题详情页：头部（标题、状态、导航、吸顶头部）、正文头部、关闭 / 重新打开、议题操作（锁定、固定、转移、
- * 转为讨论、删除、克隆）、通知设置、活动筛选、代理建议、工件、错误与登录提示。
+ * 转为讨论、删除、克隆）、通知设置、活动筛选、代理建议、附件、错误与登录提示。
  * 侧栏元数据见 metadata.ts，时间线事件见 timeline.ts。
  */
 export default {
@@ -299,29 +299,29 @@ export default {
     // 产品名按用户要求译成中文（product-names.md）：Copilot Chat → Copilot 聊天（与 projects/items.ts 同句一致）
     'Unable to load Copilot Chat. Ensure Copilot is enabled.': '無法載入 Copilot 聊天。請確認已啟用 Copilot。',
 
-    // 工件
-    'Collapse artifacts': '摺疊成品',
-    'Expand artifacts': '展開成品',
-    'Add artifact': '新增成品',
-    'Create artifact': '建立成品',
-    'Create HTML artifact': '建立 HTML 成品',
-    'Create new artifact': '建立新成品',
-    'Edit artifact': '編輯成品',
-    'Saving artifact': '正在儲存成品',
-    'Creating artifact': '正在建立成品',
-    'Artifact title': '成品標題',
-    'Invalid artifact name': '成品名稱無效',
-    'Unable to update artifact': '無法更新成品',
-    'Unable to create artifact': '無法建立成品',
-    'Artifact updated successfully.': '已更新成品。',
-    'Artifact could not be updated. Try again.': '無法更新成品。請再試一次。',
-    'Artifact could not be created. Try again.': '無法建立成品。請再試一次。',
+    // 附件
+    'Collapse artifacts': '摺疊附件',
+    'Expand artifacts': '展開附件',
+    'Add artifact': '新增附件',
+    'Create artifact': '建立附件',
+    'Create HTML artifact': '建立 HTML 附件',
+    'Create new artifact': '建立新附件',
+    'Edit artifact': '編輯附件',
+    'Saving artifact': '正在儲存附件',
+    'Creating artifact': '正在建立附件',
+    'Artifact title': '附件標題',
+    'Invalid artifact name': '附件名稱無效',
+    'Unable to update artifact': '無法更新附件',
+    'Unable to create artifact': '無法建立附件',
+    'Artifact updated successfully.': '已更新附件。',
+    'Artifact could not be updated. Try again.': '無法更新附件。請再試一次。',
+    'Artifact could not be created. Try again.': '無法建立附件。請再試一次。',
     'Use up to 255 characters: letters, numbers, spaces, periods, hyphens, or underscores. Start and end with a letter or number.':
       '最多 255 個字元：字母、數字、空格、句點、連字號或底線。開頭和結尾必須是字母或數字。',
     'HTML source': 'HTML 原始碼',
     'Paste HTML source...': '貼上 HTML 原始碼...',
     'Write markdown...': '撰寫 Markdown...',
-    'Unable to reorder artifact. Previous order restored.': '無法調整成品順序。已還原先前的順序。',
+    'Unable to reorder artifact. Previous order restored.': '無法調整附件順序。已還原先前的順序。',
     'Link could not be updated. Try again.': '無法更新連結。請再試一次。',
     'Link could not be added. Try again.': '無法新增連結。請再試一次。'
   },
@@ -425,8 +425,8 @@ export default {
     'Duplicate of': '重複於',
     'duplicate of': '重複於',
 
-    // 工件
-    Artifacts: '成品',
+    // 附件
+    Artifacts: '附件',
     'Add link': '新增連結',
     'Edit link': '編輯連結',
     'Saving link': '正在儲存連結',
@@ -507,8 +507,8 @@ export default {
       (_, field, value, rationale) => `${joinCjk('已套用', suggestionField(field))}：${value}${rationale ? '。查看理由' : ''}`
     ],
     [/^duplicate of ([\w.-]+\/[\w.-]+#\d+)$/, '重複於 $1'],
-    // 工件
-    [/^Edit artifact: (.+)$/, '編輯成品：$1'],
+    // 附件
+    [/^Edit artifact: (.+)$/, '編輯附件：$1'],
     [/^More actions for (.+)$/, '$1 的更多動作']
   ]
 } satisfies PageDictionary

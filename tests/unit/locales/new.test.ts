@@ -420,7 +420,7 @@ describe('new 静态词条', () => {
     ['Continue with Team', '选择团队版'],
     ['I understand, transfer this repository.', '我已了解，转让此存储库。'],
     ['Transfer repository', '转让存储库'],
-    ['Pulse, Contributors, Community, Traffic, Commits, Code Frequency, Network,', '脉搏、贡献者、社区、流量、提交、代码频率、网络'],
+    ['Pulse, Contributors, Community, Traffic, Commits, Code Frequency, Network,', '统计、贡献者、社区、流量、提交、代码频率、网络'],
     ['You’ve been invited to the', '你已受邀加入'],
     ["You've been invited to the", '你已受邀加入'],
     ['Accept invitation', '接受邀请'],
@@ -442,9 +442,7 @@ describe('new 静态词条', () => {
       translate(
         'Support for importing Mercurial, Subversion and Team Foundation Version Control (TFVC) repositories ended on April 12, 2024. For more details, see the'
       )
-    ).toBe(
-      '已于 2024年4月12日停止支持导入 Mercurial、Subversion 和 Team Foundation Version Control (TFVC) 存储库。有关详细信息，请参阅'
-    )
+    ).toBe('已于 2024年4月12日停止支持导入 Mercurial、Subversion 和 Team Foundation Version Control (TFVC) 存储库。有关详细信息，请参阅')
   })
 
   it('完整句子全站生效', () => {
@@ -577,7 +575,7 @@ describe('new 页面专用词条', () => {
     ['Everything included in Team, plus…', '包含团队版的全部功能，另加…'],
     [
       'Enforce branch and tag protections, as well as push rules across your enterprise. Rule insights allow you to assess impact of rules before and during enforcement.',
-      '在整个企业中强制实施分支和标签保护以及推送规则。规则见解可帮助你在强制实施前和强制实施期间评估规则的影响。'
+      '在整个企业中强制实施分支和标签保护以及推送规则。规则洞察可帮助你在强制实施前和强制实施期间评估规则的影响。'
     ]
   ])('%s → %s', (input, expected) => {
     expect(translate(input)).toBe(expected)
@@ -595,9 +593,9 @@ describe('new 页面专用词条', () => {
     }
   })
 
-  it('产品名译成中文：Copilot 云代理、商业版，GitHub 代码空间、操作、市场', () => {
-    expect(translate('About Copilot cloud agent')).toBe('关于 Copilot 云代理')
-    expect(translate('About Copilot coding agent')).toBe('关于 Copilot 编码代理')
+  it('产品名译成中文：Copilot 云端智能体、商业版，GitHub 代码空间、操作、市场', () => {
+    expect(translate('About Copilot cloud agent')).toBe('关于 Copilot 云端智能体')
+    expect(translate('About Copilot coding agent')).toBe('关于 Copilot 编码智能体')
     expect(translate('Get GitHub Copilot Business in this organization')).toBe('在此组织中使用 GitHub Copilot 商业版')
     expect(translate('GitHub Codespaces Access')).toBe('GitHub 代码空间访问权限')
     expect(translate('Access to GitHub Codespaces')).toBe('可使用 GitHub 代码空间')

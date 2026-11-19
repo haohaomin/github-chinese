@@ -27,10 +27,13 @@ const MONTH_NUMBERS: Readonly<Record<string, number>> = {
   dec: 12
 }
 
-/** 令牌页的日期格式：“Tue, Nov 25 2025”（不含捕获组） */
-export const WEEKDAY_DATE_SOURCE = `(?:Sun|Mon|Tue|Wed|Thu|Fri|Sat), ${MONTH_SOURCE} \\d{1,2},? \\d{4}`
+/** 星期：缩写或全称（Sun / Sunday） */
+const WEEKDAY_SOURCE = '(?:Sun(?:day)?|Mon(?:day)?|Tue(?:sday)?|Wed(?:nesday)?|Thu(?:rsday)?|Fri(?:day)?|Sat(?:urday)?)'
 
-const WEEKDAY_DATE_RE = new RegExp(`^(Sun|Mon|Tue|Wed|Thu|Fri|Sat), (${MONTH_SOURCE}) (\\d{1,2}),? (\\d{4})$`)
+/** 令牌页的日期格式：“Tue, Nov 25 2025”“Sunday, December 20, 2026”（不含捕获组） */
+export const WEEKDAY_DATE_SOURCE = `${WEEKDAY_SOURCE}, ${MONTH_SOURCE} \\d{1,2},? \\d{4}`
+
+const WEEKDAY_DATE_RE = new RegExp(`^(${WEEKDAY_SOURCE}), (${MONTH_SOURCE}) (\\d{1,2}),? (\\d{4})$`)
 
 /** 令牌日期：带星期 → 2025年11月25日周二；其余交给 translateTime */
 export function translateTokenDate(text: string): string {
@@ -38,7 +41,7 @@ export function translateTokenDate(text: string): string {
   if (!match) return translateTime(text)
   const month = MONTH_NUMBERS[match[2]!.slice(0, 3).toLowerCase()]
   if (month === undefined) return text
-  return `${formatDate(Number(match[4]), month, Number(match[3]))}${WEEKDAYS[match[1]!] ?? ''}`
+  return `${formatDate(Number(match[4]), month, Number(match[3]))}${WEEKDAYS[match[1]!.slice(0, 3)] ?? ''}`
 }
 
 const ANY_DATE_SOURCE = `(?:${WEEKDAY_DATE_SOURCE}|${DATE_SOURCE})`
@@ -62,9 +65,75 @@ function policyOwner(name: string): string {
 }
 
 /**
+ * 经典令牌的作用域代码 → 说明（与作用域说明的译文一致）。
+ * 只用于令牌列表：每个令牌后的作用域代码按用户要求显示为中文说明；新建、编辑表单里的代码仍保留英文
+ */
+const SCOPE_NAMES: Readonly<Record<string, string>> = {
+  repo: '完全控制专用存储库',
+  'repo:status': '访问提交状态',
+  repo_deployment: '访问部署状态',
+  public_repo: '访问公共存储库',
+  'repo:invite': '访问存储库邀请',
+  security_events: '读写安全事件',
+  workflow: '更新 GitHub 操作工作流',
+  'write:packages': '向 GitHub 软件包注册表上传软件包',
+  'read:packages': '从 GitHub 软件包注册表下载软件包',
+  'delete:packages': '从 GitHub 软件包注册表删除软件包',
+  'admin:org': '完全控制组织和团队，读写组织项目',
+  'write:org': '读写组织和团队成员身份，读写组织项目',
+  'read:org': '读取组织和团队成员身份，读取组织项目',
+  'manage_runners:org': '管理组织运行器和运行器组',
+  'admin:public_key': '完全控制用户公钥',
+  'write:public_key': '写入用户公钥',
+  'read:public_key': '读取用户公钥',
+  'admin:repo_hook': '完全控制存储库 Web 钩子',
+  'write:repo_hook': '写入存储库 Web 钩子',
+  'read:repo_hook': '读取存储库 Web 钩子',
+  'admin:org_hook': '完全控制组织 Web 钩子',
+  gist: '创建代码片段',
+  notifications: '访问通知',
+  user: '更新所有用户数据',
+  'read:user': '读取所有用户个人资料数据',
+  'user:email': '访问用户电子邮件地址（只读）',
+  'user:follow': '关注和取消关注用户',
+  delete_repo: '删除存储库',
+  'write:discussion': '读写团队讨论',
+  'read:discussion': '读取团队讨论',
+  'admin:enterprise': '完全控制企业',
+  'manage_runners:enterprise': '管理企业运行器和运行器组',
+  'manage_billing:enterprise': '读写企业计费数据',
+  'read:enterprise': '读取企业个人资料数据',
+  'scim:enterprise': '通过 SCIM 预配用户和组',
+  audit_log: '完全控制审核日志',
+  'read:audit_log': '读取审核日志',
+  codespace: '完全控制代码空间',
+  'codespace:secrets': '创建、读取、更新和删除代码空间机密',
+  copilot: '完全控制 GitHub Copilot 设置和席位分配',
+  'manage_billing:copilot': '查看和编辑 Copilot 商业版席位分配',
+  'write:network_configurations': '写入组织托管计算网络配置',
+  'read:network_configurations': '读取组织托管计算网络配置',
+  project: '完全控制项目',
+  'read:project': '读取项目',
+  'admin:gpg_key': '完全控制用户公开 GPG 密钥',
+  'write:gpg_key': '写入用户公开 GPG 密钥',
+  'read:gpg_key': '读取用户公开 GPG 密钥',
+  'admin:ssh_signing_key': '完全控制用户公开 SSH 签名密钥',
+  'write:ssh_signing_key': '写入用户公开 SSH 签名密钥',
+  'read:ssh_signing_key': '读取用户公开 SSH 签名密钥'
+}
+
+/** 令牌列表的作用域：「— admin:enterprise, admin:gpg_key」（mergeText 整段合并）→ 「— 完全控制企业、完全控制用户公开 GPG 密钥」；未收录的代码原样保留 */
+function scopeList(list: string): string {
+  return `— ${list
+    .split(', ')
+    .map(code => SCOPE_NAMES[code] ?? code)
+    .join('、')}`
+}
+
+/**
  * 个人访问令牌：精细（/settings/personal-access-tokens…）与经典（/settings/tokens…）的
  * 列表、新建表单、详情、重新生成，以及经典令牌的作用域说明。
- * 作用域代码（repo、workflow 等）保留英文，只翻译说明文字。
+ * 新建、编辑表单里的作用域代码（repo、workflow 等）保留英文，只翻译说明文字；列表里的作用域代码显示为说明（见 SCOPE_NAMES）。
  */
 export default {
   static: {
@@ -169,6 +238,8 @@ export default {
     'This token has no expiration date': '此令牌没有过期时间',
     'This token has no expiration date.': '此令牌没有过期时间。',
     'Confirm token deletion': '确认删除令牌',
+    'Your token was unable to be deleted': '无法删除令牌',
+    'Your token was unable to be deleted.': '无法删除令牌。',
     'Make sure to copy your personal access token now. You won’t be able to see it again!':
       '请立即复制你的个人访问令牌。之后将无法再次查看！',
     "Make sure to copy your personal access token now. You won't be able to see it again!":
@@ -190,6 +261,14 @@ export default {
     // 「This token expires on <strong>日期</strong>. To set a new expiration date, you must <a>regenerate the token</a>.」
     'This token expires on': '此令牌过期日期',
     '. To set a new expiration date, you must': '。要设置新的过期时间，必须',
+    // 无过期时间：「This token has no expiration date. To set a new expiration date, you must <a>regenerate the token</a>.」
+    'This token has no expiration date. To set a new expiration date, you must': '此令牌没有过期时间。要设置新的过期时间，必须',
+    'If you’ve lost or forgotten this token, you can regenerate it, but be aware that any scripts or applications using this token will need to be updated.':
+      '如果丢失或忘记了此令牌，可以重新生成，但使用此令牌的所有脚本或应用都需要更新。',
+    "If you've lost or forgotten this token, you can regenerate it, but be aware that any scripts or applications using this token will need to be updated.":
+      '如果丢失或忘记了此令牌，可以重新生成，但使用此令牌的所有脚本或应用都需要更新。',
+    'Delete token': '删除令牌',
+    'Delete this token': '删除此令牌',
     'regenerate the token': '重新生成令牌',
     'regenerate the token.': '重新生成令牌。',
     'Select scopes': '选择作用域',
@@ -331,8 +410,10 @@ export default {
       new RegExp(`^(\\d+) days? \\((${ANY_DATE_SOURCE})\\)$`),
       (_, days: string, date: string) => `${days} 天（${translateTokenDate(date)}）`
     ],
-    // 日期单独在 <strong> 等元素中
-    [new RegExp(`^(${WEEKDAY_DATE_SOURCE})(\\.?)$`), (_, date: string, dot: string) => `${translateTokenDate(date)}${period(dot)}`],
+    // 日期单独在 <strong> 等元素中（新令牌的「Sunday, December 20, 2026」、列表里「Expires <span>on Sun, Dec 20 2026</span>」）
+    [new RegExp(`^(?:on )?(${WEEKDAY_DATE_SOURCE})(\\.?)$`), (_, date: string, dot: string) => `${translateTokenDate(date)}${period(dot)}`],
+    // 经典令牌列表：每个令牌后的作用域（整段合并，见 mergeText）
+    [/^— ([a-z_]+(?::[a-z_]+)?(?:, [a-z_]+(?::[a-z_]+)?)*)$/, (_, list: string) => scopeList(list)],
     [/^Limit set by ([\w.-]+) organization$/, '由 $1 组织设定的限制'],
     // 组织或企业的令牌有效期策略（名称为空时原文为「The requires …」；豁免句原文无逗号，译文不加）
     [
@@ -363,5 +444,7 @@ export default {
     [/^(\d+) account permissions?$/, '$1 项帐户权限'],
     [/^(\d+) organization permissions?$/, '$1 项组织权限'],
     [/^(\d+) repository permissions?$/, '$1 项存储库权限']
-  ]
+  ],
+  // 经典令牌列表的作用域：<em>— <span title="说明">代码</span>, <span …>…</span></em>
+  mergeText: ['.access-token .token-description em']
 } satisfies PageDictionary

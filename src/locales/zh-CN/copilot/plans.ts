@@ -34,7 +34,7 @@ export default {
     // Copilot 专业版试用与结账（/github-copilot/pro）
     'Try Copilot Pro for 30 days free': '免费试用 Copilot 专业版 30 天',
     'Everything in Copilot Free and:': 'Copilot 免费版的全部功能，以及：',
-    'Unlimited agent mode and chat with GPT-4.1': '无限次使用 GPT-4.1 的代理模式和聊天',
+    'Unlimited agent mode and chat with GPT-4.1': '无限次使用 GPT-4.1 的智能体模式和聊天',
     'Unlimited code completions': '无限次代码补全',
     'Access to Anthropic Claude Sonnet 4, GPT-5, Gemini 2.5 Pro, and more':
       '可使用 Anthropic Claude Sonnet 4、GPT-5、Gemini 2.5 Pro 等模型',

@@ -203,8 +203,8 @@ describe('auth 静态词条', () => {
       'Open your two-factor authenticator (TOTP) app or browser extension to view your authentication code.',
       '打开双因素身份验证器 (TOTP) 应用或浏览器扩展查看验证码。'
     ],
-    ['GitHub support will review your request', 'GitHub 支持团队将审查你的请求'],
-    ['within 1-3 days', '1-3 天内'],
+    ['GitHub support will review your request', 'GitHub 支持团队审查你的请求'],
+    ['within 1-3 days', '预计 1-3 天内完成'],
     ['Enter a recovery code', '输入恢复代码'],
     [
       'The file containing your recovery codes may exist on your computer - check for a file named',
@@ -248,7 +248,7 @@ describe('auth 静态词条', () => {
     // 产品名按用户规定译成中文：GitHub Actions → GitHub 操作；Copilot 是品牌词，保留
     ['Save time with CI/CD integrations and GitHub Actions.', '借助 CI/CD 集成和 GitHub 操作节省时间。'],
     ['Access to GitHub Copilot', '使用 GitHub Copilot'],
-    ['Connect with developers worldwide for instant feedback and insights.', '与全球开发人员交流，即时获取反馈和见解。'],
+    ['Connect with developers worldwide for instant feedback and insights.', '与全球开发人员交流，即时获取反馈和洞察。'],
     ['Email preferences', '电子邮件首选项'],
     ['Your Country/Region*', '国家/地区*'],
     ['Reset your password', '重置密码'],

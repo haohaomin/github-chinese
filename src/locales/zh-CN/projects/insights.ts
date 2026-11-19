@@ -3,7 +3,7 @@ import { pangu, translateFieldName } from './fields'
 import { joinCjk } from '../helpers'
 
 /**
- * 项目（新版 Projects）：见解（图表）。
+ * 项目（新版 Projects）：洞察（图表）。
  * 默认图表、图表侧栏与菜单、配置面板（布局、X / Y 轴、分组）、时间段、升级提示、
  * 图表卡片（自定义设置、导出）、错误与空状态。
  */
@@ -42,7 +42,7 @@ function chartTitle(title: string): string {
   return CHART_TITLES[title] ?? title
 }
 
-/** Highcharts 无障碍描述：图表类型（与存储库见解页一致） */
+/** Highcharts 无障碍描述：图表类型（与存储库洞察页一致） */
 const CHART_TYPES: Readonly<Record<string, string>> = {
   'Combination chart': '组合图',
   'Line chart': '折线图',
@@ -120,7 +120,7 @@ export default {
     'Get unlimited charts': '获取无限图表',
     'Unlimited custom charts for private projects': '专用项目可创建无限自定义图表',
     // 方案名按用户要求译成中文（product-names.md）：Team / Enterprise → 团队版 / 企业版
-    'Historical insights (Team or Enterprise plans only)': '历史见解（仅限团队版或企业版计划）',
+    'Historical insights (Team or Enterprise plans only)': '历史洞察（仅限团队版或企业版计划）',
     'Save to new chart': '保存到新图表',
     'Save changes to new chart': '将更改保存到新图表',
     'Duplicate chart': '复制图表',
@@ -140,8 +140,8 @@ export default {
     'A required field may have been deleted. You will need to delete and re-create this chart.':
       '必需字段可能已被删除。需删除并重新创建此图表。',
     'A required field may have been deleted. Update the configuration or delete the chart.': '必需字段可能已被删除。请更新配置或删除图表。',
-    'This insight chart no longer exists': '此见解图表已不存在',
-    'Select another chart to view insights': '选择其他图表以查看见解',
+    'This insight chart no longer exists': '此洞察图表已不存在',
+    'Select another chart to view insights': '选择其他图表以查看洞察',
     'You do not have access to all project items. Your chart visualization might differ from others.':
       '你无权访问所有项目项。你看到的图表可能与他人不同。'
   },

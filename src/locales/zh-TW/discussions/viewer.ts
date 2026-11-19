@@ -274,7 +274,7 @@ export default {
     'that others can see.': '其他人可見的留言。',
 
     // 转移对话框
-    'Results are limited to top repositories, search to find more.': '結果僅限熱門儲存庫，搜尋可找到更多。',
+    'Results are limited to top repositories, search to find more.': '結果僅限常用儲存庫，搜尋可找到更多。',
     "There aren't any eligible repositories that match your query.": '沒有符合查詢條件的合格儲存庫。',
     'There aren’t any eligible repositories that match your query.': '沒有符合查詢條件的合格儲存庫。',
 

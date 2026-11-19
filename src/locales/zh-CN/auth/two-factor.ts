@@ -68,8 +68,9 @@ export default {
     'this can take 1-3 days': '这可能需要 1-3 天',
     'Verify an email associated with this account.': '验证与此帐户关联的电子邮件。',
     'Verify a device, SSH key or personal access token.': '验证设备、SSH 密钥或个人访问令牌。',
-    'GitHub support will review your request': 'GitHub 支持团队将审查你的请求',
-    'within 1-3 days': '1-3 天内',
+    // 「GitHub support will review your request <strong>within 1-3 days</strong>.」拼成「…审查你的请求预计 1-3 天内完成。」
+    'GitHub support will review your request': 'GitHub 支持团队审查你的请求',
+    'within 1-3 days': '预计 1-3 天内完成',
     'I understand, get started': '我已了解，开始',
 
     // 帐户恢复 /sessions/recovery
@@ -216,7 +217,7 @@ export default {
     'SMS/Text message': '短信',
     'Recovery options': '恢复选项',
     'Two-factor methods': '双因素方法',
-    'SMS number': '短信号码',
+    'SMS number': '手机号码',
     Passkeys: '通行密钥',
     Emails: '电子邮件',
     'Verified emails': '已验证电子邮件',

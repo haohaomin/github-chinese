@@ -57,7 +57,7 @@ export default {
       '只有对此存储库具有明确访问权限的用户才能对拉取请求请求更改',
     'You need to leave a comment indicating the requested changes.': '你需要发表评论说明所请求的更改。',
     'Only users who did not collaborate with the cloud agent will satisfy review requirements.':
-      '只有未与云代理协作的用户才能满足审查要求。',
+      '只有未与云端智能体协作的用户才能满足审查要求。',
     'Are you sure you want to cancel? You will lose all your pending comments.': '确定要取消吗？所有待处理的评论都将丢失。',
     'Are you sure you want to abandon your review? You will lose all your pending comments.':
       '确定要放弃审查吗？所有待处理的评论都将丢失。',

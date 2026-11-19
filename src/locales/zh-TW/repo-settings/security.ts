@@ -190,14 +190,20 @@ export default {
     'Agentic autofix enablement': '代理式自動修正啟用狀態',
     'AI Scan': 'AI 掃描',
     'Identify code security findings using AI.': '使用 AI 識別程式碼安全性發現項目。',
+    'Identify code security findings using AI. All features consume AI credits.':
+      '使用 AI 識別程式碼安全性發現項目。所有功能都會耗用 AI 點數。',
     'Learn more about AI scan': '瞭解 AI 掃描',
     'AI Scan for pull requests': '拉取請求 AI 掃描',
     'Generate security findings for non-CodeQL languages using AI.': '使用 AI 為 CodeQL 不支援的語言產生安全性發現項目。',
     'AI Scan for pull requests enablement': '拉取請求 AI 掃描啟用狀態',
     'AI Scan for repositories': '儲存庫 AI 掃描',
     'AI Scan for repositories enablement': '儲存庫 AI 掃描啟用狀態',
+    'Scan this repository with AI for additional security findings. Only scans the default branch.':
+      '使用 AI 掃描此儲存庫，找出更多安全性發現項目。僅掃描預設分支。',
     'Scan for AI applications': '掃描 AI 應用程式',
     'Scan for AI applications enablement': '掃描 AI 應用程式啟用狀態',
+    'Find risks such as indirect prompt injection in AI applications and agents, in any language. Only scans pull requests.':
+      '找出 AI 應用程式與代理中的間接提示注入等風險，不限語言。僅掃描拉取請求。',
     'Copilot Autofix for third-party tools': '第三方工具的 Copilot 自動修正',
     'Suggest fixes for third-party alerts using AI. Ensure that these tools are properly configured or that an analysis is uploaded for this feature to work. Learn more about the':
       '使用 AI 為第三方警示建議修正。請確認這些工具已正確設定或已上傳分析，此功能才能運作。瞭解',

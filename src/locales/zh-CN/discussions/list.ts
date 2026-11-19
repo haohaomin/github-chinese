@@ -110,7 +110,7 @@ export default {
       '通过 GraphQL API 和 Web 钩子与现有工作流及 GitHub 操作集成。',
     'Thread your conversations': '用嵌套回复组织对话',
     'Keep conversations on track and encourage collaboration with threaded comments.': '通过嵌套评论让对话不偏题并促进协作。',
-    'Monitor community insights': '监控社区见解',
+    'Monitor community insights': '监控社区洞察',
     'Track the health and growth of your community with a dashboard full of actionable data.':
       '通过满是可操作数据的仪表板跟踪社区的健康与成长。',
     'Ask your community with polls': '用投票征询社区意见',
@@ -196,7 +196,7 @@ export default {
     Maintainers: '维护者',
     'Community links': '社区链接',
     'Community guidelines': '社区准则',
-    'Community insights': '社区见解',
+    'Community insights': '社区洞察',
     'Code of conduct': '行为准则',
     // 维护者可见的管理入口
     'Admin controls': '管理员控件',

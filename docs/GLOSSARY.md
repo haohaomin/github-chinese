@@ -70,10 +70,10 @@
 | Advanced Security / Code Security / Secret Protection / Advisory Database（含 GitHub 前缀） | 高级安全 / 代码安全 / 机密保护 / 公告数据库 | |
 | GitHub Desktop / GitHub Mobile | GitHub 桌面版 / GitHub 移动版 | GitHub CLI、Copilot CLI 保留（CLI 是技术缩写） |
 | GitHub Education / GitHub Classroom / GitHub Skills | GitHub 教育 / GitHub 课堂 / GitHub 技能 | Student Developer Pack → 学生开发人员包；GitHub Campus Expert → GitHub 校园专家 |
-| Copilot Chat / Spaces / Memory / Autofix / Workspace | Copilot 聊天 / 空间 / 记忆 / 自动修复 / 工作区 | Copilot code review / cloud agent / coding agent → Copilot 代码审查 / 云代理 / 编码代理 |
-| Mission Control | 任务控制中心 | 代理的任务控制中心（No Mission Control environments available → 没有可用的任务控制中心环境） |
+| Copilot Chat / Spaces / Memory / Autofix / Workspace | Copilot 聊天 / 空间 / 记忆 / 自动修复 / 工作区 | Copilot code review / cloud agent / coding agent → Copilot 代码审查 / 云端智能体 / 编码智能体 |
+| Mission Control | 任务控制中心 | 智能体的任务控制中心（No Mission Control environments available → 没有可用的任务控制中心环境） |
 | Enterprise Cloud / Enterprise Server / Enterprise Managed Users (EMU) | 企业云 / 企业服务器 / 企业托管用户 (EMU) | GitHub Enterprise Cloud → GitHub 企业云 |
-| Premium support / Pulse / Beta | 高级支持 / 脉搏 / 测试版 | Premium Plus Support → 高级增强支持；Preview 仍 → 预览 |
+| Premium support / Pulse / Beta | 高级支持 / 统计 / 测试版 | Premium Plus Support → 高级增强支持；Preview 仍 → 预览 |
 | Code Quality / GitHub Stars | 代码质量 / GitHub 之星 | GitHub Stars 是社区计划，与星标无关；GitHub Universe（活动名）保留 |
 | 第三方产品名 | 原文 | Microsoft Teams、Gemini Pro、Team Foundation Version Control、Visual Studio Code 等不属于 GitHub 的产品名保留 |
 
@@ -130,24 +130,24 @@ GitHub App、OAuth app 按官方词汇表译「GitHub 应用」「OAuth 应用�
 | notification / inbox | 通知 / 收件箱 | 官方词汇表、正文。Notification settings → 通知设置；Manage notifications → 管理通知；participating notifications → 参与通知；Done → 完成；Saved → 已保存；Mark as read / unread → 标记为已读 / 未读 |
 | subscribe / unsubscribe / subscription | 订阅 / 取消订阅 / 订阅 | 官方正文（取消订阅 70 / 退订 0）。Subscribed → 已订阅；计费义 subscription 也作“订阅”（对齐 261 / 套餐 0；词汇表“套餐”的用例原文是 plan）；Manage subscription → 管理订阅 |
 | dashboard / feed | 仪表板 / 动态 | 官方词汇表（仪表板）；news feed 词汇表标题“新闻源”与其释义“动态消息”不一致，取“动态”。personal dashboard → 个人仪表板；For you → 为你推荐 |
-| profile / profile picture / avatar | 个人资料 / 个人资料图片 / 头像 | 官方正文（个人资料图片 310 / 个人资料照片 168）。Your profile → 你的个人资料；Edit profile → 编辑个人资料；organization profile → 组织个人资料；Remove photo → 删除照片 |
+| profile / profile picture / avatar | 个人资料 / 个人资料图片 / 头像 | 官方正文（个人资料图片 310 / 个人资料照片 168）。Your profile → 你的个人资料；Edit profile → 编辑个人资料；organization profile → 组织个人资料；Remove photo → 删除照片。GitHub 应用、OAuth 应用的 logo / avatar → 图标（用户规定 2026-11-20）：Upload new logo → 上传新图标；Crop your new avatar → 裁剪新图标；Set new avatar → 设置新图标；Delete this image → 删除此图标 |
 | settings | 设置 | 官方正文（界面名）。General → 常规；Access → 访问；Code, planning, and automation → 代码、规划和自动化；Integrations → 集成；Danger Zone → 危险区域 |
 | account | 帐户 | 官方正文（帐户 2913 / 账户 299）、词汇表。personal / organization / enterprise account → 个人帐户 / 组织帐户 / 企业帐户；Switch account → 切换帐户 |
 | billing / plan / licensing | 计费 / 计划 / 许可 | 官方正文（界面名 Billing and licensing → 计费和许可）、词汇表（billing cycle → 计费周期）。Billing settings → 计费设置；billing email → 计费电子邮件；Billing information → 账单信息；billing manager → 账单管理员；Payment information / Payment method → 付款信息 / 付款方式；Upgrade plan / Downgrade plan → 升级计划 / 降级计划；invoice billing → 发票付款；Switch to invoiced billing → 切换到开票计费；价格义 Free → 免费 |
 | sponsor | 赞助 / 赞助者 | 官方正文。按钮、动词 Sponsor → 赞助；人 → 赞助者（N sponsors → N 个赞助者）；Sponsoring（标签页、已赞助按钮）→ 正在赞助（官方截图说明作“赞助”，与 Sponsor 按钮同名，不采用）；tier → 等级（Sponsor tiers → 赞助等级；Select a tier → 选择等级）；Sponsor / Sponsoring owner/repo（无障碍名称）→ 赞助 / 正在赞助 owner/repo；Sponsoring as → 赞助身份；sponsored developer → 被赞助的开发者；Private Sponsor → 私密赞助者 |
-| marketplace | 市场 | 用户规定（第 3 节；官方词汇表保留英文、正文 647 / 市场 195）。Search Marketplace → 搜索市场；Marketplace apps → 市场应用；其中的 action / app → 操作 / 应用 |
+| marketplace | 市场 | 用户规定（第 3 节；官方词汇表保留英文、正文 647 / 市场 195）。Search Marketplace → 搜索市场；Marketplace apps → 市场应用；其中的 action / app → 操作 / 应用；listing → 上架项：Create draft listing → 创建上架项草稿；页头 Edit X → 编辑 X |
 | explore / trending | 探索 / 趋势 | 官方正文。Trending repositories / developers → 趋势存储库 / 趋势开发人员；趋势页标签 Repositories / Developers → 存储库 / 开发人员；See more trending developers → 查看更多趋势开发人员；Today / This week / This month → 今天 / 本周 / 本月 |
 | topic / collection | 主题 / 集合 | 官方词汇表、正文。Manage topics → 管理主题 |
 | workflow / run / job / step | 工作流 / 运行 / 作业 / 步骤 | 官方正文（工作流 5714 / 工作流程 1052）。All workflows → 所有工作流；Run workflow → 运行工作流；workflow run → 工作流运行；Re-run jobs / Re-run all jobs → 重新运行作业 / 重新运行所有作业；Cancel run → 取消运行 |
 | Queued / In progress / Success / Failure / Cancelled / Skipped | 已排队 / 正在进行 / 成功 / 失败 / 已取消 / 已跳过 | 运行、检查、部署状态。官方正文（in progress → 正在进行 80 / 进行中 25）。Timed out → 已超时；Action required → 需要操作；Startup failure → 启动失败；Neutral → 中性；Stale → 已过时；Expected → 等待报告；Waiting for status to be reported → 正在等待状态上报；Waiting → 等待中；Pending（检查、作业、部署）→ 挂起；pending runs / requests / review comments → 待处理；pending invitations / collaborators → 待定邀请 / 待定协作者 |
-| runner / artifact / cache | 运行器 / 工件 / 缓存 | 官方正文（运行器 2400 / 运行程序 760；工件 220 / 构件 111 / 制品 36）。self-hosted runner → 自托管运行器；larger runners → 更大的运行器；runner group → 运行器组；artifact attestations → 工件证明 |
+| runner / artifact / cache | 运行器 / 产物 / 缓存 | 运行器取官方正文（运行器 2400 / 运行程序 760）；artifact 用户规定：操作的构建产物作「产物」，Copilot、议题、拉取请求中的 artifact 作「附件」，不用「工件」。self-hosted runner → 自托管运行器；larger runners → 更大的运行器；runner group → 运行器组；artifact attestations → 产物证明 |
 | secret / variable | 机密 / 变量 | 官方正文。Secrets and variables → 机密和变量；Repository secrets / Environment secrets → 存储库机密 / 环境机密；secret gist → 机密代码片段；secret team → 机密团队；client secret → 客户端密钥 |
 | environment / deployment | 环境 / 部署 | 官方正文。Review deployments → 审查部署；Approve and deploy → 批准并部署；deployment protection rules → 部署保护规则；deployment history → 部署历史记录 |
 | package / container / registry / image | 软件包 / 容器 / 注册表 / 映像 | package 按用户规定（2026-10-28）作“软件包”（官方界面名 Packages → 包 19 / 软件包 0），包含、打包、学生开发包（Student Developer Pack）等不是 package 的词不动；映像为官方正文（映像 807 / 镜像 126）。N packages → N 个软件包；package manager → 软件包管理器；package registry → 软件包注册表；package.json 等文件名照原文；Container registry → 容器注册表；container image → 容器映像；Custom images → 自定义映像；runner image → 运行器映像；Base images → 基础映像；Image version → 映像版本；host image → 主机映像；图片义 image → 图片；mirror → 镜像 |
 | security / advisory / vulnerability / alert | 安全 / 公告 / 漏洞 / 警报 | 官方正文。存储库标签页 Security → 安全；设置侧栏 Security 分组 → 安全性；Security and quality → 安全和质量；security advisory → 安全公告；private vulnerability reporting → 专用漏洞报告；Dependabot alerts → Dependabot 警报；警报列表 Open / Closed → 未解决 / 已关闭 |
 | code scanning / secret scanning / push protection | 代码扫描 / 机密扫描 / 推送保护 | 官方正文（中文译出部分）。bypass → 绕过：Bypass push protection → 绕过推送保护；bypass list → 绕过列表；Add bypass → 添加绕过；bypass request → 绕过请求 |
 | dependency graph / dependents | 依赖项关系图 / 被依赖 | 官方词汇表、界面名（依赖项关系图 29）。Dependents 官方作“依赖项”，与 Dependencies 同名，不采用。Dependencies → 依赖项；Used by → 使用者 |
-| insights / traffic / network / Pulse | 见解 / 流量 / 网络 / 脉搏 | 官方正文（界面名 Insights → 见解 18 / 洞察 3）；Pulse → 脉搏（用户规定，第 3 节）。Community insights → 社区见解；Network graph → 网络图；Clones / Visitors → 克隆 / 访问者；Referring sites → 推荐站点；Popular content → 热门内容 |
+| insights / traffic / network / Pulse | 洞察 / 流量 / 网络 / 统计 | Insights → 洞察、Pulse → 统计（用户规定）。Community insights → 社区洞察；Network graph → 网络图；Clones / Visitors → 克隆 / 访问者；Referring sites → 推荐站点；Popular content → 热门内容 |
 | code / file / folder / directory | 代码 / 文件 / 文件夹 / 目录 | 官方正文。Go to file → 转到文件；Add file → 添加文件；Create new file → 创建新文件；Upload files → 上传文件；root directory → 根目录 |
 | blame / raw / history | 追溯 / 原始 / 历史记录 | 官方词汇表（追溯）、界面名（History → 历史记录 77 / 历史 3）。View raw → 查看原始文件；commit history → 提交历史记录 |
 | diff / patch | 差异 / 补丁 | 官方词汇表。Load diff → 加载差异 |
@@ -180,7 +180,7 @@ GitHub App、OAuth app 按官方词汇表译「GitHub 应用」「OAuth 应用�
 | recovery codes | 恢复代码 | 官方词汇表、正文（80 / 恢复码 0）。Download recovery codes → 下载恢复代码 |
 | SSH key / GPG key / deploy key | SSH 密钥 / GPG 密钥 / 部署密钥 | 官方正文。SSH and GPG keys → SSH 和 GPG 密钥；New SSH key → 新建 SSH 密钥；Add deploy key → 添加部署密钥；Allow write access → 允许写入权限；signing key → 签名密钥 |
 | vigilant mode / verified | 警戒模式 / 已验证 | 官方正文。Partially verified → 部分验证；Unverified → 未验证 |
-| personal access token / fine-grained | 个人访问令牌 / 精细 | 官方正文（精细 99 / 细粒度 32）。Fine-grained tokens → 精细令牌；Tokens (classic) → 令牌（经典）；token → 令牌（含 OAuth token、模型用量的 token）：N tokens → N 个令牌，input / output tokens → 输入 / 输出令牌 |
+| personal access token / fine-grained | 个人访问令牌 / 精细 | 官方正文（精细 99 / 细粒度 32）。Fine-grained tokens → 精细令牌；Tokens (classic) → 令牌（经典）；token → 令牌（含 OAuth token、模型用量的 token）：N tokens → N 个令牌，input / output tokens → 输入 / 输出令牌。经典令牌列表的作用域代码显示为说明、以顿号分隔（admin:enterprise, admin:gpg_key → 完全控制企业、完全控制用户公开 GPG 密钥），新建、编辑表单里的代码不译 |
 | ruleset / branch protection rule | 规则集 / 分支保护规则 | 官方正文。New branch ruleset / New tag ruleset → 新建分支规则集 / 新建标签规则集；Add classic branch protection rule → 添加经典分支保护规则；Branch name pattern → 分支名称模式；protected branch → 受保护分支 |
 | enforce | 强制实施 | 官方正文（214 / 强制执行 86）。Enforce HTTPS → 强制实施 HTTPS；Enforcement status → 强制实施状态 |
 | app / integration | 应用 / 集成 | 官方词汇表。GitHub App → GitHub 应用；OAuth app → OAuth 应用；Authorized OAuth Apps → 授权的 OAuth 应用；Authorized GitHub Apps → 授权的 GitHub 应用；Install / Configure / Suspend → 安装 / 配置 / 暂停 |
@@ -211,14 +211,14 @@ GitHub App、OAuth app 按官方词汇表译「GitHub 应用」「OAuth 应用�
 | previous / next | 上一页 / 下一页 | 官方正文。分页；条目导航 → 上一个 / 下一个 |
 | feedback / docs | 反馈 / 文档 | 官方正文。Give feedback → 提供反馈；GitHub Docs → GitHub 文档 |
 | public preview | 公开预览 | 官方正文（113 / 公共预览 11）。Preview（徽章）→ 预览；Beta 保留 |
-| agent | 代理 | 官方正文（Copilot 文档 代理 3408 / 智能体 451）。Agents → 代理；agent session → 代理会话；agent mode → 代理模式；coding agent → 编码代理；cloud agent → 云代理；custom agent → 自定义代理；Copilot cloud agent / Copilot coding agent → Copilot 云代理 / Copilot 编码代理 |
+| agent | 智能体 | 用户规定（议题 #9）。Agents → 智能体；agent session → 智能体会话；agent mode → 智能体模式；coding agent → 编码智能体；cloud agent → 云端智能体；custom agent → 自定义智能体；Copilot cloud agent / Copilot coding agent → Copilot 云端智能体 / Copilot 编码智能体 |
 | custom instructions / prompt | 自定义说明 / 提示 | 官方正文（自定义说明 401 / 自定义指令 229；提示文件 173 / 提示词文件 0）。repository / personal custom instructions → 存储库 / 个人自定义说明；prompt file → 提示文件；system prompt → 系统提示 |
 | usage | 使用情况 | 官方正文（界面名 Usage → 使用情况 4）。Metered usage → 按流量计费的使用情况；included usage → 包含的使用量；usage limit → 使用限制；usage report → 使用情况报告；Token usage → 令牌使用情况 |
 | developer | 开发人员 | 官方正文（开发人员 634 / 开发者 115；Developer settings → 开发人员设置）。Developer Program → 开发人员计划；sponsored developer → 被赞助的开发者（官方固定说法） |
 | keyboard shortcuts / accessibility | 键盘快捷方式 / 辅助功能 | 官方正文（快捷方式 57 / 快捷键 19；辅助功能 34 / 可访问性 5） |
 | codespace / prebuild | 代码空间 / 预生成 | 用户规定（第 3 节；官方正文 codespace 1610 / 代码空间 891）；预生成 286 / 预构建 82。Create codespace → 创建代码空间；Your codespaces → 你的代码空间；Prebuild configuration → 预生成配置；dev container → 开发容器 |
 | build | 构建 | 官方正文。Build → 构建；例外：页面（Pages）设置 Build and deployment → 生成和部署，prebuild → 预生成 |
-| webhook / payload | Web 钩子 / 有效负载 | 用户规定（2026-10-28，第 3 节；与参考仓库一致；官方正文 Webhook 1928 / 网络钩子 66）。Webhooks → Web 钩子；Add webhook → 添加 Web 钩子；Payload URL → 有效负载 URL；Recent Deliveries → 最近交付；Deliveries → 交付记录；Redeliver → 重新传递；hook → 钩子（指 webhook 时 → Web 钩子）；pre-receive hook → 预接收钩子 |
+| webhook / payload | Web 钩子 / 有效负载 | 用户规定（2026-10-28，第 3 节；与参考仓库一致；官方正文 Webhook 1928 / 网络钩子 66）。Webhooks → Web 钩子；Add webhook → 添加 Web 钩子；Payload URL → 有效负载 URL；Recent Deliveries → 最近交付；Deliveries → 交付记录；Redeliver → 重新传递；hook → 钩子（指 webhook 时 → Web 钩子）；pre-receive hook → 预接收钩子。GitHub 应用、OAuth 应用设置页（个人与组织拥有的）的 delivery 作“请求”（用户规定 2026-11-20）：Recent deliveries → 最近请求；Redeliver、redelivery → 重新请求；存储库、组织 Web 钩子页不变 |
 | gist / wiki / README | 代码片段 / Wiki / 自述文件 | gist、README 按用户规定（2026-10-28）译出，GitHub Gist → GitHub 代码片段；Wiki 是技术词，保留（第 3 节）。New gist → 新建代码片段；Your gists → 你的代码片段；public gist / secret gist → 公共代码片段 / 机密代码片段；Fork gist → 复刻代码片段；N gists → N 个代码片段；Add a README → 添加自述文件；profile README → 个人资料自述文件；README.md 等文件名、gist.github.com 等网址照原文 |
 | single sign-on / identity provider | 单一登录 / 标识提供者 | 官方词汇表。SSO、SAML、IdP 保留 |
 | code owner / achievement | 代码所有者 / 成就 | 官方词汇表、正文。CODEOWNERS 保留；成就名保留英文 |

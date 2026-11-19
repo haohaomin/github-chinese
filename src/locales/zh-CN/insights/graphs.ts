@@ -27,7 +27,7 @@ function translatePeriod(name: string): string {
 }
 
 /**
- * 见解侧栏、页面标题，以及贡献者（graphs/contributors）、
+ * 洞察侧栏、页面标题，以及贡献者（graphs/contributors）、
  * 提交活动（graphs/commit-activity）、代码频率（graphs/code-frequency）三个 React 图表页。
  */
 export default {
@@ -83,7 +83,7 @@ export default {
   },
   regexp: [
     // 无障碍标题与页面标题
-    [new RegExp(`^Insights: ${REPO}$`), '见解：$1'],
+    [new RegExp(`^Insights: ${REPO}$`), '洞察：$1'],
     [new RegExp(`^Contributors to ${REPO}$`), '$1 的贡献者'],
 
     // 贡献者页说明（分支名在独立文本节点，拼接后匹配）；原文只有一个逗号，译文不多加

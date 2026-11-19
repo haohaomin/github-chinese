@@ -70,7 +70,7 @@ export default {
     'Failed to fetch comment data': '获取评论数据失败',
     'Comment not found': '找不到评论',
     // 建议更改：应用 / 加入批次（应用建议、加入批次等按钮与不可应用的原因由 pulls 词典收录）
-    'More suggestion batching options': '更多建议批处理选项',
+    'More suggestion batching options': '更多建议批量处理选项',
     'This feature is not supported yet.': '暂不支持此功能。',
     'There was an error trying to commit changes.': '提交更改时出错。',
     // 订阅

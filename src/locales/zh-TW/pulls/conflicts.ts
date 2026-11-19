@@ -18,7 +18,7 @@ export default {
     'Accept current change': '接受目前變更',
     'Accept incoming change': '接受傳入變更',
     'Accept both changes': '接受兩者變更',
-    'Remove all conflict markers to resolve this file': '移除所有衝突標記以解決此檔案',
+    'Remove all conflict markers to resolve this file': '移除所有衝突標記以解決此檔案的衝突',
     // 提交合并对话框
     'Sign off and commit merge': '簽署並提交合併',
     'Committing merge…': '正在提交合併…',

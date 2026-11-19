@@ -9,7 +9,7 @@ import type { PageDictionary } from '../../../core/types'
  * 产品名、方案名按用户要求译成中文（.harvest/scratch/followups/product-names.md，先于 GLOSSARY 第 3 节生效）：
  * Actions → 操作、Codespaces / codespace → 代码空间、Advanced Security → 高级安全、Pages → 页面、
  * Marketplace → 市场、Sponsors → 赞助；带 GitHub 前缀的全名同样译出后半部分（GitHub 操作、GitHub 代码空间、
- * GitHub 高级安全、GitHub 页面、GitHub 赞助）；Copilot 功能名译出后半部分（Copilot 编码代理、Copilot 云代理、
+ * GitHub 高级安全、GitHub 页面、GitHub 赞助）；Copilot 功能名译出后半部分（Copilot 编码智能体、Copilot 云端智能体、
  * Copilot 自动修复）。只有自造品牌词（GitHub、Copilot、Dependabot、CodeQL、Spark、Git）和技术缩写（CLI、LFS、
  * MCP 等）保留英文。原文只写 Actions / Codespaces 而指整个产品的句子补上 GitHub 前缀（运行 GitHub 操作）。
  * 方案名 Free / Team / Enterprise / Business 译 免费版 / 团队版 / 企业版 / 商业版，品牌前缀保留
@@ -95,14 +95,14 @@ export default {
     'Interaction limits': '交互限制',
     'Code review limits': '代码审查限制',
     Rulesets: '规则集',
-    'Rule insights': '规则见解',
+    'Rule insights': '规则洞察',
     'Custom properties': '自定义属性',
     Sandboxes: '沙盒',
     Planning: '规划',
     'Issue types': '议题类型',
     'Issue fields': '议题字段',
     'Issue Fields': '议题字段',
-    'Cloud agent': '云代理',
+    'Cloud agent': '云端智能体',
     'Content exclusion': '内容排除',
     'Internet access': '互联网访问',
     'Runner groups': '运行器组',

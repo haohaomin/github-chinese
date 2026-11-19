@@ -2,7 +2,7 @@ import type { PageDictionary } from '../../../core/types'
 import { joinCjk, TIME_SOURCE, translateTime } from '../helpers'
 
 /**
- * 组织页：头部与验证徽章、概述（侧栏、置顶存储库、存储库筛选、入门任务）、人员、团队与团队设置、项目列表、关注者、赞助、见解。
+ * 组织页：头部与验证徽章、概述（侧栏、置顶存储库、存储库筛选、入门任务）、人员、团队与团队设置、项目列表、关注者、赞助、洞察。
  * React 存储库列表见 repos-list.ts、repos-filter.ts。
  */
 
@@ -23,7 +23,7 @@ const SELECTED_KINDS: Readonly<Record<string, string>> = {
   team: '个团队'
 }
 
-/** 组织见解 Actions 指标：句中的时段（小写） */
+/** 组织洞察 Actions 指标：句中的时段（小写） */
 const METRIC_PERIODS: Readonly<Record<string, string>> = {
   'current week (mon-sun)': '本周（周一至周日）',
   'current month': '本月',
@@ -35,7 +35,7 @@ const METRIC_PERIODS: Readonly<Record<string, string>> = {
   custom: '自定义时段'
 }
 
-/** 组织见解 Actions 指标：图表说明中的指标 */
+/** 组织洞察 Actions 指标：图表说明中的指标 */
 const USAGE_METRICS: Readonly<Record<string, string>> = { minutes: '总分钟数', 'job runs': '作业运行总数' }
 const PERFORMANCE_METRICS: Readonly<Record<string, string>> = {
   'Average run time of': '作业的平均运行时间',
@@ -238,12 +238,12 @@ export default {
     'Make a copy': '创建副本',
     'More project options': '更多项目选项',
     'Select an owner': '选择所有者',
-    // 见解：依赖项
+    // 洞察：依赖项
     'My organizations': '我的组织',
     'Open security advisories': '打开的安全公告',
     Licenses: '许可证',
     Unknown: '未知',
-    // 见解：Actions 使用情况 / 性能指标（列名等由 actions 词典的 static 收录）
+    // 洞察：Actions 使用情况 / 性能指标（列名等由 actions 词典的 static 收录）
     Metrics: '指标',
     Range: '范围',
     'Range:': '范围：',
@@ -336,7 +336,7 @@ export default {
       '你正以 $1 组织成员的身份查看自述文件和置顶存储库。'
     ],
 
-    // 见解：Actions 使用情况 / 性能指标的图表说明
+    // 洞察：Actions 使用情况 / 性能指标的图表说明
     [/^Showing data from (\d{4}\/\d{1,2}\/\d{1,2}) to$/, '数据时段 $1 至'],
     [
       /^Total (minutes|job runs) across all workflows in this organization for (.+)$/,
