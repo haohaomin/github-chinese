@@ -2,12 +2,17 @@
  * 译文的排版修正：翻译期间在页面上加一段样式，停止时移除（软导航后页面换掉 <head> 内容时补回）。
  * - 贡献图的月份标签：绝对定位，宽度受所在单元格限制；译文比原文宽（Nov → 11 月），
  *   最后一个月只占一两列时折成两行。不折行，同原文一样可略超出单元格
+ * - 市场计划预览的单位前缀（$10 per seat / month 的 per）：GitHub 用伪元素 content 写出，文字不在 DOM 里，词典译不到，
+ *   在这里改写为「每」（简繁同字）
  */
 export const LAYOUT_FIX_STYLE_ID = 'gcn-layout-fix'
 
 const STYLE = `
 .ContributionCalendar-label > span[aria-hidden="true"] {
   white-space: nowrap;
+}
+.marketplace-plan-unit-name-preview.js-marketplace-plan-unit-name::before {
+  content: "每 ";
 }
 `
 

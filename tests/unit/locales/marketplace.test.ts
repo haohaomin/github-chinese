@@ -121,7 +121,14 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['Number of']
   },
   { hits: [['Account: octocat', '帐户：octocat']], misses: ['Account octocat'] },
-  { hits: [['Set up with Codecov', '使用 Codecov 设置']], misses: ['Set up'] },
+  {
+    hits: [
+      ['Set up with Codecov', '使用 Codecov 设置'],
+      // 新建计划的预览按钮写作一个词
+      ['Setup with 1651asduhaiuh', '使用 1651asduhaiuh 设置']
+    ],
+    misses: ['Set up']
+  },
   {
     hits: [
       ['Try free for 14 days', '免费试用 14 天'],
@@ -299,6 +306,15 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   {
     hits: [['This is a list of the financial transactions for 1651asduhaiuh.', '1651asduhaiuh 的财务交易列表。']],
     misses: ['This is a list of the financial transactions.']
+  },
+  // 新建计划
+  { hits: [['Enable 14 day free trial for this plan', '为此计划启用 14 天免费试用']], misses: ['Enable free trial for this plan'] },
+  {
+    hits: [
+      ['Plan bullet 1', '计划要点 1'],
+      ['Plan bullet 4', '计划要点 4']
+    ],
+    misses: ['Plan bullet']
   }
 ]
 
@@ -545,7 +561,10 @@ describe('marketplace 繁体词条（zh-TW）', () => {
 
   it.each([
     ['Has listing type', '有類型'],
-    ['Has category', '有類別']
+    ['Has category', '有類別'],
+    ['Per unit', '按單位計費'],
+    ['Available for', '適用於'],
+    ['(s) in this plan', '（此方案內）']
   ])('页面：%s → %s', (input, expected) => {
     expect(twDict.scoped?.[input]).toBe(expected)
     expect(twMatcher.translate(input, ['common', 'marketplace'])).toBe(expected)
@@ -773,5 +792,36 @@ describe('marketplace 标点随原文', () => {
 
   it('正则译文同样不加', () => {
     expect(HITS.flatMap(([source, translation]) => extraPunctuation(source, translation))).toEqual([])
+  })
+})
+
+describe('marketplace 新建计划（真实结构）', () => {
+  let translator: Translator | undefined
+
+  afterEach(() => {
+    translator?.stop()
+    translator = undefined
+    document.body.innerHTML = ''
+  })
+
+  it('价格标签按片段译出，预览的适用对象整句译出，单位名保留原文', () => {
+    document.body.innerHTML = [
+      '<form><dl><dt><label for="price">Price <span class="js-unit">per unit </span>/ month</label></dt>',
+      '<dd><div><span>$</span><input id="price" type="number" value="0"><span class="suffix"><span>per unit </span>/ month</span></div>',
+      '<p class="note">Must be a whole dollar amount</p></dd></dl>',
+      '<p class="for"><svg aria-hidden="true"></svg> For <span>\n personal accounts and organizations\n </span></p>',
+      // 切换适用对象后脚本改写的文字不带空白
+      '<p class="for-js"><svg aria-hidden="true"></svg> For <span>organizations only</span></p>',
+      '<div class="qty"><input disabled type="number" value="1"><span>seat</span>(s) in this plan</div></form>'
+    ].join('')
+    translator = createTranslator({ matcher: fullMatcher, host: window, resolvePages: () => ['common', 'marketplace'] })
+    translator.start()
+    const text = (selector: string): string => (document.querySelector(selector)?.textContent ?? '').replace(/\s+/g, ' ').trim()
+    expect(text('label')).toBe('价格 每单位 / 月')
+    expect(text('.suffix')).toBe('每单位 / 月')
+    expect(text('.note')).toBe('须为整数美元金额')
+    expect(text('.for')).toBe('适用于个人帐户和组织')
+    expect(text('.for-js')).toBe('仅限组织')
+    expect(text('.qty')).toBe('seat（此计划内）')
   })
 })

@@ -343,7 +343,7 @@ export default {
     ],
     [/^Number of (\w+?)s$/, (_, unit: string) => joinCjk(UNIT_NAMES[unit] ?? unit, '數量')],
     [/^Account: (.+)$/, '帳號：$1'],
-    [/^Set up with (.+)$/, '使用 $1 設定'],
+    [/^Set ?up with (.+)$/, '使用 $1 設定'],
     [/^Try free for (\d+) (day|month)s?$/, (_, count: string, unit: string) => `免費試用 ${count} ${unit === 'day' ? '天' : '個月'}`],
     [new RegExp(`^/ (${UNIT_SOURCE})$`), (_, unit: string) => `/ ${UNIT_NAMES[unit] ?? unit}`],
     [/^(\d+) days? left of free trial$/, '免費試用剩餘 $1 天'],

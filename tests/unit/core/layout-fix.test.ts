@@ -42,6 +42,21 @@ describe('排版修正', () => {
     expect(whiteSpace('november')).not.toBe('nowrap')
   })
 
+  it('翻译中：市场计划预览的单位前缀 per 改写为「每」，停止后移除', () => {
+    document.body.innerHTML = '<span id="unit" class="marketplace-plan-unit-name-preview js-marketplace-plan-unit-name">seat</span>'
+    const fix = createLayoutFix(document)
+    fix.update(true)
+    // happy-dom 不计算伪元素样式：按注入的规则核对选择器命中预览里的单位名、content 为「每」
+    const rule = [...(styles()[0]!.sheet?.cssRules ?? [])]
+      .filter((item): item is CSSStyleRule => item instanceof CSSStyleRule)
+      .find(item => item.selectorText.endsWith('::before'))
+    expect(rule).toBeDefined()
+    expect(document.getElementById('unit')!.matches(rule!.selectorText.replace(/::before$/, ''))).toBe(true)
+    expect(rule!.style.getPropertyValue('content')).toBe('"每 "')
+    fix.update(false)
+    expect(styles()).toHaveLength(0)
+  })
+
   it('重复启动不重复添加', () => {
     const fix = createLayoutFix(document)
     fix.update(true)

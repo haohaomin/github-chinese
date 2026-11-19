@@ -154,6 +154,22 @@ export default {
     'No pricing plans': '暂无定价计划',
     'You need at least one plan to publish your app to GitHub Marketplace': '至少需要一个计划才能将应用发布到 GitHub 市场',
 
+    // 新建计划（edit/plans/new）：编辑器、定价模式与适用对象菜单的说明
+    'More information can be found in': '更多信息请参阅',
+    'Plan editing mode': '计划编辑模式',
+    'Plan editor': '计划编辑器',
+    'Plan name': '计划名称',
+    'Pricing model': '定价模式',
+    'This plan will cost nothing. Free trials will be disabled.': '此计划免费。将禁用免费试用。',
+    'Example: $10 / month': '示例：$10 / 月',
+    'Example: $10 per user / month': '示例：每用户 $10 / 月',
+    'Name of the unit': '单位名称',
+    'Example: user, seat, or person': '示例：用户、席位或人',
+    'Must be a whole dollar amount': '须为整数美元金额',
+    'This plan can be subscribed to by both personal users and organizations': '个人用户和组织均可订阅此计划',
+    'This plan can only be subscribed to by personal user accounts only': '仅个人用户帐户可订阅此计划',
+    'This plan can only be subscribed to by organizations only': '仅组织可订阅此计划',
+
     // 安全与合规
     // 「Some of this information … See <a>development documentation for more details.</a>」
     "Some of this information will be displayed on your marketplace listing once it's published. See":
@@ -256,7 +272,22 @@ export default {
     '). More information can be found in': '）。更多信息请参阅',
     'Content type': '内容类型',
     Secret: '机密',
-    Active: '激活'
+    Active: '激活',
+    // 新建计划：定价模式、价格标签「Price <span>per unit </span>/ month」、适用对象
+    'Flat rate': '固定费率',
+    'Per unit': '按单位计费',
+    Price: '价格',
+    'per unit': '每单位',
+    'Available for': '适用对象',
+    'Personal accounts and organizations': '个人帐户和组织',
+    'Personal accounts only': '仅限个人帐户',
+    'Organizations only': '仅限组织',
+    'Short description': '简短描述',
+    // 计划预览：「For <span>personal accounts and organizations</span>」（整句见 inline）、「1 <span>seat</span>(s) in this plan」
+    'personal accounts and organizations': '适用于个人帐户和组织',
+    'personal accounts only': '仅限个人帐户',
+    'organizations only': '仅限组织',
+    '(s) in this plan': '（此计划内）'
   },
   regexp: [
     // 标题：「Edit 上架项 - GitHub Marketplace」、页头「Edit 上架项」、「上架项 Transactions」
@@ -274,9 +305,14 @@ export default {
     [/^GitHub Marketplace Developer Agreement (v[\d.]+)$/, 'GitHub 市场开发人员协议 $1'],
     // 「<a>用户</a> signed the GitHub Marketplace Developer Agreement version v2.3 <relative-time>.」
     [/^signed the GitHub Marketplace Developer Agreement version (v[\d.]+)$/, '签署 GitHub 市场开发人员协议 $1 版于'],
-    [/^This is a list of the financial transactions for (.+)\.$/, '$1 的财务交易列表。']
+    [/^This is a list of the financial transactions for (.+)\.$/, '$1 的财务交易列表。'],
+    // 新建计划：免费试用天数、要点编号
+    [/^Enable (\d+) day free trial for this plan$/, '为此计划启用 $1 天免费试用'],
+    [/^Plan bullet (\d+)$/, '计划要点 $1']
   ],
   inline: [
+    // 计划预览「<svg> For <span>personal accounts and organizations</span>」：For 并入适用对象（同详情页 For organizations only → 仅限组织）
+    ['{} For {}', '{}{}'],
     ['Add and modify your pricing plans for {}. More information can be found in {}.', '为 {} 添加和修改定价计划。更多信息请参阅{}。'],
     ['Choose languages ({#}/10)', '选择语言（{#}/10）'],
     [
