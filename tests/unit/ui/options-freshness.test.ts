@@ -3,12 +3,13 @@ import { fakeBrowser } from 'wxt/testing/fake-browser'
 import { clearToasts } from '../../../src/components/toast'
 import '../../../src/entrypoints/options/options.css'
 import {
-  DEFAULT_FRESHNESS_COLORS,
-  FRESHNESS_LEVELS,
+  DEFAULT_FRESHNESS_RANGES,
   FRESHNESS_PREVIEW_COLORS,
+  MAX_FRESHNESS_RANGES,
   FRESHNESS_SCHEMES,
-  type FreshnessLevel,
-  type FreshnessScheme
+  type FreshnessRanges,
+  type FreshnessScheme,
+  type ThemedColor
 } from '../../../src/shared/freshness'
 import { getSettings, settingsItem, updateSettings } from '../../../src/shared/settings'
 import { GRADIENT, imageLightDark, LAYERED_GRADIENT, noImageLightDark } from '../shared/fake-css'
@@ -45,8 +46,35 @@ function switchOf(scope: DOMWrapper<Element>, label: string): DOMWrapper<HTMLBut
 /** get 取到的元素 */
 type Found<T extends Element = Element> = Omit<DOMWrapper<T>, 'exists'>
 
-function field(scope: DOMWrapper<Element>, scheme: FreshnessScheme, level: FreshnessLevel): Found {
-  return scope.get(`[data-test="freshness-${scheme}-${level}"]`)
+/** 默认的两个时段（30、365 天）与更早 */
+type Level = 'fresh' | 'recent' | 'stale'
+const LEVELS: readonly Level[] = ['fresh', 'recent', 'stale']
+const KEYS: Readonly<Record<Level, string>> = { fresh: '0', recent: '1', stale: 'stale' }
+/** 各时段文字颜色的默认值（预览用） */
+const PREVIEW: Readonly<Record<Level, ThemedColor>> = {
+  fresh: FRESHNESS_PREVIEW_COLORS.success.text,
+  recent: FRESHNESS_PREVIEW_COLORS.attention.text,
+  stale: FRESHNESS_PREVIEW_COLORS.neutral.text
+}
+type Colors = Readonly<Record<Level, ThemedColor>>
+const EMPTY: ThemedColor = { light: '', dark: '' }
+const DEFAULT_COLORS: Colors = { fresh: EMPTY, recent: EMPTY, stale: EMPTY }
+
+/** 默认时段，文字颜色为 colors */
+function toRanges(colors: Colors): FreshnessRanges {
+  const [fresh, recent] = DEFAULT_FRESHNESS_RANGES.ranges
+  return {
+    ranges: [
+      { ...fresh!, text: colors.fresh },
+      { ...recent!, text: colors.recent }
+    ],
+    stale: { ...DEFAULT_FRESHNESS_RANGES.stale, text: colors.stale }
+  }
+}
+
+/** 文字颜色的一项 */
+function field(scope: DOMWrapper<Element>, scheme: FreshnessScheme, level: Level): Found {
+  return scope.get(`[data-test="freshness-text-${scheme}-${KEYS[level]}"]`)
 }
 
 const hex = (scope: Found): Found<HTMLInputElement> => scope.get<HTMLInputElement>('[data-test="color-hex"]')
@@ -140,8 +168,48 @@ async function commitHex(scope: Found, value: string): Promise<void> {
   await settle()
 }
 
-async function savedColors(): Promise<unknown> {
-  return (await getSettings()).freshnessColors
+/** 保存的文字颜色（默认的两个时段与更早） */
+async function savedColors(): Promise<Colors> {
+  const { ranges, stale } = (await getSettings()).freshnessRanges
+  return { fresh: ranges[0]!.text, recent: ranges[1]!.text, stale: stale.text }
+}
+
+/** 时段的天数框 */
+const daysInputs = (scope: DOMWrapper<Element>): DOMWrapper<HTMLInputElement>[] =>
+  scope.findAll<HTMLInputElement>('[data-test="freshness-days"]')
+const shownDays = (scope: DOMWrapper<Element>): string[] => daysInputs(scope).map(input => input.element.value)
+
+/** 改天数并提交（失去焦点、按 Enter 时触发 change） */
+async function setDays(scope: DOMWrapper<Element>, index: number, value: string): Promise<void> {
+  const input = daysInputs(scope)[index]
+  if (!input) throw new Error(`未找到时段：${index}`)
+  input.element.value = value
+  await input.trigger('input')
+  await input.trigger('change')
+  await settle()
+}
+
+/** 保存的时段天数 */
+async function savedDays(): Promise<number[]> {
+  return (await getSettings()).freshnessRanges.ranges.map(range => range.days)
+}
+
+/** 某组（文字颜色、背景色的浅色或深色）各项的名称 */
+const groupLabels = (scope: DOMWrapper<Element>, group: string): string[] =>
+  scope
+    .get(`[data-test="freshness-${group}"]`)
+    .findAll('[data-test="color-label"]')
+    .map(item => item.text())
+
+/** 背景色的一项 */
+const backgroundField = (scope: DOMWrapper<Element>, scheme: FreshnessScheme, key: string): Found =>
+  scope.get(`[data-test="freshness-background-${scheme}-${key}"]`)
+
+/** 背景图写进 style 后读出的写法 */
+function cssImage(image: string): string {
+  const probe = document.createElement('span')
+  probe.style.backgroundImage = image
+  return probe.style.backgroundImage
 }
 
 function toastTexts(wrapper: VueWrapper): string[] {
@@ -164,18 +232,18 @@ describe.skipIf(!App)('设置页：更新时间着色', () => {
     vi.restoreAllMocks()
   })
 
-  it('开关默认关闭；「颜色」分浅色、深色两组（各按 GitHub 该主题的配色），三个时段默认为空、显示默认颜色，关闭时不可用', async () => {
+  it('开关默认关闭；「文字颜色」分浅色、深色两组（各按 GitHub 该主题的配色），三个时段默认为空、显示默认颜色，关闭时不可用', async () => {
     const { scope } = await render()
-    expect(scope.findAll('h2').map(item => item.text())).toEqual(['时段范围', '颜色'])
+    expect(scope.findAll('h2').map(item => item.text())).toEqual(['时段范围', '文字颜色', '背景色'])
     expect(switchOf(scope, '更新时间着色').attributes('aria-checked')).toBe('false')
     expect(scope.findAll('h3').map(item => item.text())).toEqual(['浅色', '深色'])
     for (const scheme of FRESHNESS_SCHEMES) {
-      const group = scope.get(`[data-test="freshness-${scheme}"]`)
+      const group = scope.get(`[data-test="freshness-text-${scheme}"]`)
       expect(group.attributes('data-gcn-scheme')).toBe(scheme)
       expect(group.findAll('[data-test="color-label"]').map(item => item.text())).toEqual(['30 天内', '365 天内', '更早'])
-      for (const level of FRESHNESS_LEVELS) {
+      for (const level of LEVELS) {
         const row = field(scope, scheme, level)
-        const fallback = FRESHNESS_PREVIEW_COLORS[level][scheme]
+        const fallback = PREVIEW[level][scheme]
         expect(hex(row).element.value).toBe('')
         expect(hex(row).attributes('placeholder')).toBe('默认')
         expect(swatch(row).element.style.backgroundColor).toBe(cssColor(fallback))
@@ -184,11 +252,11 @@ describe.skipIf(!App)('设置页：更新时间着色', () => {
       }
     }
     const row = field(scope, 'dark', 'recent')
-    expect(labelledBy(picker(row).element)).toBe('调色盘 深色 365 天内')
+    expect(labelledBy(picker(row).element)).toBe('调色盘 文字颜色 深色 365 天内')
     expect(picker(row).attributes('aria-haspopup')).toBe('dialog')
     expect(picker(row).attributes('aria-expanded')).toBe('false')
-    expect(labelledBy(hex(row).element)).toBe('深色 365 天内')
-    expect(labelledBy(reset(row).element)).toBe('重置 深色 365 天内')
+    expect(labelledBy(hex(row).element)).toBe('文字颜色 深色 365 天内')
+    expect(labelledBy(reset(row).element)).toBe('重置 文字颜色 深色 365 天内')
   })
 
   it('开关立即保存；开启后颜色可改', async () => {
@@ -205,13 +273,13 @@ describe.skipIf(!App)('设置页：更新时间着色', () => {
     const { scope } = await render()
     const row = field(scope, 'light', 'fresh')
     await commitHex(row, 'CF222E')
-    expect(await savedColors()).toEqual({ ...DEFAULT_FRESHNESS_COLORS, fresh: { light: '#cf222e', dark: '' } })
+    expect(await savedColors()).toEqual({ ...DEFAULT_COLORS, fresh: { light: '#cf222e', dark: '' } })
     expect(hex(row).element.value).toBe('#cf222e')
     expect(swatch(row).element.style.backgroundColor).toBe(cssColor('#cf222e'))
     expect(label(row).element.style.color).toBe(cssColor('#cf222e'))
     await commitHex(field(scope, 'dark', 'stale'), ' #ABC ')
     expect(await savedColors()).toEqual({
-      ...DEFAULT_FRESHNESS_COLORS,
+      ...DEFAULT_COLORS,
       fresh: { light: '#cf222e', dark: '' },
       stale: { light: '', dark: '#aabbcc' }
     })
@@ -223,17 +291,17 @@ describe.skipIf(!App)('设置页：更新时间着色', () => {
     const row = field(scope, 'light', 'recent')
     await typeHex(row, '#0969da')
     expect(label(row).element.style.color).toBe(cssColor('#0969da'))
-    expect(await savedColors()).toEqual(DEFAULT_FRESHNESS_COLORS)
+    expect(await savedColors()).toEqual(DEFAULT_COLORS)
     await commitHex(row, '#0969d')
     expect(hex(row).attributes('aria-invalid')).toBe('true')
     expect(status(row).text()).toBe('格式错误')
     expect(hex(row).attributes('aria-describedby')).toBe(status(row).attributes('id'))
-    expect(label(row).element.style.color).toBe(cssColor(FRESHNESS_PREVIEW_COLORS.recent.light))
-    expect(await savedColors()).toEqual(DEFAULT_FRESHNESS_COLORS)
+    expect(label(row).element.style.color).toBe(cssColor(PREVIEW.recent.light))
+    expect(await savedColors()).toEqual(DEFAULT_COLORS)
     await commitHex(row, '#0969da')
     expect(hex(row).attributes('aria-invalid')).toBeUndefined()
     expect(status(row).text()).toBe('')
-    expect(await savedColors()).toEqual({ ...DEFAULT_FRESHNESS_COLORS, recent: { light: '#0969da', dark: '' } })
+    expect(await savedColors()).toEqual({ ...DEFAULT_COLORS, recent: { light: '#0969da', dark: '' } })
   })
 
   it('CSS 颜色与渐变：浏览器认的保存，名称按值预览（渐变裁到文字）；不认的提示格式错误、不保存', async () => {
@@ -249,8 +317,8 @@ describe.skipIf(!App)('设置页：更新时间着色', () => {
 
     await commitHex(row, 'foo')
     expect(status(row).text()).toBe('格式错误')
-    expect(label(row).element.style.color).toBe(cssColor(FRESHNESS_PREVIEW_COLORS.fresh.light))
-    expect(await savedColors()).toEqual(DEFAULT_FRESHNESS_COLORS)
+    expect(label(row).element.style.color).toBe(cssColor(PREVIEW.fresh.light))
+    expect(await savedColors()).toEqual(DEFAULT_COLORS)
 
     await commitHex(row, 'rgba(9, 105, 218, 0.5)')
     expect(status(row).text()).toBe('')
@@ -261,11 +329,11 @@ describe.skipIf(!App)('设置页：更新时间着色', () => {
     expect(label(row).element.style.backgroundImage).toBe(GRADIENT)
     expect(label(row).element.style.backgroundClip).toBe('text')
     expect(swatch(row).element.style.backgroundImage).toBe(GRADIENT)
-    expect(await savedColors()).toEqual({ ...DEFAULT_FRESHNESS_COLORS, fresh: { light: GRADIENT, dark: '' } })
+    expect(await savedColors()).toEqual({ ...DEFAULT_COLORS, fresh: { light: GRADIENT, dark: '' } })
 
     await commitHex(row, LAYERED_GRADIENT)
     expect(status(row).text()).toBe('格式错误')
-    expect(await savedColors()).toEqual({ ...DEFAULT_FRESHNESS_COLORS, fresh: { light: GRADIENT, dark: '' } })
+    expect(await savedColors()).toEqual({ ...DEFAULT_COLORS, fresh: { light: GRADIENT, dark: '' } })
   })
 
   it('调色盘：改动只预览，点在别处时保存；再点色块收起；Tab 离开时也保存', async () => {
@@ -275,21 +343,21 @@ describe.skipIf(!App)('设置页：更新时间着色', () => {
     const panel = await openPalette(row)
     expect(picker(row).attributes('aria-expanded')).toBe('true')
     expect(panel.attributes('role')).toBe('dialog')
-    expect(labelledBy(panel.element)).toBe('深色 30 天内')
+    expect(labelledBy(panel.element)).toBe('文字颜色 深色 30 天内')
     expect(panel.element.contains(document.activeElement)).toBe(true)
     // 默认颜色按 hex 拆开
-    expect(channel(panel, 'hex').element.value).toBe(FRESHNESS_PREVIEW_COLORS.fresh.dark)
+    expect(channel(panel, 'hex').element.value).toBe(PREVIEW.fresh.dark)
     expect(channel(panel, 'a').element.value).toBe('100')
 
     await setChannel(panel, 'hex', '4493f8')
     expect(hex(row).element.value).toBe('#4493f8')
     expect(label(row).element.style.color).toBe(cssColor('#4493f8'))
     expect(swatch(row).element.style.backgroundColor).toBe(cssColor('#4493f8'))
-    expect(await savedColors()).toEqual(DEFAULT_FRESHNESS_COLORS)
+    expect(await savedColors()).toEqual(DEFAULT_COLORS)
     await clickOutside()
     expect(hasPalette(row)).toBe(false)
     expect(picker(row).attributes('aria-expanded')).toBe('false')
-    expect(await savedColors()).toEqual({ ...DEFAULT_FRESHNESS_COLORS, fresh: { light: '', dark: '#4493f8' } })
+    expect(await savedColors()).toEqual({ ...DEFAULT_COLORS, fresh: { light: '', dark: '#4493f8' } })
 
     // 再点色块：收起
     await openPalette(row)
@@ -303,7 +371,7 @@ describe.skipIf(!App)('设置页：更新时间着色', () => {
     again.element.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: hex(row).element }))
     await settle()
     expect(hasPalette(row)).toBe(false)
-    expect(await savedColors()).toEqual({ ...DEFAULT_FRESHNESS_COLORS, fresh: { light: '', dark: '#ff7b72' } })
+    expect(await savedColors()).toEqual({ ...DEFAULT_COLORS, fresh: { light: '', dark: '#ff7b72' } })
   })
 
   it('调色盘：键盘调不透明度、色相、饱和度与明度；透明度写进 hex；Esc 取消并恢复', async () => {
@@ -332,7 +400,7 @@ describe.skipIf(!App)('设置页：更新时间着色', () => {
     expect(hex(row).element.value).toBe('')
     expect(document.activeElement).toBe(picker(row).element)
     await settle()
-    expect(await savedColors()).toEqual(DEFAULT_FRESHNESS_COLORS)
+    expect(await savedColors()).toEqual(DEFAULT_COLORS)
   })
 
   it('调色盘：HEX / RGB / HSL 切换写法，数值框改值（越界取边界，非数字恢复）', async () => {
@@ -362,7 +430,7 @@ describe.skipIf(!App)('设置页：更新时间着色', () => {
     expect(hex(row).element.value).toBe('hsla(20, 100%, 50%, 0.5)')
 
     await clickOutside()
-    expect(await savedColors()).toEqual({ ...DEFAULT_FRESHNESS_COLORS, fresh: { light: 'hsla(20, 100%, 50%, 0.5)', dark: '' } })
+    expect(await savedColors()).toEqual({ ...DEFAULT_COLORS, fresh: { light: 'hsla(20, 100%, 50%, 0.5)', dark: '' } })
     // 再打开：按已存的写法拆开
     const again = await openPalette(row)
     expect(again.get('[data-test="color-format"] .ui-select-label:not(.ui-select-sizer)').text()).toBe('HSL')
@@ -401,7 +469,7 @@ describe.skipIf(!App)('设置页：更新时间着色', () => {
     expect(hex(row).element.value).toMatch(/^conic-gradient\(from 45deg, #1a7f37 0%, /)
     const value = hex(row).element.value
     await clickOutside()
-    expect(await savedColors()).toEqual({ ...DEFAULT_FRESHNESS_COLORS, fresh: { light: value, dark: '' } })
+    expect(await savedColors()).toEqual({ ...DEFAULT_COLORS, fresh: { light: value, dark: '' } })
 
     await commitHex(row, 'linear-gradient(90deg, #cf222e, #0969da 80%, rgb(130, 80, 223))')
     const opened = await openPalette(row)
@@ -432,24 +500,24 @@ describe.skipIf(!App)('设置页：更新时间着色', () => {
     const panel = await openPalette(field(scope, 'dark', 'stale'))
     expect(panel.find('[role="radiogroup"]').exists()).toBe(false)
     expect(panel.find('[data-test="gradient-track"]').exists()).toBe(false)
-    expect(channel(panel, 'hex').element.value).toBe(FRESHNESS_PREVIEW_COLORS.stale.dark)
+    expect(channel(panel, 'hex').element.value).toBe(PREVIEW.stale.dark)
   })
 
   it('重置、清空写法：恢复默认，只改这一项', async () => {
-    const colors = { ...DEFAULT_FRESHNESS_COLORS, fresh: { light: '#cf222e', dark: '#ff7b72' } }
-    await settingsItem.setValue({ ...ZH_SETTINGS, freshness: true, freshnessColors: colors })
+    const colors = { ...DEFAULT_COLORS, fresh: { light: '#cf222e', dark: '#ff7b72' } }
+    await settingsItem.setValue({ ...ZH_SETTINGS, freshness: true, freshnessRanges: toRanges(colors) })
     const { scope } = await render()
     const light = field(scope, 'light', 'fresh')
     expect(hex(light).element.value).toBe('#cf222e')
     expect(reset(light).element.disabled).toBe(false)
     await reset(light).trigger('click')
     await settle()
-    expect(await savedColors()).toEqual({ ...DEFAULT_FRESHNESS_COLORS, fresh: { light: '', dark: '#ff7b72' } })
+    expect(await savedColors()).toEqual({ ...DEFAULT_COLORS, fresh: { light: '', dark: '#ff7b72' } })
     expect(hex(light).element.value).toBe('')
     expect(reset(light).element.disabled).toBe(true)
-    expect(label(light).element.style.color).toBe(cssColor(FRESHNESS_PREVIEW_COLORS.fresh.light))
+    expect(label(light).element.style.color).toBe(cssColor(PREVIEW.fresh.light))
     await commitHex(field(scope, 'dark', 'fresh'), '  ')
-    expect(await savedColors()).toEqual(DEFAULT_FRESHNESS_COLORS)
+    expect(await savedColors()).toEqual(DEFAULT_COLORS)
   })
 
   it('设置在别处改了（其他页面、导入备份）：跟着变；未提交的输入不覆盖', async () => {
@@ -458,7 +526,7 @@ describe.skipIf(!App)('设置页：更新时间着色', () => {
     const light = field(scope, 'light', 'stale')
     const dark = field(scope, 'dark', 'stale')
     await typeHex(dark, '#8b9')
-    await updateSettings({ freshnessColors: { ...DEFAULT_FRESHNESS_COLORS, stale: { light: '#59636e', dark: '#30363d' } } })
+    await updateSettings({ freshnessRanges: toRanges({ ...DEFAULT_COLORS, stale: { light: '#59636e', dark: '#30363d' } }) })
     await settle()
     expect(hex(light).element.value).toBe('#59636e')
     expect(hex(dark).element.value).toBe('#8b9')
@@ -469,7 +537,7 @@ describe.skipIf(!App)('设置页：更新时间着色', () => {
     await updateSettings({ uiLanguage: 'en' })
     await settle()
     expect(scope.findAll('h3').map(item => item.text())).toEqual(['Light', 'Dark'])
-    const labels = scope.get('[data-test="freshness-light"]').findAll('[data-test="color-label"]')
+    const labels = scope.get('[data-test="freshness-text-light"]').findAll('[data-test="color-label"]')
     expect(labels.map(item => item.text())).toEqual(['Within 30 days', 'Within 365 days', 'Older'])
     expect(hex(field(scope, 'light', 'fresh')).attributes('placeholder')).toBe('Default')
     expect(reset(field(scope, 'light', 'fresh')).text()).toBe('Reset')
@@ -481,5 +549,98 @@ describe.skipIf(!App)('设置页：更新时间着色', () => {
     vi.spyOn(fakeBrowser.storage.sync, 'set').mockRejectedValue(new Error('配额'))
     await commitHex(field(scope, 'light', 'fresh'), '#cf222e')
     expect(toastTexts(wrapper)).toEqual(['保存失败'])
+  })
+
+  it('时段：添加（最后一个的两倍）、删除（至少留一个）、改天数；改后按天数排序，各组名称随之变化', async () => {
+    await settingsItem.setValue({ ...ZH_SETTINGS, freshness: true })
+    const { scope } = await render()
+    expect(shownDays(scope)).toEqual(['30', '365'])
+    expect(scope.get('[data-test="freshness-range-stale"]').text()).toBe('更早')
+
+    await scope.get('[data-test="freshness-add"]').trigger('click')
+    await settle()
+    expect(await savedDays()).toEqual([30, 365, 730])
+    expect(shownDays(scope)).toEqual(['30', '365', '730'])
+    expect(groupLabels(scope, 'text-light')).toEqual(['30 天内', '365 天内', '730 天内', '更早'])
+
+    await setDays(scope, 0, '400')
+    expect(await savedDays()).toEqual([365, 400, 730])
+    expect(shownDays(scope)).toEqual(['365', '400', '730'])
+    expect(groupLabels(scope, 'text-dark')).toEqual(['365 天内', '400 天内', '730 天内', '更早'])
+
+    const removes = scope.findAll<HTMLButtonElement>('[data-test="freshness-remove"]')
+    expect(removes[1]!.attributes('aria-label')).toBe('删除 400 天内')
+    await removes[1]!.trigger('click')
+    await settle()
+    expect(await savedDays()).toEqual([365, 730])
+    await scope.get('[data-test="freshness-remove"]').trigger('click')
+    await settle()
+    expect(await savedDays()).toEqual([730])
+    expect(scope.get<HTMLButtonElement>('[data-test="freshness-remove"]').element.disabled).toBe(true)
+  })
+
+  it('时段：与其他时段重复时不保存、恢复原值并提示；越界取边界；清空恢复', async () => {
+    await settingsItem.setValue({ ...ZH_SETTINGS, freshness: true })
+    const { scope } = await render()
+    const message = scope.get('[data-test="freshness-range-status"]')
+    await setDays(scope, 0, '365')
+    expect(await savedDays()).toEqual([30, 365])
+    expect(shownDays(scope)).toEqual(['30', '365'])
+    expect(message.text()).toBe('天数重复')
+    expect(daysInputs(scope)[0]!.attributes('aria-describedby')).toBe(message.attributes('id'))
+
+    await setDays(scope, 1, '99999')
+    expect(message.text()).toBe('')
+    expect(await savedDays()).toEqual([30, 3650])
+    await setDays(scope, 0, '0')
+    expect(await savedDays()).toEqual([1, 3650])
+    await setDays(scope, 0, '')
+    expect(shownDays(scope)).toEqual(['1', '3650'])
+    expect(await savedDays()).toEqual([1, 3650])
+  })
+
+  it(`时段：最多 ${MAX_FRESHNESS_RANGES} 个，满了不能再加；关闭着色时不可改`, async () => {
+    const { scope } = await render()
+    const add = scope.get<HTMLButtonElement>('[data-test="freshness-add"]')
+    expect([add.element.disabled, daysInputs(scope)[0]!.element.disabled]).toEqual([true, true])
+    await switchOf(scope, '更新时间着色').trigger('click')
+    await settle()
+    for (let count = 2; count < MAX_FRESHNESS_RANGES; count += 1) {
+      await add.trigger('click')
+      await settle()
+    }
+    expect(await savedDays()).toHaveLength(MAX_FRESHNESS_RANGES)
+    expect(add.element.disabled).toBe(true)
+  })
+
+  it('背景色：默认关闭；开启后各时段（含更早）可改，名称按文字颜色加背景色预览', async () => {
+    await settingsItem.setValue({ ...ZH_SETTINGS, freshness: true })
+    const { scope } = await render()
+    const toggle = switchOf(scope, '启用')
+    expect(toggle.attributes('aria-checked')).toBe('false')
+    expect(scope.find('[data-test="freshness-background-light"]').exists()).toBe(false)
+    expect(label(field(scope, 'light', 'fresh')).element.style.backgroundImage).toBe('')
+
+    await toggle.trigger('click')
+    await settle()
+    expect((await getSettings()).freshnessBackground).toBe(true)
+    expect(groupLabels(scope, 'background-light')).toEqual(['30 天内', '365 天内', '更早'])
+    const success = FRESHNESS_PREVIEW_COLORS.success.background.light
+    const row = backgroundField(scope, 'light', '0')
+    expect(labelledBy(hex(row).element)).toBe('背景色 浅色 30 天内')
+    expect(label(row).element.style.color).toBe(cssColor(PREVIEW.fresh.light))
+    expect(label(row).element.style.backgroundImage).toBe(cssImage(`linear-gradient(${success}, ${success})`))
+    // 文字颜色一组也带上背景色
+    expect(label(field(scope, 'light', 'fresh')).element.style.backgroundImage).toBe(cssImage(`linear-gradient(${success}, ${success})`))
+
+    await commitHex(row, '#ffebe9')
+    const { ranges } = (await getSettings()).freshnessRanges
+    expect(ranges[0]!.background).toEqual({ light: '#ffebe9', dark: '' })
+    expect(ranges[0]!.text).toEqual(EMPTY)
+    expect(label(row).element.style.backgroundImage).toBe(cssImage('linear-gradient(#ffebe9, #ffebe9)'))
+    expect(label(field(scope, 'light', 'fresh')).element.style.backgroundImage).toBe(cssImage('linear-gradient(#ffebe9, #ffebe9)'))
+
+    await commitHex(backgroundField(scope, 'dark', 'stale'), '#30363d')
+    expect((await getSettings()).freshnessRanges.stale.background).toEqual({ light: '', dark: '#30363d' })
   })
 })

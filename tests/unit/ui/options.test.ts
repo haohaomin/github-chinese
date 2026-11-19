@@ -142,8 +142,10 @@ describe.skipIf(!App)('设置页组件', () => {
         '隐私',
         '范围',
         '时段范围',
-        '颜色',
+        '文字颜色',
+        '背景色',
         '时间格式',
+        '更新',
         '关于'
       ])
       expect(dictionaryTabLabels(wrapper)).toEqual(['自定义词库', '内置词库'])
@@ -168,7 +170,7 @@ describe.skipIf(!App)('设置页组件', () => {
       expect(section(wrapper, '关于').element.closest('[role="tabpanel"]')).toBeNull()
       const main = wrapper.get('main').element
       expect(main.firstElementChild?.contains(wrapper.get('[role="tablist"]').element)).toBe(true)
-      // 开关只有汉化、加速的三个与各分类的自动隐藏、净化搜索，以及自动加载、下载次数、新标签页打开及其范围、更新时间着色（图片预览、下载文件夹只在弹出页）
+      // 开关只有汉化、加速的三个与各分类的自动隐藏、净化搜索，以及自动加载、下载次数、新标签页打开及其范围、更新时间着色及其背景色、自动检查更新（图片预览、下载文件夹只在弹出页）
       expect(wrapper.findAll('.ui-switch-label').map(item => item.text())).toEqual([
         '汉化',
         '加速下载',
@@ -200,13 +202,16 @@ describe.skipIf(!App)('设置页组件', () => {
         '首页',
         '个人与组织主页',
         '探索',
-        '更新时间着色'
+        '更新时间着色',
+        '启用',
+        '自动检查更新'
       ])
-      // 下拉只有时间格式、内置词库的翻译语言与加速设置的替换原链接；没有界面语言下拉
+      // 下拉只有时间格式、内置词库的翻译语言、加速设置的替换原链接与检查频率；没有界面语言下拉
       expect(wrapper.findAll('[role="combobox"]').map(item => item.attributes('data-test'))).toEqual([
         'dictionary-language',
         'replace-category',
-        'time-format'
+        'time-format',
+        'update-interval'
       ])
       expect(wrapper.text()).not.toContain('快捷键')
     })
@@ -277,8 +282,10 @@ describe.skipIf(!App)('设置页组件', () => {
           'Privacy',
           'Scope',
           'Date ranges',
-          'Colors',
+          'Text colors',
+          'Background',
           'Time format',
+          'Updates',
           'About'
         ],
         'GitHub repository'
@@ -288,7 +295,22 @@ describe.skipIf(!App)('设置页组件', () => {
         'GitHub 中文化',
         '設定',
         ['中文化設定', '加速設定', '淨化設定', '增強設定', '企業版設定'],
-        ['排除路徑', '加速來源', '範圍', '說明', '個人存取權杖', '建立權杖', '隱私權', '範圍', '時段範圍', '顏色', '時間格式', '關於'],
+        [
+          '排除路徑',
+          '加速來源',
+          '範圍',
+          '說明',
+          '個人存取權杖',
+          '建立權杖',
+          '隱私權',
+          '範圍',
+          '時段範圍',
+          '文字顏色',
+          '背景色',
+          '時間格式',
+          '更新',
+          '關於'
+        ],
         'GitHub'
       ]
     ] as const)('界面语言随设置（如在弹出页修改）切换：%s', async (uiLanguage, title, tabsLabel, tabs, sections, repository) => {
@@ -299,7 +321,7 @@ describe.skipIf(!App)('设置页组件', () => {
       expect(wrapper.get('[role="tablist"]').attributes('aria-label')).toBe(tabsLabel)
       expect(tabLabels(wrapper)).toEqual(tabs)
       expect(headings(wrapper)).toEqual(sections)
-      expect(wrapper.get('dt').text()).toBe(repository)
+      expect(wrapper.get('[aria-labelledby="about-title"] dt').text()).toBe(repository)
       expect(document.documentElement.lang).toBe(uiLanguage)
     })
 

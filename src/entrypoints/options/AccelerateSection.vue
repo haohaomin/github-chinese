@@ -410,22 +410,6 @@
 </script>
 
 <style scoped>
-  /* 替换原链接：与开关同一列表，名称在左、下拉框在右 */
-  .field-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  }
-
-  .field-label {
-    cursor: pointer;
-  }
-
-  .field-select {
-    min-width: 160px;
-  }
-
   /* 加速源与上方开关隔开 */
   .sources-section {
     margin-top: 12px;

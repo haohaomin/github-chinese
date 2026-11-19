@@ -1,6 +1,9 @@
 import { fakeBrowser } from 'wxt/testing/fake-browser'
 import { REPOSITORY_URL } from '../../../src/shared/extension'
+import { settingsItem } from '../../../src/shared/settings'
 import {
+  canCheckUpdates,
+  checkForUpdate,
   checkLatestVersion,
   fetchLatestVersion,
   installSource,
@@ -9,15 +12,17 @@ import {
   releaseUrl,
   releaseVersion,
   UPDATE_CHECK_DEPS,
-  UPDATE_CHECK_INTERVAL_MS,
   UPDATE_CHECK_TIMEOUT_MS,
   updateCheckItem,
   type UpdateCheckDeps
 } from '../../../src/shared/update-check'
+import { UPDATE_INTERVAL_MS } from '../../../src/shared/update-settings'
 
 const NOW = Date.UTC(2026, 10, 1, 8)
 const TAG_URL = `${REPOSITORY_URL}/releases/tag/v1.3.0`
 const CWS_UPDATE_URL = 'https://clients2.google.com/service/update2/crx'
+/** 默认的自动检查间隔（每天） */
+const UPDATE_CHECK_INTERVAL_MS = UPDATE_INTERVAL_MS.daily
 
 type FetchMock = ReturnType<typeof vi.fn<UpdateCheckDeps['fetch']>>
 
@@ -27,6 +32,7 @@ function makeDeps(overrides: Partial<UpdateCheckDeps> = {}): UpdateCheckDeps & {
     now: () => NOW,
     manifest: () => ({ version: '1.2.0' }),
     installType: async () => 'development',
+    policy: async () => ({ auto: true, intervalMs: UPDATE_CHECK_INTERVAL_MS }),
     ...overrides
   } as UpdateCheckDeps & { fetch: FetchMock }
 }
@@ -222,6 +228,68 @@ describe('checkLatestVersion', () => {
   })
 })
 
+describe('自动检查的设置', () => {
+  it('关闭自动检查：回调缓存的版本号，不请求', async () => {
+    await updateCheckItem.setValue({ latest: '1.2.5', checkedAt: NOW - 10 * UPDATE_CHECK_INTERVAL_MS })
+    const deps = makeDeps({ policy: async () => ({ auto: false, intervalMs: UPDATE_CHECK_INTERVAL_MS }) })
+    expect(await collect(deps)).toEqual(['1.2.5'])
+    expect(deps.fetch).not.toHaveBeenCalled()
+  })
+
+  it('关闭自动检查、没有缓存：不回调、不请求', async () => {
+    const deps = makeDeps({ policy: async () => ({ auto: false, intervalMs: UPDATE_CHECK_INTERVAL_MS }) })
+    expect(await collect(deps)).toEqual([])
+    expect(deps.fetch).not.toHaveBeenCalled()
+  })
+
+  it('按频率：每周时 3 天前检查过不请求，8 天前的请求', async () => {
+    const weekly = { policy: async () => ({ auto: true, intervalMs: UPDATE_INTERVAL_MS.weekly }) }
+    await updateCheckItem.setValue({ latest: '1.2.5', checkedAt: NOW - 3 * UPDATE_INTERVAL_MS.daily })
+    const recent = makeDeps(weekly)
+    expect(await collect(recent)).toEqual(['1.2.5'])
+    expect(recent.fetch).not.toHaveBeenCalled()
+    await updateCheckItem.setValue({ latest: '1.2.5', checkedAt: NOW - 8 * UPDATE_INTERVAL_MS.daily })
+    const stale = makeDeps(weekly)
+    expect(await collect(stale)).toEqual(['1.2.5', '1.3.0'])
+  })
+
+  it('读设置出错：按默认（开启、每天）', async () => {
+    await updateCheckItem.setValue({ latest: '1.2.5', checkedAt: NOW - UPDATE_CHECK_INTERVAL_MS })
+    const deps = makeDeps({
+      policy: async () => {
+        throw new Error('不可用')
+      }
+    })
+    expect(await collect(deps)).toEqual(['1.2.5', '1.3.0'])
+  })
+})
+
+describe('checkForUpdate', () => {
+  it('不看缓存与设置，直接请求；取到的写入缓存', async () => {
+    await updateCheckItem.setValue({ latest: '1.2.5', checkedAt: NOW })
+    const deps = makeDeps({ policy: async () => ({ auto: false, intervalMs: UPDATE_CHECK_INTERVAL_MS }) })
+    expect(await checkForUpdate(deps)).toBe('1.3.0')
+    expect(deps.fetch).toHaveBeenCalledTimes(1)
+    expect(await updateCheckItem.getValue()).toEqual({ latest: '1.3.0', checkedAt: NOW })
+  })
+
+  it('失败：undefined，缓存不变', async () => {
+    const cached = { latest: '1.2.5', checkedAt: NOW - 1 }
+    await updateCheckItem.setValue(cached)
+    const deps = makeDeps({ fetch: vi.fn(async () => ({ ok: false, url: TAG_URL })) })
+    expect(await checkForUpdate(deps)).toBeUndefined()
+    expect(await updateCheckItem.getValue()).toEqual(cached)
+  })
+})
+
+describe('canCheckUpdates', () => {
+  it('手动安装为 true；商店安装、企业策略部署为 false', async () => {
+    expect(await canCheckUpdates(makeDeps())).toBe(true)
+    expect(await canCheckUpdates(makeDeps({ manifest: () => ({ version: '1.2.0', update_url: CWS_UPDATE_URL }) }))).toBe(false)
+    expect(await canCheckUpdates(makeDeps({ installType: async () => 'admin' }))).toBe(false)
+  })
+})
+
 describe('UPDATE_CHECK_DEPS', () => {
   function stubManagement(value: unknown): () => void {
     Object.defineProperty(fakeBrowser, 'management', { value, configurable: true, writable: true })
@@ -254,5 +322,11 @@ describe('UPDATE_CHECK_DEPS', () => {
       update_url: CWS_UPDATE_URL
     } as never)
     expect(UPDATE_CHECK_DEPS.manifest()).toMatchObject({ update_url: CWS_UPDATE_URL })
+  })
+
+  it('policy：读设置的自动检查与频率', async () => {
+    expect(await UPDATE_CHECK_DEPS.policy()).toEqual({ auto: true, intervalMs: UPDATE_INTERVAL_MS.daily })
+    await settingsItem.setValue({ updateCheck: false, updateInterval: 'monthly' })
+    expect(await UPDATE_CHECK_DEPS.policy()).toEqual({ auto: false, intervalMs: UPDATE_INTERVAL_MS.monthly })
   })
 })

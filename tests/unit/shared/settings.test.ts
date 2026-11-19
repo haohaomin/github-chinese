@@ -263,17 +263,42 @@ describe('更新时间着色', () => {
     expect(mergeSettings({ freshness: 1 }).freshness).toBe(false)
   })
 
-  it('颜色：默认都为空；存储值逐项校验（见 shared/freshness）', () => {
-    expect(DEFAULT_SETTINGS.freshnessColors).toEqual({
-      fresh: { light: '', dark: '' },
-      recent: { light: '', dark: '' },
-      stale: { light: '', dark: '' }
+  it('时段：默认 30、365 天，颜色都为空，不加背景色；存储值逐项校验（见 shared/freshness）', () => {
+    const empty = { light: '', dark: '' }
+    expect(DEFAULT_SETTINGS.freshnessRanges).toEqual({
+      ranges: [
+        { days: 30, text: empty, background: empty },
+        { days: 365, text: empty, background: empty }
+      ],
+      stale: { text: empty, background: empty }
     })
-    expect(mergeSettings({ freshnessColors: { fresh: { light: '#CF222E', dark: 'red' } } }).freshnessColors).toEqual({
-      ...DEFAULT_SETTINGS.freshnessColors,
-      fresh: { light: '#cf222e', dark: 'red' }
+    expect(DEFAULT_SETTINGS.freshnessBackground).toBe(false)
+    const merged = mergeSettings({
+      freshnessRanges: { ranges: [{ days: 7, text: { light: '#CF222E', dark: 'red' } }] },
+      freshnessBackground: true
     })
-    expect(mergeSettings({ freshnessColors: 'Sample text' }).freshnessColors).toEqual(DEFAULT_SETTINGS.freshnessColors)
+    expect(merged.freshnessRanges.ranges).toEqual([{ days: 7, text: { light: '#cf222e', dark: 'red' }, background: empty }])
+    expect(merged.freshnessBackground).toBe(true)
+    expect(mergeSettings({ freshnessRanges: 'Sample text' }).freshnessRanges).toEqual(DEFAULT_SETTINGS.freshnessRanges)
+  })
+
+  it('1.6 的设置（freshnessDays、freshnessColors）：换算成时段，保存时不再写入', () => {
+    const merged = mergeSettings({ freshnessDays: { fresh: 7, recent: 90 }, freshnessColors: { recent: { light: '', dark: '#d29922' } } })
+    expect(merged.freshnessRanges.ranges.map(range => [range.days, range.text.dark])).toEqual([
+      [7, ''],
+      [90, '#d29922']
+    ])
+    expect(merged).not.toHaveProperty('freshnessDays')
+    expect(merged).not.toHaveProperty('freshnessColors')
+  })
+})
+
+describe('更新检查', () => {
+  it('默认开启、每天；不合法的用默认', () => {
+    expect(DEFAULT_SETTINGS.updateCheck).toBe(true)
+    expect(DEFAULT_SETTINGS.updateInterval).toBe('daily')
+    expect(mergeSettings({ updateCheck: false, updateInterval: 'weekly' })).toMatchObject({ updateCheck: false, updateInterval: 'weekly' })
+    expect(mergeSettings({ updateCheck: 'no', updateInterval: 'hourly' })).toMatchObject({ updateCheck: true, updateInterval: 'daily' })
   })
 })
 

@@ -1,18 +1,18 @@
 import { browser } from 'wxt/browser'
 import { storage } from 'wxt/utils/storage'
 import { REPOSITORY_URL } from './extension'
+import { getSettings, type Settings } from './settings'
+import { DEFAULT_UPDATE_INTERVAL, UPDATE_INTERVAL_MS } from './update-settings'
 
 /**
  * 新版本检查：从发行版安装的（Chromium 解压加载、Safari 宿主应用）不会自动更新，弹出页、设置页据此提示新版本。
+ * 打开时按设置（updateCheck、updateInterval）自动检查，也可手动检查。
  * 商店版由商店更新：Chrome 应用商店、Edge 加载项安装时在 manifest 中写入 update_url；企业策略部署的由管理员更新。
  * Firefox 不检查（见 components/useUpdateCheck）
  */
 
 /** 最新发行版（不含预发行版）：GitHub 跳转到 /releases/tag/v<版本号> */
 export const LATEST_RELEASE_URL = `${REPOSITORY_URL}/releases/latest`
-
-/** 两次检查的最短间隔 */
-export const UPDATE_CHECK_INTERVAL_MS = 24 * 60 * 60 * 1000
 
 /** 单次请求的时限 */
 export const UPDATE_CHECK_TIMEOUT_MS = 10_000
@@ -76,6 +76,19 @@ export function releaseUrl(version: string): string {
   return `${REPOSITORY_URL}/releases/tag/v${version}`
 }
 
+/** 自动检查：是否检查、两次检查的最短间隔 */
+export interface UpdatePolicy {
+  readonly auto: boolean
+  readonly intervalMs: number
+}
+
+const DEFAULT_POLICY: UpdatePolicy = { auto: true, intervalMs: UPDATE_INTERVAL_MS[DEFAULT_UPDATE_INTERVAL] }
+
+/** 设置里的自动检查 */
+export function updatePolicy(settings: Pick<Settings, 'updateCheck' | 'updateInterval'>): UpdatePolicy {
+  return { auto: settings.updateCheck, intervalMs: UPDATE_INTERVAL_MS[settings.updateInterval] }
+}
+
 export interface UpdateCheckDeps {
   fetch(url: string, init: RequestInit): Promise<Pick<Response, 'ok' | 'url'>>
   /** 当前时间（毫秒时间戳） */
@@ -83,6 +96,8 @@ export interface UpdateCheckDeps {
   manifest(): { readonly update_url?: unknown }
   /** management.getSelf() 的 installType；没有该接口时为 undefined */
   installType(): Promise<string | undefined>
+  /** 自动检查的设置 */
+  policy(): Promise<UpdatePolicy>
 }
 
 export const UPDATE_CHECK_DEPS: UpdateCheckDeps = {
@@ -91,7 +106,8 @@ export const UPDATE_CHECK_DEPS: UpdateCheckDeps = {
   now: () => Date.now(),
   manifest: () => browser.runtime.getManifest(),
   // getSelf 不需要 management 权限
-  installType: async () => (await browser.management?.getSelf?.())?.installType
+  installType: async () => (await browser.management?.getSelf?.())?.installType,
+  policy: async () => updatePolicy(await getSettings())
 }
 
 /**
@@ -146,24 +162,49 @@ async function readInstallSource(deps: UpdateCheckDeps): Promise<InstallSource |
   }
 }
 
-/**
- * 取最新发行版的版本号，经 onLatest 回调：手动安装时先回调缓存的；缓存过期（或检查时间晚于当前）再请求，
- * 取到则回调并写入缓存，失败时缓存不变。商店安装、企业策略部署不读缓存、不请求
- */
-export async function checkLatestVersion(onLatest: (version: string) => void, deps: UpdateCheckDeps = UPDATE_CHECK_DEPS): Promise<void> {
-  if ((await readInstallSource(deps)) !== 'manual') return
-  const now = deps.now()
-  const cached = await readCache()
-  if (cached) {
-    onLatest(cached.latest)
-    if (cached.checkedAt <= now && now - cached.checkedAt < UPDATE_CHECK_INTERVAL_MS) return
+async function readPolicy(deps: UpdateCheckDeps): Promise<UpdatePolicy> {
+  try {
+    return await deps.policy()
+  } catch {
+    return DEFAULT_POLICY
   }
+}
+
+/** 是否检查新版本：手动安装的（商店安装、企业策略部署的不检查） */
+export async function canCheckUpdates(deps: UpdateCheckDeps = UPDATE_CHECK_DEPS): Promise<boolean> {
+  return (await readInstallSource(deps)) === 'manual'
+}
+
+/** 请求最新发行版的版本号并写入缓存；失败为 undefined，缓存不变 */
+async function requestLatest(deps: UpdateCheckDeps): Promise<string | undefined> {
+  const now = deps.now()
   const latest = await fetchLatestVersion(deps)
-  if (latest === undefined) return
+  if (latest === undefined) return undefined
   try {
     await updateCheckItem.setValue({ latest, checkedAt: now })
   } catch {
     // 写不进缓存：下次打开时再请求
   }
-  onLatest(latest)
+  return latest
+}
+
+/**
+ * 取最新发行版的版本号，经 onLatest 回调：手动安装时先回调缓存的；开启自动检查且缓存过期（或检查时间晚于当前）再请求，
+ * 取到则回调并写入缓存，失败时缓存不变。商店安装、企业策略部署不读缓存、不请求
+ */
+export async function checkLatestVersion(onLatest: (version: string) => void, deps: UpdateCheckDeps = UPDATE_CHECK_DEPS): Promise<void> {
+  if (!(await canCheckUpdates(deps))) return
+  const now = deps.now()
+  const cached = await readCache()
+  if (cached) onLatest(cached.latest)
+  const policy = await readPolicy(deps)
+  if (!policy.auto) return
+  if (cached && cached.checkedAt <= now && now - cached.checkedAt < policy.intervalMs) return
+  const latest = await requestLatest(deps)
+  if (latest !== undefined) onLatest(latest)
+}
+
+/** 手动检查：不看缓存与设置，直接请求；取到的写入缓存。失败为 undefined */
+export async function checkForUpdate(deps: UpdateCheckDeps = UPDATE_CHECK_DEPS): Promise<string | undefined> {
+  return requestLatest(deps)
 }

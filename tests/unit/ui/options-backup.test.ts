@@ -117,13 +117,13 @@ describe.skipIf(!App)('设置页：备份与导入导出', () => {
     vi.restoreAllMocks()
   })
 
-  it('顶部为导入备份、导出备份；净化设置、下载次数、新标签页打开、企业版设置最上方，排除路径、加速源标题右侧为导入、导出；只选 JSON 文件', async () => {
+  it('顶部为检查更新、导入备份、导出备份；净化设置、下载次数、新标签页打开、企业版设置最上方，排除路径、加速源标题右侧为导入、导出；只选 JSON 文件', async () => {
     const wrapper = await render()
     expect(
       header(wrapper)
         .findAll('button')
         .map(item => item.text())
-    ).toEqual(['导入备份', '导出备份'])
+    ).toEqual(['检查更新', '导入备份', '导出备份'])
     expect(header(wrapper).get('[data-test="backup-file"]').attributes('accept')).toBe('.json,application/json')
     for (const label of ['净化设置', '下载次数', '新标签页打开', '企业版设置']) {
       const content = panel(wrapper, label).get('.section').element
@@ -260,7 +260,11 @@ describe.skipIf(!App)('设置页：备份与导入导出', () => {
   it('导入备份：界面语言随文件中的设置切换', async () => {
     const wrapper = await render()
     await chooseBackup(header(wrapper), file({ settings: { uiLanguage: 'en' } }))
-    expect(header(wrapper).findAll('button')[1]?.text()).toBe('Export backup')
+    expect(
+      header(wrapper)
+        .findAll('button')
+        .map(item => item.text())
+    ).toEqual(['Check for updates', 'Import backup', 'Export backup'])
   })
 
   it.each([

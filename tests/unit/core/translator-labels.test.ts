@@ -6,7 +6,7 @@ import { createMatcher } from '../../../src/core/matcher'
 import { createTranslator, type Translator, type TranslatorOptions } from '../../../src/core/translator'
 import type { LocaleBundle, PageKey } from '../../../src/core/types'
 import { DEFAULT_AUTO_LOAD_SCOPES } from '../../../src/shared/auto-load'
-import { DEFAULT_FRESHNESS_COLORS, DEFAULT_FRESHNESS_DAYS } from '../../../src/shared/freshness'
+import { DEFAULT_FRESHNESS_RANGES } from '../../../src/shared/freshness'
 import type { Settings } from '../../../src/shared/settings'
 import { $, settle } from './helpers'
 
@@ -594,8 +594,10 @@ describe('停用、换词典、切换语言、排除页面', () => {
       newTabPaths: [],
       chineseReadme: false,
       freshness: false,
-      freshnessColors: DEFAULT_FRESHNESS_COLORS,
-      freshnessDays: DEFAULT_FRESHNESS_DAYS,
+      freshnessRanges: DEFAULT_FRESHNESS_RANGES,
+      freshnessBackground: false,
+      updateCheck: true,
+      updateInterval: 'daily',
       categories: [],
       categoryOrder: [],
       removedCategories: [],

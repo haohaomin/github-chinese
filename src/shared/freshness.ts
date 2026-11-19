@@ -1,48 +1,81 @@
 /**
- * 更新时间着色的时段与颜色（设置项 freshnessColors，处理见 core/freshness）。
- * 颜色按时段、GitHub 的浅色与深色主题各一项：值为 CSS 颜色或渐变（hex 统一为小写 #rrggbb），空字符串为默认
- * （FRESH_DAYS 天内、RECENT_DAYS 天内用主题的成功色、提示色，更早的不变）
+ * 更新时间着色的时段与颜色（设置项 freshnessRanges、freshnessBackground，处理见 core/freshness）。
+ * 时段按天数从近到远排列（「N 天内」，天数不重复），其后是「更早」；各时段的文字颜色、背景色按 GitHub 的浅色、深色主题各一项：
+ * 值为 CSS 颜色或渐变（hex 统一为小写 #rrggbb），空字符串为默认。
+ * 默认颜色按时段的先后取色调（成功、提示、严重、危险、完成、强调），更早的文字不变、背景为中性色
  */
 
-/** 时段的期限（天）：默认值 */
+/** 时段的期限（天）：默认的两个时段 */
 export const FRESH_DAYS = 30
 export const RECENT_DAYS = 365
 /** 自定义天数的范围 */
 export const MIN_FRESH_DAYS = 1
 export const MAX_FRESH_DAYS = 3650
-
-/** 时段：fresh 为 FRESH_DAYS 天内，recent 为 RECENT_DAYS 天内，stale 为更早 */
-export type FreshnessLevel = 'fresh' | 'recent' | 'stale'
-export const FRESHNESS_LEVELS: readonly FreshnessLevel[] = ['fresh', 'recent', 'stale']
+/** 时段数（不含「更早」）的上下限 */
+export const MIN_FRESHNESS_RANGES = 1
+export const MAX_FRESHNESS_RANGES = 6
 
 /** GitHub 的主题：浅色、深色 */
 export type FreshnessScheme = 'light' | 'dark'
 export const FRESHNESS_SCHEMES: readonly FreshnessScheme[] = ['light', 'dark']
 
-export type FreshnessColors = Readonly<Record<FreshnessLevel, Readonly<Record<FreshnessScheme, string>>>>
+/** 颜色的用处：文字、背景 */
+export type FreshnessPaintKind = 'text' | 'background'
+export const FRESHNESS_PAINT_KINDS: readonly FreshnessPaintKind[] = ['text', 'background']
 
-/** 自定义时段天数：fresh 为多少天内，recent 为多少天内（须大于 fresh） */
-export interface FreshnessDays {
-  readonly fresh: number
-  readonly recent: number
+/** 一项颜色在浅色、深色主题下的值，空字符串为默认 */
+export type ThemedColor = Readonly<Record<FreshnessScheme, string>>
+
+/** 一个时段的颜色 */
+export type FreshnessPaint = Readonly<Record<FreshnessPaintKind, ThemedColor>>
+
+/** 时段：days 天内（含） */
+export interface FreshnessRange extends FreshnessPaint {
+  readonly days: number
 }
 
-export const DEFAULT_FRESHNESS_DAYS: FreshnessDays = {
-  fresh: FRESH_DAYS,
-  recent: RECENT_DAYS
+/** 时段设置：从近到远的各时段与「更早」 */
+export interface FreshnessRanges {
+  readonly ranges: readonly FreshnessRange[]
+  readonly stale: FreshnessPaint
 }
 
-export const DEFAULT_FRESHNESS_COLORS: FreshnessColors = {
-  fresh: { light: '', dark: '' },
-  recent: { light: '', dark: '' },
-  stale: { light: '', dark: '' }
+/** 时段的键：从近到远的序号，或 stale（更早） */
+export type FreshnessKey = number | 'stale'
+
+/** 默认颜色的色调：各时段按先后循环取，更早的为 neutral */
+export type FreshnessTone = 'success' | 'attention' | 'severe' | 'danger' | 'done' | 'accent' | 'neutral'
+export const RANGE_TONES: readonly Exclude<FreshnessTone, 'neutral'>[] = ['success', 'attention', 'severe', 'danger', 'done', 'accent']
+
+const EMPTY_COLOR: ThemedColor = { light: '', dark: '' }
+const EMPTY_PAINT: FreshnessPaint = { text: EMPTY_COLOR, background: EMPTY_COLOR }
+
+export function emptyRange(days: number): FreshnessRange {
+  return { days, ...EMPTY_PAINT }
 }
 
-/** 默认颜色在 GitHub 默认主题下的值（成功色、提示色、次要文字色）：设置页的预览与调色盘用 */
-export const FRESHNESS_PREVIEW_COLORS: FreshnessColors = {
-  fresh: { light: '#1a7f37', dark: '#3fb950' },
-  recent: { light: '#9a6700', dark: '#d29922' },
-  stale: { light: '#59636e', dark: '#9198a1' }
+export const DEFAULT_FRESHNESS_RANGES: FreshnessRanges = {
+  ranges: [emptyRange(FRESH_DAYS), emptyRange(RECENT_DAYS)],
+  stale: EMPTY_PAINT
+}
+
+/** 时段的色调 */
+export function toneOf(key: FreshnessKey): FreshnessTone {
+  return key === 'stale' ? 'neutral' : RANGE_TONES[key % RANGE_TONES.length]!
+}
+
+/**
+ * 各色调在 GitHub 默认主题下的值（文字色、柔和背景色）：设置页的预览与调色盘用。
+ * 中性的文字色为次要文字色（更早的时间在页面上不改颜色，预览用它）
+ */
+export const FRESHNESS_PREVIEW_COLORS: Readonly<Record<FreshnessTone, FreshnessPaint>> = {
+  success: { text: { light: '#1a7f37', dark: '#3fb950' }, background: { light: '#dafbe1', dark: '#2ea04326' } },
+  attention: { text: { light: '#9a6700', dark: '#d29922' }, background: { light: '#fff8c5', dark: '#bb800926' } },
+  severe: { text: { light: '#bc4c00', dark: '#db6d28' }, background: { light: '#fff1e5', dark: '#db6d281a' } },
+  danger: { text: { light: '#d1242f', dark: '#f85149' }, background: { light: '#ffebe9', dark: '#f851491a' } },
+  done: { text: { light: '#8250df', dark: '#ab7df8' }, background: { light: '#fbefff', dark: '#ab7df826' } },
+  accent: { text: { light: '#0969da', dark: '#4493f8' }, background: { light: '#ddf4ff', dark: '#388bfd1a' } },
+  neutral: { text: { light: '#59636e', dark: '#9198a1' }, background: { light: '#818b981f', dark: '#656c7633' } }
 }
 
 const HEX_COLOR = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i
@@ -120,48 +153,130 @@ function sanitizeColor(value: unknown): string {
   return normalizeHexColor(text) ?? text
 }
 
-/** 读取存储、导入备份：逐项校验，缺失或格式不符的用默认 */
-export function sanitizeFreshnessColors(value: unknown): FreshnessColors {
-  const levels = isRecord(value) ? value : {}
-  const levelColors = (level: FreshnessLevel): Record<FreshnessScheme, string> => {
-    const schemes = levels[level]
-    const pick = (scheme: FreshnessScheme): string => (isRecord(schemes) ? sanitizeColor(schemes[scheme]) : '')
-    return { light: pick('light'), dark: pick('dark') }
-  }
-  return { fresh: levelColors('fresh'), recent: levelColors('recent'), stale: levelColors('stale') }
+function sanitizeThemed(value: unknown): ThemedColor {
+  return isRecord(value) ? { light: sanitizeColor(value.light), dark: sanitizeColor(value.dark) } : EMPTY_COLOR
 }
 
-/** 读取存储、导入备份：校验自定义天数，缺失或越界用默认 */
-export function sanitizeFreshnessDays(value: unknown): FreshnessDays {
-  if (!isRecord(value)) return { ...DEFAULT_FRESHNESS_DAYS }
-  const pick = (key: 'fresh' | 'recent', fallback: number): number => {
-    const raw = value[key]
-    if (typeof raw !== 'number' || !Number.isFinite(raw)) return fallback
-    const rounded = Math.round(raw)
-    if (rounded < MIN_FRESH_DAYS || rounded > MAX_FRESH_DAYS) return fallback
-    return rounded
-  }
-  const fresh = pick('fresh', DEFAULT_FRESHNESS_DAYS.fresh)
-  const recent = pick('recent', DEFAULT_FRESHNESS_DAYS.recent)
-  // recent 必须 > fresh，否则用默认
-  return { fresh, recent: recent > fresh ? recent : DEFAULT_FRESHNESS_DAYS.recent }
+function sanitizePaint(value: unknown): FreshnessPaint {
+  return isRecord(value) ? { text: sanitizeThemed(value.text), background: sanitizeThemed(value.background) } : EMPTY_PAINT
 }
 
-/** 改一项颜色（空字符串为默认），返回新的颜色设置 */
+/** 天数：整数、在范围内；否则为 undefined */
+function sanitizeDays(value: unknown): number | undefined {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return undefined
+  const rounded = Math.round(value)
+  return rounded >= MIN_FRESH_DAYS && rounded <= MAX_FRESH_DAYS ? rounded : undefined
+}
+
+/** 按天数从小到大，天数重复的只留第一个，最多 MAX_FRESHNESS_RANGES 个 */
+function normalizeRanges(ranges: readonly FreshnessRange[]): FreshnessRange[] {
+  const sorted: FreshnessRange[] = []
+  for (const range of [...ranges].sort((a, b) => a.days - b.days)) {
+    if (sorted.at(-1)?.days !== range.days) sorted.push(range)
+  }
+  return sorted.slice(0, MAX_FRESHNESS_RANGES)
+}
+
+/**
+ * 1.6 的设置：两个时段的天数（freshnessDays：fresh、recent）与三个时段的文字颜色（freshnessColors：fresh、recent、stale），
+ * 换成时段设置；没有或不合法的用默认
+ */
+export function migrateLegacyFreshness(days: unknown, colors: unknown): FreshnessRanges {
+  const picked = isRecord(days) ? days : {}
+  const fresh = sanitizeDays(picked.fresh) ?? FRESH_DAYS
+  const recentDays = sanitizeDays(picked.recent)
+  const recent = recentDays !== undefined && recentDays > fresh ? recentDays : Math.max(RECENT_DAYS, fresh + 1)
+  const levels = isRecord(colors) ? colors : {}
+  const paint = (level: string): FreshnessPaint => ({ text: sanitizeThemed(levels[level]), background: EMPTY_COLOR })
+  return {
+    // 近期已是上限（3650 天）时次近与之重复，只留近期
+    ranges: normalizeRanges([
+      { days: fresh, ...paint('fresh') },
+      { days: Math.min(recent, MAX_FRESH_DAYS), ...paint('recent') }
+    ]),
+    stale: paint('stale')
+  }
+}
+
+/**
+ * 读取存储、导入备份：校验时段设置；没有时按 1.6 的设置（legacy）换算。
+ * 天数不合法的时段丢弃，按天数排序、去重；一个时段都没有时用默认
+ */
+export function sanitizeFreshnessRanges(value: unknown, legacy?: { readonly days: unknown; readonly colors: unknown }): FreshnessRanges {
+  if (!isRecord(value) || !Array.isArray(value.ranges)) {
+    return legacy ? migrateLegacyFreshness(legacy.days, legacy.colors) : DEFAULT_FRESHNESS_RANGES
+  }
+  const ranges = normalizeRanges(
+    value.ranges.flatMap((item): FreshnessRange[] => {
+      const days = isRecord(item) ? sanitizeDays(item.days) : undefined
+      return days === undefined ? [] : [{ days, ...sanitizePaint(item) }]
+    })
+  )
+  if (ranges.length < MIN_FRESHNESS_RANGES) return DEFAULT_FRESHNESS_RANGES
+  return { ranges, stale: sanitizePaint(value.stale) }
+}
+
+/** 时段的颜色 */
+export function paintOf(config: FreshnessRanges, key: FreshnessKey): FreshnessPaint | undefined {
+  return key === 'stale' ? config.stale : config.ranges[key]
+}
+
+/** 改一项颜色（空字符串为默认）；days 为时段的天数（时段改了天数或已删除时不改），stale 为更早 */
 export function withFreshnessColor(
-  colors: FreshnessColors,
-  level: FreshnessLevel,
+  config: FreshnessRanges,
+  target: number | 'stale',
+  kind: FreshnessPaintKind,
   scheme: FreshnessScheme,
   color: string
-): FreshnessColors {
-  return { ...colors, [level]: { ...colors[level], [scheme]: color } }
+): FreshnessRanges {
+  const paint = (current: FreshnessPaint): FreshnessPaint => ({ ...current, [kind]: { ...current[kind], [scheme]: color } })
+  if (target === 'stale') return { ...config, stale: paint(config.stale) }
+  return { ...config, ranges: config.ranges.map(range => (range.days === target ? { ...range, ...paint(range) } : range)) }
 }
 
-/** 改一项天数，返回新的天数设置；recent 自动保证 > fresh */
-export function withFreshnessDays(days: FreshnessDays, key: 'fresh' | 'recent', value: number): FreshnessDays {
-  const clamped = Math.max(MIN_FRESH_DAYS, Math.min(MAX_FRESH_DAYS, Math.round(value)))
-  if (key === 'fresh') {
-    return { fresh: clamped, recent: Math.max(clamped + 1, days.recent) }
-  }
-  return { fresh: days.fresh, recent: Math.max(days.fresh + 1, clamped) }
+/** 天数是否可改为 value：在范围内且不与其他时段重复 */
+export function canSetRangeDays(config: FreshnessRanges, index: number, value: number): boolean {
+  const days = Math.round(value)
+  if (!Number.isFinite(days) || days < MIN_FRESH_DAYS || days > MAX_FRESH_DAYS) return false
+  return config.ranges.every((range, other) => other === index || range.days !== days)
+}
+
+/** 改一个时段的天数（取整）并按天数重新排序；越界或与其他时段重复时不改 */
+export function withRangeDays(config: FreshnessRanges, index: number, value: number): FreshnessRanges {
+  const range = config.ranges[index]
+  if (!range || !canSetRangeDays(config, index, value)) return config
+  const days = Math.round(value)
+  return { ...config, ranges: normalizeRanges(config.ranges.map((item, other) => (other === index ? { ...item, days } : item))) }
+}
+
+/** 新时段的天数：最后一个的两倍（不超过上限）；已到上限时取相邻时段间最大空隙的中点；放不下时为 undefined */
+export function nextRangeDays(config: FreshnessRanges): number | undefined {
+  if (config.ranges.length >= MAX_FRESHNESS_RANGES) return undefined
+  const days = config.ranges.map(range => range.days)
+  const last = days.at(-1)
+  if (last === undefined) return FRESH_DAYS
+  const doubled = Math.min(MAX_FRESH_DAYS, last * 2)
+  if (doubled > last) return doubled
+  let best: number | undefined
+  let gap = 1
+  days.forEach((value, index) => {
+    const previous = index === 0 ? 0 : days[index - 1]!
+    if (value - previous > gap) {
+      gap = value - previous
+      best = previous + Math.floor(gap / 2)
+    }
+  })
+  return best !== undefined && best >= MIN_FRESH_DAYS ? best : undefined
+}
+
+/** 加一个时段（天数见 nextRangeDays）；放不下时不改 */
+export function withAddedRange(config: FreshnessRanges): FreshnessRanges {
+  const days = nextRangeDays(config)
+  return days === undefined ? config : { ...config, ranges: normalizeRanges([...config.ranges, emptyRange(days)]) }
+}
+
+/** 删除一个时段；至少留 MIN_FRESHNESS_RANGES 个 */
+export function withoutRange(config: FreshnessRanges, index: number): FreshnessRanges {
+  if (config.ranges.length <= MIN_FRESHNESS_RANGES || !config.ranges[index]) return config
+  return { ...config, ranges: config.ranges.filter((_range, other) => other !== index) }
 }

@@ -351,8 +351,7 @@ export default defineContentScript({
     // 更新时间着色：文件列表与最近提交的时间按距今远近改颜色（见 core/freshness）
     const freshness = createFreshness(document, {
       active: () => current.enabled && current.freshness,
-      colors: () => current.freshnessColors,
-      days: () => current.freshnessDays
+      config: () => ({ ranges: current.freshnessRanges, background: current.freshnessBackground })
     })
     // 自动加载：「加载更多」与分页列表的下一页（见 core/auto-load）
     const autoLoader = createAutoLoader(document, {

@@ -31,7 +31,7 @@
       </template>
     </div>
 
-    <dl v-if="settings.timeFormat === 'custom'" class="format-reference">
+    <dl class="format-reference">
       <div v-for="token in tokenRows" :key="token.code" class="format-reference-row" data-test="format-reference-row">
         <dt class="format-reference-code">{{ token.code }}</dt>
         <dd class="format-reference-desc">{{ token.desc }}</dd>

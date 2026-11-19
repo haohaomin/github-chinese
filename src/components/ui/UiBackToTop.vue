@@ -1,5 +1,5 @@
 <template>
-  <div ref="root" class="ui-back-to-top" :class="{ 'is-shown': shown }">
+  <div ref="root" class="ui-back-to-top" :class="{ 'is-shown': shown, 'is-page': page }">
     <button
       type="button"
       class="ui-back-to-top-button"
@@ -7,7 +7,7 @@
       :title="label"
       data-test="back-to-top"
       @click="toTop"
-      @focus="focused = true"
+      @focus="onFocus"
       @blur="focused = false"
     >
       <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
@@ -22,12 +22,15 @@
 
   /**
    * 返回顶部：放在可滚动的列表（容器）里，作为最后一个子元素；固定在列表可见区域的右下角。
-   * 向下滚过半屏后显示（同时在列表末尾留出按钮的高度），点按后列表滚回顶部（减少动态效果时直接回到顶部）。
-   * 按钮有焦点时不隐藏：键盘操作回到顶部后焦点仍在按钮上
+   * 整页（page）时按页面的滚动，固定在窗口右下角。
+   * 向下滚过半屏后显示（列表里同时在末尾留出按钮的高度），点按后滚回顶部（减少动态效果时直接回到顶部）。
+   * 键盘聚焦时不隐藏：键盘操作回到顶部后焦点仍在按钮上；点按聚焦的照常隐藏
    */
-  const { label } = defineProps<{
+  const { label, page = false } = defineProps<{
     /** 按钮的名称（悬停提示同） */
     label: string
+    /** 整页：按页面的滚动；缺省按所在的列表（父元素） */
+    page?: boolean
   }>()
 
   /** Octicons 的 arrow-up（16px） */
@@ -38,27 +41,52 @@
   const scrolled = ref(false)
   const focused = ref(false)
   const shown = computed(() => scrolled.value || focused.value)
-  let container: HTMLElement | null = null
+  /** 滚动的元素：列表，整页时为页面的滚动元素 */
+  let container: Element | null = null
+  /** 滚动事件的来源：列表，整页时为窗口 */
+  let source: HTMLElement | Window | null = null
 
-  /** 滚过列表可见高度的一半后显示 */
+  /** 滚过可见高度的一半后显示 */
   function update(): void {
-    if (container) scrolled.value = container.scrollTop > container.clientHeight / 2
+    if (!container) return
+    const height = page ? window.innerHeight : container.clientHeight
+    scrolled.value = container.scrollTop > height / 2
+  }
+
+  /** 键盘聚焦（:focus-visible）；不支持该选择器时按键盘聚焦 */
+  function isFocusVisible(element: Element): boolean {
+    try {
+      return element.matches(':focus-visible')
+    } catch {
+      return true
+    }
+  }
+
+  function onFocus(event: FocusEvent): void {
+    const target = event.currentTarget
+    focused.value = target instanceof Element && isFocusVisible(target)
   }
 
   function toTop(): void {
     const reduced = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches
-    container?.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' })
+    const behavior = reduced ? 'auto' : 'smooth'
+    if (page) window.scrollTo({ top: 0, behavior })
+    else container?.scrollTo({ top: 0, behavior })
   }
 
   onMounted(() => {
-    container = root.value?.parentElement ?? null
-    container?.addEventListener('scroll', update, { passive: true })
+    container = page ? (document.scrollingElement ?? document.documentElement) : (root.value?.parentElement ?? null)
+    source = page ? window : (root.value?.parentElement ?? null)
+    source?.addEventListener('scroll', update, { passive: true })
+    if (page) window.addEventListener('resize', update, { passive: true })
     update()
   })
 
   onBeforeUnmount(() => {
-    container?.removeEventListener('scroll', update)
+    source?.removeEventListener('scroll', update)
+    if (page) window.removeEventListener('resize', update)
     container = null
+    source = null
   })
 </script>
 
@@ -81,6 +109,16 @@
 
   .ui-back-to-top.is-shown {
     height: calc(var(--gcn-control-md) + 12px);
+  }
+
+  /* 整页：固定在窗口右下角，不占位置；在下拉列表、调色盘等浮层之下 */
+  .ui-back-to-top.is-page {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 5;
+    height: auto;
+    padding-right: 0;
   }
 
   .ui-back-to-top-button {

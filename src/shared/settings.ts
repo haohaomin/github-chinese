@@ -1,17 +1,11 @@
 import { storage } from 'wxt/utils/storage'
 import { sanitizeAccelerateSettings, type AccelerateSettings } from './accelerate-categories'
 import { DEFAULT_AUTO_LOAD_SCOPES, sanitizeAutoLoadScopes, type AutoLoadScope } from './auto-load'
-import {
-  DEFAULT_FRESHNESS_COLORS,
-  DEFAULT_FRESHNESS_DAYS,
-  sanitizeFreshnessColors,
-  sanitizeFreshnessDays,
-  type FreshnessColors,
-  type FreshnessDays
-} from './freshness'
+import { DEFAULT_FRESHNESS_RANGES, sanitizeFreshnessRanges, type FreshnessRanges } from './freshness'
 import { isPageLocalePreference, isUiLanguagePreference, type PageLocalePreference, type UiLanguagePreference } from './locale'
 import { DEFAULT_NEW_TAB_SCOPES, sanitizeNewTabScopes, type NewTabScope } from './new-tab'
 import { DEFAULT_CUSTOM_TIME_FORMAT, isTimeFormatMode, sanitizeTimeFormat, type TimeFormatMode } from './time-format'
+import { DEFAULT_UPDATE_INTERVAL, isUpdateInterval, type UpdateInterval } from './update-settings'
 
 /** 扩展界面外观：auto 跟随浏览器 */
 export type ThemePreference = 'auto' | 'light' | 'dark'
@@ -79,10 +73,14 @@ export interface Settings extends AccelerateSettings {
   readonly chineseReadme: boolean
   /** 更新时间着色：文件列表与最近提交的时间按距今远近改颜色（见 core/freshness） */
   readonly freshness: boolean
-  /** 更新时间着色的时段天数（见 shared/freshness） */
-  readonly freshnessDays: FreshnessDays
-  /** 更新时间着色的颜色：各时段在 GitHub 浅色、深色主题下的颜色，空为默认（见 shared/freshness） */
-  readonly freshnessColors: FreshnessColors
+  /** 更新时间着色的时段：各时段的天数，与在 GitHub 浅色、深色主题下的文字颜色、背景色，空为默认（见 shared/freshness） */
+  readonly freshnessRanges: FreshnessRanges
+  /** 更新时间着色加背景色 */
+  readonly freshnessBackground: boolean
+  /** 自动检查新版本：打开弹出页、设置页时按 updateInterval 检查（见 shared/update-check） */
+  readonly updateCheck: boolean
+  /** 自动检查新版本的频率 */
+  readonly updateInterval: UpdateInterval
 }
 
 /**
@@ -117,8 +115,10 @@ export const DEFAULT_SETTINGS: Settings = {
   newTabPaths: [],
   chineseReadme: false,
   freshness: false,
-  freshnessDays: DEFAULT_FRESHNESS_DAYS,
-  freshnessColors: DEFAULT_FRESHNESS_COLORS,
+  freshnessRanges: DEFAULT_FRESHNESS_RANGES,
+  freshnessBackground: false,
+  updateCheck: true,
+  updateInterval: DEFAULT_UPDATE_INTERVAL,
   categories: [],
   categoryOrder: [],
   removedCategories: [],
@@ -193,8 +193,11 @@ export function mergeSettings(stored: unknown): Settings {
     newTabPaths: isStringArray(value.newTabPaths) ? value.newTabPaths : DEFAULT_SETTINGS.newTabPaths,
     chineseReadme: pickBoolean('chineseReadme', DEFAULT_SETTINGS.chineseReadme),
     freshness: pickBoolean('freshness', DEFAULT_SETTINGS.freshness),
-    freshnessColors: sanitizeFreshnessColors(value.freshnessColors),
-    freshnessDays: sanitizeFreshnessDays(value.freshnessDays),
+    // 1.6 的 freshnessDays、freshnessColors 换算成时段设置，之后保存时不再写入
+    freshnessRanges: sanitizeFreshnessRanges(value.freshnessRanges, { days: value.freshnessDays, colors: value.freshnessColors }),
+    freshnessBackground: pickBoolean('freshnessBackground', DEFAULT_SETTINGS.freshnessBackground),
+    updateCheck: pickBoolean('updateCheck', DEFAULT_SETTINGS.updateCheck),
+    updateInterval: isUpdateInterval(value.updateInterval) ? value.updateInterval : DEFAULT_SETTINGS.updateInterval,
     ...sanitizeAccelerateSettings(value)
   }
   return merged

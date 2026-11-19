@@ -5,6 +5,7 @@ import type { LocaleBundle } from '../../../src/core/types'
 import type { LocaleLoaderDeps } from '../../../src/shared/locale-loader'
 import { INSTANCE_MARK_PREFIX } from '../../../src/core/instance-mark'
 import { FRESHNESS_ATTRIBUTE } from '../../../src/core/freshness'
+import type { FreshnessRanges } from '../../../src/shared/freshness'
 import { LAYOUT_FIX_STYLE_ID } from '../../../src/core/layout-fix'
 import {
   installTurboBridge,
@@ -51,11 +52,14 @@ const state = vi.hoisted(() => ({
     newTabPaths: [] as readonly string[],
     chineseReadme: false,
     freshness: false,
-    freshnessDays: { fresh: 7, recent: 365 },
-    freshnessColors: { fresh: { light: '', dark: '' }, recent: { light: '', dark: '' }, stale: { light: '', dark: '' } } as Record<
-      string,
-      Record<string, string>
-    >
+    freshnessRanges: {
+      ranges: [
+        { days: 7, text: { light: '', dark: '' }, background: { light: '', dark: '' } },
+        { days: 365, text: { light: '', dark: '' }, background: { light: '', dark: '' } }
+      ],
+      stale: { text: { light: '', dark: '' }, background: { light: '', dark: '' } }
+    } as FreshnessRanges,
+    freshnessBackground: false
   },
   failSettings: false,
   /** 设置后读取设置要等它落定（模拟读存储较慢） */
@@ -299,8 +303,14 @@ beforeEach(() => {
     newTabPaths: [],
     chineseReadme: false,
     freshness: false,
-    freshnessDays: { fresh: 7, recent: 365 },
-    freshnessColors: { fresh: { light: '', dark: '' }, recent: { light: '', dark: '' }, stale: { light: '', dark: '' } }
+    freshnessRanges: {
+      ranges: [
+        { days: 7, text: { light: '', dark: '' }, background: { light: '', dark: '' } },
+        { days: 365, text: { light: '', dark: '' }, background: { light: '', dark: '' } }
+      ],
+      stale: { text: { light: '', dark: '' }, background: { light: '', dark: '' } }
+    },
+    freshnessBackground: false
   }
   locales.load.mockReset()
   locales.load.mockImplementation(async locale => (locale === 'zh-TW' ? TW_BUNDLE : TEST_BUNDLE))
@@ -1023,7 +1033,7 @@ describe('汉化关闭（总开关开着）', () => {
     expect(document.title).toBe('Issues · vuejs/core')
     expect(send({ type: 'gcn:get-status' })).toMatchObject({ active: false, excluded: false, translatedCount: 0 })
     expect(askTranslating()).toBe(false)
-    expect(time.getAttribute(FRESHNESS_ATTRIBUTE)).toBe('fresh')
+    expect(time.getAttribute(FRESHNESS_ATTRIBUTE)).toBe('0')
   })
 
   it('翻译中关闭：还原原文，其他功能照常；再开启时照常翻译，不重复加载语言包', async () => {
@@ -1036,7 +1046,7 @@ describe('汉化关闭（总开关开着）', () => {
     expect(document.title).toBe('Issues · vuejs/core')
     expect(send({ type: 'gcn:get-status' })).toMatchObject({ active: false })
     expect(askTranslating()).toBe(false)
-    expect(time.getAttribute(FRESHNESS_ATTRIBUTE)).toBe('fresh')
+    expect(time.getAttribute(FRESHNESS_ATTRIBUTE)).toBe('0')
     state.settingsListener!({ ...state.settings, translation: true })
     await flushTasks()
     expect($('p').textContent).toBe('议题')
@@ -1748,11 +1758,11 @@ describe('增强功能', () => {
       state.settings = { ...state.settings, freshness: true }
       const time = addFileRow()
       await start()
-      expect(time.getAttribute(FRESHNESS_ATTRIBUTE)).toBe('fresh')
+      expect(time.getAttribute(FRESHNESS_ATTRIBUTE)).toBe('0')
       state.settingsListener?.({ ...state.settings, freshness: false })
       expect(time.hasAttribute(FRESHNESS_ATTRIBUTE)).toBe(false)
       state.settingsListener?.({ ...state.settings, freshness: true })
-      expect(time.getAttribute(FRESHNESS_ATTRIBUTE)).toBe('fresh')
+      expect(time.getAttribute(FRESHNESS_ATTRIBUTE)).toBe('0')
       context?.invalidate()
       expect(time.hasAttribute(FRESHNESS_ATTRIBUTE)).toBe(false)
     })
@@ -1772,9 +1782,12 @@ describe('增强功能', () => {
       await start()
       const style = (): string => document.getElementById('gcn-freshness-style')?.textContent ?? ''
       expect(style()).not.toContain('light-dark')
-      const colors = { ...state.settings.freshnessColors, fresh: { light: '#cf222e', dark: '' } }
-      state.settingsListener?.({ ...state.settings, freshnessColors: colors })
+      const [first, ...rest] = state.settings.freshnessRanges.ranges
+      const ranges = { ...state.settings.freshnessRanges, ranges: [{ ...first!, text: { light: '#cf222e', dark: '' } }, ...rest] }
+      state.settingsListener?.({ ...state.settings, freshnessRanges: ranges })
       expect(style()).toContain('light-dark(#cf222e, var(--fgColor-success')
+      state.settingsListener?.({ ...state.settings, freshnessRanges: ranges, freshnessBackground: true })
+      expect(style()).toContain('background-color: var(--bgColor-success-muted')
       expect(document.querySelectorAll('#gcn-freshness-style')).toHaveLength(1)
     })
   })

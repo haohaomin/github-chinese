@@ -56,6 +56,8 @@ export const BUTTONS_ATTRIBUTE = 'data-gcn-accel-buttons'
 export const LABEL_ATTRIBUTE = 'data-gcn-accel-label'
 /** 克隆原元素加的同款元素（值为位置：menu、button、clone） */
 export const CLONE_ATTRIBUTE = 'data-gcn-accel-clone'
+/** 当前处理页面的运行：写在 <html> 上（扩展更新后新注入的运行改写它，旧运行随即不再处理页面） */
+export const OWNER_ATTRIBUTE = 'data-gcn-accel-owner'
 /** 复制后的提示图标（值为 copied、failed） */
 export const FEEDBACK_ATTRIBUTE = 'data-gcn-accel-feedback'
 /** 不在按钮组里、父元素也不用 gap 排布的同款按钮：与原按钮拼成一组（同按钮组） */
@@ -173,6 +175,8 @@ const STRIPPED_ATTRIBUTES = [
 const STRIPPED_ELEMENTS = '[popover], [role="tooltip"], tool-tip'
 /** 已加的元素：其中的链接、地址框不再处理 */
 const OURS = `[${GROUP_ATTRIBUTE}], [${CLONE_ATTRIBUTE}]`
+/** 已加的元素里最外层的：另起的行、同款元素 */
+const TOP_LEVEL = `[${ROW_ATTRIBUTE}], [${CLONE_ATTRIBUTE}]`
 
 /** 附件所在的行（图标与附件名）：附件名下方另起一行时放在它之后 */
 function assetLine(anchor: HTMLAnchorElement): Element {
@@ -446,6 +450,16 @@ export function createAccelerateOptions(doc: Document, deps: AccelerateOptionsDe
   let healthPending = false
   /** 探测失败：本轮设置下不再等，按不探测处理 */
   let healthFailed = false
+  /** 本次运行的标记（见 OWNER_ATTRIBUTE） */
+  const owner = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`
+  doc.documentElement.setAttribute(OWNER_ATTRIBUTE, owner)
+
+  /** 页面已归别的运行处理：不再添加、移除（标记被页面去掉时重新写上） */
+  function superseded(): boolean {
+    const current = doc.documentElement.getAttribute(OWNER_ATTRIBUTE)
+    if (current === null) doc.documentElement.setAttribute(OWNER_ATTRIBUTE, owner)
+    return current !== null && current !== owner
+  }
 
   function isEnabled(): boolean {
     const settings = deps.settings()
@@ -848,6 +862,15 @@ export function createAccelerateOptions(doc: Document, deps: AccelerateOptionsDe
     }
   }
 
+  /** 不归本次运行管理的已加元素（Turbo 缓存的页面快照恢复时带回的旧选项等）：移除，随后按目标重新添加 */
+  function pruneStale(): void {
+    const tracked = new Set<Element>(containers.values())
+    for (const rendered of groups.values()) for (const node of rendered.nodes) tracked.add(node)
+    for (const element of doc.querySelectorAll(TOP_LEVEL)) {
+      if (!tracked.has(element) && !element.parentElement?.closest(TOP_LEVEL)) element.remove()
+    }
+  }
+
   /** 同款菜单项的文字随原菜单项（汉化、还原时页面只改文字）：观察原菜单项的文字 */
   function watchLabels(): void {
     labelObserver.disconnect()
@@ -858,6 +881,11 @@ export function createAccelerateOptions(doc: Document, deps: AccelerateOptionsDe
 
   function scan(): void {
     scheduled = false
+    if (superseded()) {
+      setObserving(false)
+      labelObserver.disconnect()
+      return
+    }
     setObserving(!stopped && isEnabled())
     // 不公开的页面（软导航后可能变化，照常监听）
     if (!observing || isPrivatePage(doc)) {
@@ -865,6 +893,7 @@ export function createAccelerateOptions(doc: Document, deps: AccelerateOptionsDe
       return
     }
     pruneContainers()
+    pruneStale()
     const targets = findTargets()
     // 页面上有下载链接、克隆地址时才探测；不等探测结果，先按各分类的第一个加速源显示
     const state = targets.length > 0 ? healthState() : NO_HEALTH
@@ -908,7 +937,11 @@ export function createAccelerateOptions(doc: Document, deps: AccelerateOptionsDe
     stop() {
       stopped = true
       setObserving(false)
+      labelObserver.disconnect()
+      // 页面已归新的运行：其选项、样式留给它
+      if (superseded()) return
       removeAll()
+      doc.documentElement.removeAttribute(OWNER_ATTRIBUTE)
     }
   }
 }

@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { test as base, chromium, expect, type BrowserContext, type Locator, type Page, type Worker } from '@playwright/test'
 import { DEFAULT_AUTO_LOAD_SCOPES } from '../../src/shared/auto-load'
-import { DEFAULT_FRESHNESS_COLORS, DEFAULT_FRESHNESS_DAYS } from '../../src/shared/freshness'
+import { DEFAULT_FRESHNESS_RANGES } from '../../src/shared/freshness'
 import type { CustomEntries, Settings } from '../../src/shared/settings'
 
 /** 被测扩展目录：默认构建产物 .output/chrome-mv3（bun run build）；E2E_EXTENSION 可指向其他解压目录 */
@@ -61,8 +61,10 @@ export const DEFAULT_SETTINGS: Settings = {
   newTabPaths: [],
   chineseReadme: false,
   freshness: false,
-  freshnessDays: DEFAULT_FRESHNESS_DAYS,
-  freshnessColors: DEFAULT_FRESHNESS_COLORS,
+  freshnessRanges: DEFAULT_FRESHNESS_RANGES,
+  freshnessBackground: false,
+  updateCheck: true,
+  updateInterval: 'daily',
   categories: [],
   categoryOrder: [],
   removedCategories: [],

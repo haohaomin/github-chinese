@@ -1,11 +1,21 @@
 import { describe, expect, it } from 'vitest'
 import {
-  DEFAULT_FRESHNESS_COLORS,
+  canSetRangeDays,
+  DEFAULT_FRESHNESS_RANGES,
+  emptyRange,
   isValidColor,
+  MAX_FRESH_DAYS,
+  MAX_FRESHNESS_RANGES,
+  migrateLegacyFreshness,
+  nextRangeDays,
   normalizeHexColor,
-  sanitizeFreshnessColors,
+  sanitizeFreshnessRanges,
+  toneOf,
+  withAddedRange,
   withFreshnessColor,
-  type FreshnessColors
+  withoutRange,
+  withRangeDays,
+  type FreshnessRanges
 } from '../../../src/shared/freshness'
 import { GRADIENT, imageLightDark, LAYERED_GRADIENT, noImageLightDark } from './fake-css'
 
@@ -56,48 +66,106 @@ describe('isValidColor', () => {
   })
 })
 
-describe('sanitizeFreshnessColors', () => {
-  it.each([undefined, null, 'Sample text', 42, []])('不是对象：都为默认（%s）', value => {
-    expect(sanitizeFreshnessColors(value)).toEqual(DEFAULT_FRESHNESS_COLORS)
+const EMPTY = { light: '', dark: '' }
+
+function config(days: readonly number[]): FreshnessRanges {
+  return { ranges: days.map(value => emptyRange(value)), stale: { text: EMPTY, background: EMPTY } }
+}
+
+const daysOf = (value: FreshnessRanges): number[] => value.ranges.map(range => range.days)
+
+describe('sanitizeFreshnessRanges', () => {
+  it.each([undefined, null, 'Sample text', [], { ranges: 'x' }])('不合法：用默认（%s）', value => {
+    expect(sanitizeFreshnessRanges(value)).toEqual(DEFAULT_FRESHNESS_RANGES)
   })
 
-  it('逐项校验：统一写法；缺失、类型不符、格式不符的为默认；未知的项丢弃', () => {
-    expect(
-      sanitizeFreshnessColors({
-        fresh: { light: '#CF222E', dark: 'abc', extra: '#000000' },
-        recent: { light: 42, dark: 'url(https://example.com/)' },
-        stale: 'Sample text',
-        other: { light: '#000000', dark: '#000000' }
-      })
-    ).toEqual({
-      fresh: { light: '#cf222e', dark: '#aabbcc' },
-      recent: { light: '', dark: '' },
-      stale: { light: '', dark: '' }
+  it('逐项校验：天数取整、越界的时段丢弃，按天数排序去重，颜色只收安全的写法，hex 统一', () => {
+    const value = sanitizeFreshnessRanges({
+      ranges: [
+        { days: 365, text: { light: '#CF222E', dark: 'red; }' }, background: { light: 'rgba(9, 105, 218, 0.5)', dark: 3 } },
+        { days: 6.6 },
+        { days: 0 },
+        { days: 4000 },
+        { days: 7, text: { light: 'blue' } },
+        'bad'
+      ],
+      stale: { background: { dark: '#ABC' } }
     })
+    expect(daysOf(value)).toEqual([7, 365])
+    expect(value.ranges[1]).toEqual({
+      days: 365,
+      text: { light: '#cf222e', dark: '' },
+      background: { light: 'rgba(9, 105, 218, 0.5)', dark: '' }
+    })
+    expect(value.stale).toEqual({ text: EMPTY, background: { light: '', dark: '#aabbcc' } })
   })
 
-  it('CSS 颜色与渐变原样保留（后台没有 CSS 接口，只查写法）；含注入字符、括号不成对的为默认', () => {
-    expect(
-      sanitizeFreshnessColors({
-        fresh: { light: ` ${GRADIENT} `, dark: 'rgba(9, 105, 218, 0.5)' },
-        recent: { light: '#1A7F3780', dark: 'red; } body { display: none' },
-        stale: { light: 'rgba(1, 2, 3', dark: 'red /* x */' }
-      })
-    ).toEqual({
-      fresh: { light: GRADIENT, dark: 'rgba(9, 105, 218, 0.5)' },
-      recent: { light: '#1A7F3780', dark: '' },
-      stale: { light: '', dark: '' }
+  it(`最多 ${MAX_FRESHNESS_RANGES} 个；一个都没有时用默认`, () => {
+    expect(daysOf(sanitizeFreshnessRanges({ ranges: [1, 2, 3, 4, 5, 6, 7, 8].map(days => ({ days })) }))).toEqual([1, 2, 3, 4, 5, 6])
+    expect(sanitizeFreshnessRanges({ ranges: [{ days: 0 }] })).toEqual(DEFAULT_FRESHNESS_RANGES)
+  })
+
+  it('没有时段设置时按 1.6 的天数、颜色换算', () => {
+    const value = sanitizeFreshnessRanges(undefined, {
+      days: { fresh: 7, recent: 90 },
+      colors: { fresh: { light: '#cf222e', dark: '' }, stale: { light: '', dark: 'red' } }
     })
+    expect(daysOf(value)).toEqual([7, 90])
+    expect(value.ranges[0]?.text).toEqual({ light: '#cf222e', dark: '' })
+    expect(value.ranges[1]?.text).toEqual(EMPTY)
+    expect(value.stale).toEqual({ text: { light: '', dark: 'red' }, background: EMPTY })
   })
 })
 
-describe('withFreshnessColor', () => {
-  it('只改给出的一项，返回新对象，原对象不变', () => {
-    const colors: FreshnessColors = { ...DEFAULT_FRESHNESS_COLORS, recent: { light: '#9a6700', dark: '' } }
-    const next = withFreshnessColor(colors, 'recent', 'dark', '#d29922')
-    expect(next).toEqual({ ...DEFAULT_FRESHNESS_COLORS, recent: { light: '#9a6700', dark: '#d29922' } })
-    expect(colors.recent).toEqual({ light: '#9a6700', dark: '' })
-    expect(next.fresh).toBe(colors.fresh)
-    expect(withFreshnessColor(next, 'recent', 'light', '').recent).toEqual({ light: '', dark: '#d29922' })
+describe('migrateLegacyFreshness', () => {
+  it('没有、不合法：默认 30、365 天', () => {
+    expect(daysOf(migrateLegacyFreshness(undefined, undefined))).toEqual([30, 365])
+    expect(daysOf(migrateLegacyFreshness({ fresh: 'x', recent: -1 }, 'x'))).toEqual([30, 365])
+  })
+
+  it('次近不大于近期：次近按默认；近期已是上限时只留一个', () => {
+    expect(daysOf(migrateLegacyFreshness({ fresh: 400, recent: 300 }, undefined))).toEqual([400, 401])
+    expect(daysOf(migrateLegacyFreshness({ fresh: MAX_FRESH_DAYS, recent: 30 }, undefined))).toEqual([MAX_FRESH_DAYS])
+  })
+})
+
+describe('改动', () => {
+  it('withFreshnessColor：按天数找时段改一项，其他不变；时段已不在时不改', () => {
+    const base = config([30, 365])
+    const next = withFreshnessColor(base, 365, 'background', 'dark', '#d29922')
+    expect(next.ranges[1]?.background).toEqual({ light: '', dark: '#d29922' })
+    expect(next.ranges[0]).toBe(base.ranges[0])
+    expect(withFreshnessColor(next, 'stale', 'text', 'light', 'red').stale.text).toEqual({ light: 'red', dark: '' })
+    expect(withFreshnessColor(base, 90, 'text', 'light', 'red')).toEqual(base)
+  })
+
+  it('withRangeDays：取整、按天数重新排序；越界、与其他时段重复时不改', () => {
+    const base = config([30, 365])
+    expect(daysOf(withRangeDays(base, 0, 400.4))).toEqual([365, 400])
+    expect(withRangeDays(base, 0, 365)).toBe(base)
+    expect(withRangeDays(base, 0, 0)).toBe(base)
+    expect(withRangeDays(base, 0, MAX_FRESH_DAYS + 1)).toBe(base)
+    expect(canSetRangeDays(base, 1, 365)).toBe(true)
+    expect(canSetRangeDays(base, 1, 30)).toBe(false)
+  })
+
+  it('nextRangeDays、withAddedRange：最后一个的两倍；到上限时取最大空隙的中点；满了不加', () => {
+    expect(nextRangeDays(config([30, 365]))).toBe(730)
+    expect(nextRangeDays(config([1000, MAX_FRESH_DAYS]))).toBe(2325)
+    expect(nextRangeDays(config([1, 2, 3, 4, 5, 6]))).toBeUndefined()
+    expect(daysOf(withAddedRange(config([30, 365])))).toEqual([30, 365, 730])
+    const full = config([1, 2, 3, 4, 5, 6])
+    expect(withAddedRange(full)).toBe(full)
+  })
+
+  it('withoutRange：删除；至少留一个', () => {
+    expect(daysOf(withoutRange(config([30, 365]), 0))).toEqual([365])
+    const single = config([30])
+    expect(withoutRange(single, 0)).toBe(single)
+  })
+
+  it('toneOf：时段按先后循环取色调，更早的为中性', () => {
+    expect([0, 1, 2, 5, 6].map(key => toneOf(key))).toEqual(['success', 'attention', 'severe', 'accent', 'success'])
+    expect(toneOf('stale')).toBe('neutral')
   })
 })

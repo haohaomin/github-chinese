@@ -194,6 +194,10 @@ export default {
     'AI Scan for pull requests': '拉取請求 AI 掃描',
     'Generate security findings for non-CodeQL languages using AI.': '使用 AI 為 CodeQL 不支援的語言產生安全性發現項目。',
     'AI Scan for pull requests enablement': '拉取請求 AI 掃描啟用狀態',
+    'AI Scan for repositories': '儲存庫 AI 掃描',
+    'AI Scan for repositories enablement': '儲存庫 AI 掃描啟用狀態',
+    'Scan for AI applications': '掃描 AI 應用程式',
+    'Scan for AI applications enablement': '掃描 AI 應用程式啟用狀態',
     'Copilot Autofix for third-party tools': '第三方工具的 Copilot 自動修正',
     'Suggest fixes for third-party alerts using AI. Ensure that these tools are properly configured or that an analysis is uploaded for this feature to work. Learn more about the':
       '使用 AI 為第三方警示建議修正。請確認這些工具已正確設定或已上傳分析，此功能才能運作。瞭解',

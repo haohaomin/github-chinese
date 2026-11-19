@@ -316,7 +316,7 @@ describe.skipIf(!App)('弹出页组件', () => {
   })
 
   describe('布局', () => {
-    it('依次为标题栏、当前页（总开关、状态）、常规、语言、页脚（设置、排除此页、GitHub），最后是顶部提示的区域', async () => {
+    it('依次为标题栏、当前页（总开关、状态）、常规、语言、页脚（设置、检查更新、排除此页、GitHub），最后是顶部提示的区域', async () => {
       await openTab(`${REPO_URL}/issues`)
       mockContent(contentWith())
       const wrapper = await render()
@@ -336,7 +336,12 @@ describe.skipIf(!App)('弹出页组件', () => {
       expect(toggle!.compareDocumentPosition(state!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
       expect(children.indexOf(general)).toBe(2)
       expect(children.indexOf(language)).toBe(3)
-      expect(footer.findAll('button, a').map(item => item.attributes('aria-label') ?? item.text())).toEqual(['设置', '排除此页', 'GitHub'])
+      expect(footer.findAll('button, a').map(item => item.attributes('aria-label') ?? item.text())).toEqual([
+        '设置',
+        '检查更新',
+        '排除此页',
+        'GitHub'
+      ])
     })
 
     it('页脚右侧的 GitHub 图标：在新标签页打开扩展的存储库', async () => {

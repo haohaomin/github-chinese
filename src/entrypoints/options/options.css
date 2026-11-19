@@ -62,6 +62,22 @@ html {
   border-top: 1px solid var(--gcn-border-muted);
 }
 
+/* 开关列表里的下拉框（替换原链接、检查频率）：名称在左、下拉框在右 */
+.field-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.field-label {
+  cursor: pointer;
+}
+
+.field-select {
+  min-width: 160px;
+}
+
 /*
  * 列表（自定义词条、加速源、排除路径、屏蔽规则）：限高（约 10 行），超出时在框内滚动，表头固定在顶部；
  * 圆角裁切表头与悬停底色

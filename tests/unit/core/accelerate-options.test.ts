@@ -10,6 +10,7 @@ import {
   GROUP_ATTRIBUTE,
   LABEL_ATTRIBUTE,
   OPTION_ATTRIBUTE,
+  OWNER_ATTRIBUTE,
   ROW_ATTRIBUTE,
   type AccelerateOptions
 } from '../../../src/core/accelerate-options'
@@ -500,6 +501,43 @@ describe('createAccelerateOptions', () => {
     await flush()
     expect(assetRow()?.getAttribute(ROW_ATTRIBUTE)).toBe('asset')
     expect(groups()).toHaveLength(1)
+  })
+
+  it('页面快照恢复（Turbo 缓存）带回的旧选项：移除，只留一组', async () => {
+    codeMenu()
+    document.body.insertAdjacentHTML(
+      'beforeend',
+      `<ul><li class="Box-row"><div><span class="asset"><svg></svg><a href="${RELEASE}"><span>vue.global.js</span></a></span></div></li></ul>`
+    )
+    start()
+    expect(groups()).toHaveLength(1)
+    expect(clones('menu')).toHaveLength(4)
+    // 快照为 HTML 的副本：已加的元素随之复制，不在本次运行的记录里
+    const snapshot = document.body.innerHTML
+    document.body.innerHTML = snapshot
+    await flush()
+    expect(document.querySelectorAll(`[${ROW_ATTRIBUTE}]`)).toHaveLength(1)
+    expect(groups()).toHaveLength(1)
+    expect(texts(groups()[0])).toEqual(CATEGORIES)
+    expect(menuNames()).toEqual(CATEGORIES)
+    options!.stop()
+    expect(document.querySelectorAll(`[${ROW_ATTRIBUTE}], [${CLONE_ATTRIBUTE}]`)).toHaveLength(0)
+  })
+
+  it('扩展更新后新注入的运行：旧运行不再添加、移除，其停止时不动新运行的选项与样式', async () => {
+    releaseRow()
+    const old = start()
+    const current = createAccelerateOptions(document, { settings: () => settings, health, copy, label })
+    await flush()
+    expect(groups()).toHaveLength(1)
+    expect(document.querySelectorAll(`[${ROW_ATTRIBUTE}]`)).toHaveLength(1)
+    old.stop()
+    await flush()
+    expect(groups()).toHaveLength(1)
+    expect(document.getElementById('gcn-accel-style')).not.toBeNull()
+    current.stop()
+    expect(groups()).toHaveLength(0)
+    expect(document.documentElement.hasAttribute(OWNER_ATTRIBUTE)).toBe(false)
   })
 
   it('同款元素不再紧跟原元素（被页面移走、中间插入了别的元素）：移除后重新加上；原菜单项移除时一并移除', async () => {

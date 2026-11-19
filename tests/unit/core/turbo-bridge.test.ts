@@ -9,7 +9,7 @@ import {
   type BridgeWindow
 } from '../../../src/core/turbo-bridge'
 import { DEFAULT_AUTO_LOAD_SCOPES } from '../../../src/shared/auto-load'
-import { DEFAULT_FRESHNESS_COLORS, DEFAULT_FRESHNESS_DAYS } from '../../../src/shared/freshness'
+import { DEFAULT_FRESHNESS_RANGES } from '../../../src/shared/freshness'
 import { $, settle, TEST_BUNDLE } from './helpers'
 
 const HOME = '/vuejs/core/issues'
@@ -1666,8 +1666,10 @@ describe('与控制器一起：排除路径', () => {
         newTabPaths: [],
         chineseReadme: false,
         freshness: false,
-        freshnessDays: DEFAULT_FRESHNESS_DAYS,
-        freshnessColors: DEFAULT_FRESHNESS_COLORS,
+        freshnessRanges: DEFAULT_FRESHNESS_RANGES,
+        freshnessBackground: false,
+        updateCheck: true,
+        updateInterval: 'daily',
         categories: [],
         categoryOrder: [],
         removedCategories: [],

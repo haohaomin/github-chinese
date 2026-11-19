@@ -7,7 +7,8 @@ import { isPrivatePage } from './private-page'
  * 次数由后台向 GitHub REST API 请求（见 shared/github-api：设置了个人访问令牌时带上，令牌不进内容脚本）。
  * 每个发行版请求一次，同时只发一个（限额用尽时不白发其余的），结果在页面内缓存 CACHE_TTL_MS；
  * 限额用尽时到重置时间之前不再请求，其间每隔 LIMIT_RECHECK_MS 问一次后台（填了令牌后不用等到重置）。
- * 只处理 github.com 上的公开存储库（企业版的 API 地址、访问方式各不相同）
+ * 只处理 github.com 上的公开存储库（企业版的 API 地址、访问方式各不相同）。
+ * 行里已有 GitHub 自带的次数（有写入权限时显示，2026-06 起）时不加
  */
 export interface ReleaseDownloadsDeps {
   /** 是否开启（总开关与本功能的开关） */
@@ -46,6 +47,8 @@ const DOWNLOAD_PATH_RE = /^\/([^/]+)\/([^/]+)\/releases\/download\/(.+)\/([^/]+)
 const ASSET_LINK_SELECTOR = '.Box-row a[href*="/releases/download/"]'
 const ROW_SELECTOR = '.Box-row'
 const LEFT_SELECTOR = ':scope > .flex-justify-start'
+/** GitHub 自带的次数里的图标 */
+const NATIVE_ICON_SELECTOR = '.octicon-download'
 /** Octicons 的 download（16px） */
 const ICON_PATHS = [
   'M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Z',
@@ -78,6 +81,8 @@ const STYLE = `
 
 /** 页面上的附件行 */
 interface AssetRow {
+  /** 附件行 */
+  readonly row: Element
   /** 放次数的元素：行的左侧，没有时为链接所在的元素 */
   readonly holder: Element
   /** 次数紧跟其后：左侧里含附件名的那一项（之后可能是另起一行的加速选项，见 core/accelerate-options） */
@@ -135,6 +140,14 @@ function placeOf(row: Element, anchor: HTMLAnchorElement): { readonly holder: El
   return anchor.parentElement ? { holder: anchor.parentElement, name: anchor } : undefined
 }
 
+/** 行里有 GitHub 自带的次数：不是本模块加的下载图标 */
+function hasNativeCount(row: Element): boolean {
+  for (const icon of row.querySelectorAll(NATIVE_ICON_SELECTOR)) {
+    if (!icon.closest(`[${COUNT_ATTRIBUTE}]`)) return true
+  }
+  return false
+}
+
 /** 缓存键：所有者、存储库不分大小写，标签区分 */
 function releaseKey(release: ReleaseRef): string {
   return `${release.owner.toLowerCase()}/${release.repo.toLowerCase()}\n${release.tag}`
@@ -187,7 +200,10 @@ export function createReleaseDownloads(doc: Document, deps: ReleaseDownloadsDeps
     doc.getElementById(STYLE_ID)?.remove()
   }
 
-  /** 页面上的附件行，按发行版分组；同一行只取第一个附件链接 */
+  /**
+   * 页面上的附件行，按发行版分组；同一行只取第一个附件链接。
+   * 有 GitHub 自带次数的行不计入，其中已加的次数移除（整组都有时不请求）
+   */
   function collectRows(): Map<string, { readonly release: ReleaseRef; readonly rows: AssetRow[] }> {
     const groups = new Map<string, { readonly release: ReleaseRef; readonly rows: AssetRow[] }>()
     const seen = new Set<Element>()
@@ -198,9 +214,13 @@ export function createReleaseDownloads(doc: Document, deps: ReleaseDownloadsDeps
       const place = placeOf(row, anchor)
       if (!asset || !place) continue
       seen.add(row)
+      if (hasNativeCount(row)) {
+        for (const element of row.querySelectorAll(`[${COUNT_ATTRIBUTE}]`)) element.remove()
+        continue
+      }
       const key = releaseKey(asset.release)
       const group = groups.get(key) ?? { release: asset.release, rows: [] }
-      group.rows.push({ ...place, file: asset.file })
+      group.rows.push({ row, ...place, file: asset.file })
       groups.set(key, group)
     }
     return groups
@@ -210,17 +230,19 @@ export function createReleaseDownloads(doc: Document, deps: ReleaseDownloadsDeps
     const lang = deps.lang()
     const short = new Intl.NumberFormat(lang, { notation: 'compact', maximumFractionDigits: 1 })
     const full = new Intl.NumberFormat(lang)
-    for (const { holder, name, file } of rows) {
+    for (const { row, holder, name, file } of rows) {
       const count = counts.get(file)
       if (count === undefined) continue
       const value = `${count}|${lang}`
-      const existing = holder.querySelector(`:scope > [${COUNT_ATTRIBUTE}]`)
-      if (existing?.getAttribute(COUNT_ATTRIBUTE) === value) {
+      // 同一行只留一个（页面快照恢复等带回的多余的移除）
+      const owned = [...row.querySelectorAll(`[${COUNT_ATTRIBUTE}]`)]
+      const existing = owned.find(element => element.parentElement === holder && element.getAttribute(COUNT_ATTRIBUTE) === value)
+      for (const element of owned) if (element !== existing) element.remove()
+      if (existing) {
         // 加速选项后加的行插在了附件名与次数之间：挪回附件名之后，留在第一行
         if (existing.previousElementSibling !== name) name.after(existing)
         continue
       }
-      existing?.remove()
       ensureStyle()
       rendered = true
       const element = doc.createElement('span')

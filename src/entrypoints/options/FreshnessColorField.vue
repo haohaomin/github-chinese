@@ -70,9 +70,10 @@
   import { useI18n } from '../../components/ui-preferences'
   import { isGradient, isValidColor, normalizeHexColor } from '../../shared/freshness'
   import ColorPalette from './ColorPalette.vue'
+  import { previewStyle as stylePreview, shownColor as showColor } from './freshness-preview'
 
   /**
-   * 一项颜色：名称（用当前颜色显示，即预览）、色块（点开调色盘）、颜色写法、重置。
+   * 一项颜色（文字颜色或背景色）：名称（用当前颜色显示，即预览）、色块（点开调色盘）、颜色写法、重置。
    * 写法为 CSS 颜色（hex、rgb()、hsl()、颜色名等）或渐变，浏览器不认的标为格式不符。
    * 调色盘里改动时只预览，关闭（点在别处、再点色块、焦点移出）时保存，Esc 取消并恢复打开时的写法；
    * 写法在失去焦点、按 Enter、离开标签页时保存；清空为默认
@@ -81,8 +82,13 @@
     label: string
     color: string
     fallback: string
+    /** 名称的前缀：所在组的标题（可为多个 id，空格分隔） */
     groupLabelId: string
     disabled?: boolean
+    /** 颜色的用处：文字（默认）、背景 */
+    kind?: 'text' | 'background'
+    /** 预览时一起显示的另一项：文字颜色项为背景色（不加背景时不给），背景色项为文字颜色 */
+    pair?: string
   }>()
 
   const emit = defineEmits<{ save: [color: string] }>()
@@ -126,25 +132,12 @@
   )
 
   /** 当前显示的颜色：写法可用时为它（hex 统一写法），否则为默认色 */
-  const shownColor = computed(() => {
-    const text = draft.value.trim()
-    if (text === '' || invalid.value) return props.fallback
-    const hex = normalizeHexColor(text)
-    if (hex !== undefined) return hex
-    return isValidColor(text) ? text : props.fallback
-  })
+  const shownColor = computed(() => (invalid.value ? props.fallback : showColor(draft.value, props.fallback)))
 
-  /** 名称标签的样式（即预览）：颜色用 color，渐变用背景裁到文字 */
-  const previewStyle = computed(() => {
-    const color = shownColor.value
-    if (!isGradient(color)) return { color }
-    return {
-      backgroundImage: color,
-      WebkitBackgroundClip: 'text',
-      backgroundClip: 'text',
-      WebkitTextFillColor: 'transparent'
-    }
-  })
+  /** 名称标签的样式（即预览），连同另一项（见 pair） */
+  const previewStyle = computed(() =>
+    props.kind === 'background' ? stylePreview(props.pair ?? 'currentColor', shownColor.value) : stylePreview(shownColor.value, props.pair)
+  )
 
   const swatchStyle = computed(() =>
     isGradient(shownColor.value) ? { backgroundImage: shownColor.value } : { backgroundColor: shownColor.value }
@@ -187,15 +180,43 @@
     commit()
   }
 
-  /** 下方放不下而上方更宽裕时向上展开；右侧超出窗口时与色块右缘对齐 */
+  /** 调色盘的大小变化（切换纯色、渐变等）：重新定位 */
+  let resizeObserver: ResizeObserver | undefined
+
+  /**
+   * 下方放不下、上方放得下时向上展开，其余向下（页面能向下滚，向上展开超出窗口顶端时可能滚不到）；
+   * 右侧超出窗口时与色块右缘对齐
+   */
   function place(): void {
     const rect = swatch.value?.getBoundingClientRect()
     const panel = popover.value
     if (!rect || !panel) return
+    const height = panel.offsetHeight
     const below = window.innerHeight - rect.bottom - GAP - EDGE
     const upper = rect.top - GAP - EDGE
-    above.value = panel.offsetHeight > below && upper > below
+    above.value = height > below && height <= upper
     alignEnd.value = rect.left + panel.offsetWidth > window.innerWidth - EDGE
+  }
+
+  /** 滚动页面让调色盘完整可见；比窗口高时露出顶端 */
+  function reveal(): void {
+    popover.value?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' })
+  }
+
+  function placeAndReveal(): void {
+    place()
+    void nextTick(reveal)
+  }
+
+  function watchSize(panel: HTMLElement): void {
+    if (typeof ResizeObserver !== 'function') return
+    let initial = true
+    resizeObserver = new ResizeObserver(() => {
+      // 首次回调为打开时的大小：已定位
+      if (initial) initial = false
+      else placeAndReveal()
+    })
+    resizeObserver.observe(panel)
   }
 
   function show(): void {
@@ -204,14 +225,19 @@
     open.value = true
     document.addEventListener('pointerdown', onOutside, true)
     void nextTick(() => {
-      place()
-      popover.value?.querySelector<HTMLElement>(FOCUSABLE)?.focus({ preventScroll: true })
+      const panel = popover.value
+      if (!panel) return
+      placeAndReveal()
+      panel.querySelector<HTMLElement>(FOCUSABLE)?.focus({ preventScroll: true })
+      watchSize(panel)
     })
   }
 
   function hide(): void {
     open.value = false
     document.removeEventListener('pointerdown', onOutside, true)
+    resizeObserver?.disconnect()
+    resizeObserver = undefined
   }
 
   /** 关闭并保存调色盘里的改动 */
@@ -265,6 +291,7 @@
 
   onBeforeUnmount(() => {
     document.removeEventListener('pointerdown', onOutside, true)
+    resizeObserver?.disconnect()
     if (dirty) commit()
   })
 </script>
@@ -338,6 +365,8 @@
     border: 1px solid var(--gcn-overlay-border);
     border-radius: var(--gcn-radius-overlay);
     box-shadow: var(--gcn-shadow-overlay);
+    /* 滚动显示时与窗口边缘留出的距离（同 EDGE） */
+    scroll-margin: 8px;
   }
 
   .color-field-popover:focus {

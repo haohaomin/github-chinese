@@ -30,6 +30,14 @@ async function scrollTo(wrapper: VueWrapper, top: number): Promise<void> {
   await nextTick()
 }
 
+/** :focus-visible 的结果：键盘聚焦为 true */
+function focusVisible(value: boolean): void {
+  const original = Element.prototype.matches
+  vi.spyOn(Element.prototype, 'matches').mockImplementation(function (this: Element, selector: string) {
+    return selector === ':focus-visible' ? value : original.call(this, selector)
+  })
+}
+
 function shown(wrapper: VueWrapper): boolean {
   return wrapper.get('.ui-back-to-top').classes('is-shown')
 }
@@ -91,13 +99,51 @@ describe.skipIf(!UiBackToTop)('UiBackToTop', () => {
     expect(scroll).toHaveBeenLastCalledWith({ top: 0, behavior: 'auto' })
   })
 
-  it('有焦点时不隐藏（键盘操作回到顶部后焦点仍在按钮上）；失去焦点后隐藏', async () => {
+  it('键盘聚焦时不隐藏（键盘操作回到顶部后焦点仍在按钮上）；失去焦点后隐藏', async () => {
+    focusVisible(true)
     const wrapper = mountList()
     const button = wrapper.get('[data-test="back-to-top"]')
     await button.trigger('focus')
     expect(shown(wrapper)).toBe(true)
     await button.trigger('blur')
     expect(shown(wrapper)).toBe(false)
+  })
+
+  it('点按聚焦（非键盘）：回到顶部后隐藏，不用点别处', async () => {
+    focusVisible(false)
+    vi.spyOn(Element.prototype, 'scrollTo').mockImplementation(() => undefined)
+    const wrapper = mountList()
+    await scrollTo(wrapper, 800)
+    const button = wrapper.get('[data-test="back-to-top"]')
+    await button.trigger('focus')
+    await button.trigger('click')
+    await scrollTo(wrapper, 0)
+    expect(shown(wrapper)).toBe(false)
+  })
+
+  it('整页：按页面的滚动显示、隐藏，点按时窗口滚回顶部；固定在窗口右下角', async () => {
+    const scroll = vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined)
+    vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(600)
+    const page = document.scrollingElement ?? document.documentElement
+    page.classList.add('frame')
+    const wrapper = mount(required(UiBackToTop), { props: { label: '返回顶部', page: true }, attachTo: document.body })
+    expect(wrapper.classes()).toContain('is-page')
+    expect(wrapper.classes()).not.toContain('is-shown')
+    view.top = 400
+    window.dispatchEvent(new Event('scroll'))
+    await nextTick()
+    expect(wrapper.classes()).toContain('is-shown')
+    await wrapper.get('[data-test="back-to-top"]').trigger('click')
+    expect(scroll).toHaveBeenLastCalledWith({ top: 0, behavior: 'smooth' })
+    view.top = 0
+    window.dispatchEvent(new Event('scroll'))
+    await nextTick()
+    expect(wrapper.classes()).not.toContain('is-shown')
+    const remove = vi.spyOn(window, 'removeEventListener')
+    wrapper.unmount()
+    page.classList.remove('frame')
+    expect(remove).toHaveBeenCalledWith('scroll', expect.any(Function))
+    expect(remove).toHaveBeenCalledWith('resize', expect.any(Function))
   })
 
   it('卸载后不再监听列表的滚动', () => {

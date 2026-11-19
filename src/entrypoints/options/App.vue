@@ -8,6 +8,7 @@
         <UpdateBadge />
       </div>
       <div class="options-actions">
+        <UpdateCheckButton />
         <TransferTools
           :import-label="t('importBackup')"
           :export-label="t('exportBackup')"
@@ -46,6 +47,8 @@
         <template #enterprise><EnterpriseSection /></template>
       </UiTabs>
 
+      <UpdateSection />
+
       <section class="section" aria-labelledby="about-title">
         <h2 id="about-title" class="section-title">{{ t('about') }}</h2>
         <dl class="pairs">
@@ -59,6 +62,7 @@
       </section>
     </main>
 
+    <UiBackToTop page :label="t('backToTop')" />
     <ToastHost />
   </div>
 </template>
@@ -67,10 +71,13 @@
   import { computed, ref } from 'vue'
   import ToastHost from '../../components/ToastHost.vue'
   import type { UiTab } from '../../components/ui/types'
+  import UiBackToTop from '../../components/ui/UiBackToTop.vue'
   import UiButton from '../../components/ui/UiButton.vue'
   import UiTabs from '../../components/ui/UiTabs.vue'
   import { useI18n, useUiPreferencesSync } from '../../components/ui-preferences'
   import UpdateBadge from '../../components/UpdateBadge.vue'
+  import UpdateCheckButton from '../../components/UpdateCheckButton.vue'
+  import { provideUpdateCheck } from '../../components/useUpdateCheck'
   import type { MessageKey } from '../../i18n'
   import { FEEDBACK_URL, getExtensionVersion, REPOSITORY_URL } from '../../shared/extension'
   import AccelerateSection from './AccelerateSection.vue'
@@ -86,6 +93,7 @@
   import TimeFormatSection from './TimeFormatSection.vue'
   import TranslationSwitch from './TranslationSwitch.vue'
   import TransferTools from './TransferTools.vue'
+  import UpdateSection from './UpdateSection.vue'
   import { useBackup } from './useBackup'
 
   /** 扩展图标（public/ 下的文件）。用绑定而非静态属性：模板里静态的绝对路径会被编译成模块导入 */
@@ -125,6 +133,7 @@
   ]
 
   useUiPreferencesSync()
+  provideUpdateCheck()
   const { t } = useI18n()
   const version = getExtensionVersion()
   const { exportScope, importScope } = useBackup()

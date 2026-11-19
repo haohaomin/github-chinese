@@ -26,9 +26,9 @@ function release(tag: string): ReleaseRef {
   return { owner: 'vuejs', repo: 'core', tag }
 }
 
-/** 附件行：左边图标与链接，右边摘要、大小、时间（同 GitHub 的发行版页面） */
-function assetRow(href: string, options: { readonly size?: string; readonly digest?: boolean } = {}): string {
-  const { size = '1.92 KB', digest = true } = options
+/** 附件行：左边图标与链接，右边摘要、（有写入权限时）GitHub 自带的次数、大小、时间（同 GitHub 的发行版页面） */
+function assetRow(href: string, options: { readonly size?: string; readonly digest?: boolean; readonly native?: number } = {}): string {
+  const { size = '1.92 KB', digest = true, native } = options
   return `
     <li class="Box-row d-flex flex-column flex-md-row">
       <div class="d-flex flex-justify-start flex-items-center col-12 col-lg-6">
@@ -39,6 +39,7 @@ function assetRow(href: string, options: { readonly size?: string; readonly dige
       </div>
       <div class="d-flex flex-auto flex-justify-end flex-items-center col-md-6 ml-3">
         ${digest ? '<div class="d-flex flex-items-center flex-justify-end flex-1"><span class="Truncate">sha256:0123</span></div>' : ''}
+        ${native === undefined ? '' : `<span class="color-fg-muted text-right flex-shrink-0 ml-2" data-test="native">${native} <svg class="octicon octicon-download"></svg></span>`}
         ${size ? `<span class="color-fg-muted text-right flex-shrink-0 flex-grow-0 ml-2" data-test="size">${size}</span>` : ''}
         <span class="color-fg-muted text-right flex-shrink-0 flex-grow-0 ml-2" data-test="time"><relative-time datetime="2026-10-26T19:19:59Z">Oct 26</relative-time></span>
       </div>
@@ -230,6 +231,41 @@ describe('createReleaseDownloads', () => {
     await settle()
     expect(countOf(second!)?.previousElementSibling).toBe(nameOf(second!))
     expect(countOf(second!)?.nextElementSibling?.className).toBe('gcn-test-options')
+    expect(requestMock).toHaveBeenCalledOnce()
+  })
+
+  it('行里已有 GitHub 自带的次数（有写入权限）：不加；整组都有时不请求', async () => {
+    const own = addAssets([
+      assetRow(`${RELEASES}/v3.5.0/vue.global.js`, { native: 4 }),
+      assetRow(`${RELEASES}/v3.5.0/vue.esm.js`, { native: 0 })
+    ])
+    start()
+    await settle()
+    expect(counts()).toHaveLength(0)
+    expect(requestMock).not.toHaveBeenCalled()
+    // 混有没有自带次数的行（如别的存储库的发行版）：只给它加
+    own.remove()
+    const mixed = addAssets([assetRow(`${RELEASES}/v3.5.0/vue.global.js`, { native: 4 }), assetRow(`${RELEASES}/v3.5.0/vue.esm.js`)])
+    await settle()
+    const [first, second] = [...mixed.querySelectorAll('.Box-row')]
+    expect(countOf(first!)).toBeNull()
+    expect(countOf(second!)?.getAttribute('title')).toBe('下载 0 次')
+    expect(requestMock).toHaveBeenCalledOnce()
+  })
+
+  it('自带次数晚于本模块出现：移除已加的；同一行多出的次数只留一个', async () => {
+    const list = addAssets([assetRow(`${RELEASES}/v3.5.0/vue.global.js`), assetRow(`${RELEASES}/v3.5.0/vue.esm.js`)])
+    start()
+    await settle()
+    const [first, second] = [...list.querySelectorAll('.Box-row')]
+    // 页面快照恢复等带回的副本
+    countOf(second!)!.after(countOf(second!)!.cloneNode(true))
+    first!
+      .querySelector('[data-test="size"]')!
+      .insertAdjacentHTML('beforebegin', '<span data-test="native">4 <svg class="octicon octicon-download"></svg></span>')
+    await settle()
+    expect(countOf(first!)).toBeNull()
+    expect(second!.querySelectorAll(`[${COUNT_ATTRIBUTE}]`)).toHaveLength(1)
     expect(requestMock).toHaveBeenCalledOnce()
   })
 

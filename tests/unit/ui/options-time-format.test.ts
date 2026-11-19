@@ -166,11 +166,12 @@ describe.skipIf(!App)('设置页：时间格式', () => {
     expect(previewText(wrapper)).toBe('週一 上午 10:03')
   })
 
-  it('格式符说明表：选自定义时显示；示例为本地 2026-01-05 09:05:08.007（周一）', async () => {
+  it('格式符说明表：始终显示，选自定义前后一样；示例为本地 2026-01-05 09:05:08.007（周一）', async () => {
     const wrapper = await render()
-    expect(referenceRows(wrapper)).toEqual([])
+    const before = referenceRows(wrapper)
     await chooseMode(wrapper, '自定义')
     const rows = referenceRows(wrapper)
+    expect(before).toEqual(rows)
     expect(rows[0]).toEqual(['YYYY', '年（四位）', '2026'])
     expect(rows).toContainEqual(['M / MM', '月', '1 / 01'])
     expect(rows).toContainEqual(['H / HH', '时（24 小时制）', '9 / 09'])

@@ -66,6 +66,7 @@
 
     <footer class="popup-footer">
       <UiButton size="sm" @click="openOptions">{{ t('settings') }}</UiButton>
+      <UpdateCheckButton />
       <UiButton v-if="tab" size="sm" :disabled="!canToggleExcluded" @click="toggleExcluded">
         {{ excluded ? t('includePage') : t('excludePage') }}
       </UiButton>
@@ -101,6 +102,8 @@
   import UiSwitch from '../../components/ui/UiSwitch.vue'
   import { THEME_MESSAGE, useI18n, useUiPreferencesSync } from '../../components/ui-preferences'
   import UpdateBadge from '../../components/UpdateBadge.vue'
+  import UpdateCheckButton from '../../components/UpdateCheckButton.vue'
+  import { provideUpdateCheck } from '../../components/useUpdateCheck'
   import { REPOSITORY_URL } from '../../shared/extension'
   import GeneralSection from './GeneralSection.vue'
   import LanguageSection from './LanguageSection.vue'
@@ -110,6 +113,7 @@
   const LOGO_URL = '/icon/48.png'
 
   useUiPreferencesSync()
+  provideUpdateCheck()
   const { t } = useI18n()
 
   const {
@@ -273,8 +277,10 @@
   }
 
   /* 右侧同顶部：图标与上方开关的右缘对齐 */
+  /* 按钮放不下时换行（英文界面） */
   .popup-footer {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 8px;
     padding: 12px 10px 12px 16px;
