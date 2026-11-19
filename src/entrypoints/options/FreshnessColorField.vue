@@ -1,17 +1,40 @@
 <template>
   <div class="color-field">
     <span :id="labelId" class="color-field-label" :style="previewStyle" data-test="color-label">{{ label }}</span>
-    <input
-      v-if="isHexColor"
-      class="color-field-picker"
-      type="color"
-      :value="hexPreview"
-      :disabled="disabled"
-      :aria-labelledby="names"
-      data-test="color-picker"
-      @input="onPick"
-      @change="onPickDone"
-    />
+    <span ref="anchor" class="color-field-palette" @focusout="onFocusOut" @keydown.esc="onEscape">
+      <button
+        ref="swatch"
+        type="button"
+        class="color-field-swatch"
+        :disabled="disabled"
+        aria-haspopup="dialog"
+        :aria-expanded="open"
+        :aria-controls="open ? paletteId : undefined"
+        :aria-labelledby="`${paletteLabelId} ${names}`"
+        data-test="color-picker"
+        @click="toggle"
+      >
+        <span class="color-field-swatch-checker">
+          <span class="color-field-swatch-color" :style="swatchStyle" data-test="color-swatch"></span>
+        </span>
+      </button>
+      <span :id="paletteLabelId" hidden>{{ t('palette') }}</span>
+      <Transition name="color-field-popover">
+        <div
+          v-if="open"
+          :id="paletteId"
+          ref="popover"
+          role="dialog"
+          tabindex="-1"
+          class="color-field-popover"
+          :class="{ 'is-above': above, 'is-end': alignEnd }"
+          :aria-labelledby="names"
+          data-test="color-palette"
+        >
+          <ColorPalette :value="draft" :fallback="fallback" @update="onPaletteUpdate" />
+        </div>
+      </Transition>
+    </span>
     <UiInput
       class="color-field-hex"
       mono
@@ -41,16 +64,18 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, ref, useId, watch } from 'vue'
+  import { computed, nextTick, onBeforeUnmount, ref, useId, useTemplateRef, watch } from 'vue'
   import UiButton from '../../components/ui/UiButton.vue'
   import UiInput from '../../components/ui/UiInput.vue'
   import { useI18n } from '../../components/ui-preferences'
   import { isGradient, isValidColor, normalizeHexColor } from '../../shared/freshness'
+  import ColorPalette from './ColorPalette.vue'
 
   /**
-   * 一项颜色：名称（用当前颜色显示，即预览）、取色器（仅 #rgb、#rrggbb 时显示）、颜色写法、重置。
+   * 一项颜色：名称（用当前颜色显示，即预览）、色块（点开调色盘）、颜色写法、重置。
    * 写法为 CSS 颜色（hex、rgb()、hsl()、颜色名等）或渐变，浏览器不认的标为格式不符。
-   * 取色器拖动时只预览，关闭时保存；写法在失去焦点、按 Enter、离开标签页时保存；清空为默认
+   * 调色盘里改动时只预览，关闭（点在别处、再点色块、焦点移出）时保存，Esc 取消并恢复打开时的写法；
+   * 写法在失去焦点、按 Enter、离开标签页时保存；清空为默认
    */
   const props = defineProps<{
     label: string
@@ -62,15 +87,34 @@
 
   const emit = defineEmits<{ save: [color: string] }>()
 
+  /** 弹出层与色块的间距、与窗口边缘至少留出的距离（px） */
+  const GAP = 4
+  const EDGE = 8
+  /** 打开时聚焦弹出层里的第一个可聚焦控件 */
+  const FOCUSABLE = 'button:not(:disabled, [tabindex="-1"]), input:not(:disabled), [tabindex="0"]'
+
   const { t } = useI18n()
   const labelId = useId()
   const resetId = useId()
   const statusId = useId()
+  const paletteId = useId()
+  const paletteLabelId = useId()
   const names = computed(() => `${props.groupLabelId} ${labelId}`)
+
+  const anchor = useTemplateRef<HTMLElement>('anchor')
+  const swatch = useTemplateRef<HTMLButtonElement>('swatch')
+  const popover = useTemplateRef<HTMLElement>('popover')
 
   const draft = ref(props.color)
   const invalid = ref(false)
   let dirty = false
+
+  const open = ref(false)
+  /** 向上展开、与色块右缘对齐：每次打开时按窗口内的空间决定 */
+  const above = ref(false)
+  const alignEnd = ref(false)
+  /** 打开调色盘时的写法与状态：Esc 取消时恢复 */
+  let before = { draft: '', invalid: false, dirty: false }
 
   watch(
     () => props.color,
@@ -81,48 +125,40 @@
     }
   )
 
-  /** 当前草稿是否为纯 hex 颜色（显示取色器的条件） */
-  const isHexColor = computed(() => {
+  /** 当前显示的颜色：写法可用时为它（hex 统一写法），否则为默认色 */
+  const shownColor = computed(() => {
     const text = draft.value.trim()
-    return text === '' || normalizeHexColor(text) !== undefined
-  })
-
-  /** 取色器用的 hex 值 */
-  const hexPreview = computed(() => {
-    const text = draft.value.trim()
-    return normalizeHexColor(text) ?? props.fallback
-  })
-
-  /** 名称标签的样式（即预览）：颜色用 color，渐变用背景裁到文字；不可用时为默认 */
-  const previewStyle = computed(() => {
-    const text = draft.value.trim()
-    if (text === '' || invalid.value) return { color: props.fallback }
+    if (text === '' || invalid.value) return props.fallback
     const hex = normalizeHexColor(text)
-    if (hex !== undefined) return { color: hex }
-    if (!isValidColor(text)) return { color: props.fallback }
-    if (!isGradient(text)) return { color: text }
+    if (hex !== undefined) return hex
+    return isValidColor(text) ? text : props.fallback
+  })
+
+  /** 名称标签的样式（即预览）：颜色用 color，渐变用背景裁到文字 */
+  const previewStyle = computed(() => {
+    const color = shownColor.value
+    if (!isGradient(color)) return { color }
     return {
-      backgroundImage: text,
+      backgroundImage: color,
       WebkitBackgroundClip: 'text',
       backgroundClip: 'text',
       WebkitTextFillColor: 'transparent'
     }
   })
 
+  const swatchStyle = computed(() =>
+    isGradient(shownColor.value) ? { backgroundImage: shownColor.value } : { backgroundColor: shownColor.value }
+  )
+
   function onInput(value: string): void {
     draft.value = value
     dirty = true
   }
 
-  function onPick(event: Event): void {
-    draft.value = (event.target as HTMLInputElement).value
+  function onPaletteUpdate(value: string): void {
+    draft.value = value
     invalid.value = false
     dirty = true
-  }
-
-  function onPickDone(event: Event): void {
-    onPick(event)
-    commit()
   }
 
   function commit(): void {
@@ -151,7 +187,84 @@
     commit()
   }
 
+  /** 下方放不下而上方更宽裕时向上展开；右侧超出窗口时与色块右缘对齐 */
+  function place(): void {
+    const rect = swatch.value?.getBoundingClientRect()
+    const panel = popover.value
+    if (!rect || !panel) return
+    const below = window.innerHeight - rect.bottom - GAP - EDGE
+    const upper = rect.top - GAP - EDGE
+    above.value = panel.offsetHeight > below && upper > below
+    alignEnd.value = rect.left + panel.offsetWidth > window.innerWidth - EDGE
+  }
+
+  function show(): void {
+    if (open.value || props.disabled) return
+    before = { draft: draft.value, invalid: invalid.value, dirty }
+    open.value = true
+    document.addEventListener('pointerdown', onOutside, true)
+    void nextTick(() => {
+      place()
+      popover.value?.querySelector<HTMLElement>(FOCUSABLE)?.focus({ preventScroll: true })
+    })
+  }
+
+  function hide(): void {
+    open.value = false
+    document.removeEventListener('pointerdown', onOutside, true)
+  }
+
+  /** 关闭并保存调色盘里的改动 */
+  function close(): void {
+    if (!open.value) return
+    hide()
+    if (dirty) commit()
+  }
+
+  /** 取消：关闭并恢复打开时的写法，焦点回到色块 */
+  function cancel(): void {
+    if (!open.value) return
+    hide()
+    draft.value = before.draft
+    invalid.value = before.invalid
+    dirty = before.dirty
+    swatch.value?.focus()
+  }
+
+  function toggle(): void {
+    if (open.value) close()
+    else show()
+  }
+
+  /** 点在色块与调色盘以外：关闭并保存 */
+  function onOutside(event: Event): void {
+    const target = event.target
+    if (target instanceof Node && anchor.value?.contains(target)) return
+    close()
+  }
+
+  /** 焦点移到色块与调色盘以外（Tab 离开）：关闭并保存。切换窗口等没有去处的失焦不算 */
+  function onFocusOut(event: FocusEvent): void {
+    const next = event.relatedTarget
+    if (next instanceof Node && !anchor.value?.contains(next)) close()
+  }
+
+  function onEscape(event: KeyboardEvent): void {
+    if (!open.value) return
+    event.stopPropagation()
+    cancel()
+  }
+
+  // 打开时被禁用（如关掉总开关）：收起并保存
+  watch(
+    () => props.disabled,
+    value => {
+      if (value) close()
+    }
+  )
+
   onBeforeUnmount(() => {
+    document.removeEventListener('pointerdown', onOutside, true)
     if (dirty) commit()
   })
 </script>
@@ -168,7 +281,12 @@
     font-variant-numeric: tabular-nums;
   }
 
-  .color-field-picker {
+  .color-field-palette {
+    position: relative;
+    display: flex;
+  }
+
+  .color-field-swatch {
     width: 40px;
     height: var(--gcn-control-md);
     padding: 3px;
@@ -177,31 +295,88 @@
     border-radius: var(--gcn-radius);
     box-shadow: var(--gcn-shadow-inset);
     cursor: pointer;
-    appearance: none;
     transition: border-color var(--gcn-duration-fast) var(--gcn-ease);
+    -webkit-tap-highlight-color: transparent;
   }
 
-  .color-field-picker:hover:not(:disabled) {
+  .color-field-swatch:hover:enabled,
+  .color-field-swatch[aria-expanded='true'] {
     border-color: var(--gcn-border-emphasis);
   }
 
-  .color-field-picker:disabled {
+  .color-field-swatch:disabled {
     cursor: not-allowed;
     opacity: 0.5;
   }
 
-  .color-field-picker::-webkit-color-swatch-wrapper {
-    padding: 0;
-  }
-
-  .color-field-picker::-webkit-color-swatch {
-    border: none;
+  /* 色块下垫棋盘格：半透明的颜色看得出透明 */
+  .color-field-swatch-checker {
+    display: block;
+    height: 100%;
+    overflow: hidden;
+    background: repeating-conic-gradient(var(--gcn-checker) 0 25%, var(--gcn-bg) 0 50%) 0 0 / 8px 8px;
     border-radius: 3px;
   }
 
-  .color-field-picker::-moz-color-swatch {
-    border: none;
-    border-radius: 3px;
+  .color-field-swatch-color {
+    display: block;
+    height: 100%;
+    box-shadow: inset 0 0 0 1px light-dark(#1f23281a, #ffffff1a);
+  }
+
+  /* 调色盘：z-index 盖住后面带定位的控件（按钮、另一组颜色） */
+  .color-field-popover {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    z-index: 20;
+    width: 264px;
+    max-width: calc(100vw - 16px);
+    padding: 12px;
+    color: var(--gcn-fg);
+    background: var(--gcn-overlay-bg);
+    border: 1px solid var(--gcn-overlay-border);
+    border-radius: var(--gcn-radius-overlay);
+    box-shadow: var(--gcn-shadow-overlay);
+  }
+
+  .color-field-popover:focus {
+    outline: none;
+  }
+
+  .color-field-popover.is-above {
+    top: auto;
+    bottom: calc(100% + 4px);
+  }
+
+  .color-field-popover.is-end {
+    right: 0;
+    left: auto;
+  }
+
+  /* 展开：淡入并从色块一侧滑出 4px；收起只淡出（同下拉框） */
+  .color-field-popover-enter-active {
+    transition:
+      opacity var(--gcn-duration-base) var(--gcn-ease-out),
+      transform var(--gcn-duration-base) var(--gcn-ease-out);
+  }
+
+  .color-field-popover-leave-active {
+    pointer-events: none;
+    transition: opacity var(--gcn-duration-fast) var(--gcn-ease);
+  }
+
+  .color-field-popover-enter-from,
+  .color-field-popover-leave-to {
+    opacity: 0;
+  }
+
+  .color-field-popover-enter-from {
+    transform: translateY(-4px);
+  }
+
+  .color-field-popover.is-above.color-field-popover-enter-from {
+    transform: translateY(4px);
   }
 
   .color-field-status {
@@ -212,5 +387,19 @@
 
   .color-field-status:not(:empty) {
     padding-top: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .color-field-swatch,
+    .color-field-popover-enter-active,
+    .color-field-popover-leave-active {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .color-field-swatch-checker {
+      forced-color-adjust: none;
+    }
   }
 </style>

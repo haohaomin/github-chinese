@@ -38,7 +38,7 @@ export const DEFAULT_FRESHNESS_COLORS: FreshnessColors = {
   stale: { light: '', dark: '' }
 }
 
-/** 默认颜色在 GitHub 默认主题下的值（成功色、提示色、次要文字色）：设置页的预览与取色器用 */
+/** 默认颜色在 GitHub 默认主题下的值（成功色、提示色、次要文字色）：设置页的预览与调色盘用 */
 export const FRESHNESS_PREVIEW_COLORS: FreshnessColors = {
   fresh: { light: '#1a7f37', dark: '#3fb950' },
   recent: { light: '#9a6700', dark: '#d29922' },

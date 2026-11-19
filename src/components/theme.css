@@ -63,6 +63,8 @@
   --gcn-danger-fg: light-dark(#d1242f, #fa5e55);
   --gcn-danger-bg: light-dark(#ffebe9, #f8514926);
   --gcn-neutral-bg: light-dark(#818b981f, #656c7633);
+  /* 透明色底下的棋盘格（与 --gcn-bg 相间） */
+  --gcn-checker: light-dark(#d1d9e0, #3d444d);
 
   /* 按钮 */
   --gcn-btn-fg: light-dark(#25292e, #f0f6fc);
