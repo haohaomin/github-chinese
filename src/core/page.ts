@@ -186,7 +186,9 @@ const TOP_SECTION: Readonly<Record<string, readonly PageKey[]>> = {
   // MCP 服务器目录与服务器详情页
   mcp: ['mcp'],
   // 帐户页（创建组织除外）：升级计划、选择计划与个人设置的计划页同一组件，付款历史等计费页同 /settings/billing
-  account: ['settings']
+  account: ['settings'],
+  // 兑换优惠券页：优惠券词条在个人设置的计划词典
+  redeem: ['settings']
 }
 
 /** 顶级保留路径的前两段 → 页面类型（优先于 TOP_SECTION） */
@@ -259,6 +261,9 @@ function hasRepositoryFilter(parts: readonly string[], at: number): boolean {
 /** /organizations/<组织>/ 下不在 settings/ 里、但带组织设置侧栏的三级段 */
 const ORG_SETTINGS_SECTIONS: ReadonlySet<string> = new Set(['rename', 'billing_managers'])
 
+/** 个人设置（/settings/）下与组织设置同一组件的二级段：计费、议题类型、议题字段 */
+const SHARED_SETTINGS_SECTIONS: ReadonlySet<string> = new Set(['billing', 'issue-types', 'issue-fields'])
+
 /** /organizations/ 下不是组织名的二级段 */
 const ORGANIZATIONS_PAGES = new Set(['new', 'plan', 'enterprise_plan'])
 
@@ -296,6 +301,8 @@ function detectOwnerScope(kind: string, parts: readonly string[]): readonly Page
   // 组织下的重命名完成页同组织设置（OWNER_SECTION 的 rename 是个人帐户的）
   if (section === 'rename') return ['organization', 'org-settings']
   const keys: PageKey[] = ['organization', ...(own(OWNER_SECTION, section) ?? [])]
+  // 团队的项目页（/orgs/<组织>/teams/<团队>/projects）：与组织项目列表同一列表组件
+  if (section === 'teams' && parts[4] === 'projects') keys.push('projects')
   return section === 'settings' && hasRepositoryFilter(parts, 3) ? [...keys, 'org-policies'] : keys
 }
 
@@ -372,6 +379,11 @@ export function detectPages(url: UrlLike): PageKey[] {
     return unique(['common', ...detectOwnerScope(first, parts)])
   }
   if (first === 'enterprises') return unique(['common', ...(own(ENTERPRISE_SECTION, third) ?? [])])
+  // 个人设置中与组织设置同一组件的页（计费、议题类型、议题字段）：叠加组织设置的词典（个人设置排在后面，同一原文以个人设置的译法为准）；
+  // 计划页另叠加新建组织选择计划页的词典（排在前面）
+  if (first === 'settings' && SHARED_SETTINGS_SECTIONS.has(second ?? '')) {
+    return ['common', ...(second === 'billing' && third === 'plans' ? (['new'] as const) : []), 'org-settings', 'settings']
+  }
   // 市场上架项的 Web 钩子页（/marketplace/<上架项>/hook）：在 marketplace 上叠加 marketplace-hook（最近请求，同 GitHub 应用设置）
   if (first === 'marketplace' && third === 'hook' && second !== 'actions') return ['common', 'marketplace', 'marketplace-hook']
   if (isSitePath(first)) {

@@ -150,6 +150,7 @@ export default {
     'Account owners and billing managers receive budget alert emails by default. You can add other recipients if needed.':
       '帐户所有者和账单管理员默认接收预算警报电子邮件。如有需要，可以添加其他收件人。',
     'Select users': '选择用户',
+    'At least one alert recipient must be selected': '至少选择一个警报收件人',
     'Search for users': '搜索用户',
     'Successfully updated invoicing preference': '已更新开票偏好设置',
     // 概览：计算使用量
@@ -560,6 +561,10 @@ export default {
     [
       /^Cost calculated based on (\d[\d,]*) Spark premium requests? that exceed the premium request usage included with your Copilot licenses\.$/,
       '费用按超出 Copilot 许可证包含的高级请求使用量的 $1 个 Spark 高级请求计算。'
+    ],
+    [
+      /^Cost calculated based on (\d[\d,]*) Spark AI credits? that exceed the AI credits usage included with your Copilot licenses\.$/,
+      '费用按超出 Copilot 许可证包含的 AI 额度使用量的 $1 个 Spark AI 额度计算。'
     ],
     [/^\/ (\d[\d,]*) AI credits$/, '/ $1 AI 额度'],
 

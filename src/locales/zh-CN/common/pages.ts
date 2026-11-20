@@ -448,6 +448,12 @@ export default {
     'Transportation & Storage': '交通运输与仓储',
     'Travel, Recreation, and Leisure': '旅游、娱乐与休闲',
     'Wholesale & Distribution': '批发与分销',
+    // 创建企业：企业托管用户类型的标题、提交后的错误横幅（字段名是跳转链接）与条款复选框的提示
+    'Enterprise Managed Users': '企业托管用户',
+    'The following fields have errors:': '以下字段有错误：',
+    'Username shortcode': '用户名短代码',
+    'Identity provider': '标识提供者',
+    'Please acknowledge these terms and check these boxes to proceed.': '请确认这些条款并勾选复选框以继续。',
     'Create enterprise': '创建企业',
     'Trial terms': '试用条款',
     // “I understand that <certain features 链接> are unavailable during the trial experience.”
@@ -829,12 +835,20 @@ export default {
       "At {}, we're seeing technology leaders take an active role in helping their customers adopt new technologies. GitHub is demonstrating a thoughtful, deliberate approach to creating compelling service offerings. {}{}{}",
       '在 {}，我们看到技术领导者正积极帮助客户采用新技术。GitHub 在打造有吸引力的服务方面展现出深思熟虑、审慎周到的做法。{}{}{}'
     ],
-    // 创建企业表单的数据托管说明：With <GitHub Enterprise Cloud with Data Residency 链接>, you can choose …
-    // 链接文字译成中文，{} 两侧不留空格。宿主按三段收录（表单需登录，结构未核对），
-    // 另有元素子节点时不命中，各段照常翻译
+    // 创建企业表单的数据托管说明：With <GitHub Enterprise Cloud with Data Residency 链接><外部链接图标>, you can choose …
+    // 链接文字译成中文，{} 两侧不留空格；没有图标时见第二条
+    [
+      'With {}{}, you can choose where your company’s code and data are stored. Your enterprise will be hosted on a dedicated subdomain of GHE.com.',
+      '借助{}{}，你可以选择公司代码和数据的存储位置。你的企业将托管在 GHE.com 的专用子域上。'
+    ],
     [
       'With {}, you can choose where your company’s code and data are stored. Your enterprise will be hosted on a dedicated subdomain of GHE.com.',
       '借助{}，你可以选择公司代码和数据的存储位置。你的企业将托管在 GHE.com 的专用子域上。'
+    ],
+    // 企业托管用户的创建表单：现有组织不会随之升级（组织名照录；句末是企业云链接与外部链接图标）
+    [
+      /^The ([\w.-]+) organization will not be upgraded because existing organizations cannot be added to enterprises with Enterprise Managed Users\. To bring your organization along, we recommend\{\}\{\}\.$/,
+      '$1 组织不会升级：现有组织无法加入使用企业托管用户的企业。如需纳入你的组织，我们建议{}{}。'
     ]
   ],
   // 功能页时间线条目（Primer Brand Timeline，类名带 CSS 模块哈希，按片段匹配）：<em> 拆开的句子整段合并

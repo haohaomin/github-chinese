@@ -54,6 +54,7 @@ export default {
     'Your profile picture has been updated. It may take a few minutes to update across the site.':
       '你的个人资料图片已更新。全站更新可能需要几分钟。',
     'Crop your new profile picture': '裁剪新的个人资料图片',
+    'This profile picture has been deleted.': '此个人资料图片已删除。',
     'Set new profile picture': '设置新的个人资料图片',
     // 个人资料图片上传失败提示（原文无逗号，译文不加）
     'We only support PNG, GIF, or JPG pictures.': '仅支持 PNG、GIF 或 JPG 图片。',

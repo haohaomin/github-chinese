@@ -45,10 +45,22 @@ describe('detectPages', () => {
     ['https://github.com/organizations/vuejs/repositories/new', ['common', 'new']],
     ['https://github.com/organizations/vuejs/repositories', ['common', 'organization']],
     ['https://github.com/account/organizations/new', ['common', 'new']],
-    // 帐户页都属个人设置（创建组织除外）：付款历史等计费页与 /settings/billing 同一组词典
+    // 帐户页都属个人设置（创建组织除外）：付款历史等计费页用个人设置的词典
     ['https://github.com/account/billing', ['common', 'settings']],
     ['https://github.com/account/billing/history', ['common', 'settings']],
     ['https://github.com/Account/Billing/History/', ['common', 'settings']],
+    // 个人设置中与组织设置同一组件的页：叠加组织设置的词典（个人设置在后）；计划页另叠加新建组织的计划词典
+    ['https://github.com/settings/billing', ['common', 'org-settings', 'settings']],
+    ['https://github.com/settings/billing/usage', ['common', 'org-settings', 'settings']],
+    ['https://github.com/settings/billing/plans', ['common', 'new', 'org-settings', 'settings']],
+    ['https://github.com/settings/issue-types', ['common', 'org-settings', 'settings']],
+    ['https://github.com/settings/issue-fields/123', ['common', 'org-settings', 'settings']],
+    ['https://github.com/settings/profile', ['common', 'settings']],
+    // 兑换优惠券页：优惠券词条在个人设置
+    ['https://github.com/redeem', ['common', 'settings']],
+    // 团队的项目页与组织项目列表同一组件
+    ['https://github.com/orgs/vuejs/teams/core/projects', ['common', 'organization', 'projects']],
+    ['https://github.com/orgs/vuejs/teams/core', ['common', 'organization']],
     ['https://github.com/open-source/sponsors', ['common', 'sponsors']],
     ['https://github.com/open-source', ['common']],
     ['https://github.com/vuejs/core/agents', ['common', 'repository', 'copilot']],

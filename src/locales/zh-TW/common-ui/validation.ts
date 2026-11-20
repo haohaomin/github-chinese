@@ -10,23 +10,33 @@ import { joinCjk } from '../helpers'
 
 /** 字段名：译法与各表单的字段标签一致 */
 const FIELDS: Readonly<Record<string, string>> = {
-  Bio: '個人簡介',
+  'Admin name': '管理員姓名',
+  'Admin work email': '管理員公司電子郵件',
   'Billing email': '帳單電子郵件',
+  Bio: '個人簡介',
   Body: '內文',
   Branch: '分支',
+  'Business/Institution name': '企業/機構名稱',
   'Callback URL': '回呼 URL',
   Color: '顏色',
   Company: '公司',
+  Country: '國家/地區',
+  'Country/Region': '國家/地區',
   Description: '描述',
   Domain: '網域',
   Email: '電子郵件',
+  'Enterprise name': '企業名稱',
+  'Enterprise URL slug': '企業 URL 代稱',
   'Homepage URL': '首頁 URL',
+  'Identity provider': '身分識別提供者',
+  Industry: '產業',
   Key: '金鑰',
   Label: '標籤',
   Location: '所在地',
   Login: '使用者名稱',
   Name: '名稱',
   Note: '備註',
+  'Number of employees': '員工人數',
   'Organization name': '組織名稱',
   Password: '密碼',
   'Repository name': '儲存庫名稱',
@@ -35,7 +45,9 @@ const FIELDS: Readonly<Record<string, string>> = {
   Title: '標題',
   URL: 'URL',
   Username: '使用者名稱',
+  'Username shortcode': '使用者名稱簡碼',
   Value: '值',
+  'Vat code': 'VAT 稅號',
   Website: '網站'
 }
 
@@ -56,7 +68,11 @@ const MESSAGES: Readonly<Record<string, string>> = {
   'is not a number': '不是數字',
   'is not included in the list': '不在可選範圍內',
   'must be accepted': '必須接受',
-  'contains invalid characters': '包含無效字元'
+  'contains invalid characters': '包含無效字元',
+  'cannot be an ip address': '不能是 IP 位址',
+  'may only contain alphanumeric characters': '只能包含英數字元',
+  'must be selected': '為必選項目',
+  'required to enable enterprise managed users': '為啟用企業受控使用者所必需'
 }
 
 /** 带字符数的错误：is too long (maximum is 100 characters)；COUNTED_SOURCE 不含捕获组，拼进 VALIDATION_RE */
@@ -81,7 +97,10 @@ export const VALIDATION_FIELD_SOURCE = alternatives(Object.keys(FIELDS))
 
 const VALIDATION_RE = new RegExp(`^(${VALIDATION_FIELD_SOURCE}) (${alternatives(Object.keys(MESSAGES))}|${COUNTED_SOURCE})(\\.?)$`)
 
-/** VALIDATION_RE 匹配到的错误一定在两张表之一 */
+/** 字段名在前一个元素里时（<a>Username shortcode</a> may only contain alphanumeric characters.）只剩错误部分 */
+const MESSAGE_RE = new RegExp(`^(${alternatives(Object.keys(MESSAGES))}|${COUNTED_SOURCE})(\\.?)$`)
+
+/** VALIDATION_RE、MESSAGE_RE 匹配到的错误一定在两张表之一 */
 function message(text: string): string {
   const fixed = MESSAGES[text]
   if (fixed !== undefined) return fixed
@@ -92,6 +111,8 @@ function message(text: string): string {
 export default {
   regexp: [
     // Name can't be blank → 名稱不能為空白；Description is too long (maximum is 100 characters). → 描述過長（上限為 100 個字元）。
-    [VALIDATION_RE, (_, field: string, error: string, dot: string) => `${joinCjk(FIELDS[field]!, message(error))}${dot ? '。' : ''}`]
+    [VALIDATION_RE, (_, field: string, error: string, dot: string) => `${joinCjk(FIELDS[field]!, message(error))}${dot ? '。' : ''}`],
+    // 只剩错误部分：may only contain alphanumeric characters. → 只能包含字母和数字。
+    [MESSAGE_RE, (_, error: string, dot: string) => `${message(error)}${dot ? '。' : ''}`]
   ]
 } satisfies PageDictionary

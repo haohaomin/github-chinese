@@ -230,6 +230,41 @@ export default {
     'Child teams': '子團隊',
     'Parent team': '父團隊',
     'Add a member': '新增成員',
+    'This team has no description': '此團隊沒有說明',
+    'Select all team members': '選取所有團隊成員',
+    'Search by team name or create a new team': '依團隊名稱搜尋或建立新團隊',
+    'Sorry. That name is already taken.': '抱歉，此名稱已被使用。',
+    'You’ve successfully updated the team.': '已更新團隊。',
+    "You've successfully updated the team.": '已更新團隊。',
+    'You’ve successfully deleted the team. Updated permissions may take a few minutes to take effect.':
+      '已刪除團隊。權限更新可能需要幾分鐘才會生效。',
+    "You've successfully deleted the team. Updated permissions may take a few minutes to take effect.":
+      '已刪除團隊。權限更新可能需要幾分鐘才會生效。',
+    // 团队：存储库
+    'Repositories with direct access': '具有直接存取權的儲存庫',
+    'This team doesn’t have any repositories.': '此團隊沒有任何儲存庫。',
+    "This team doesn't have any repositories.": '此團隊沒有任何儲存庫。',
+    'Only repositories that you have admin privileges for can be added.': '只能新增你具有管理員權限的儲存庫。',
+    'Add repository to team': '將儲存庫新增至團隊',
+    'Search by repository name': '依儲存庫名稱搜尋',
+    'The repository was not found': '找不到儲存庫',
+    // 团队：Copilot
+    'Customize Copilot for your team': '為團隊自訂 Copilot',
+    "The Copilot plugins this team's direct members get from day one. Doesn't apply to members of child teams.":
+      '此團隊直屬成員從第一天起取得的 Copilot 外掛程式。不適用於子團隊成員。',
+    'The Copilot plugins this team’s direct members get from day one. Doesn’t apply to members of child teams.':
+      '此團隊直屬成員從第一天起取得的 Copilot 外掛程式。不適用於子團隊成員。',
+    'Team customizations need Copilot': '團隊自訂需要 Copilot',
+    'Organization Copilot settings': '組織 Copilot 設定',
+    // 团队设置：头像、代码审查、可见性
+    'Crop your new team avatar': '裁切新的團隊頭像',
+    'Your team avatar has been updated. It may take a few minutes to update across the site.': '團隊頭像已更新。全站更新可能需要幾分鐘。',
+    "You've successfully updated the team's code review settings.": '已更新團隊的程式碼審查設定。',
+    'You’ve successfully updated the team’s code review settings.': '已更新團隊的程式碼審查設定。',
+    'Because secret teams cannot be nested, changing the team’s visibility to secret will result in cancelling all pending parent or child requests for this team.':
+      '祕密團隊無法巢狀，將團隊可見度改為祕密會取消此團隊所有待處理的父團隊或子團隊請求。',
+    "Because secret teams cannot be nested, changing the team's visibility to secret will result in cancelling all pending parent or child requests for this team.":
+      '祕密團隊無法巢狀，將團隊可見度改為祕密會取消此團隊所有待處理的父團隊或子團隊請求。',
 
     // 项目列表
     'Search all projects': '搜尋所有專案',
@@ -338,6 +373,11 @@ export default {
     Amount: '金額',
     // 团队设置页
     General: '一般',
+    // 团队：「Add a team to <strong>团队</strong>」「Add repository to <strong>团队</strong>」，头像上传中
+    'Add a team to': '將團隊新增至',
+    'Add repository to': '將儲存庫新增至',
+    'Uploading...': '上傳中...',
+    'Uploading…': '上傳中…',
     // OAuth 应用访问申请页（/orgs/<组织>/policies/applications/<id>，与 settings-developer 一致）
     'Organization access': '組織存取權',
     'Currently:': '目前：',
@@ -416,6 +456,16 @@ export default {
     [/^(\d[\d,]*) security managers? in the ([\w.-]+) organization$/, '$2 組織中的 $1 位安全性管理員'],
     [/^(\d[\d,]*) teams? in the ([\w.-]+) organization$/, '$2 組織中的 $1 個團隊'],
     [/^(\d[\d,]*) child team members?$/, '$1 位子團隊成員'],
+    // 团队页：成员数、添加成员 / 存储库（团队名可含空格）、子团队、团队搜索的新建项、Copilot 空状态
+    [/^(\d[\d,]*) members? shown\.$/, '顯示 $1 位成員。'],
+    [/^Add member to (.+)$/, '將成員新增至 $1'],
+    [/^Add repository to (.+)$/, '將儲存庫新增至 $1'],
+    [/^Teams will become a child of (.+)\.$/, '團隊將成為 $1 的子團隊。'],
+    [/^(.+) \(Create team\)$/, '$1（建立團隊）'],
+    [
+      /^Members of ([\w.-]+) need Copilot Business or Copilot Enterprise to get this team[’']s customizations\.$/,
+      '$1 的成員需要 Copilot 商務版或 Copilot 企業版才能取得此團隊的自訂設定。'
+    ],
     // 团队同步不一致页标题
     [/^(\d[\d,]*) group members? not in team$/, '$1 位群組成員不在團隊中'],
     [/^(\d[\d,]*) team members? not in group$/, '$1 位團隊成員不在群組中'],
@@ -498,6 +548,8 @@ export default {
     [
       "Create a public repository called {}. Once created, add a {}. The README will appear on your organization's profile, visible to anyone.",
       '建立名為 {} 的公開儲存庫。建立後新增 {}。讀我檔案將顯示在組織的個人檔案中，所有人皆可看到。'
-    ]
+    ],
+    // 新建团队：名称检查结果「Mention this team in conversations as <strong>@组织/团队</strong>.」
+    ['Mention this team in conversations as {}.', '在對話中提及此團隊時使用 {}。']
   ]
 } satisfies PageDictionary

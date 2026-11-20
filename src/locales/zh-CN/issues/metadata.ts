@@ -33,6 +33,21 @@ const SECTION_NAME: Readonly<Record<string, string>> = {
 
 const SECTION_NAME_SOURCE = Object.keys(SECTION_NAME).join('|')
 
+/** 议题字段：组织预置字段名（与组织设置一致）；组织自定义的字段名是用户内容，照录 */
+const PRESET_FIELDS: Readonly<Record<string, string>> = {
+  Priority: '优先级',
+  'Start date': '开始日期',
+  'Target date': '目标日期',
+  Effort: '工作量'
+}
+
+const PRESET_FIELD_SOURCE = Object.keys(PRESET_FIELDS).join('|')
+
+/** 字段名：预置字段译出，其余照录 */
+function fieldName(name: string): string {
+  return PRESET_FIELDS[name] ?? name
+}
+
 /**
  * 默认议题类型（组织预置）的名称：默认类型名称表（PageDictionary.issueTypes），只在议题类型名称区域内整段匹配；
  * 组织自定义的类型名是用户内容，不收
@@ -102,6 +117,9 @@ export default {
     'Field is visible to all organizations in this enterprise.': '此字段对此企业中的所有组织可见。',
     'This status automatically assigns the issue to an agent.': '此状态会自动将议题分配给智能体。',
     'Issue field option results': '议题字段选项结果',
+    'No fields added. Choose Fields to add one.': '未添加字段。选择“字段”以添加。',
+    'All available fields have been added.': '已添加所有可用字段。',
+    'Fields: add a field': '字段：添加字段',
 
     // 关系
     'Relationships are currently unavailable': '关系暂不可用',
@@ -205,6 +223,12 @@ export default {
     Fields: '字段',
     Field: '字段',
     'Add fields': '添加字段',
+    'Add a field': '添加字段',
+    // 组织预置的议题字段名与单选选项（侧栏、时间线、字段菜单；Start date 见日期选择器词典，High / Medium / Low 由通用词典处理）
+    Priority: '优先级',
+    'Target date': '目标日期',
+    Effort: '工作量',
+    Urgent: '紧急',
     'No status': '无状态',
     'Awaiting triage': '等待分类',
     'Select projects': '选择项目',
@@ -395,14 +419,16 @@ export default {
     [/^, (\d+)% complete$/, '，已完成 $1%'],
     // 议题字段（字段名是用户内容，原文无引号，译文不加；与中文之间按 joinName 留空格）
     [/^Value cannot be more than (\d+) characters \((\d+)\)$/, '值不能超过 $1 个字符（当前 $2 个）'],
-    [/^The value for the (.+) field$/, (_, name) => joinName(name, '字段的值')],
-    [/^Toolbar for (.+) field$/, (_, name) => joinName(name, '字段工具栏')],
+    [/^The value for the (.+) field$/, (_, name: string) => joinName(fieldName(name), '字段的值')],
+    [/^Toolbar for (.+) field$/, (_, name: string) => joinName(fieldName(name), '字段工具栏')],
     [/^Cannot be greater than (-?[\d.,]+)$/, '不能大于 $1'],
     [/^Cannot be less than (-?[\d.,]+)$/, '不能小于 $1'],
-    [/^Remove field (.+)$/, (_, name) => joinName('删除字段', name)],
-    [/^Update field (.+) \(press enter to submit\)$/, (_, name) => `${joinName('更新字段', name)}（按 Enter 提交）`],
+    [/^Remove field (.+)$/, (_, name: string) => joinName('删除字段', fieldName(name))],
+    [/^Update field (.+) \(press enter to submit\)$/, (_, name: string) => `${joinName('更新字段', fieldName(name))}（按 Enter 提交）`],
     [/^No fields configured for (.+)\.$/, (_, name) => `${joinName(name, '未配置字段')}。`],
-    [/^Set (.+), none$/, (_, name) => `${joinName('设置', name)}，当前为空`],
+    [/^Set (.+), none$/, (_, name: string) => `${joinName('设置', fieldName(name))}，当前为空`],
+    // 字段值选择器的占位文字：Select Effort（预置字段）
+    [new RegExp(`^Select (${PRESET_FIELD_SOURCE})$`), (_, name: string) => `选择${fieldName(name)}`],
     [/^(.+) \(edited\)$/, '$1（已编辑）'],
     // 选择器
     [/^Cannot edit (.+) right now$/, (_, subject) => joinCjk('暂时无法编辑', PICKER_SUBJECT[subject] ?? subject)],

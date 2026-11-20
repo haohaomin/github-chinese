@@ -1,5 +1,23 @@
+import { lookupTable } from '../../../core/table'
 import type { PageDictionary } from '../../../core/types'
+import regions from '../common/regions'
 import { joinCjk } from '../helpers'
+
+const regionText = lookupTable(regions.static)
+
+/**
+ * 安全日志事件的地点「城市, 地区, 国家/地区」（地区常为空）：国家/地区名在 common/regions 中时才改写，
+ * 按国家/地区、地区、城市排列，去掉空项与重名，收录的地名译出，其余保留原文。
+ * 国家/地区名不在其中时抛错（引擎按未命中处理，后面的规则照常匹配：日期、权限列表等同样是逗号分隔的三段）
+ */
+function eventLocation(_: string, city: string, region: string, country: string): string {
+  if (regionText(country) === undefined) throw new Error(`非地点：${country}`)
+  const parts = [country, region, city].filter((part, index, all) => part !== '' && all.indexOf(part) === index)
+  return parts.map(part => regionText(part) ?? part).join(' ')
+}
+
+/** 地点中的一段（不含捕获组）：以大写字母（含带变音符号的拉丁字母）开头，不含逗号、数字、冒号 */
+const PLACE_SOURCE = '(?:[A-ZÀ-ÖØ-Þ][^,\\d:]*)'
 
 const TOKEN_ACTION: Readonly<Record<string, string>> = {
   Created: '创建了',
@@ -101,6 +119,8 @@ export default {
     'Regenerated a token for': '为以下用户重新生成了令牌',
     'Updated a token for': '为以下用户更新了令牌',
     'Revoked a token for': '撤销了以下用户的令牌',
+    'Created a Pages verified domain': '创建了页面的已验证域',
+    'Deleted a Pages verified domain': '删除了页面的已验证域',
 
     // 赞助日志
     'Sponsors log': '赞助日志',
@@ -221,6 +241,20 @@ export default {
     [
       /^Set policy to default workflow token can create or approve PR to (true|false) for$/,
       (_, value: string) => `为以下存储库${value === 'true' ? '允许' : '禁止'}默认工作流令牌创建或批准拉取请求`
-    ]
+    ],
+    // 头像事件（团队头像等）：「Updated profile picture for octo-org/team」
+    [/^Updated profile picture for (.+)$/, '更新了 $1 的头像'],
+    // 事件地点：Hong Kong, , Hong Kong → 中国香港
+    [new RegExp(`^(${PLACE_SOURCE}?), (${PLACE_SOURCE}?), (${PLACE_SOURCE})$`), eventLocation]
+  ],
+  // 事件描述被用户、应用、企业链接拆开的句子
+  inline: [
+    ['Blocked user {}', '阻止了用户 {}'],
+    ['Unblocked user {}', '取消阻止了用户 {}'],
+    ['Removed authorization for OAuth application {}', '移除了 OAuth 应用 {} 的授权'],
+    ['Added {} as an owner of the {} enterprise', '将 {} 添加为 {} 企业的所有者'],
+    ['{} added payment details to the {} enterprise', '{} 向 {} 企业添加了付款详细信息'],
+    ['Marketplace listing {} was sent back to draft state', '市场上架项 {} 已退回草稿状态'],
+    ['Installed the {} integration.', '安装了 {} 集成。']
   ]
 } satisfies PageDictionary

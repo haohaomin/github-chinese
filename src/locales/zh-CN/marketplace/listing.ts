@@ -7,7 +7,7 @@ import { joinCjk } from '../helpers'
  * 服务条款说明由多个链接拆开，按片段收录，整句另用正则。
  * 产品名、方案名按用户决定（2026-10-27，product-names.md）译成中文：Marketplace → 市场、权限名 actions / codespaces →
  * 操作 / 代码空间、Copilot Chat → Copilot 聊天；第三方应用的常见计划名 Free / Pro / Open Source 等按 PLAN_NAMES 译出
- * （计划卡片与「… plan available.」句同译）。
+ * （计划卡片与「… plan available.」句同译）。计划描述与要点（发布者填写）不忽略：按用户要求收录的见 apps.ts，其余保留原文。
  */
 
 /** GitHub 应用权限名（透明度表格） */
@@ -379,9 +379,6 @@ export default {
     '[role="dialog"] h3.lh-condensed + p',
     // 支持的语言列表（发布者选择）
     '[data-testid="languages"] > span',
-    // 计划描述与要点（发布者填写）。计划名不忽略：常见英文词照译（PLAN_SCOPED 与 common），其余保留原文
-    '[data-testid="plans-radio-group"] [id$="-description"]',
-    '[data-testid="plans-radio-group"] li',
     // 截图说明（发布者填写）
     '.ScreenshotCarousel-screenshot > .pt-2'
   ]

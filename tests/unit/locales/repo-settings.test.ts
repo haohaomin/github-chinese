@@ -863,6 +863,22 @@ const REGEXP_CASES: Readonly<Record<PartName, readonly RegExpCase[]>> = {
       hits: [["Accessible from repositories in the 'octo-ent' enterprise", '可从 octo-ent 企业中的存储库访问']],
       misses: ['Accessible from repositories in the enterprise']
     },
+    // 访问：组织 / 企业内其他存储库可访问（专用存储库的访问设置）
+    {
+      hits: [
+        [
+          "Workflows in other repositories that are part of the 'setube-organization' organization can access the actions and reusable workflows in this repository. Access is allowed only from private repositories.",
+          'setube-organization 组织中其他存储库的工作流可以访问此存储库中的操作和可重用工作流。仅允许从专用存储库访问。'
+        ],
+        [
+          'Workflows in other repositories that are part of the octo-ent enterprise can access the actions and reusable workflows in this repository. Access is allowed only from private repositories.',
+          'octo-ent 企业中其他存储库的工作流可以访问此存储库中的操作和可重用工作流。仅允许从专用存储库访问。'
+        ]
+      ],
+      misses: [
+        'Workflows in other repositories that are part of the octo-org team can access the actions and reusable workflows in this repository. Access is allowed only from private repositories.'
+      ]
+    },
     // 策略：pull_request_target 限制公告
     {
       hits: [

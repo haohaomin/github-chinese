@@ -490,6 +490,15 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     ],
     misses: ['Cost calculated based on Spark premium requests.']
   },
+  {
+    hits: [
+      [
+        'Cost calculated based on 1,200 Spark AI credits that exceed the AI credits usage included with your Copilot licenses.',
+        '费用按超出 Copilot 许可证包含的 AI 额度使用量的 1,200 个 Spark AI 额度计算。'
+      ]
+    ],
+    misses: ['Cost calculated based on Spark AI credits.']
+  },
   { hits: [['/ 3,000 AI credits', '/ 3,000 AI 额度']], misses: ['/ unlimited AI credits'] },
   // 使用情况按 SKU 分组时核数可变的 SKU 名（与个人计费一致）
   {
@@ -1673,6 +1682,47 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [['/ Effort', '/ 工作量']], misses: ['/ Custom field'] },
   { hits: [['Open field actions for Urgent', '打开“紧急”的操作']], misses: ['Open actions for Urgent'] },
   { hits: [['Move High', '移动“高”']], misses: ['Move Critical'] },
+  {
+    hits: [
+      ['Open edit dialog for Urgent', '打开“紧急”的编辑对话框'],
+      ['Open edit dialog for Blocker', '打开“Blocker”的编辑对话框']
+    ],
+    misses: ['Open edit dialog']
+  },
+  {
+    hits: [
+      ['Advanced move High...', '高级移动“高”...'],
+      ['Advanced move Blocker…', '高级移动“Blocker”…']
+    ],
+    misses: ['Advanced move High']
+  },
+  { hits: [['Remove Urgent', '移除“紧急”']], misses: ['Remove Blocker'] },
+  // 单选选项的高级移动对话框：移动结果预览（自定义选项名照录）
+  { hits: [['High will be first item in the list.', '“高”将成为列表第一项。']], misses: ['High will be first.'] },
+  { hits: [['Blocker will be last item in the list.', '“Blocker”将成为列表最后一项。']], misses: ['Low will be last.'] },
+  {
+    hits: [['Medium will be between Urgent and Low.', '“中”将位于“紧急”和“低”之间。']],
+    misses: ['Medium will be between Urgent.']
+  },
+  // 议题类型：禁用、删除确认（类型名照录）
+  {
+    hits: [
+      [
+        'The "Bug" issue type will no longer be available to use. If it is re-enabled in the future, it will be preserved on existing issues of this type unless a different type has been added.',
+        '议题类型“Bug”将不再可用。将来重新启用时，此类型的现有议题会保留它，除非已改为其他类型。'
+      ]
+    ],
+    misses: ['The "Bug" issue type will no longer be available to use.']
+  },
+  {
+    hits: [
+      [
+        'This will remove the "Bug" issue type from all issues. This action cannot be undone.',
+        '这将从所有议题中移除议题类型“Bug”。此操作无法撤消。'
+      ]
+    ],
+    misses: ['This will remove the "Bug" issue type from all issues.']
+  },
   // 自定义属性：批量设置、删除前的用量检查、匹配数
   { hits: [['Set properties on demo-repository', '设置 demo-repository 的属性']], misses: ['Set properties'] },
   {

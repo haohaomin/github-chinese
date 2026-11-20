@@ -1,5 +1,12 @@
 import type { PageDictionary } from '../../../core/types'
 
+/** 订单页的提交按钮（同意条款句中引用按钮名） */
+const ORDER_BUTTONS: Readonly<Record<string, string>> = {
+  'Complete order and begin installation': '完成訂單並開始安裝',
+  'Issue plan changes and begin installation': '送出方案變更並開始安裝',
+  'Complete order': '完成訂單'
+}
+
 /**
  * GitHub 应用页（/apps/<name>）、安装与授权（/apps/<name>/installations/…）、
  * 订单页（/marketplace/<name>/order/<id>）、待处理订单与待安装（/marketplace/orders/pending、/marketplace/installations/pending）。
@@ -22,6 +29,12 @@ export default {
     'Free static sites': '免費靜態網站',
     'Free Postgres databases': '免費 Postgres 資料庫',
     'Free Key Value (Redis-compatible) caches': '免費鍵值（相容 Redis）快取',
+    // 上架页「<计划名> plan available.」：Render 的计划名是一句说明，整句收录（不加原文没有的引号，按语义拆成两句）
+    'Free. Sign up to auto-deploy web apps for free plan available.': '提供免費方案。註冊即可免費自動部署 Web 應用程式。',
+    // Codecov 上架项的计划说明（第三方内容，按用户要求收录；计划名 Umbrella 是专名，保留）
+    'Unlimited public repositories': '無限公開儲存庫',
+    "Use Codecov's standard plan with all features and unlimited private repositories":
+      '使用包含全部功能和無限私人儲存庫的 Codecov 標準方案',
     // 应用页 /apps/<name>
     'Read more about this app on the Marketplace': '在市集上瞭解此應用程式',
     'Manage your installation settings.': '管理安裝設定。',
@@ -180,9 +193,8 @@ export default {
     ['If your browser does not redirect you automatically, please visit this {} to continue.', '如果瀏覽器沒有自動跳轉，請前往此{}繼續。'],
     // 订单页同意条款：「By clicking "…", you are agreeing to Render’s <a>服务条款</a> and the <a>隐私政策</a>. You previously agreed to the <details>市场服务条款。</details>」
     [
-      /^By clicking ["“](Complete order and begin installation|Issue plan changes and begin installation)["”], you are agreeing to (.+?)[’']s \{\} and(?: the)? \{\}\. You previously agreed to the \{\}$/,
-      (_, button: string, app: string) =>
-        `按一下「${button === 'Complete order and begin installation' ? '完成訂單並開始安裝' : '送出方案變更並開始安裝'}」即表示你同意 ${app} 的{}和{}。你先前已同意{}`
+      /^By clicking ["“](Complete order and begin installation|Issue plan changes and begin installation|Complete order)["”], you are agreeing to (.+?)[’']s \{\} and(?: the)? \{\}\. You previously agreed to the \{\}$/,
+      (_, button: string, app: string) => `按一下「${ORDER_BUTTONS[button] ?? button}」即表示你同意 ${app} 的{}和{}。你先前已同意{}`
     ],
     // 订单页：首段 + 链接 signing + the + 链接 GitHub Customer Agreement + 句号；整句命中时去掉 the，
     // 显示为「…請簽署 GitHub 客戶合約。」。不命中时按 static 首段与 scoped 的 signing 逐段翻译

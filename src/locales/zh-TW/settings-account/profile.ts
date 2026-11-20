@@ -59,6 +59,7 @@ export default {
     'Your profile picture has been updated. It may take a few minutes to update across the site.':
       '你的頭像已更新。全站更新可能需要幾分鐘。',
     'Crop your new profile picture': '裁切新的頭像',
+    'This profile picture has been deleted.': '此頭像已刪除。',
     'Set new profile picture': '設定新的頭像',
     // 头像上传失败提示（原文无逗号，译文不加）
     'We only support PNG, GIF, or JPG pictures.': '僅支援 PNG、GIF 或 JPG 圖片。',

@@ -188,6 +188,14 @@ export default {
     'Host documentation and simple websites for your project in a wiki format that contributors can easily edit either on the web or command line.':
       '以贡献者可通过网页或命令行轻松编辑的 Wiki 形式托管项目的文档和简单网站。',
     'Assign more than one person to an issue.': '为一个议题分配多人。',
+    // 计划对比页：功能卡片的无障碍名称、Copilot 计划入口、代码空间说明（不带价格的写法）
+    'Organization features': '组织功能',
+    'Enterprise compliance features': '企业合规功能',
+    'Enterprise support': '企业支持',
+    'Looking for GitHub Copilot Pro?': '在找 GitHub Copilot 专业版？',
+    'View Copilot plans': '查看 Copilot 计划',
+    'Blazing fast cloud developer environments with flexible compute and pre-configured containers, developers can code, collaborate, and debug from any browser.':
+      '极速云端开发环境，提供灵活的算力和预配置容器，开发人员可在任意浏览器中编码、协作和调试。',
     'GitHub organizations give you team-based access control and discussions.': 'GitHub 组织提供基于团队的访问控制和讨论。',
     'Learn more about organizations': '了解组织',
     'Enforce consistent code standards, security, and compliance across branches and tags.':
@@ -407,6 +415,18 @@ export default {
     'Unselect this school': '取消选择此学校',
     'Share Location': '共享位置',
     'Location shared': '已共享位置',
+    // 共享位置：浏览器定位的状态与错误
+    'Getting location...': '正在获取位置...',
+    'Getting location…': '正在获取位置…',
+    'Error getting location': '获取位置出错',
+    'Unable to access location': '无法访问位置',
+    'Your browser does not support geolocation.': '你的浏览器不支持地理定位。',
+    'Permission to access location was denied by a security policy.': '安全策略拒绝了位置访问权限。',
+    'Location information is unavailable.': '位置信息不可用。',
+    'The request to get your location timed out.': '获取位置的请求超时。',
+    'An unknown error occurred within your browser while trying to get your location.': '浏览器获取位置时发生未知错误。',
+    'Make sure location access is allowed in your browser/OS and platform settings. Disable VPN and add-ons, clear cookies/cache, and try a different browser (preferably Chrome). Log out and back in after adjusting settings, then re-apply. If issues persist, try applying from your smartphone using mobile data instead of WiFi.':
+      '确保浏览器/操作系统和平台设置中已允许访问位置。停用 VPN 和附加组件，清除 Cookie/缓存，并换用其他浏览器（最好是 Chrome）。调整设置后退出并重新登录，然后重新申请。如果问题仍然存在，请在智能手机上使用移动数据而非 WiFi 申请。',
     'Please select the type of proof you would like to provide *': '请选择要提供的证明类型 *',
     'What is a valid proof of education?': '什么是有效的教育证明？',
     'Application Type:': '申请类型：',
@@ -562,6 +582,8 @@ export default {
       (_, name: string, date: string) =>
         joinCjk(joinCjk(joinCjk('你已取消订阅', planName(name)), '。此计划变更将于'), translateTime(date)) + '生效。'
     ],
+    // 兑换优惠券（/redeem）：优惠码与句子在同一文本节点
+    [/^Sorry, we couldn[’']t find a coupon with the code: (.+)$/, '抱歉，未找到此优惠码对应的优惠券：$1'],
     // 优惠券与教育福利（句号随原文）
     [
       new RegExp(`^(\\$[\\d,]+(?:\\.\\d{2})?) off per month until (${DATE_SOURCE})(\\.?)$`),

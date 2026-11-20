@@ -173,8 +173,15 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   {
     hits: [['Content created by @octocat is being closed.', '正在关闭 @octocat 创建的内容。']],
-    misses: ['Content created by octocat is being closed.']
+    misses: ['Content created by @octocat is closed.']
   },
+  // 个人设置的阻止用户页：不带 @ 的同一句
+  {
+    hits: [['Content created by octocat is being closed.', '正在关闭 octocat 创建的内容。']],
+    misses: ['Content created by the octocat team is being closed.']
+  },
+  // 企业列表：设置按钮的无障碍名称
+  { hits: [['Settings for acme-inc', 'acme-inc 的设置']], misses: ['Settings for my enterprise'] },
   { hits: [['3 users found', '找到 3 个用户']], misses: ['Many users found'] },
   {
     hits: [
@@ -202,6 +209,13 @@ const REGEXP_CASES: readonly RegExpCase[] = [
 
   // 存储库、已删除的存储库、软件包、Pages
   { hits: [['3 collaborators', '3 个协作者']], misses: ['Many collaborators'] },
+  {
+    hits: [
+      ['Verified domain example.com was deleted.', '已删除已验证的域 example.com'],
+      ['Verified domain docs.example.com was deleted', '已删除已验证的域 docs.example.com']
+    ],
+    misses: ['Verified domain was deleted.']
+  },
   {
     hits: [['No recoverable repositories were found for octocat.', '未找到 octocat 可恢复的存储库。']],
     misses: ['No recoverable repositories were found.']
@@ -502,6 +516,17 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       ['Set policy to default workflow token can create or approve PR to false for', '为以下存储库禁止默认工作流令牌创建或批准拉取请求']
     ],
     misses: ['Set policy to default workflow token can create or approve PR to maybe for']
+  },
+  { hits: [['Updated profile picture for octo-org/octo-team', '更新了 octo-org/octo-team 的头像']], misses: ['Updated profile picture'] },
+  {
+    hits: [
+      // 国家/地区在前，去掉空项与重名；城市、地区没有收录时照录
+      ['Hong Kong, , Hong Kong', '中国香港'],
+      ['Tokyo, Tokyo, Japan', '日本 Tokyo'],
+      ['Austin, Texas, United States', '美国 得克萨斯州 Austin']
+    ],
+    // 国家/地区名未收录、不是三段时不改写
+    misses: ['Springfield, Somewhere, Atlantis', 'Hong Kong, Hong Kong']
   },
 
   // 已授权的应用
@@ -1406,6 +1431,19 @@ describe('settings-developer 被链接拆开的句子（DOM）', () => {
     )
     // 组织名是用户内容，只有它被报为未译
     expect(t.drainUntranslated().map(([text]) => text)).toEqual(['octo-org'])
+  })
+
+  it('安全日志：被用户、企业链接拆开的事件描述整句改写', () => {
+    start(
+      [
+        '<div id="blocked">Blocked user <a href="/octocat">octocat</a></div>',
+        '<div id="owner">Added <a href="/octocat">octocat</a> as an owner of the <a href="/enterprises/acme">acme</a> enterprise</div>',
+        '<div id="payment"><a href="/octocat">octocat</a> added payment details to the <a href="/enterprises/acme">acme</a> enterprise</div>'
+      ].join('')
+    )
+    expect(document.getElementById('blocked')?.textContent).toBe('阻止了用户 octocat')
+    expect(document.getElementById('owner')?.textContent).toBe('将 octocat 添加为 acme 企业的所有者')
+    expect(document.getElementById('payment')?.textContent).toBe('octocat 向 acme 企业添加了付款详细信息')
   })
 })
 

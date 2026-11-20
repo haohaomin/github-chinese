@@ -157,6 +157,8 @@ export default {
     'Top repositories by bypasses': '绕过次数最多的存储库',
     'No bypasses found': '未找到绕过',
     'No repositories have any rule bypasses for the selected filters': '所选筛选条件下没有存储库存在规则绕过',
+    // 「按参与者统计的绕过」图表的纵轴标题（SVG 中，见 core/ignore.ts 的 Highcharts 放行）
+    'Number of bypasses': '绕过次数',
     // 存储库：默认分支
     'Choose the default branch for new repositories in this organization. You might want to change the default name due to different workflows, or because your integrations still require “master” as the default branch name. You can always change the default branch name on individual repositories.':
       '为此组织中的新存储库选择默认分支。你可能因工作流不同，或集成仍要求使用“master”作为默认分支名称而需要更改默认名称。你随时可以更改单个存储库的默认分支名称。',
@@ -220,6 +222,34 @@ export default {
     'An unexpected problem or behavior': '意外的问题或行为',
     'A request, idea, or new functionality': '请求、想法或新功能',
     'Pinned issue fields': '置顶的议题字段',
+    // 议题类型编辑页（组织与个人设置同一组件）：置顶字段、选择字段面板、禁用 / 启用 / 删除
+    'The fields shown by default when this issue type is selected.': '选择此议题类型时默认显示的字段。',
+    'Add new pinned issue field': '添加新的置顶议题字段',
+    'No pinned fields yet': '暂无置顶字段',
+    "You haven't added any fields for this type. Selected fields will appear here.": '尚未为此类型添加任何字段。所选字段将显示在这里。',
+    'You haven’t added any fields for this type. Selected fields will appear here.': '尚未为此类型添加任何字段。所选字段将显示在这里。',
+    'Pin issue field': '置顶议题字段',
+    'Filter fields': '筛选字段',
+    'Issue Fields results': '议题字段结果',
+    'No issue fields were found': '未找到议题字段',
+    'Try searching with a different query for results.': '请尝试其他搜索词。',
+    'Disable issue type': '禁用议题类型',
+    'This will prevent the issue type from being used on new or existing issues.': '这将阻止在新议题或现有议题上使用此议题类型。',
+    'Enable issue type': '启用议题类型',
+    'Re-enable the issue type to allow it to be added to new repositories and issues.':
+      '重新启用此议题类型，使其可添加到新的存储库和议题。',
+    'Delete issue type': '删除议题类型',
+    'Deleting an issue type will remove it from all existing issues. This action cannot be undone.':
+      '删除议题类型会将其从所有现有议题中移除。此操作无法撤消。',
+    // 议题字段：个人设置的权限选项说明、空状态与入门字段
+    'Field is visible to you and any repository collaborators': '你和所有存储库协作者可以看到此字段',
+    'You don’t have any issue fields yet': '你还没有任何议题字段',
+    "You don't have any issue fields yet": '你还没有任何议题字段',
+    'Create your own field, or add a starter set with Priority, Start date, Target date, and Effort. You can edit or delete them anytime.':
+      '创建自己的字段，或添加包含优先级、开始日期、目标日期和工作量的入门字段。之后可随时编辑或删除。',
+    'Add starter fields': '添加入门字段',
+    'Adding starter fields..': '正在添加入门字段..',
+    'Adding starter fields...': '正在添加入门字段...',
     'Field Visibility': '字段可见性',
     'Field visibility': '字段可见性',
     'Organization only': '仅限组织',
@@ -431,13 +461,47 @@ export default {
       '以下是此组织之前删除的软件包。你可以恢复最近 30 天内删除的软件包。',
 
     // Pages（与个人设置共用）
-    'There are no verified domains for this organization.': '此组织暂无已验证的域。'
+    'There are no verified domains for this organization.': '此组织暂无已验证的域。',
+
+    // 议题类型：颜色选择的提示；议题字段：单选选项的高级移动对话框（「<选项> will be first item in the list.」选项名在前一个元素里时的后半句）
+    Gray: '灰色',
+    Blue: '蓝色',
+    Green: '绿色',
+    Yellow: '黄色',
+    Orange: '橙色',
+    Red: '红色',
+    Pink: '粉色',
+    Purple: '紫色',
+    Item: '条目',
+    Action: '操作',
+    'will be first item in the list.': '将成为列表第一项。',
+    'will be last item in the list.': '将成为列表最后一项。'
   },
   regexp: [
     // 议题字段编辑页：标题「<a>议题字段</a> / Effort」的后半段、单选选项的操作与拖动按钮
     [new RegExp(`^/ (${Object.keys(PRESET_FIELDS).join('|')})$`), (_, name: string) => `/ ${PRESET_FIELDS[name]}`],
     [/^Open field actions for (.+)$/, (_, name: string) => `打开“${pick(PRESET_OPTIONS, name) ?? name}”的操作`],
     [new RegExp(`^Move (${Object.keys(PRESET_OPTIONS).join('|')})$`), (_, name: string) => `移动“${pick(PRESET_OPTIONS, name) ?? name}”`],
+    [/^Open edit dialog for (.+)$/, (_, name: string) => `打开“${pick(PRESET_OPTIONS, name) ?? name}”的编辑对话框`],
+    [/^Advanced move (.+?)(\.\.\.|…)$/, (_, name: string, dots: string) => `高级移动“${pick(PRESET_OPTIONS, name) ?? name}”${dots}`],
+    [new RegExp(`^Remove (${Object.keys(PRESET_OPTIONS).join('|')})$`), (_, name: string) => `移除“${PRESET_OPTIONS[name]}”`],
+    // 单选选项的高级移动对话框：移动结果预览
+    [/^(.+) will be first item in the list\.$/, (_, name: string) => `“${pick(PRESET_OPTIONS, name) ?? name}”将成为列表第一项。`],
+    [/^(.+) will be last item in the list\.$/, (_, name: string) => `“${pick(PRESET_OPTIONS, name) ?? name}”将成为列表最后一项。`],
+    [
+      /^(.+) will be between (.+) and (.+)\.$/,
+      (_, name: string, first: string, second: string) =>
+        `“${pick(PRESET_OPTIONS, name) ?? name}”将位于“${pick(PRESET_OPTIONS, first) ?? first}”和“${pick(PRESET_OPTIONS, second) ?? second}”之间。`
+    ],
+    // 议题类型：禁用、删除确认（类型名保留原文）
+    [
+      /^The "(.+)" issue type will no longer be available to use\. If it is re-enabled in the future, it will be preserved on existing issues of this type unless a different type has been added\.$/,
+      '议题类型“$1”将不再可用。将来重新启用时，此类型的现有议题会保留它，除非已改为其他类型。'
+    ],
+    [
+      /^This will remove the "(.+)" issue type from all issues\. This action cannot be undone\.$/,
+      '这将从所有议题中移除议题类型“$1”。此操作无法撤消。'
+    ],
     // 自定义属性：设置值、删除前的使用情况、匹配的存储库数（筛选框计数「N repositories matching」由 org-policies 收录）
     [/^Set properties on (.+)$/, '设置 $1 的属性'],
     [/^(\d+) repositor(?:y|ies) found that uses? the property:$/, '找到 $1 个使用此属性的存储库：'],
@@ -478,6 +542,9 @@ export default {
     [/^Type: (Text|Single select|Multi select|True\/false|URL)$/, (_, type: string) => `类型：${PROPERTY_TYPES[type]}`]
   ],
   inline: [
+    // 议题字段计数：「<span>2</span> Issue fields」
+    ['{} Issue fields', '{} 个议题字段'],
+    ['{} Issue field', '{} 个议题字段'],
     // 议题字段「置顶到议题」说明：Choose which <a>issue types</a> show this field …
     ['Choose which {} show this field when viewing and creating issues.', '选择在查看和创建议题时显示此字段的{}。'],
     [

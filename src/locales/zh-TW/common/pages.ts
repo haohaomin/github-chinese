@@ -450,6 +450,12 @@ export default {
     'Transportation & Storage': '運輸和倉儲',
     'Travel, Recreation, and Leisure': '旅遊、娛樂和休閒',
     'Wholesale & Distribution': '批發和經銷',
+    // 创建企业：企业托管用户类型的标题、提交后的错误横幅（字段名是跳转链接）与条款复选框的提示
+    'Enterprise Managed Users': '企業受控使用者',
+    'The following fields have errors:': '以下欄位有錯誤：',
+    'Username shortcode': '使用者名稱簡碼',
+    'Identity provider': '身分識別提供者',
+    'Please acknowledge these terms and check these boxes to proceed.': '請確認這些條款並勾選核取方塊以繼續。',
     'Create enterprise': '建立企業',
     'Trial terms': '試用條款',
     // “I understand that <certain features 链接> are unavailable during the trial experience.”
@@ -833,12 +839,20 @@ export default {
       "At {}, we're seeing technology leaders take an active role in helping their customers adopt new technologies. GitHub is demonstrating a thoughtful, deliberate approach to creating compelling service offerings. {}{}{}",
       '在 {}，我們看到技術領導者正積極協助客戶採用新技術。GitHub 在打造具吸引力的服務方面，展現出深思熟慮、審慎周延的做法。{}{}{}'
     ],
-    // 创建企业表单的数据托管说明：With <GitHub Enterprise Cloud with Data Residency 链接>, you can choose …
-    // 链接文字译成中文，{} 两侧不留空格。宿主按三段收录（表单需登录，结构未核对），
-    // 另有元素子节点时不命中，各段照常翻译
+    // 创建企业表单的数据托管说明：With <GitHub Enterprise Cloud with Data Residency 链接><外部链接图标>, you can choose …
+    // 链接文字译成中文，{} 两侧不留空格；没有图标时见第二条
+    [
+      'With {}{}, you can choose where your company’s code and data are stored. Your enterprise will be hosted on a dedicated subdomain of GHE.com.',
+      '透過{}{}，你可以選擇公司程式碼和資料的儲存位置。你的企業將託管在 GHE.com 的專屬子網域上。'
+    ],
     [
       'With {}, you can choose where your company’s code and data are stored. Your enterprise will be hosted on a dedicated subdomain of GHE.com.',
       '透過{}，你可以選擇公司程式碼和資料的儲存位置。你的企業將託管在 GHE.com 的專屬子網域上。'
+    ],
+    // 企业托管用户的创建表单：现有组织不会随之升级（组织名照录；句末是企业云链接与外部链接图标）
+    [
+      /^The ([\w.-]+) organization will not be upgraded because existing organizations cannot be added to enterprises with Enterprise Managed Users\. To bring your organization along, we recommend\{\}\{\}\.$/,
+      '$1 組織不會升級：現有組織無法加入使用企業受控使用者的企業。如需納入你的組織，建議使用{}{}。'
     ]
   ],
   // 功能页时间线条目（Primer Brand Timeline，类名带 CSS 模块哈希，按片段匹配）：<em> 拆开的句子整段合并

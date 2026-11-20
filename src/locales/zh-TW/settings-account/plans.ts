@@ -193,6 +193,14 @@ export default {
     'Host documentation and simple websites for your project in a wiki format that contributors can easily edit either on the web or command line.':
       '以貢獻者可透過網頁或命令列輕鬆編輯的 Wiki 形式代管專案的說明文件和簡易網站。',
     'Assign more than one person to an issue.': '為一個議題指派多人。',
+    // 计划对比页：功能卡片的无障碍名称、Copilot 计划入口、代码空间说明（不带价格的写法）
+    'Organization features': '組織功能',
+    'Enterprise compliance features': '企業合規功能',
+    'Enterprise support': '企業支援',
+    'Looking for GitHub Copilot Pro?': '在找 GitHub Copilot 專業版嗎？',
+    'View Copilot plans': '查看 Copilot 方案',
+    'Blazing fast cloud developer environments with flexible compute and pre-configured containers, developers can code, collaborate, and debug from any browser.':
+      '極速雲端開發環境，具備彈性運算和預先設定的容器，開發人員可在任何瀏覽器中撰寫程式碼、協作並偵錯。',
     'GitHub organizations give you team-based access control and discussions.': 'GitHub 組織提供以團隊為單位的存取控制和討論。',
     'Learn more about organizations': '瞭解組織',
     'Enforce consistent code standards, security, and compliance across branches and tags.':
@@ -421,6 +429,18 @@ export default {
     'Unselect this school': '取消選擇此學校',
     'Share Location': '分享位置',
     'Location shared': '已分享位置',
+    // 分享位置：浏览器定位的状态与错误
+    'Getting location...': '正在取得位置...',
+    'Getting location…': '正在取得位置…',
+    'Error getting location': '取得位置時發生錯誤',
+    'Unable to access location': '無法存取位置',
+    'Your browser does not support geolocation.': '你的瀏覽器不支援地理位置定位。',
+    'Permission to access location was denied by a security policy.': '安全性原則拒絕了位置存取權限。',
+    'Location information is unavailable.': '無法取得位置資訊。',
+    'The request to get your location timed out.': '取得位置的要求逾時。',
+    'An unknown error occurred within your browser while trying to get your location.': '瀏覽器在取得你的位置時發生未知錯誤。',
+    'Make sure location access is allowed in your browser/OS and platform settings. Disable VPN and add-ons, clear cookies/cache, and try a different browser (preferably Chrome). Log out and back in after adjusting settings, then re-apply. If issues persist, try applying from your smartphone using mobile data instead of WiFi.':
+      '請確認瀏覽器/作業系統和平台設定已允許存取位置。停用 VPN 和附加元件，清除 Cookie/快取，並改用其他瀏覽器（最好是 Chrome）。調整設定後請登出再重新登入，然後重新申請。如果問題仍未解決，請改用智慧型手機並以行動數據而非 WiFi 申請。',
     'Please select the type of proof you would like to provide *': '請選擇要提供的證明類型 *',
     'What is a valid proof of education?': '什麼是有效的教育證明？',
     'Application Type:': '申請類型：',
@@ -584,6 +604,8 @@ export default {
       (_, name: string, date: string) =>
         joinCjk(joinCjk(joinCjk('你已取消訂閱', planName(name)), '。此方案變更將於'), translateTime(date)) + '生效。'
     ],
+    // 兑换优惠券（/redeem）：优惠码与句子在同一文本节点
+    [/^Sorry, we couldn[’']t find a coupon with the code: (.+)$/, '抱歉，找不到此優惠碼對應的優惠券：$1'],
     // 优惠券与教育权益（句号随原文；off 作「折抵」，与组织帐务一致）
     [
       new RegExp(`^(\\$[\\d,]+(?:\\.\\d{2})?) off per month until (${DATE_SOURCE})(\\.?)$`),

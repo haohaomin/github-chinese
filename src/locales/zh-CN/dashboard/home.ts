@@ -112,6 +112,7 @@ export default {
     'Give dashboard feedback': '提供仪表板反馈',
     'How satisfied are you with this dashboard?': '你对此仪表板的满意度如何？',
     'What can we improve?': '我们可以改进哪些方面？',
+    'Thanks for sharing your dashboard feedback.': '感谢你提供仪表板反馈。',
     // 标签页标题段
     'GitHub Dashboard': 'GitHub 仪表板',
 

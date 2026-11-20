@@ -76,9 +76,15 @@ export default {
     'Designed for businesses or teams who collaborate on GitHub.com': '专为在 GitHub.com 上协作的企业或团队设计',
     'Start free for 30 days': '免费试用 30 天',
     'Learn more about enterprises': '了解企业',
+    'Learn more about enterprise accounts': '了解企业帐户',
+    'New Enterprise': '新建企业',
 
     // 已阻止的用户（个人）
     'You are about to block:': '你即将阻止：',
+    'Maximum 250 characters. Please don’t include any personal information such as legal names or email addresses. This note will only be visible to you.':
+      '最多 250 个字符。请勿包含法定姓名或电子邮件地址等个人信息。此备注仅你可见。',
+    "Maximum 250 characters. Please don't include any personal information such as legal names or email addresses. This note will only be visible to you.":
+      '最多 250 个字符。请勿包含法定姓名或电子邮件地址等个人信息。此备注仅你可见。',
     'Additionally, blocked users are not able to:': '此外，被阻止的用户无法：',
     'invite you as a collaborator to their repositories': '邀请你成为其存储库的协作者',
     'follow your account’s public activity': '关注你帐户的公开活动',
@@ -122,6 +128,8 @@ export default {
     'Code review limit settings saved.': '已保存代码审查限制设置。'
   },
   scoped: {
+    // 阻止成功的提示：「<strong>用户</strong> has been successfully blocked.」
+    'has been successfully blocked.': '已被阻止。',
     // 组织（Leave 由 common-ui 收录，Billing manager 由 org-settings 收录）
     'Compare plans': '比较计划',
     Dismissed: '已关闭',
@@ -224,6 +232,10 @@ export default {
     [new RegExp(`^Unable to unblock ${LOGIN}\\. Please try again\\.$`), '无法取消阻止 @$1。请重试。'],
     [new RegExp(`^Unable to close content from ${LOGIN}\\. Please try again\\.$`), '无法关闭 @$1 的内容。请重试。'],
     [new RegExp(`^Content created by ${LOGIN} is being closed\\.$`), '正在关闭 @$1 创建的内容。'],
+    // 同一句不带 @ 的写法（个人设置的阻止用户页），用户名照原文
+    [/^Content created by ([\w-]+) is being closed\.$/, '正在关闭 $1 创建的内容。'],
+    // 企业列表：设置按钮的无障碍名称（企业标识）
+    [/^Settings for ([\w.-]+)$/, '$1 的设置'],
     [/^(\d+) users? found$/, '找到 $1 个用户'],
     [/^(\d+) blocked users?$/, '$1 个已阻止的用户'],
     // 阻止备注输入框的剩余字数

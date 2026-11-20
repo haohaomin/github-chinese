@@ -1155,6 +1155,25 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   {
     hits: [['3 open and 2 closed projects found.', '找到 3 个打开和 2 个已关闭的项目。']],
     misses: ['3 open projects found.']
+  },
+  // 团队项目页：团队协作者权限对话框
+  {
+    hits: [
+      [
+        'This team currently has no access permissions on this project. To provide access to the project, the team "Core team" will be added as a collaborator with read permissions.',
+        '此团队目前没有此项目的访问权限。团队“Core team”将被添加为具有读取权限的协作者，以便访问此项目。'
+      ]
+    ],
+    misses: ['This team currently has no access permissions on this project.']
+  },
+  {
+    hits: [
+      [
+        'This team currently has access permissions to this project. If this project is removed, "Core team" access will be revoked and the team will no longer be able to access the project.',
+        '此团队目前拥有此项目的访问权限。移除此项目后，“Core team”的访问权限将被撤销，团队将无法再访问此项目。'
+      ]
+    ],
+    misses: ['This team currently has access permissions to this project.']
   }
 ]
 

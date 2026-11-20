@@ -709,7 +709,7 @@ describe('marketplace 忽略选择器', () => {
     expect(isIgnored(root, '[data-component="Dialog.Title"]')).toBe(false)
   })
 
-  it('支持的语言列表与计划描述被忽略，计划名、标题与“提供免费试用”标签照常翻译', () => {
+  it('支持的语言列表被忽略，计划名、计划描述、标题与“提供免费试用”标签照常翻译', () => {
     const root = document.createElement('div')
     root.innerHTML = [
       '<div data-testid="languages"><div><h2>Supported languages</h2><span data-component="CounterLabel">3</span></div>',
@@ -723,7 +723,7 @@ describe('marketplace 忽略选择器', () => {
     expect(isIgnored(root, '[data-testid="languages"] > span')).toBe(true)
     expect(isIgnored(root, 'h2')).toBe(false)
     expect(isIgnored(root, '[data-component="CounterLabel"]')).toBe(false)
-    expect(isIgnored(root, '#plan-1-description')).toBe(true)
+    expect(isIgnored(root, '#plan-1-description')).toBe(false)
     expect(isIgnored(root, 'label[for="plan-1"]')).toBe(false)
     expect(isIgnored(root, 'label[for="plan-2"]')).toBe(false)
     expect(isIgnored(root, 'label[for="plan-2"] [data-component="Label"]')).toBe(false)
@@ -772,12 +772,12 @@ describe('marketplace 计划卡片（真实结构）', () => {
     ].join('')
   }
 
-  it('常见计划名照译，自定义计划名与计划描述保留原文，“提供免费试用”标签照常翻译', () => {
+  it('常见计划名照译，自定义计划名保留原文；计划描述有词条时翻译，“提供免费试用”标签照常翻译', () => {
     document.body.innerHTML = [
       '<div data-testid="plans-radio-group" data-component="Stack">',
       planCard('plan-1', 'Open Source', 'Unlimited public repositories', '$0'),
       planCard('plan-2', 'Umbrella', 'Sample text', '$10', true),
-      // 描述是发布者填写的，与全局词条同形（Free → 免费版）也不译
+      // 描述是发布者填写的，按用户要求不忽略：与全局词条同形时照词条翻译（Free → 免费版）
       planCard('plan-3', 'Pro', 'Free', '$20'),
       planCard('plan-4', 'Open source', 'Sample text', '$0', true),
       '</div>'
@@ -789,9 +789,9 @@ describe('marketplace 计划卡片（真实结构）', () => {
     expect(name('plan-2')).toBe('Umbrella')
     expect(name('plan-3')).toBe('专业版')
     expect(name('plan-4')).toBe('开源')
-    expect(document.querySelector('#plan-1-description')?.textContent).toBe('Unlimited public repositories')
+    expect(document.querySelector('#plan-1-description')?.textContent).toBe('无限公共存储库')
     expect(document.querySelector('#plan-2-description')?.textContent).toBe('Sample text')
-    expect(document.querySelector('#plan-3-description')?.textContent).toBe('Free')
+    expect(document.querySelector('#plan-3-description')?.textContent).toBe('免费版')
     expect([...document.querySelectorAll('[data-component="Label"]')].map(label => label.textContent)).toEqual([
       '提供免费试用',
       '提供免费试用'

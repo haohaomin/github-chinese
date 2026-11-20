@@ -16,6 +16,8 @@ export default {
       '打开移动设备上的双因素身份验证器 (TOTP) 应用查看验证码。',
     'Open your two-factor authenticator (TOTP) app or browser extension to view your authentication code.':
       '打开双因素身份验证器 (TOTP) 应用或浏览器扩展查看验证码。',
+    'Enter the code from your two-factor authentication app or browser extension below.':
+      '在下方输入双因素身份验证应用或浏览器扩展中的验证码。',
     'Use this method for future logins': '以后登录都使用此方法',
     'Future logins on this device will prompt you to use': '此设备以后登录时将默认提示使用',
     'an authentication code': '验证码',

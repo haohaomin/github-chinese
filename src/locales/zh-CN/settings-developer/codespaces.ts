@@ -19,6 +19,8 @@ export default {
       '此设置会将你的 dotfiles 安装到云端 Copilot 和代码空间创建的环境中。',
     'This setting installs your dotfiles in environments created by Copilot in the cloud.':
       '此设置会将你的 dotfiles 安装到云端 Copilot 创建的环境中。',
+    'This setting automatically installs your dotfiles in environments created by Codespaces and Copilot cloud agent.':
+      '此设置会自动将你的 dotfiles 安装到代码空间和 Copilot 云端智能体创建的环境中。',
     'Dotfiles repository': 'Dotfiles 存储库',
     'Select a repository you own to use as your dotfiles repository.': '选择一个你拥有的存储库作为 dotfiles 存储库。',
     'Failed to update your dotfiles settings. Please try again.': '无法更新 dotfiles 设置。请重试。',

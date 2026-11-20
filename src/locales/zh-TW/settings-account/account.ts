@@ -119,7 +119,10 @@ export default {
     'You’ll be prompted to verify your identity before account deletion.': '刪除帳號前，系統會提示你驗證身分。',
     'Confirm your password:': '確認你的密碼：',
     'Cancel plan and delete this account': '取消方案並刪除此帳號',
-    'Delete this account': '刪除此帳號'
+    'Delete this account': '刪除此帳號',
+    // 删除帐户：仍是企业所有者时的说明（「You must <a>…</a>, and if required, <a>…</a>, before you can delete your user.」见 inline）
+    'remove yourself from these enterprises': '退出這些企業',
+    'invite a new enterprise owner': '邀請新的企業擁有者'
   },
   scoped: {
     // 重新命名警告「We will create … / We will not set up …」中的 We 不收：计量使用量等页面的日期选择器
@@ -205,6 +208,14 @@ export default {
   // 链接文字由 static 译出，拼读为「記得更新本機儲存庫以指向新位置。」；按钮里的使用者名称包在元素中时见第二条
   inline: [
     ['Remember to {} to point to the new location.', '記得{}以指向新位置。'],
-    ['View {} settings', '查看 {} 的設定']
+    ['View {} settings', '查看 {} 的設定'],
+    // 更改用户名的警告（与组织设置一致；单独的 We 不收，见 scoped 的说明）
+    ['We {} create redirects for your repositories (web and git access).', '我們{}為你的儲存庫建立重新導向（網頁和 Git 存取）。'],
+    ['We {} set up redirects for your old profile page.', '我們{}為你的舊個人檔案頁面設定重新導向。'],
+    ['We {} set up redirects for Pages sites.', '我們{}為頁面網站設定重新導向。'],
+    ['We {} set up redirects for your Pages sites.', '我們{}為你的頁面網站設定重新導向。'],
+    // 删除帐户：仍是企业所有者（企业名在 <strong> 里）
+    ['Your account is currently an owner in these enterprises: {}', '你的帳號目前是下列企業的擁有者：{}'],
+    ['You must {}, and if required, {}, before you can delete your user.', '你必須先{}，並在需要時{}，才能刪除你的使用者。']
   ]
 } satisfies PageDictionary

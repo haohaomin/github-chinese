@@ -33,6 +33,8 @@ export default {
     'Add project templates from your organization to view them here.': '新增組織的專案範本後會顯示在這裡。',
     // Rails 版空状态（前两句原文带句号，与模板版同译）
     'Provide quick access to relevant projects.': '快速存取相關的專案。',
+    'Provide quick access to relevant project templates.': '快速存取相關的專案範本。',
+    'Add projects from your organization to view them here.': '新增組織中的專案後會顯示在這裡。',
     'Add projects to view them here.': '新增專案後會顯示在這裡。',
     "This repository doesn't have any projects yet": '此儲存庫還沒有任何專案',
     'No projects found': '找不到專案',
@@ -49,6 +51,8 @@ export default {
     'Link projects': '連結專案',
     'Link a project from the organization to this repository': '將組織中的專案連結到此儲存庫',
     'Link a template from the organization to this repository': '將組織中的範本連結到此儲存庫',
+    'Link a project from the organization to this team': '將組織中的專案連結到此團隊',
+    'Link a template from the organization to this team': '將組織中的範本連結到此團隊',
     'Link a project to this repository': '將專案連結到此儲存庫',
     'Filter projects': '篩選專案',
     'Filter templates': '篩選範本',
@@ -129,7 +133,11 @@ export default {
     'Something went wrong. Please try again.': '發生錯誤。請再試一次。',
     // 存储库项目页（Rails 版）：空状态按钮；行菜单的 Remove project 是从存储库取消链接、不删除项目（React 版为 Unlink project）
     'Create a project': '建立專案',
-    'Remove project': '移除專案'
+    'Remove project': '移除專案',
+    // 团队项目页（/orgs/<组织>/teams/<团队>/projects）：团队协作者权限对话框
+    'Update team collaborator permissions': '更新團隊協作者權限',
+    'Add team as collaborator': '將團隊新增為協作者',
+    'Remove team as collaborator': '移除團隊的協作者身分'
   },
   regexp: [
     [/^(All|Templates), Project type$/, (_, type: string) => `${type === 'All' ? '全部' : '範本'}，專案類型`],
@@ -148,7 +156,16 @@ export default {
     // 项目名是用户内容，原文没有引号，译文也不加；两句之间随原文用句号
     [/^Couldn't unlink (.+)\. Please try again\.$/, (_, name: string) => `${joinCjk('無法取消連結', name)}。請再試一次。`],
     // 原文只有 and、没有逗号：译文用「和」，不加顿号（与 profile/tabs.ts 同译）
-    [/^(\d+) open and (\d+) closed projects? found\.$/, '找到 $1 個開放中和 $2 個已關閉的專案。']
+    [/^(\d+) open and (\d+) closed projects? found\.$/, '找到 $1 個開放中和 $2 個已關閉的專案。'],
+    // 团队项目页：团队协作者权限对话框（团队名在引号中）
+    [
+      /^This team currently has no access permissions on this project\. To provide access to the project, the team "(.+)" will be added as a collaborator with read permissions\.$/,
+      '此團隊目前沒有此專案的存取權限。團隊「$1」將新增為具有讀取權限的協作者，以便存取此專案。'
+    ],
+    [
+      /^This team currently has access permissions to this project\. If this project is removed, "(.+)" access will be revoked and the team will no longer be able to access the project\.$/,
+      '此團隊目前具有此專案的存取權限。移除此專案後，「$1」的存取權限將被撤銷，團隊將無法再存取此專案。'
+    ]
   ],
   ignore: [
     // 存储库项目页的项目描述、组织项目列表中的项目标题与描述

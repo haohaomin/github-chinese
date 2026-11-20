@@ -223,6 +223,11 @@ export default {
     'Please reload page and try again': '请重新加载页面后重试',
     'We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try refreshing.':
       '我们会自动跟踪这些错误；如果问题仍然存在，请联系我们。在此期间，请尝试刷新。',
+    // 同一提示拆成两段的写法（Whoops 错误页）
+    'Whoops, something went wrong!': '哎呀，出错了！',
+    'We track these errors automatically, but if the problem persists feel free to contact us.':
+      '我们会自动跟踪这些错误；如果问题仍然存在，请联系我们。',
+    'In the meantime, try refreshing.': '在此期间，请尝试刷新。',
     // 独角兽页（服务暂不可用、超时）
     'No server is currently available to service your request.': '当前没有可用的服务器处理你的请求。',
     'This page is taking too long to load.': '此页面加载时间过长。',

@@ -146,6 +146,31 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     ],
     misses: ['Child team members']
   },
+  // 团队页：成员数、添加成员 / 存储库、子团队、团队搜索的新建项、Copilot 空状态
+  {
+    hits: [
+      ['12 members shown.', '显示 12 个成员。'],
+      ['1 member shown.', '显示 1 个成员。']
+    ],
+    misses: ['Members shown.']
+  },
+  { hits: [['Add member to Core team', '将成员添加到 Core team']], misses: ['Add member to'] },
+  { hits: [['Add repository to Core team', '将存储库添加到 Core team']], misses: ['Add repository'] },
+  { hits: [['Teams will become a child of Core team.', '团队将成为 Core team 的子团队。']], misses: ['Teams will become a child.'] },
+  { hits: [['design-team (Create team)', 'design-team（创建团队）']], misses: ['(Create team)'] },
+  {
+    hits: [
+      [
+        "Members of setube-organization need Copilot Business or Copilot Enterprise to get this team's customizations.",
+        'setube-organization 的成员需要 Copilot 商业版或 Copilot 企业版才能获得此团队的自定义设置。'
+      ],
+      [
+        'Members of octo-org need Copilot Business or Copilot Enterprise to get this team’s customizations.',
+        'octo-org 的成员需要 Copilot 商业版或 Copilot 企业版才能获得此团队的自定义设置。'
+      ]
+    ],
+    misses: ['Members of octo-org need Copilot Business.']
+  },
   // 团队同步不一致页标题
   {
     hits: [

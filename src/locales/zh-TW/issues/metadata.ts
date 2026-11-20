@@ -33,6 +33,21 @@ const SECTION_NAME: Readonly<Record<string, string>> = {
 
 const SECTION_NAME_SOURCE = Object.keys(SECTION_NAME).join('|')
 
+/** 议题字段：组织预置字段名（与组织设置一致）；组织自定义的字段名是用户内容，照录 */
+const PRESET_FIELDS: Readonly<Record<string, string>> = {
+  Priority: '優先順序',
+  'Start date': '開始日期',
+  'Target date': '目標日期',
+  Effort: '工作量'
+}
+
+const PRESET_FIELD_SOURCE = Object.keys(PRESET_FIELDS).join('|')
+
+/** 字段名：预置字段译出，其余照录 */
+function fieldName(name: string): string {
+  return PRESET_FIELDS[name] ?? name
+}
+
 /**
  * 默认议题类型（组织预置）的名称：默认类型名称表（PageDictionary.issueTypes），只在议题类型名称区域内整段匹配；
  * 组织自定义的类型名是用户内容，不收
@@ -102,6 +117,9 @@ export default {
     'Field is visible to all organizations in this enterprise.': '此企業中的所有組織都能看到此欄位。',
     'This status automatically assigns the issue to an agent.': '此狀態會自動將議題指派給代理。',
     'Issue field option results': '議題欄位選項結果',
+    'No fields added. Choose Fields to add one.': '尚未新增欄位。選擇「欄位」以新增。',
+    'All available fields have been added.': '已新增所有可用欄位。',
+    'Fields: add a field': '欄位：新增欄位',
 
     // 关系
     'Relationships are currently unavailable': '關係目前無法使用',
@@ -206,6 +224,12 @@ export default {
     Fields: '欄位',
     Field: '欄位',
     'Add fields': '新增欄位',
+    'Add a field': '新增欄位',
+    // 组织预置的议题字段名与单选选项（侧栏、时间线、字段菜单；Start date 见日期选择器词典，High / Medium / Low 由通用词典处理）
+    Priority: '優先順序',
+    'Target date': '目標日期',
+    Effort: '工作量',
+    Urgent: '緊急',
     'No status': '無狀態',
     'Awaiting triage': '等待分類',
     'Select projects': '選取專案',
@@ -396,14 +420,16 @@ export default {
     [/^, (\d+)% complete$/, '，已完成 $1%'],
     // 议题字段（字段名是用户内容，原文无引号，译文不加；与中文之间按 joinName 留空格）
     [/^Value cannot be more than (\d+) characters \((\d+)\)$/, '值不能超過 $1 個字元（目前 $2 個）'],
-    [/^The value for the (.+) field$/, (_, name) => joinName(name, '欄位的值')],
-    [/^Toolbar for (.+) field$/, (_, name) => joinName(name, '欄位工具列')],
+    [/^The value for the (.+) field$/, (_, name: string) => joinName(fieldName(name), '欄位的值')],
+    [/^Toolbar for (.+) field$/, (_, name: string) => joinName(fieldName(name), '欄位工具列')],
     [/^Cannot be greater than (-?[\d.,]+)$/, '不能大於 $1'],
     [/^Cannot be less than (-?[\d.,]+)$/, '不能小於 $1'],
-    [/^Remove field (.+)$/, (_, name) => joinName('移除欄位', name)],
-    [/^Update field (.+) \(press enter to submit\)$/, (_, name) => `${joinName('更新欄位', name)}（按 Enter 送出）`],
+    [/^Remove field (.+)$/, (_, name: string) => joinName('移除欄位', fieldName(name))],
+    [/^Update field (.+) \(press enter to submit\)$/, (_, name: string) => `${joinName('更新欄位', fieldName(name))}（按 Enter 送出）`],
     [/^No fields configured for (.+)\.$/, (_, name) => `${joinName(name, '未設定欄位')}。`],
-    [/^Set (.+), none$/, (_, name) => `${joinName('設定', name)}，目前為空`],
+    [/^Set (.+), none$/, (_, name: string) => `${joinName('設定', fieldName(name))}，目前為空`],
+    // 字段值选择器的占位文字：Select Effort（预置字段）
+    [new RegExp(`^Select (${PRESET_FIELD_SOURCE})$`), (_, name: string) => `選擇${fieldName(name)}`],
     [/^(.+) \(edited\)$/, '$1（已編輯）'],
     // 选择器
     [/^Cannot edit (.+) right now$/, (_, subject) => joinCjk('目前無法編輯', PICKER_SUBJECT[subject] ?? subject)],

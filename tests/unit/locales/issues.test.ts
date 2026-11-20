@@ -8,6 +8,7 @@ import type { LocaleBundle, PageDictionary, PageKey } from '../../../src/core/ty
 import issues from '../../../src/locales/zh-CN/issues'
 import { LABEL_SUGGESTION_IGNORE } from '../../../src/locales/zh-CN/issues/filter'
 import { labelName } from '../../../src/locales/zh-CN/issues/labels'
+import { formatDate } from '../../../src/locales/zh-CN/helpers'
 import { joinName } from '../../../src/locales/zh-CN/issues/list'
 import pulls from '../../../src/locales/zh-CN/pulls'
 import { zhCN } from '../../../src/locales/zh-CN/index'
@@ -340,10 +341,11 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [['Value cannot be more than 1024 characters (1100)', '值不能超过 1024 个字符（当前 1100 个）']],
     misses: ['Value cannot be more than 1024 characters']
   },
-  // 字段名是用户内容，不加引号；英文名与中文之间留空格
+  // 字段名是用户内容，不加引号；英文名与中文之间留空格；组织预置的字段名（Priority 等）译出
   {
     hits: [
-      ['The value for the Priority field', 'Priority 字段的值'],
+      ['The value for the Priority field', '优先级字段的值'],
+      ['The value for the Estimate field', 'Estimate 字段的值'],
       ['The value for the 优先级 field', '优先级字段的值']
     ],
     misses: ['The value for the field']
@@ -359,7 +361,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [['Cannot be less than 0', '不能小于 0']], misses: ['Cannot be less than min'] },
   {
     hits: [
-      ['Remove field Priority', '删除字段 Priority'],
+      ['Remove field Priority', '删除字段优先级'],
+      ['Remove field Estimate', '删除字段 Estimate'],
       ['Remove field 🎯 Goal', '删除字段 🎯 Goal']
     ],
     misses: ['Remove fields']
@@ -369,7 +372,15 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['Update field Estimate']
   },
   { hits: [['No fields configured for Bug.', 'Bug 未配置字段。']], misses: ['No fields configured for Bug'] },
-  { hits: [['Set Priority, none', '设置 Priority，当前为空']], misses: ['Set Priority'] },
+  { hits: [['Set Priority, none', '设置优先级，当前为空']], misses: ['Set Priority'] },
+  // 字段值选择器的占位文字（预置字段）
+  {
+    hits: [
+      ['Select Effort', '选择工作量'],
+      ['Select Target date', '选择目标日期']
+    ],
+    misses: ['Select Estimate']
+  },
   { hits: [['Priority (edited)', 'Priority（已编辑）']], misses: ['Priority (edit)'] },
   // metadata：选择器
   {
@@ -1327,6 +1338,25 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   {
     hits: [['Actions for Fix login bug', 'Fix login bug 的操作']],
     misses: ["Actions for octocat's comment, 7:05 AM on October 19", 'Actions for']
+  },
+  // 议题字段的日期选择器（与提交列表同一词典 commits/date-picker）
+  {
+    hits: [['Oct 1 - Oct 26', `${formatDate(undefined, 10, 1)} - ${formatDate(undefined, 10, 26)}`]],
+    misses: ['Oct 1 - yesterday']
+  },
+  { hits: [['Oct 1 -', `${formatDate(undefined, 10, 1)} -`]], misses: ['yesterday -'] },
+  { hits: [['Week 2', '第 2 周']], misses: ['Week 12'] },
+  {
+    hits: [['Saturday, November 21 (Today)', `${formatDate(undefined, 11, 21)}星期六（今天）`]],
+    misses: ['Funday, November 21']
+  },
+  {
+    hits: [['Must be on or after Nov 1, 2026', `不能早于 ${formatDate(2026, 11, 1)}`]],
+    misses: ['Must be on or after yesterday']
+  },
+  {
+    hits: [['Must be on or before Dec 31, 2026', `不能晚于 ${formatDate(2026, 12, 31)}`]],
+    misses: ['Must be on or before tomorrow']
   }
 ]
 

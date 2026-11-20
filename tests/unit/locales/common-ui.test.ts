@@ -781,6 +781,16 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       'name is invalid'
     ]
   },
+  // 字段名在前一个元素里时只剩错误部分（<a>Username shortcode</a> may only contain alphanumeric characters.）
+  {
+    hits: [
+      ['may only contain alphanumeric characters.', '只能包含字母和数字。'],
+      ['required to enable enterprise managed users.', '为启用企业托管用户所必需。'],
+      ['must be selected', '为必选项'],
+      ['is too long (maximum is 10 characters)', '过长（最多 10 个字符）']
+    ],
+    misses: ['may only contain letters.', 'is invalid!']
+  },
 
   // 标签：Dependabot 生态标签的说明（标签选择器、拉取请求侧栏令牌的 title；产品名按术语表译出，其余生态名保持原文）
   {

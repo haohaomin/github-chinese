@@ -289,6 +289,11 @@ export default {
     [/^Accessible from repositories owned by the user ['‘’"“”]?([\w.-]+)['‘’"“”]?$/, '可從使用者 $1 擁有的儲存庫存取'],
     [/^Accessible from repositories in the ['‘’"“”]?([\w.-]+)['‘’"“”]? organization$/, '可從 $1 組織中的儲存庫存取'],
     [/^Accessible from repositories in the ['‘’"“”]?([\w.-]+)['‘’"“”]? enterprise$/, '可從 $1 企業中的儲存庫存取'],
+    [
+      /^Workflows in other repositories that are part of the ['‘’"“”]?([\w.-]+)['‘’"“”]? (organization|enterprise) can access the actions and reusable workflows in this repository\. Access is allowed only from private repositories\.$/,
+      (_, owner: string, kind: string) =>
+        `${owner} ${kind === 'organization' ? '組織' : '企業'}中其他儲存庫的工作流程可以存取此儲存庫中的動作和可重複使用的工作流程。僅允許從私人儲存庫存取。`
+    ],
     // 策略：pull_request_target 限制公告（事件名在 <code> 中时由 static 匹配后半句）
     [
       new RegExp(`^On (${DATE_SOURCE}), GitHub will restrict$`),

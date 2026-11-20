@@ -469,6 +469,14 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     ],
     misses: ["You've cancelled your subscription to Copilot Pro."]
   },
+  // 兑换优惠券（/redeem）：优惠码与句子在同一文本节点
+  {
+    hits: [
+      ['Sorry, we couldn’t find a coupon with the code: ZZZZTESTCODE', '抱歉，未找到此优惠码对应的优惠券：ZZZZTESTCODE'],
+      ["Sorry, we couldn't find a coupon with the code: abc-123", '抱歉，未找到此优惠码对应的优惠券：abc-123']
+    ],
+    misses: ['Sorry, we couldn’t find a coupon']
+  },
   {
     hits: [
       ['$4.00 off per month until Dec 31, 2026', '2026年12月31日前每月减免 $4.00'],

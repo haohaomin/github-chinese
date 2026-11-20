@@ -16,6 +16,8 @@ export default {
       '開啟行動裝置上的雙重驗證器 (TOTP) 應用程式以查看驗證碼。',
     'Open your two-factor authenticator (TOTP) app or browser extension to view your authentication code.':
       '開啟雙重驗證器 (TOTP) 應用程式或瀏覽器擴充功能以查看驗證碼。',
+    'Enter the code from your two-factor authentication app or browser extension below.':
+      '在下方輸入雙重驗證應用程式或瀏覽器擴充功能中的驗證碼。',
     'Use this method for future logins': '日後登入都使用此方式',
     'Future logins on this device will prompt you to use': '日後在此裝置登入時預設會提示你使用',
     'an authentication code': '驗證碼',

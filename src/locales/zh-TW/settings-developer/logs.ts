@@ -1,5 +1,23 @@
+import { lookupTable } from '../../../core/table'
 import type { PageDictionary } from '../../../core/types'
+import regions from '../common/regions'
 import { joinCjk } from '../helpers'
+
+const regionText = lookupTable(regions.static)
+
+/**
+ * 安全日志事件的地点「城市, 地区, 国家/地区」（地区常为空）：国家/地区名在 common/regions 中时才改写，
+ * 按国家/地区、地区、城市排列，去掉空项与重名，收录的地名译出，其余保留原文。
+ * 国家/地区名不在其中时抛错（引擎按未命中处理，后面的规则照常匹配：日期、权限列表等同样是逗号分隔的三段）
+ */
+function eventLocation(_: string, city: string, region: string, country: string): string {
+  if (regionText(country) === undefined) throw new Error(`非地点：${country}`)
+  const parts = [country, region, city].filter((part, index, all) => part !== '' && all.indexOf(part) === index)
+  return parts.map(part => regionText(part) ?? part).join(' ')
+}
+
+/** 地点中的一段（不含捕获组）：以大写字母（含带变音符号的拉丁字母）开头，不含逗号、数字、冒号 */
+const PLACE_SOURCE = '(?:[A-ZÀ-ÖØ-Þ][^,\\d:]*)'
 
 const TOKEN_ACTION: Readonly<Record<string, string>> = {
   Created: '建立了',
@@ -108,6 +126,8 @@ export default {
     'Regenerated a token for': '為以下使用者重新產生了權杖',
     'Updated a token for': '為以下使用者更新了權杖',
     'Revoked a token for': '撤銷了以下使用者的權杖',
+    'Created a Pages verified domain': '建立了頁面的已驗證網域',
+    'Deleted a Pages verified domain': '刪除了頁面的已驗證網域',
 
     // 赞助日志
     'Sponsors log': '贊助記錄',
@@ -229,6 +249,20 @@ export default {
     [
       /^Set policy to default workflow token can create or approve PR to (true|false) for$/,
       (_, value: string) => `為以下儲存庫${value === 'true' ? '允許' : '禁止'}預設工作流程權杖建立或核准 PR`
-    ]
+    ],
+    // 头像事件（团队头像等）：「Updated profile picture for octo-org/team」
+    [/^Updated profile picture for (.+)$/, '更新了 $1 的頭像'],
+    // 事件地点：Hong Kong, , Hong Kong → 香港
+    [new RegExp(`^(${PLACE_SOURCE}?), (${PLACE_SOURCE}?), (${PLACE_SOURCE})$`), eventLocation]
+  ],
+  // 事件描述被用户、应用、企业链接拆开的句子
+  inline: [
+    ['Blocked user {}', '封鎖了使用者 {}'],
+    ['Unblocked user {}', '解除封鎖了使用者 {}'],
+    ['Removed authorization for OAuth application {}', '移除了 OAuth 應用程式 {} 的授權'],
+    ['Added {} as an owner of the {} enterprise', '將 {} 新增為 {} 企業的擁有者'],
+    ['{} added payment details to the {} enterprise', '{} 為 {} 企業新增了付款詳細資料'],
+    ['Marketplace listing {} was sent back to draft state', '市集上架資訊 {} 已退回草稿狀態'],
+    ['Installed the {} integration.', '安裝了 {} 整合。']
   ]
 } satisfies PageDictionary

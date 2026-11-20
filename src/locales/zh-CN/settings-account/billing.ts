@@ -198,6 +198,7 @@ export default {
     'Billable spend for Actions and Actions Runners for the selected timeframe. Applicable discounts cover Actions usage in public repositories and included usage for Actions minutes and storage.':
       '所选时间范围内操作和操作运行器的可计费支出。适用折扣涵盖公共存储库中的操作使用量以及操作分钟数和存储中包含的使用量。',
     'Billable spend for Codespaces for the selected timeframe.': '所选时间范围内代码空间的可计费支出。',
+    'Billable spend for Sandbox for the selected timeframe.': '所选时间范围内沙盒的可计费支出。',
     'Billable spend for Git LFS for the selected timeframe. Applicable discounts cover included usage for Git LFS bandwidth and storage.':
       '所选时间范围内 Git LFS 的可计费支出。适用折扣涵盖 Git LFS 带宽和存储中包含的使用量。',
     'Billable spend for Packages for the selected timeframe. Applicable discounts cover Packages usage in public repositories and included usage for Packages data transfer and storage.':
@@ -238,6 +239,7 @@ export default {
     'Clear Search or filter usage (chart updates as you type)': '清除搜索或筛选',
     'Show Usage': '显示使用情况',
     'Show Usage Breakdown': '显示使用情况明细',
+    'Hide Usage Breakdown': '隐藏使用情况明细',
     'Usage breakdown table (scrollable)': '使用情况明细表（可滚动）',
     'Chart view': '图表视图',
     'consumed usage -': '已消耗使用量 -',
@@ -254,6 +256,21 @@ export default {
     'Total spend on Copilot for the selected timeframe, excluding applicable discounts.': '所选时间范围内 Copilot 的总支出，不含适用折扣。',
     'Total gross spend on Copilot for the selected timeframe including licenses and AI Credits.':
       '所选时间范围内包含许可证和 AI 额度的 Copilot 总支出。',
+    'Total gross spend on Copilot for the selected timeframe including licenses and AI credits.':
+      '所选时间范围内包含许可证和 AI 额度的 Copilot 总支出。',
+    'Total gross spend on GitHub Advanced Security for the selected timeframe including licenses and AI credits.':
+      '所选时间范围内包含许可证和 AI 额度的 GitHub 高级安全总支出。',
+    'Spark AI credits': 'Spark AI 额度',
+    // 操作用量：存储计费说明；按存储库统计的「其他所有使用量」及其提示
+    'GitHub Actions storage billing': 'GitHub 操作存储计费',
+    'GitHub Actions storage billing operates on an hourly accrual model.': 'GitHub 操作存储按小时累计计费。',
+    'Learn more about Actions Storage': '了解操作存储',
+    'All other usage': '其他所有使用量',
+    'About all other usage by repository': '关于按存储库统计的其他所有使用量',
+    "Includes usage from all other repositories, plus usage that isn't tied to a repository, such as licenses and Copilot.":
+      '包括其他所有存储库的使用量，以及许可证、Copilot 等不关联存储库的使用量。',
+    'Includes usage from all other repositories, plus usage that isn’t tied to a repository, such as licenses and Copilot.':
+      '包括其他所有存储库的使用量，以及许可证、Copilot 等不关联存储库的使用量。',
     'Billable licenses': '可计费许可证',
     'Billable licenses info': '可计费许可证信息',
     "If a user stops consuming a license within the month, the adjustment will be reflected in your next month's bill.":

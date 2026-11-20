@@ -163,6 +163,8 @@ export default {
   regexp: [
     // 人：量词作「位」
     [/^(\d+) collaborators?$/, '$1 位協作者'],
+    // 页面：删除已验证域后的提示
+    [/^Verified domain ([\w.-]+) was deleted\.?$/, '已刪除已驗證的網域 $1'],
     [/^No recoverable repositories were found for (\S+)\.$/, '找不到 $1 可還原的儲存庫。'],
     [/^Are you sure you want to restore (\S+)\?$/, '確定要還原 $1 嗎？'],
     // 已删除的存储库「Deleted <relative-time> by <login>」：整句见 inline，不命中时与 Deleted、by 按片段拼读
