@@ -51,6 +51,8 @@ export default {
     'Nothing to preview': '沒有可預覽的內容',
     'Error rendering preview': '轉譯預覽時發生錯誤',
     'Markdown preview unavailable': 'Markdown 預覽無法使用',
+    // 议题表单、讨论表单未填的字段：提交时由 GitHub 写入正文（见 ignore 的 FORM_BLANK_TEXTS）
+    'No response': '未填寫',
 
     // 工具栏；窄时收起的按钮在溢出菜单里（Primer ActionBar：More <名称> items）
     'Formatting tools': '格式設定工具',

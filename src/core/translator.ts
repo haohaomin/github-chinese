@@ -10,7 +10,8 @@
  * 遍历：TreeWalker + FILTER_REJECT 跳过忽略区域；变动根节点按父元素判断祖先，同一批变动内同一父元素只判断一次。
  * 忽略区域内的重新进入区域（REENTRY_SELECTORS）：遍历后只在被拒的忽略区域里按容器类名查找，再单独遍历；
  * 纯代码容器、跳过标签内不查。
- * 忽略区域里只有两类文字照常翻译：占位文字（PLACEHOLDER_TEXTS）与名称区域（LABEL_SELECTORS）里的默认标签名、说明、
+ * 忽略区域里只有三类文字照常翻译：占位文字（PLACEHOLDER_TEXTS）、正文里的表单空字段（FORM_BLANK_TEXTS），
+ * 以及名称区域（LABEL_SELECTORS）里的默认标签名、说明、
  * 预置列表名和默认类型名（语言包的名称表、说明表与标签正则、预置列表名表、默认类型名称表，名称区域、说明区域、
  * 星标列表名称区域、议题类型名称区域分开匹配），
  * 都只在最外层的忽略区域根上判断。
@@ -25,6 +26,8 @@ import {
   CODE_CONTAINER_SELECTORS,
   EXIT_ATTRIBUTES,
   EXIT_SELECTORS,
+  FORM_BLANK_TEXTS,
+  FORM_BODY_SELECTOR,
   IGNORE_SELECTORS,
   IGNORE_TAGS,
   ISSUE_TYPE_NAME_SELECTORS,
@@ -291,6 +294,18 @@ function soleParagraph(region: Element): Element | null {
 function placeholderRegionOf(element: Element): Element {
   const parent = element.localName === 'p' ? element.parentElement : null
   return parent !== null && soleParagraph(parent) === element ? parent : element
+}
+
+/**
+ * 表单空字段的文本节点（见 ignore 的 FORM_BLANK_TEXTS）：em 里只有一个文本节点，em 是段落里唯一的子节点，
+ * 段落紧跟在字段标题（h3）之后；否则 null。不查文字与选择器
+ */
+function formBlankNode(em: Element): Text | null {
+  const node = em.firstChild
+  const paragraph = em.parentElement
+  if (em.localName !== 'em' || !isTextNode(node) || node !== em.lastChild) return null
+  if (paragraph === null || paragraph.localName !== 'p' || paragraph.firstChild !== em || paragraph.lastChild !== em) return null
+  return paragraph.previousElementSibling?.localName === 'h3' ? node : null
 }
 
 /**
@@ -860,6 +875,8 @@ export function createTranslator(options: TranslatorOptions): Translator {
       applyRootRules(element)
       const placeholder = placeholderNode(element)
       if (placeholder) translatePlaceholder(placeholder)
+      // 正文里的表单空字段照常翻译
+      if (safeMatches(element, FORM_BODY_SELECTOR)) translateFormBlanks(element)
       // 遍历走到的忽略区域根都是最外层的：命中标签区域时其中的默认标签照常翻译
       if (labelsEnabled && elementMatches(labelIndex, element)) translateLabelRoot(element)
       rejectedPending?.push(element)
@@ -1156,6 +1173,13 @@ export function createTranslator(options: TranslatorOptions): Translator {
     }
     /** 本批已按标签区域判断过的父元素 */
     const labelParents = new Set<Element>()
+    /** 本批判断过的父元素是否在正文里 */
+    const formParents = new Map<Element, boolean>()
+    const inFormBody = (parent: Element): boolean => {
+      let inside = formParents.get(parent)
+      if (inside === undefined) formParents.set(parent, (inside = closestOf(parent, FORM_BODY_SELECTOR) !== null))
+      return inside
+    }
     for (const root of roots) {
       if (!root.isConnected) continue
       const parent = root.parentElement
@@ -1167,6 +1191,8 @@ export function createTranslator(options: TranslatorOptions): Translator {
         walk(root, 'translate', !isReentry(root))
         // 经典评论框预览区：脚本用 innerHTML 换上的占位段落
         if (placeholderRegionOf(root) === parent) translateRegionPlaceholder(parent)
+        // 正文整体替换（React 重渲染正文的 HTML）：其中的表单空字段
+        if (inFormBody(parent)) translateFormBlanks(root)
         // 标签区域里换上的元素（React 换掉令牌里的文字元素、标签页的标签链接里换上新令牌）：按所在的标签区域根判断
         if (!labelParents.has(parent)) {
           labelParents.add(parent)
@@ -1208,6 +1234,8 @@ export function createTranslator(options: TranslatorOptions): Translator {
       if (insideSkipped(element)) {
         // 文字在经典评论框预览区的段落里时按预览区判断
         translateRegionPlaceholder(placeholderRegionOf(element))
+        // 文字在正文的表单空字段里时照常翻译
+        translateFormBlank(element)
         // 文字在标签区域里时按所在的标签区域根判断
         translateLabelsAt(element)
         continue
@@ -1319,6 +1347,28 @@ export function createTranslator(options: TranslatorOptions): Translator {
     const source = sourceOf(node)
     if (source === CONTESTED || !PLACEHOLDER_TEXTS.has(normalizeText(source))) return
     applyText(node, source, false)
+  }
+
+  // ---------- 表单空字段 ----------
+
+  /**
+   * 正文里的表单空字段（见 ignore 的 FORM_BLANK_TEXTS）照常翻译，不记未翻译。写过译文的节点按记录判断，
+   * 没有记录时看当前文字；段落在跳过标签、退出标记、纯代码容器里时不处理（正文自身是忽略区域，不算）
+   */
+  function translateFormBlank(em: Element): void {
+    const node = formBlankNode(em)
+    if (node === null || (!records.hasText(node) && !FORM_BLANK_TEXTS.has(normalizeText(node.data)))) return
+    const paragraph = em.parentElement!
+    if (closestOf(paragraph, FORM_BODY_SELECTOR) === null || closestOf(paragraph, HARD_SKIP_SELECTOR) !== null) return
+    const source = sourceOf(node)
+    if (source === CONTESTED || !FORM_BLANK_TEXTS.has(normalizeText(source))) return
+    applyText(node, source, false)
+  }
+
+  /** root 自身或其中的表单空字段 */
+  function translateFormBlanks(root: Element): void {
+    if (root.localName === 'em') translateFormBlank(root)
+    else for (const em of root.getElementsByTagName('em')) translateFormBlank(em)
   }
 
   // ---------- 标签区域 ----------

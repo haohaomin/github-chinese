@@ -363,6 +363,16 @@ export const PLACEHOLDER_SELECTOR = [
 /** 占位段落所在的区域根：经典评论框（.js-previewable-comment-form）的预览区 .comment-body.markdown-body.js-preview-body */
 export const CLASSIC_PREVIEW_SELECTOR = '.js-preview-body'
 
+/**
+ * 表单空字段：议题表单、讨论表单提交时，GitHub 在正文里给未填的字段写入 _No response_，渲染为字段标题（h3）之后、
+ * 只含这一个 <em> 的段落。正文（FORM_BODY_SELECTOR）里结构相同的这段文字照常翻译；
+ * 不在正文里、前面不是 h3、段落里还有别的内容时保持原文
+ */
+export const FORM_BLANK_TEXTS: ReadonlySet<string> = new Set(['No response'])
+
+/** 表单空字段所在的正文 */
+export const FORM_BODY_SELECTOR = '.markdown-body'
+
 /** 重新进入区域的容器类：REENTRY_SELECTORS 的目标都是它的直接子元素，引擎先按类名找容器 */
 export const REENTRY_CONTAINER_CLASS = 'js-suggested-changes-blob'
 

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { PLACEHOLDER_TEXTS } from '../../../src/core/ignore'
+import { FORM_BLANK_TEXTS, PLACEHOLDER_TEXTS } from '../../../src/core/ignore'
 import { createMatcher } from '../../../src/core/matcher'
 import { createTranslator, type Translator } from '../../../src/core/translator'
 import type { LocaleBundle, PageKey } from '../../../src/core/types'
@@ -18,7 +18,8 @@ const BUNDLE: LocaleBundle = [
         'Loading preview…': '正在加载预览…',
         'Error rendering preview': '渲染预览时出错',
         Preview: '预览',
-        Issues: '议题'
+        Issues: '议题',
+        'No response': '未填写'
       }
     }
   ]
@@ -151,6 +152,84 @@ describe('忽略区域里的占位文字', () => {
   })
 })
 
+/**
+ * 议题正文（React 版）：表单未填的字段渲染为字段标题（h3）之后、只含一个 <em> 的段落；
+ * 正文在两层 .markdown-body 里（外层带 data-testid，内层是 safe-html-box）
+ */
+const FORM_BODY = (content: string): string =>
+  '<div class="markdown-body" data-testid="markdown-body" id="issue">' +
+  `<div class="markdown-body safe-html-box__Uwc6Al" id="box">${content}</div></div>`
+
+const BLANK_FIELDS = (id = 'blank'): string =>
+  `<h3 dir="auto">Steps</h3><p dir="auto"><em id="${id}">No response</em></p>` +
+  `<h3 dir="auto">Version</h3><p dir="auto" id="${id}-version">1.0</p>`
+
+describe('正文里的表单空字段', () => {
+  it('字段标题后只有空字段标记的段落照常翻译，其余正文保持原文；stop 后还原', () => {
+    const t = start(FORM_BODY(BLANK_FIELDS()))
+    expect(text('#blank')).toBe('未填写')
+    expect(text('#blank-version')).toBe('1.0')
+    expect(text('#box h3')).toBe('Steps')
+    t.stop()
+    expect(text('#blank')).toBe('No response')
+  })
+
+  it('经典视图的评论正文（.comment-body.markdown-body）同样翻译', () => {
+    start(`<table><tbody><tr><td class="d-block comment-body markdown-body">${BLANK_FIELDS()}</td></tr></tbody></table>`)
+    expect(text('#blank')).toBe('未填写')
+  })
+
+  it('结构不同时保持原文：前面不是 h3、段落里还有别的内容、em 里套着元素、不是空字段标记', () => {
+    start(
+      FORM_BODY(
+        '<p dir="auto"><em id="first">No response</em></p>' +
+          '<h2 dir="auto">Steps</h2><p dir="auto"><em id="h2">No response</em></p>' +
+          '<h3 dir="auto">Logs</h3><p dir="auto"><em id="mixed">No response</em> yet</p>' +
+          '<h3 dir="auto">Notes</h3><p dir="auto"><em id="nested"><strong>No response</strong></em></p>' +
+          '<h3 dir="auto">Other</h3><p dir="auto"><em id="other">None</em></p>'
+      )
+    )
+    for (const id of ['#first', '#h2', '#mixed', '#nested']) expect(text(id)).toBe('No response')
+    expect(text('#other')).toBe('None')
+  })
+
+  it('不在正文里、正文带退出标记时保持原文', () => {
+    start(
+      `<div class="comment-body">${BLANK_FIELDS('plain')}</div>` +
+        `<div class="markdown-body" translate="no">${BLANK_FIELDS('exit')}</div>` +
+        `<div class="markdown-body"><div class="notranslate">${BLANK_FIELDS('inner-exit')}</div></div>`
+    )
+    for (const id of ['#plain', '#exit', '#inner-exit']) expect(text(id)).toBe('No response')
+  })
+
+  it('正文整体替换（React 重渲染）、标记文字之后写入都翻译；改为其他文字保持原文', async () => {
+    start(FORM_BODY('<p dir="auto">Loading</p>'))
+    $('#box').innerHTML = BLANK_FIELDS()
+    await settle()
+    expect(text('#blank')).toBe('未填写')
+    $('#box').innerHTML = '<h3 dir="auto">Steps</h3><p dir="auto"><em id="later">Pending</em></p>'
+    await settle()
+    expect(text('#later')).toBe('Pending')
+    ;($('#later').firstChild as Text).data = 'No response'
+    await settle()
+    expect(text('#later')).toBe('未填写')
+    ;($('#later').firstChild as Text).data = 'Done'
+    await settle()
+    expect(text('#later')).toBe('Done')
+  })
+
+  it('换词典后按新词典重译；译后正文加上退出标记：还原原文，不再写回', async () => {
+    const t = start(FORM_BODY(BLANK_FIELDS()) + `<div class="markdown-body">${BLANK_FIELDS('second')}</div>`)
+    t.setMatcher(createMatcher([['common', { static: { 'No response': '无' } }]]))
+    expect(text('#blank')).toBe('无')
+    expect(text('#second')).toBe('无')
+    $('#issue').setAttribute('translate', 'no')
+    await settle()
+    expect(text('#blank')).toBe('No response')
+    expect(text('#second')).toBe('无')
+  })
+})
+
 describe('经典评论框的预览区', () => {
   it('服务器渲染的占位段落照常翻译，段落前后的换行缩进不变；stop 后还原', () => {
     const t = start(CLASSIC('\n    <p>Nothing to preview</p>\n  '))
@@ -258,6 +337,7 @@ describe.each([
       const pages: PageKey[] = releaseForm.has(source) ? ['common', 'repository', 'releases'] : ['common']
       expect(matcher.translate(source, pages), source).toBeDefined()
     }
+    for (const source of FORM_BLANK_TEXTS) expect(matcher.translate(source, ['common']), source).toMatch(/[一-鿿]/)
   })
 
   it('预览窗格的请求失败提示、经典预览区的加载中与出错段落都译出；stop 后还原', () => {
