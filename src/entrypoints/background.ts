@@ -15,6 +15,7 @@ import type { PageLocale } from '../shared/locale'
 import { LOCALE_SCRIPT_FILES } from '../shared/locale-loader'
 import { syncLocaleScript } from '../shared/locale-script'
 import { isBackgroundMessage, isContentStatus, toReleaseCountsResponse, type ContentMessage } from '../shared/messages'
+import { isPaymentFormGranted, PAYMENT_FORM_ORIGINS, PAYMENT_FORM_SCRIPT_FILE, syncPaymentFormScript } from '../shared/payment-form'
 import { getSettings, watchSettings, type Settings } from '../shared/settings'
 import { createSourceHealthMonitor, SESSION_HEALTH_STORE } from '../shared/source-health'
 
@@ -24,20 +25,21 @@ function reportError(error: unknown): void {
   console.error('[GitHub 中文化]', error)
 }
 
-/** 动态注册的排队：词典脚本、企业版站点的内容脚本依次注册、更新、注销，不并发（并发注册同一 ID 会报错） */
+/** 动态注册的排队：词典脚本、企业版站点的内容脚本、付款表单脚本依次注册、更新、注销，不并发（并发注册同一 ID 会报错） */
 let scriptSync: Promise<void> = Promise.resolve()
 
 /**
- * 按设置与已授权的企业版站点同步动态注册（见 shared/locale-script、shared/enterprise-scripts）；不传设置时读存储。
- * 返回本次同步落定的 Promise（不抛出）
+ * 按设置、已授权的企业版站点与付款表单同步动态注册（见 shared/locale-script、shared/enterprise-scripts、
+ * shared/payment-form）；不传设置时读存储。返回本次同步落定的 Promise（不抛出）
  */
 function scheduleScriptSync(settings?: Settings): Promise<void> {
   scriptSync = scriptSync
     .then(async () => {
-      const [current, origins] = await Promise.all([settings ?? getSettings(), grantedOrigins()])
+      const [current, origins, paymentForm] = await Promise.all([settings ?? getSettings(), grantedOrigins(), isPaymentFormGranted()])
       const matches = enterpriseMatches(origins)
       await syncLocaleScript(current, matches).catch(reportError)
-      await syncEnterpriseScripts(matches)
+      await syncEnterpriseScripts(matches).catch(reportError)
+      await syncPaymentFormScript(paymentForm)
     })
     .catch(reportError)
   return scriptSync
@@ -162,6 +164,33 @@ async function injectIntoGrantedTabs(origins: readonly string[]): Promise<void> 
   if (enterprise.length > 0) await injectIntoTabs(url => onEnterprise(url, enterprise))
 }
 
+/** github.com 的页面（付款表单只嵌在 github.com 页面里） */
+function onGitHubDotCom(url: string | undefined): boolean {
+  return parseGitHubUrl(url)?.hostname === 'github.com'
+}
+
+/**
+ * 向已打开的 github.com 页面的所有框架注入付款表单脚本（动态注册的脚本不自动注入已打开的页面）：
+ * 只有已授权的托管页框架能注入，脚本在其他框架里直接返回。休眠的标签页不注入，单个标签页失败不影响其他
+ */
+async function injectPaymentForm(): Promise<void> {
+  if (typeof browser.scripting?.executeScript !== 'function') return
+  const tabs = (await browser.tabs.query({})).filter(tab => tab.id !== undefined && !tab.discarded && onGitHubDotCom(tab.url))
+  const files: ScriptPublicPath[] = [PAYMENT_FORM_SCRIPT_FILE]
+  await Promise.all(
+    tabs.map(tab =>
+      browser.scripting
+        .executeScript({ target: { tabId: tab.id!, allFrames: true }, files, injectImmediately: true })
+        .catch(() => undefined)
+    )
+  )
+}
+
+/** 已授权付款表单时注入（扩展安装、更新后：旧脚本失效，表单还原为英文） */
+async function injectPaymentFormIfGranted(): Promise<void> {
+  if (await isPaymentFormGranted()) await injectPaymentForm()
+}
+
 export default defineBackground(() => {
   // 加速源的探测：结果在有效期内缓存，并存入会话存储（Service Worker 重启后照用）
   const sourceHealth = createSourceHealthMonitor(PROBE_DEPS, SESSION_HEALTH_STORE)
@@ -216,11 +245,13 @@ export default defineBackground(() => {
         })
     }
   })
-  // 企业版站点的授权、撤销（弹出页、设置页、浏览器的扩展管理）：同步注册；新授权的站点注入已打开的页面
+  // 企业版站点、付款表单的授权、撤销（弹出页、设置页、浏览器的扩展管理）：同步注册；新授权的站点注入已打开的页面，
+  // 新授权付款表单时注入已打开的 github.com 页面里的托管页
   browser.permissions?.onAdded?.addListener(({ origins }) => {
     if (!origins?.length) return
     scheduleScriptSync()
       .then(() => injectIntoGrantedTabs(origins))
+      .then(() => (origins.some(origin => PAYMENT_FORM_ORIGINS.includes(origin)) ? injectPaymentForm() : undefined))
       .catch(reportError)
   })
   browser.permissions?.onRemoved?.addListener(({ origins }) => {
@@ -235,7 +266,10 @@ export default defineBackground(() => {
     void syncBadgeFromStorage()
     // 安装、更新扩展时浏览器清空注册（Chromium、Firefox 都是），在此与顶层同步补回
     void scheduleScriptSync()
-    if (reason === 'install' || reason === 'update') injectIntoOpenTabs().catch(reportError)
+    if (reason === 'install' || reason === 'update') {
+      injectIntoOpenTabs().catch(reportError)
+      injectPaymentFormIfGranted().catch(reportError)
+    }
     if (reason === 'update') {
       removeLegacyUntranslated().catch(reportError)
       // 设置中旧版本的「收集未翻译」开关改为关闭：同步到未更新的旧版本，它们随之停止收集

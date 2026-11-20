@@ -1,10 +1,17 @@
 /**
  * 企业版站点（GitHub Enterprise Server 的自有域名、GHE.com 的子域名）：页面与 github.com 相同，只是域名不同。
  * 以已授予的可选主机权限为准：授权即启用，撤销即停用（内容脚本的动态注册见 enterprise-scripts.ts）。
- * 每个站点授权主站与代码片段子域名两项：GHES 开启子域名隔离时代码片段在 gist.<主机名>
+ * 每个站点授权主站与代码片段子域名两项：GHES 开启子域名隔离时代码片段在 gist.<主机名>。
+ * 付款表单的托管页（www.zuora.com，见 payment-form.ts）同样是可选主机权限，不算企业版站点
  */
 import { browser } from 'wxt/browser'
 import { isGitHubSite } from './github'
+import { PAYMENT_FORM_HOST } from './payment-form'
+
+/** 不能作为企业版站点：GitHub 自己的站点（已默认启用）、付款表单的托管页 */
+function isReservedHost(host: string): boolean {
+  return isGitHubSite(host) || host === PAYMENT_FORM_HOST
+}
 
 /** 带协议的输入（复制自地址栏） */
 const SCHEME_RE = /^[a-z][a-z\d+.-]*:\/\//i
@@ -19,7 +26,7 @@ const GIST_PREFIX = 'gist.'
 
 /**
  * 规范化输入的企业版站点：主机名，或带协议、路径的地址。返回小写的主机名，不含端口与末尾的点；
- * 格式错误、GitHub 自己的站点（已默认启用）返回 undefined
+ * 格式错误、GitHub 自己的站点（已默认启用）、付款表单的托管页返回 undefined
  */
 export function normalizeEnterpriseHost(value: string): string | undefined {
   const text = value.trim()
@@ -32,7 +39,7 @@ export function normalizeEnterpriseHost(value: string): string | undefined {
   }
   if (url.protocol !== 'https:' && url.protocol !== 'http:') return undefined
   const host = url.hostname.replace(/\.$/, '')
-  return HOST_RE.test(host) && !isGitHubSite(host) ? host : undefined
+  return HOST_RE.test(host) && !isReservedHost(host) ? host : undefined
 }
 
 /** 页面所在的站点：代码片段子域名上的页面以主站为准（如 gist.github.example.com → github.example.com） */
@@ -52,13 +59,13 @@ function parsePattern(pattern: string): { readonly scheme: string; readonly host
   return match && host && !host.includes('*') ? { scheme: match[1]!, host } : undefined
 }
 
-/** 已授予的主机权限中企业版站点的匹配模式：具体主机，不含 GitHub 自己的站点；去重，顺序不变 */
+/** 已授予的主机权限中企业版站点的匹配模式：具体主机，不含 GitHub 自己的站点与付款表单的托管页；去重，顺序不变 */
 export function enterpriseMatches(origins: readonly string[]): string[] {
   return [
     ...new Set(
       origins.filter(origin => {
         const pattern = parsePattern(origin)
-        return pattern !== undefined && !isGitHubSite(pattern.host)
+        return pattern !== undefined && !isReservedHost(pattern.host)
       })
     )
   ]

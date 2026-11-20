@@ -47,7 +47,10 @@ describe('normalizeEnterpriseHost', () => {
     'https://gist.github.com/',
     'docs.github.com',
     'raw.githubusercontent.com',
-    'www.githubstatus.com'
+    'www.githubstatus.com',
+    // 付款表单的托管页（见 shared/payment-form）
+    'www.zuora.com',
+    'https://www.zuora.com/apps/PublicHostedPageLite.do'
   ])('%j → 不接受', input => {
     expect(normalizeEnterpriseHost(input)).toBeUndefined()
   })
@@ -79,10 +82,11 @@ describe('已授权的企业版站点', () => {
     '<all_urls>',
     '*://*.example.com/*',
     'https://docs.github.com/*',
+    'https://www.zuora.com/*',
     '*://github.example.com/*'
   ]
 
-  it('enterpriseMatches：具体主机，不含 GitHub 自己的站点与通配主机；去重，顺序不变', () => {
+  it('enterpriseMatches：具体主机，不含 GitHub 自己的站点、付款表单的托管页与通配主机；去重，顺序不变', () => {
     expect(enterpriseMatches(ORIGINS)).toEqual(['*://github.example.com/*', '*://gist.github.example.com/*', 'https://octo-corp.ghe.com/*'])
   })
 

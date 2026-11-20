@@ -25,6 +25,7 @@ import orgPolicies from './org-policies'
 import orgSettings from './org-settings'
 import organization from './organization'
 import packages from './packages'
+import paymentForm from './payment-form'
 import profile from './profile'
 import projects from './projects'
 import pulls from './pulls'
@@ -81,5 +82,6 @@ export const zhTW: LocaleBundle = [
   ['features', features],
   ['mcp', mcp],
   ['status', status],
-  ['support', support]
+  ['support', support],
+  ['payment-form', paymentForm]
 ]

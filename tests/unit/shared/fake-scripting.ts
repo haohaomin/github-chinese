@@ -8,6 +8,8 @@ export interface RegisteredScript {
   readonly runAt?: string
   /** 运行环境：主世界为 MAIN，缺省为隔离环境 */
   readonly world?: string
+  /** 是否注入所有框架 */
+  readonly allFrames?: boolean
   /** 是否跨会话保留；测试直接放入、不带该字段的注册模拟不返回它的浏览器 */
   readonly persistAcrossSessions?: boolean
 }

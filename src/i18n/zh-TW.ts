@@ -45,6 +45,7 @@ export default {
 
   general: '一般',
   translation: '中文化',
+  paymentForm: '中文化付款表單',
   translateTime: '時間在地化',
   translateTitle: '翻譯標題',
   languageSection: '語言',

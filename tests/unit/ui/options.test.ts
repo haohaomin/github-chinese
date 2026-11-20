@@ -127,7 +127,7 @@ describe.skipIf(!App)('设置页组件', () => {
   })
 
   describe('布局', () => {
-    it('先是汉化设置（汉化开关、排除路径；自定义词库、内置词库两个标签）、加速设置、净化设置、增强设置（自动加载、下载次数、新标签页打开、更新时间着色、时间格式五个标签）、企业版设置五个标签页，再是关于；常规开关、语言下拉、快捷键都不在这里', async () => {
+    it('先是汉化设置（汉化开关、汉化付款表单开关、排除路径；自定义词库、内置词库两个标签）、加速设置、净化设置、增强设置（自动加载、下载次数、新标签页打开、更新时间着色、时间格式五个标签）、企业版设置五个标签页，再是关于；常规开关、语言下拉、快捷键都不在这里', async () => {
       const wrapper = await render()
       expect(wrapper.get('h1').text()).toBe('GitHub 中文化')
       expect(wrapper.get('[role="tablist"]').attributes('aria-label')).toBe('设置')
@@ -170,9 +170,10 @@ describe.skipIf(!App)('设置页组件', () => {
       expect(section(wrapper, '关于').element.closest('[role="tabpanel"]')).toBeNull()
       const main = wrapper.get('main').element
       expect(main.firstElementChild?.contains(wrapper.get('[role="tablist"]').element)).toBe(true)
-      // 开关只有汉化、加速的三个与各分类的自动隐藏、净化搜索，以及自动加载、下载次数、新标签页打开及其范围、更新时间着色及其背景色、自动检查更新（图片预览、下载文件夹只在弹出页）
+      // 开关只有汉化、汉化付款表单、加速的三个与各分类的自动隐藏、净化搜索，以及自动加载、下载次数、新标签页打开及其范围、更新时间着色及其背景色、自动检查更新（图片预览、下载文件夹只在弹出页）
       expect(wrapper.findAll('.ui-switch-label').map(item => item.text())).toEqual([
         '汉化',
+        '汉化付款表单',
         '加速下载',
         '加速图片',
         '故障转移',

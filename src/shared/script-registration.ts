@@ -13,6 +13,8 @@ export interface ScriptRegistration {
   readonly matches: readonly string[]
   /** 主世界；缺省为隔离环境 */
   readonly world?: 'MAIN'
+  /** 注入所有框架（含跨源 iframe）；缺省只注入顶层框架 */
+  readonly allFrames?: boolean
 }
 
 /** 注册时的脚本路径不带开头的 /；浏览器返回的路径可能带 */
@@ -53,6 +55,7 @@ export async function syncRegisteredScript(id: string, script: ScriptRegistratio
     // 已降为仅本次会话的注册改回持久；不返回该字段的浏览器按持久
     current.persistAcrossSessions !== false &&
     (current.world ?? 'ISOLATED') === (script.world ?? 'ISOLATED') &&
+    (current.allFrames ?? false) === (script.allFrames ?? false) &&
     sameList(current.js?.map(scriptPath), js) &&
     sameSet(current.matches, script.matches)
   ) {
@@ -64,7 +67,9 @@ export async function syncRegisteredScript(id: string, script: ScriptRegistratio
     js,
     runAt: 'document_start' as const,
     persistAcrossSessions: true,
-    ...(script.world ? { world: script.world } : {})
+    ...(script.world ? { world: script.world } : {}),
+    // 开启时写入；由开改关时写 false（更新不带该字段时沿用原值）
+    ...(script.allFrames || current?.allFrames ? { allFrames: script.allFrames ?? false } : {})
   }
   if (current) {
     await scripting.updateContentScripts([registration])

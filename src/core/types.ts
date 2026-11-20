@@ -157,7 +157,9 @@ export const PAGE_KEYS = [
   // GitHub 状态页（www.githubstatus.com）
   'status',
   // GitHub 支持站点（help.github.com、support.github.com）
-  'support'
+  'support',
+  // 付款表单（www.zuora.com 托管页，嵌在 GitHub 页面里的跨源 iframe）：只由付款表单脚本使用，GitHub 页面不检测
+  'payment-form'
 ] as const
 
 export type PageKey = (typeof PAGE_KEYS)[number]

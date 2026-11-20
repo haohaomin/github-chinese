@@ -43,6 +43,7 @@ const zhCN = {
 
   general: '常规',
   translation: '汉化',
+  paymentForm: '汉化付款表单',
   translateTime: '时间本地化',
   translateTitle: '翻译标题',
   languageSection: '语言',

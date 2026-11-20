@@ -45,6 +45,7 @@ export default {
 
   general: 'General',
   translation: 'Translate pages',
+  paymentForm: 'Translate payment form',
   translateTime: 'Localize times',
   translateTitle: 'Translate titles',
   languageSection: 'Language',
