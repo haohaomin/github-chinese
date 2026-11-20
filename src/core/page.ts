@@ -181,6 +181,8 @@ const TOP_SECTION: Readonly<Record<string, readonly PageKey[]>> = {
   repos: ['organization'],
   // GitHub Education 介绍页（学生、教师、学校、合作伙伴）
   education: ['education'],
+  // GitHub 功能介绍页（/features 及 /features/copilot 等子页）
+  features: ['features'],
   // MCP 服务器目录与服务器详情页
   mcp: ['mcp'],
   // 帐户页（创建组织除外）：升级计划、选择计划与个人设置的计划页同一组件，付款历史等计费页同 /settings/billing
@@ -212,7 +214,9 @@ const OWNER_SECTION: Readonly<Record<string, readonly PageKey[]>> = {
   // 组织安全概览：/orgs/<org>/security/overview、coverage、alerts/…、campaigns/…
   security: ['security'],
   // 组织主题页：/orgs/<org>/topics，带组织设置侧栏
-  topics: ['org-settings']
+  topics: ['org-settings'],
+  // 审核日志设置：/orgs/<org>/audit-log/event_settings，带组织设置侧栏
+  'audit-log': ['org-settings']
 }
 
 /** /enterprises/<企业>/ 下的三级路径段 → 页面类型 */
@@ -238,8 +242,20 @@ const REPO_SUBPAGE: Readonly<Record<string, readonly PageKey[]>> = {
 /** 组织设置下的应用设置页（/organizations/<组织>/settings/apps/*、applications/*）：在 org-settings 上叠加 org-apps */
 const ORG_APP_SECTIONS: ReadonlySet<string> = new Set(['apps', 'applications'])
 
-/** 组织设置下的存储库策略页（settings/policies/*）：在 org-settings 上叠加 org-policies（目标存储库筛选框） */
-const ORG_POLICY_SECTION = 'policies'
+/**
+ * 组织设置下带目标存储库筛选框的页：在 org-settings 上叠加 org-policies。
+ * 存储库策略（settings/policies/*）、规则集与规则洞察（settings/rules/*）、代码质量（settings/code-quality）、
+ * 操作策略（settings/actions/rules/*）
+ */
+const ORG_POLICY_SECTIONS: ReadonlySet<string> = new Set(['policies', 'rules', 'code-quality'])
+
+/** settings/ 之后的路径是否带目标存储库筛选框 */
+function hasRepositoryFilter(parts: readonly string[], at: number): boolean {
+  return ORG_POLICY_SECTIONS.has(parts[at] ?? '') || (parts[at] === 'actions' && parts[at + 1] === 'rules')
+}
+
+/** /organizations/<组织>/ 下不在 settings/ 里、但带组织设置侧栏的三级段 */
+const ORG_SETTINGS_SECTIONS: ReadonlySet<string> = new Set(['rename', 'billing_managers'])
 
 /** /organizations/ 下不是组织名的二级段 */
 const ORGANIZATIONS_PAGES = new Set(['new', 'plan', 'enterprise_plan'])
@@ -266,19 +282,19 @@ function detectOwnerScope(kind: string, parts: readonly string[]): readonly Page
     // 企业版试用计划选择页（登录名不含下划线，不是组织）
     if (parts[1] === 'enterprise_plan') return []
     if (section === 'repositories' && parts[3] === 'new') return ['new']
-    // 组织计划页与个人设置的计划页同一组件
-    if (section === 'billing') return ['settings', 'org-settings']
-    // 重命名组织的进度与完成页
-    if (section === 'rename') return ['org-settings']
+    // 组织计划页与个人设置的计划页同一组件；计划卡片与比较表另叠加新建组织选择计划页的词典（同一组件，排在前面，个人与组织设置的译法优先）
+    if (section === 'billing') return parts[3] === 'plans' ? ['new', 'settings', 'org-settings'] : ['settings', 'org-settings']
+    // 重命名组织的进度与完成页、添加账单管理员页（带组织设置侧栏）
+    if (ORG_SETTINGS_SECTIONS.has(section)) return ['org-settings']
     if (section !== 'settings') return ['organization']
-    if (parts[3] === ORG_POLICY_SECTION) return ['org-settings', 'org-policies']
+    if (hasRepositoryFilter(parts, 3)) return ['org-settings', 'org-policies']
     return ORG_APP_SECTIONS.has(parts[3] ?? '') ? ['org-settings', 'org-apps'] : ['org-settings']
   }
   if (kind === 'users') return ['profile', ...(own(OWNER_SECTION, section) ?? [])]
   // 组织下的重命名完成页同组织设置（OWNER_SECTION 的 rename 是个人帐户的）
   if (section === 'rename') return ['organization', 'org-settings']
   const keys: PageKey[] = ['organization', ...(own(OWNER_SECTION, section) ?? [])]
-  return section === 'settings' && parts[3] === ORG_POLICY_SECTION ? [...keys, 'org-policies'] : keys
+  return section === 'settings' && hasRepositoryFilter(parts, 3) ? [...keys, 'org-policies'] : keys
 }
 
 /** 顶级路径段是否是站点页面（不是用户名 / 组织名） */

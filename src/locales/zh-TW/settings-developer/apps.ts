@@ -387,9 +387,7 @@ export default {
     redelivery: '重新傳遞',
     'Redeliver payload?': '重新傳遞承載？',
     'Yes, redeliver this payload': '是，重新傳遞此承載',
-    Headers: '標頭',
-    Payload: '承載',
-    Body: '內文',
+    // 请求详情的区块名 Headers / Payload / Body 照原文（用户定）
     // 请求详情标签页的读屏名称（原文拼写如此，兼收正确拼写）
     'Hook request and reponse': 'Web 鉤子請求和回應',
     'Hook request and response': 'Web 鉤子請求和回應',

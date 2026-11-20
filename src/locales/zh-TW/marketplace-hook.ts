@@ -4,14 +4,7 @@ import { APP_DELIVERY_KEYS } from './org-apps'
 import apps from './settings-developer/apps'
 
 /** 请求详情的标签页与区块名（同应用设置页） */
-const DETAIL_KEYS: ReadonlySet<string> = new Set([
-  'Response',
-  'Headers',
-  'Payload',
-  'Body',
-  'Hook request and reponse',
-  'Hook request and response'
-])
+const DETAIL_KEYS: ReadonlySet<string> = new Set(['Response', 'Hook request and reponse', 'Hook request and response'])
 
 /**
  * 市场上架项的 Web 钩子页（/marketplace/<上架项>/hook）：叠加在 marketplace 之上。

@@ -32,6 +32,10 @@ function quotedPermission(quote: string, permission: string): string {
  */
 export default {
   static: {
+    // 成员权限保存提示
+    'Members and outside collaborators are now allowed to make app access requests.': '現在允許成員和外部協作者提出應用程式存取要求。',
+    'Repository admins can now install GitHub Apps.': '儲存庫管理員現在可以安裝 GitHub 應用程式。',
+    'Branch rename settings were updated.': '已更新分支重新命名設定。',
     // 成员权限：基本权限为“无”时的说明（“authorized team”版本）
     'Members will only be able to clone and pull public repositories. To give a member additional access, you’ll need to add them to an authorized team or make them a collaborator on individual repositories.':
       '成員只能複製並拉取公開儲存庫。若要授予成員更多存取權，你需要將其加入已授權的團隊，或將其設為個別儲存庫的協作者。',
@@ -285,6 +289,8 @@ export default {
       '建立、使用或刪除部署金鑰的指令碼、應用程式或工作流程將無法再運作。'
   },
   regexp: [
+    // 基本权限更改确认：This will change the base permissions for 2 projects.
+    [/^This will change the base permissions for (\d+) projects?\.$/, '這將變更 $1 個專案的基本權限。'],
     // 策略列表计数：0 repository policies
     [/^(\d+) repository polic(?:y|ies)$/, '$1 個儲存庫政策'],
     [

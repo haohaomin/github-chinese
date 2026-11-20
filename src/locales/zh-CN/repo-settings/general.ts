@@ -11,6 +11,31 @@ const BRANCH = '(\\S+)'
  */
 export default {
   static: {
+    // 功能：Wiki、讨论
+    'Contact the owner of the repository to enable GitHub Wikis.': '请联系存储库所有者启用 GitHub Wiki。',
+    'Update organization discussion settings': '更新组织讨论设置',
+    // 存储库访问：可见性、组织访问
+    'Only those with access to this repository can view it': '只有拥有此存储库访问权限的人员才能查看',
+    'Organization access': '组织访问权限',
+    'Search by name': '按名称搜索',
+    'No people or teams have organization-based access to this repository': '没有人员或团队通过组织访问此存储库',
+    'Assigned individuals and teams will appear here once an organization owner grants them access':
+      '组织所有者授予访问权限后分配的个人和团队将显示在此处',
+    'Set base role': '设置基本角色',
+    // 代码质量（存储库）
+    'Code quality findings': '代码质量发现',
+    'Automatically detect code quality issues in your codebase': '自动检测代码库中的代码质量问题',
+    'Enable code quality': '启用代码质量',
+    'Code Quality cannot currently be enabled for this repository.': '目前无法为此存储库启用代码质量。',
+    'Ensure your codebases are reliable, maintainable, and efficient by proactively scanning for best practices, reducing bugs, improving readability, and enabling easier testing, collaboration, and scalability. Enabling this feature will incur charges in':
+      '主动扫描最佳实践、减少缺陷、提高可读性，让测试、协作和扩展更轻松，确保代码库可靠、可维护且高效。启用此功能将产生费用，计入',
+    'A pull request will also be opened to merge an AI-generated workflow YAML file that is needed to enable code coverage analysis.':
+      '还将创建一个拉取请求，用于合并启用代码覆盖率分析所需的 AI 生成工作流 YAML 文件。',
+    'Additionally, to enable code coverage analysis, a workflow YAML file is generated using AI that will need to be reviewed and merged manually from the pull request that is opened.':
+      '此外，为启用代码覆盖率分析，将使用 AI 生成工作流 YAML 文件，需要在所创建的拉取请求中手动审查并合并。',
+    // Dependabot 运行器类型
+    'Select the runner type used by Dependabot for scans, versions and security updates.':
+      '选择 Dependabot 用于扫描、版本更新和安全更新的运行器类型。',
     // 存储库名称
     'Repository name was not changed': '存储库名称未更改',
     'already exists on this account.': '已存在于此帐户中。',
@@ -248,6 +273,20 @@ export default {
     feedback: '反馈'
   },
   regexp: [
+    // 讨论设为组织成员讨论来源时无法禁用；组织策略限制设置
+    [
+      /^Discussions cannot be disabled because they are set as the source for the ([\w.-]+) organization[’']s member discussions\.$/,
+      '讨论无法禁用，因为已被设为 $1 组织成员讨论的来源。'
+    ],
+    [
+      /^Some settings on this page can[’']t be changed because of a ([\w.-]+) policy\. We recommend using$/,
+      '由于 $1 的策略，此页面上的部分设置无法更改。建议使用'
+    ],
+    // 运行器类型对话框标题：Edit runner type for Dependabot
+    [
+      /^Edit runner type for (Dependabot|code scanning)$/,
+      (_, name: string) => (name === 'Dependabot' ? '编辑 Dependabot 的运行器类型' : '编辑代码扫描的运行器类型')
+    ],
     // 存储库名称可用性
     [new RegExp(`^${NAME} is available\\.$`), '$1 可用。'],
     [
@@ -276,5 +315,24 @@ export default {
       (_, owner: string, repo: string) => `你可以上传社交图片，但 ${repo ? `${owner}/${repo}` : owner} 为专用存储库，图片不会公开显示。`
     ],
     [new RegExp(`^Are you sure you want to remove ${NAME}/${NAME}[’']s promotional image\\?$`), '确定要删除 $1/$2 的推广图片吗？']
+  ],
+  inline: [
+    // 存储库访问页：未设基本角色、组织访问说明（<a>owners</a>、<a>Set base role</a>、<a>Manage</a> 拆开的句子）
+    [
+      'No base role set. Only {} and those with direct access can access this repository. {}.',
+      '未设置基本角色。只有{}和拥有直接访问权限的人员可以访问此存储库。{}。'
+    ],
+    [
+      'No base role set. Only {} and those with direct access can access this repository. {}',
+      '未设置基本角色。只有{}和拥有直接访问权限的人员可以访问此存储库。{}'
+    ],
+    [/^(\d+) users? and \{\} can access this repository through the organization\. \{\}\.$/, '$1 个用户和{}可以通过组织访问此存储库。{}。'],
+    ['{} and {} can access this repository through the organization. {}.', '{}和{}可以通过组织访问此存储库。{}。'],
+    // 代码质量：「We will support … found in this <a>open source repository</a>. …」；组织策略禁用：Disabled by <组织>
+    [
+      'We will support quality rules and languages found in this {}. The languages supported with CodeQL for standard findings are: C#, Java, JavaScript/TypeScript, Python, Ruby, and Go. Other languages may be scanned with AI, but will not generate standard findings with CodeQL.',
+      '我们将支持此{}中的质量规则和语言。CodeQL 支持生成标准发现的语言有：C#、Java、JavaScript/TypeScript、Python、Ruby 和 Go。其他语言可能会使用 AI 扫描，但不会通过 CodeQL 生成标准发现。'
+    ],
+    ['Disabled by {}', '已被 {} 禁用']
   ]
 } satisfies PageDictionary

@@ -270,6 +270,9 @@ export default {
     '. Already have an account?': '。已有帐户？',
     'Sign in to comment': '登录后评论',
     'Remember, contributions to this repository should follow its': '请记住，对此存储库的贡献应遵守其',
+    // 仓库没有行为准则时：… should follow our <a>GitHub Community Guidelines</a>.
+    'Remember, contributions to this repository should follow our': '请记住，对此存储库的贡献应遵守我们的',
+    'GitHub Community Guidelines': 'GitHub 社区准则',
     'code of conduct': '行为准则',
     'security policy': '安全策略',
 

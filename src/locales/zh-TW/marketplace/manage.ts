@@ -4,10 +4,13 @@ import type { PageDictionary } from '../../../core/types'
  * 市集上架资讯的建立与管理：新增上架资讯草稿（/marketplace/new、/marketplace/new/<类型>/<id>）、
  * 编辑页各步骤（/marketplace/<上架资讯>/edit、edit/contact、edit/description、edit/plans、security_compliance、hook）、
  * 交易（/marketplace/<上架资讯>/insights/transactions）。
- * 开发人员协议正文、语言选择列表不翻译（见 ignore）。术语：listing → 上架資訊，logo → 標誌，plan → 方案。
+ * 语言选择列表不翻译（见 ignore）；开发人员协议弹窗正文见 agreement.ts。术语：listing → 上架資訊，logo → 標誌，plan → 方案。
  */
 export default {
   static: {
+    // 截图说明的编辑按钮、上架项状态
+    'Save caption': '儲存說明',
+    'Edit caption': '編輯說明',
     // 上架项图标裁剪对话框与保存提示（logo 作“图标”，同应用设置页）
     'Crop your new Marketplace listing logo': '裁切新的上架資訊標誌',
     'Set new Marketplace listing logo': '設定新的上架資訊標誌',
@@ -287,6 +290,7 @@ export default {
     'for more information on this page.': '以瞭解此頁面的詳細資訊。'
   },
   scoped: {
+    Published: '已發佈',
     // 截图说明输入框、必填项校验（短词，只在本页面类型生效）
     caption: '說明',
     'cannot be blank': '不能為空白',
@@ -369,8 +373,6 @@ export default {
   ],
   ignore: [
     // 语言选择列表：语言名
-    '.js-languages-menu .select-menu-item-text',
-    // 开发人员协议正文（法律文本）
-    'details-dialog > .Box-body.markdown-body'
+    '.js-languages-menu .select-menu-item-text'
   ]
 } satisfies PageDictionary

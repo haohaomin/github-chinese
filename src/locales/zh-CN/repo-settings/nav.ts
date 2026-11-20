@@ -66,6 +66,8 @@ export default {
     'Check the sidebar for available repository settings.': '请在侧栏中查看可用的存储库设置。'
   },
   scoped: {
+    // 侧栏「安全和质量」分组
+    'Code quality': '代码质量',
     // 与组织设置、个人设置同名的菜单项
     General: '常规',
     Access: '访问',

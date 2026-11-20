@@ -118,6 +118,33 @@ describe('IGNORE_SELECTORS', () => {
 })
 
 describe('真实结构：用户内容命中，界面文字不命中', () => {
+  it('details-dialog 法律文本、组织合规页报告说明的 .markdown-body 照常翻译；其他 .markdown-body 仍忽略', () => {
+    const host = mount(`
+      <details class="details-reset details-overlay">
+        <summary>GitHub Marketplace Developer Agreement</summary>
+        <details-dialog class="Box Box--overlay d-flex flex-column">
+          <div class="Box-body markdown-body overflow-auto">
+            <h2>1. DEFINITIONS</h2>
+            <p><strong>2.1</strong> This Agreement sets forth the terms.</p>
+          </div>
+        </details-dialog>
+      </details>
+      <div class="col-12 tmp-mr-5 mb-1">
+        <div class="markdown-body f5 color-fg-muted mt-2">Our SOC 2 reports assume the use of certain security features.</div>
+      </div>
+      <div class="Box-body wiki-custom-sidebar markdown-body"><p>Sidebar link</p></div>
+      <article class="markdown-body entry-content container-lg"><p>Project readme</p></article>
+    `)
+    expect(
+      ignoredTexts(host, [
+        '1. DEFINITIONS',
+        'This Agreement sets forth the terms.',
+        'Our SOC 2 reports assume the use of certain security features.'
+      ])
+    ).toEqual([])
+    expect(ignoredTexts(host, ['Sidebar link', 'Project readme'])).toEqual(['Sidebar link', 'Project readme'])
+  })
+
   it('讨论：标题、分类分组名；分类链接交给 discussions 词典', () => {
     const host = mount(`
       <nav class="NavigationList" aria-label="Categories">

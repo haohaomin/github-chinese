@@ -537,6 +537,15 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       ['Filter contains 2 issues:', '筛选器有 2 处错误：']
     ],
     misses: ['Filter contains issues:', 'Filter contains 2 issues']
+  },
+  // 洞察：Actions 指标与 Copilot 仪表板的时段按钮「Period: <时段>」（未收录的时段照录）
+  {
+    hits: [
+      ['Period: Current month', '时段：本月'],
+      ['Period: Last 30 days', '时段：最近 30 天'],
+      ['Period: Q3 2026', '时段：Q3 2026']
+    ],
+    misses: ['Period']
   }
 ]
 

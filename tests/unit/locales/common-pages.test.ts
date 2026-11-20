@@ -264,14 +264,13 @@ describe('common/pages 行内句', () => {
 type PairCase = readonly [source: string, cn: string, tw: string]
 
 describe('common/pages 营销页、开发人员计划注册页与 Spark', () => {
-  it.each([
-    'https://github.com/features',
-    'https://github.com/sitemap',
-    'https://github.com/developer/register',
-    'https://github.com/spark'
-  ])('%s 只有 common 作用域，词条收 static', url => {
-    expect(detectPages(new URL(url))).toEqual(COMMON)
-  })
+  // /features 另有 features 页面类型（见 features.test.ts），不在此列
+  it.each(['https://github.com/sitemap', 'https://github.com/developer/register', 'https://github.com/spark'])(
+    '%s 只有 common 作用域，词条收 static',
+    url => {
+      expect(detectPages(new URL(url))).toEqual(COMMON)
+    }
+  )
 
   const STATIC_CASES: readonly PairCase[] = [
     // 未登录首页：首屏、轮播与 AI 分区

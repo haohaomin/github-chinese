@@ -25,12 +25,19 @@ export function copilotPlan(name: string): string {
 }
 
 /**
- * Copilot 订阅与试用页（/github-copilot/signup、/github-copilot/pro、/github-copilot/free_signup）：
+ * Copilot 订阅与试用页（/github-copilot/signup、/github-copilot/pro、/github-copilot/free_signup）与商业版结账页（/github-copilot/purchase）：
  * 计划介绍、计费周期、结账说明、开通完成后的引导。方案名按 product-names.md 译出（见 COPILOT_PLANS）；
  * 单独的 Free 指方案时作「免費版」，价格义 free 作「免費」；GitHub Mobile → GitHub 行動版。
  */
 export default {
   static: {
+    // Copilot 商业版结账（/github-copilot/purchase）：帐户、计划、账单信息、摘要
+    Checkout: '結帳',
+    'Pick an account': '選擇帳號',
+    'Copilot plan': 'Copilot 方案',
+    'For organizations ready to improve engineering velocity, code quality, and developer experience. See all features on Business plan.':
+      '適合希望提升工程效率、程式碼品質和開發人員體驗的組織。查看商務版方案的所有功能。',
+    'Billing Information': '帳單資訊',
     // Copilot 专业版试用与结账（/github-copilot/pro）
     'Try Copilot Pro for 30 days free': '免費試用 Copilot 專業版 30 天',
     'Everything in Copilot Free and:': 'Copilot 免費版的所有功能，以及：',
@@ -87,6 +94,13 @@ export default {
       '開源維護者、教師和學生可以免費使用 GitHub Copilot。我們會依政策每月檢查資格。'
   },
   scoped: {
+    // 结账页的短词与链接（signing 是账单链接说明中的链接，整句见 inline）
+    Account: '帳號',
+    Switch: '切換',
+    Summary: '摘要',
+    signing: '簽署',
+    here: '這裡',
+    'contact our sales team': '聯絡我們的銷售團隊',
     'Try now': '立即試用',
     'Free for 30 days': '免費 30 天',
     'Billing frequency': '計費頻率',
@@ -104,6 +118,11 @@ export default {
     'Eligibility requirements': '資格條件'
   },
   regexp: [
+    // 结账页：帐户类型与成员数、每用户价格、计费周期与席位、链接账单信息后的提示（组织名照录）
+    [/^Organization • (\d+) members?$/, '組織 • $1 名成員'],
+    [/^(\$[\d,.]+) \/ user$/, '$1 / 使用者'],
+    [/^(Monthly|Yearly) • No seats assigned yet$/, (_, cycle: string) => `${cycle === 'Monthly' ? '每月' : '每年'} • 尚未指派席次`],
+    [/^Billing information successfully linked to (\S+)$/, '已將帳單資訊連結到 $1'],
     [/^(\d+) premium requests to use the latest models and code review$/, '$1 個進階請求可用於最新模型和程式碼審查'],
     [/^Save (\$[\d,]+(?:\.\d+)?)(!?)$/, (_, amount: string, bang: string) => `節省 ${amount}${bang ? '！' : ''}`],
     // 结账页的计费说明，其后的开始日期单独成节点：按每月 $10.00 計費的起始日期為 <日期>（原文无标点；
@@ -113,5 +132,21 @@ export default {
       (_, amount: string, period: string) => `按每${PERIOD[period] ?? period} ${amount} 計費的起始日期為`
     ]
     // 营销同意复选框的两句由 common/pages.ts 翻译（共用组件，全站生效）
+  ],
+  inline: [
+    // 结账页：付款方式提示（链接：联系支持）、条款与发票说明（链接：此处、联系我们的销售团队）
+    [
+      'Update your payment method information to enable GitHub Copilot. If you are unable to do so, {}.',
+      '更新付款方式資訊以啟用 GitHub Copilot。如果無法更新，請{}。'
+    ],
+    [
+      'Your existing agreement with GitHub governs your use of GitHub Copilot. See GitHub Copilot specific terms {}. If you require invoices, {}.',
+      '你對 GitHub Copilot 的使用受你與 GitHub 的現有協議約束。GitHub Copilot 的專用條款請見{}。如需發票，請{}。'
+    ],
+    // 账单未链接时：首段 + 链接 signing + the + 链接 GitHub Customer Agreement + 句号（同市场订单页，首段见 marketplace/apps.ts 的 static）
+    [
+      'An organization owner or billing manager must link their personal billing information with this organization account. You can switch to a business account to use your business’ billing information by {} the {}.',
+      '組織擁有者或帳務管理員必須將個人帳單資訊連結到此組織帳號。若要切換到商業帳號以使用公司的帳單資訊請{} {}。'
+    ]
   ]
 } satisfies PageDictionary

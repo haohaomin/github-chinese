@@ -58,7 +58,6 @@ export default {
 
     // 侧栏帮助资源
     'Helpful resources': '实用资源',
-    'GitHub Community Guidelines': 'GitHub 社区准则',
     'Security policy': '安全策略',
     Contributing: '贡献指南'
   },

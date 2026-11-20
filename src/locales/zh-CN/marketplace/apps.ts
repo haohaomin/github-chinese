@@ -6,6 +6,21 @@ import type { PageDictionary } from '../../../core/types'
  */
 export default {
   static: {
+    // 订单页：按钮、安装范围、跳转、已安装提示（第三方应用名照录）
+    'Issue plan changes and begin installation': '提交计划变更并开始安装',
+    'Complete order': '完成订单',
+    'This applies to all current and future repositories owned by the resource owner. Also includes public repositories (read-only).':
+      '适用于资源所有者拥有的所有当前和未来存储库。同时包括公共存储库（只读）。',
+    'If your browser does not redirect you automatically, please visit this setup page to continue.':
+      '如果浏览器没有自动跳转，请访问此设置页面继续。',
+    'Marketplace Terms of Service.': '市场服务条款。',
+    // Render 上架项的计划说明（第三方内容，按用户要求收录）
+    'Sign up to auto-deploy web apps for free': '注册即可免费自动部署 Web 应用',
+    'Free. Sign up to auto-deploy web apps for free': '免费。注册即可免费自动部署 Web 应用',
+    'Free web services': '免费 Web 服务',
+    'Free static sites': '免费静态网站',
+    'Free Postgres databases': '免费 Postgres 数据库',
+    'Free Key Value (Redis-compatible) caches': '免费键值（兼容 Redis）缓存',
     // 应用页 /apps/<name>
     'Read more about this app on the Marketplace': '在市场中了解此应用',
     'Manage your installation settings.': '管理安装设置。',
@@ -102,6 +117,33 @@ export default {
     '(current plan)': '（当前计划）'
   },
   regexp: [
+    // 订单页：下一步、按比例计费区间、跳转、已安装 / 取消 / 卸载确认（第三方应用名、组织名、日期照录）
+    [/^Next: Authorize (.+) to access your account\.$/, '下一步：授权 $1 访问你的帐户。'],
+    [
+      /^Prorated for (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{1,2})(?:st|nd|rd|th)-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{1,2})(?:st|nd|rd|th)$/,
+      (_, m1: string, d1: string, m2: string, d2: string) => {
+        const months = 'JanFebMarAprMayJunJulAugSepOctNovDec'
+        return `${months.indexOf(m1) / 3 + 1}月${d1}日至${months.indexOf(m2) / 3 + 1}月${d2}日按比例计费`
+      }
+    ],
+    [/^You are being redirected to (.+) to continue installation\.$/, '正在重定向到 $1 以继续安装。'],
+    [
+      /^You have already installed and set up a plan for (.+) on ([\w.-]+)\. To proceed, please select a different plan or account\.$/,
+      '你已在 $2 上安装 $1 并设置了计划。如需继续，请选择其他计划或帐户。'
+    ],
+    [
+      /^Cancelling this plan will end your subscription to this app on (\d{4}-\d{2}-\d{2})\. Are you sure you wish to continue\?$/,
+      '取消此计划将于 $1 终止你对此应用的订阅。确定继续吗？'
+    ],
+    [
+      /^It looks like (.+) has already been installed on your account\. You can view your current installation or continue with setting up this plan\.$/,
+      '$1 似乎已安装在你的帐户上。可以查看当前安装或继续设置此计划。'
+    ],
+    [
+      /^This action cannot be undone\. Are you sure you want to uninstall this GitHub App from (\d+) repositor(?:y|ies)\?$/,
+      '此操作无法撤消。确定从 $1 个存储库卸载此 GitHub 应用吗？'
+    ],
+    [/^You[’']re all set! A job has been queued to uninstall the [‘']?(.+?)[’']? app\.$/, '已完成！卸载“$1”应用的作业已加入队列。'],
     // 页面标题
     [/^GitHub Apps - (.+)$/, 'GitHub 应用 - $1'],
 
@@ -127,6 +169,12 @@ export default {
     [/^Install (.+)$/, '安装 $1']
   ],
   inline: [
+    // 订单页同意条款：「By clicking "…", you are agreeing to Render’s <a>服务条款</a> and the <a>隐私政策</a>. You previously agreed to the <details>市场服务条款。</details>」
+    [
+      /^By clicking ["“](Complete order and begin installation|Issue plan changes and begin installation)["”], you are agreeing to (.+?)[’']s \{\} and(?: the)? \{\}\. You previously agreed to the \{\}$/,
+      (_, button: string, app: string) =>
+        `单击“${button === 'Complete order and begin installation' ? '完成订单并开始安装' : '提交计划变更并开始安装'}”即表示你同意 ${app} 的{}和{}。你之前已同意{}`
+    ],
     // 订单页：首段 + 链接 signing + the + 链接 GitHub Customer Agreement + 句号；整句命中时去掉 the，
     // 显示为“…请签署 GitHub 客户协议。”。不命中时按 static 首段与 scoped 的 signing 逐段翻译
     [
@@ -135,6 +183,8 @@ export default {
     ]
   ],
   ignore: [
+    // 订单页「市场服务条款」弹窗正文（法律文本，不翻译；全局对 details-dialog 法律文本的 .markdown-body 已放行，见 core/ignore.ts）
+    '.js-marketplace-form-wrapper details-dialog > .Box-body',
     // 应用页名称
     '.Layout-main h1.f1',
     // 侧栏：开发人员帐户名、第三方说明中的应用名

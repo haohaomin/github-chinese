@@ -11,6 +11,7 @@ import dashboard from './dashboard'
 import discussions from './discussions'
 import education from './education'
 import explore from './explore'
+import features from './features'
 import gist from './gist'
 import insights from './insights'
 import issues from './issues'
@@ -77,6 +78,7 @@ export const zhTW: LocaleBundle = [
   ['marketplace-hook', marketplaceHook],
   ['sponsors', sponsors],
   ['education', education],
+  ['features', features],
   ['mcp', mcp],
   ['status', status],
   ['support', support]

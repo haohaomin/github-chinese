@@ -233,7 +233,6 @@ export default {
     'Too heated': '争论过激',
 
     // 未登录时的评论框（其余片段由 common-ui 翻译）
-    'Remember, contributions to this repository should follow our': '请记住，对此存储库的贡献应遵守我们的',
     'contributing guidelines': '贡献指南',
 
     // 投票

@@ -445,6 +445,8 @@ const base = {
     'individuals and organizations': '適用於個人和組織',
     'Security, compliance,': '安全性、合規性',
     'and flexible deployment': '和彈性部署',
+    // 组织计划页企业版卡片的隐藏副标题
+    'Security & flexible deployment': '安全性和彈性部署',
     forever: '永久',
     'for the first 12 months': '前 12 個月',
     'Starting at': '起價',

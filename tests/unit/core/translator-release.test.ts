@@ -139,3 +139,30 @@ describe('活动概览雷达图的 <svg> 按选择器放行', () => {
     expect(top.textContent).toBe('代码审查')
   })
 })
+
+describe('Highcharts 图表的 <svg> 按选择器放行', () => {
+  const CHART = `
+    <div class="highcharts-container">
+      <svg class="highcharts-root" xmlns="http://www.w3.org/2000/svg" width="600" height="300">
+        <g class="highcharts-legend"><g class="highcharts-legend-item"><text id="legend">Commits</text></g></g>
+        <g class="highcharts-axis"><text class="highcharts-axis-title" id="axis">Code review</text></g>
+      </svg>
+    </div>
+    <svg class="octicon" id="icon"><text>Commits</text></svg>`
+
+  it('图例与坐标轴标题译出；其他 SVG 照旧跳过', () => {
+    start(CHART, PROFILE_PAGES)
+    expect($('#legend').textContent).toBe('提交')
+    expect($('#axis').textContent).toBe('代码审查')
+    expect($('#icon').textContent).toBe('Commits')
+  })
+
+  it('重绘（替换文本节点）后重译', async () => {
+    start(CHART, PROFILE_PAGES)
+    const legend = $('#legend')
+    legend.textContent = ''
+    legend.appendChild(document.createTextNode('Code review'))
+    await settle()
+    expect(legend.textContent).toBe('代码审查')
+  })
+})

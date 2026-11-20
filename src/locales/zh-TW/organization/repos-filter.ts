@@ -41,7 +41,9 @@ export const FILTER_KEY: Readonly<Record<string, string>> = {
   'Total good-first issues': '適合新手的議題總數',
   'Total forks': '分叉總數',
   'Size (Kb)': '大小 (Kb)',
-  'Total topics': '主題總數'
+  'Total topics': '主題總數',
+  // 组织规则集仪表板的筛选键（evaluate-status）
+  'Evaluate status': '評估狀態'
 }
 
 /** 筛选键说明（pulls/dashboard.ts 同样取用） */
@@ -51,11 +53,17 @@ export const FILTER_DESCRIPTION: Readonly<Record<string, string>> = {
   'Filter by custom properties': '依自訂屬性篩選',
   'Programming language': '程式語言',
   'Creation date': '建立日期',
-  'Last updated date': '上次更新日期'
+  'Last updated date': '上次更新日期',
+  // 规则集仪表板：evaluate-status 的说明（取值 active、evaluate、all 是限定符，照录）
+  'Evaluate status: active | evaluate | all': '評估狀態：active | evaluate | all'
 }
 
 /** 筛选取值（pulls/dashboard.ts 同样取用） */
 export const FILTER_VALUE: Readonly<Record<string, string>> = {
+  // 规则集仪表板：evaluate-status 的取值
+  'Active rules': '作用中的規則',
+  'Evaluate rules': '評估規則',
+  'All rules': '所有規則',
   README: '讀我檔案',
   Me: '我',
   'Funding file': '贊助檔案',
@@ -214,6 +222,11 @@ export default {
     'Total good-first issues': '適合新手的議題總數',
     'Size (Kb)': '大小 (Kb)',
     'Total topics': '主題總數',
+    // 规则集仪表板：evaluate-status 键及取值
+    'Evaluate status': '評估狀態',
+    'Active rules': '作用中的規則',
+    'Evaluate rules': '評估規則',
+    'All rules': '所有規則',
     // 组织页按功能开关追加的筛选键
     Deployable: '可部署',
     Deployed: '已部署',

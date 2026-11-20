@@ -137,7 +137,7 @@ export const PAGE_KEYS = [
   'org-settings',
   // 组织拥有的应用设置页（/organizations/<组织>/settings/apps/*、applications/*），叠加在 org-settings 之上
   'org-apps',
-  // 组织设置的存储库策略页（settings/policies/*）：目标存储库筛选框，叠加在 org-settings 之上
+  // 组织设置中带目标存储库筛选框的页（存储库策略、规则集、代码质量、操作策略），叠加在 org-settings 之上
   'org-policies',
   'notifications',
   'search',
@@ -151,6 +151,8 @@ export const PAGE_KEYS = [
   'marketplace-hook',
   'sponsors',
   'education',
+  // GitHub 功能介绍页（/features 及子页）
+  'features',
   'mcp',
   // GitHub 状态页（www.githubstatus.com）
   'status',

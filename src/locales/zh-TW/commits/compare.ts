@@ -104,6 +104,8 @@ export default {
     'You can try running this command locally to see the comparison on your machine:': '你可以嘗試在本機執行以下命令來查看比較：'
   },
   scoped: {
+    // 入门引导提示「By creating a <a>pull request</a> you'll be proposing …」里的链接
+    'pull request': '拉取請求',
     // 空比较提示片段：<main> 已包含來自 <v3.0.0> 的所有提交。請嘗試 …
     '. Try': '的所有提交。請嘗試',
     'base:': '基底：',
@@ -112,6 +114,15 @@ export default {
     'Files changed': '變更的檔案',
     // 标签 Files changed 的单数形式
     'File changed': '變更的檔案',
+    // 摘要栏计数：<span>1</span> <span>file changed</span>（数字是相邻元素）
+    'file changed': '個檔案已變更',
+    'files changed': '個檔案已變更',
+    contributor: '位貢獻者',
+    contributors: '位貢獻者',
+    // 新建拉取请求表单：类型菜单按钮、表单内容恢复失败的横幅
+    'Select a type of pull request': '選擇拉取請求類型',
+    "Your submitted title and description could not be recovered. Try your browser's Back button to see if your previous text is still available.":
+      '無法復原你提交的標題和描述。請嘗試使用瀏覽器的「上一頁」按鈕，查看先前的文字是否還在。',
     // 两点比较页头说明的链接间片段：“此範圍”已并入前一个链接的译文
     'for this range or': '或'
   },
@@ -119,5 +130,24 @@ export default {
   ignore: [
     // 经典比较页摘要下展开的文件路径列表
     'ol.content > li > a[href^="#diff-"]'
+  ],
+  attributeRules: [
+    // 经典提交列表（比较页）：作者链接是用户提及（整体忽略），只改写提示
+    ['a.commit-author', 'title', /^View all commits by ([\w.-]+(?:\[bot\])?)$/, '查看 $1 的所有提交']
+  ],
+  inline: [
+    // 入门引导提示（?show_onboarding_guide_tip=true）：分支名 <strong>、链接 <a> 拆开的句子
+    [
+      "The changes below are committed to a separate branch, named {}. By creating a {} you'll be proposing that your team pull these changes into this repository's main branch.",
+      '以下變更已提交到名為 {} 的獨立分支。建立{}即表示提議團隊將這些變更拉取到此儲存庫的主要分支。'
+    ],
+    [
+      'The changes below are committed to a separate branch, named {}. By creating a {} you’ll be proposing that your team pull these changes into this repository’s main branch.',
+      '以下變更已提交到名為 {} 的獨立分支。建立{}即表示提議團隊將這些變更拉取到此儲存庫的主要分支。'
+    ],
+    [
+      'These particular changes propose revisions to the README file in this repository, which adds a badge indicating the status of two {} workflows in your repository.',
+      '這些變更提議修訂此儲存庫的讀我檔案，新增一個顯示儲存庫中兩個 {}工作流程狀態的徽章。'
+    ]
   ]
 } satisfies PageDictionary

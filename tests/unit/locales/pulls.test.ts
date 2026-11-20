@@ -883,7 +883,20 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   { hits: [['Re-request review from octocat', '重新请求 octocat 审查']], misses: ['Re-request review from Mona Lisa'] },
   { hits: [['Request review from hubot', '请求 hubot 审查']], misses: ['Request review from Mona Lisa'] },
-  { hits: [['Request up to 15 reviewers', '最多请求 15 个审查者']], misses: ['Request up to many reviewers'] },
+  {
+    hits: [
+      ['Request up to 15 reviewers', '最多请求 15 个审查者'],
+      ['Request up to 1 reviewer', '最多请求 1 个审查者']
+    ],
+    misses: ['Request up to many reviewers']
+  },
+  {
+    hits: [
+      ['You can only select 1 reviewer.', '最多只能选择 1 个审查者。'],
+      ['You can only select 10 assignees.', '最多只能选择 10 个受理人。']
+    ],
+    misses: ['You can only select 10 labels.']
+  },
   // sidebar：经典侧栏审查者区无审查时的提示（— 连接两分句）
   {
     hits: [

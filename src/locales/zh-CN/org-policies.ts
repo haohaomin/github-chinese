@@ -15,7 +15,8 @@ const policies = {
 } satisfies PageDictionary
 
 /**
- * 组织设置的存储库策略页（/organizations/<组织>/settings/policies/*）：叠加在 org-settings 之上。
+ * 组织设置中带目标存储库筛选框的页：存储库策略（settings/policies/*）、规则集与规则洞察（settings/rules/*）、
+ * 代码质量（settings/code-quality）、操作策略（settings/actions/rules/*），叠加在 org-settings 之上。
  * 目标存储库的筛选框与存储库列表的筛选框是同一组件，沿用 organization/repos-filter；
  * 只在本页面类型生效，避免宽泛的筛选规则影响其他组织设置页。
  */

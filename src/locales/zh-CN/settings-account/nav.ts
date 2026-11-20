@@ -9,6 +9,16 @@ import type { PageDictionary } from '../../../core/types'
  */
 export default {
   static: {
+    // 创建企业（试用）：使用个人帐户的企业表单
+    'Sign up for Enterprise Cloud': '注册企业云',
+    'Learn more about Enterprise Cloud': '了解企业云',
+    'For only private, internal work and provisioned accounts, we recommend using': '仅用于专用、内部工作和预配帐户时，建议使用',
+    'Choose an existing organization to include in the new Enterprise account': '选择要纳入新企业帐户的现有组织',
+    'Create without an organization': '不纳入组织直接创建',
+    'Note: Billing for any selected organization will be delegated to the enterprise account.': '注意：所选组织的计费将委托给企业帐户。',
+    'Learn about changes to your billing during trial': '了解试用期间的计费变化',
+    'For Copilot access, please': '如需 Copilot 访问权限，请',
+    'Verifying...': '验证中...',
     // 页头
     'Your personal account': '你的个人帐户',
     'Go to your personal profile': '转到你的个人资料',
@@ -92,5 +102,17 @@ export default {
     'Developer Settings': '开发人员设置'
   },
   // 切换设置对象的按钮：「Switch <span>settings</span> context」，settings 由 scoped 译出（整句同 org-settings 的 static）
-  inline: [['Switch {} context', '切换{}对象']]
+  inline: [
+    // 创建企业：链接后接外部链接图标再接句号
+    ['For Copilot access, please {}.', '如需 Copilot 访问权限，请{}。'],
+    [
+      'For only private, internal work and provisioned accounts, we recommend using {} {}.',
+      '仅用于专用、内部工作和预配帐户时，建议使用{}{}。'
+    ],
+    [
+      'Note: Billing for any selected organization will be delegated to the enterprise account. {} {}.',
+      '注意：所选组织的计费将委托给企业帐户。{}{}。'
+    ],
+    ['Switch {} context', '切换{}对象']
+  ]
 } satisfies PageDictionary

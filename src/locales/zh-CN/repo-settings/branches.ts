@@ -6,6 +6,10 @@ import type { PageDictionary } from '../../../core/types'
  */
 export default {
   static: {
+    // 分支设置页：规则集推广横幅
+    'Level up your branch protections with Repository Rules': '使用存储库规则升级分支保护',
+    'Take advantage of new features such as signed commits, requiring status checks, requiring linear history, and more!':
+      '使用签名提交、要求状态检查、要求线性历史记录等新功能！',
     // 分支保护规则列表
     'Add branch ruleset': '添加分支规则集',
     'Add classic branch protection rule': '添加经典分支保护规则',
@@ -180,6 +184,14 @@ export default {
     'Only these people, teams, or apps are allowed to force push.': '只有这些人员、团队或应用可以强制推送。',
     'Search for people, teams, or apps': '搜索人员、团队或应用',
     'You have reached the maximum number of people, teams, and apps you can add.': '已达到可添加的人员、团队和应用数量上限。',
+    'You have reached the maximum number of people, teams, or apps you can add.': '已达到可添加的人员、团队或应用数量上限。',
+    // 新建分支保护规则页：推荐改用规则集的提示（?enable_tip=true）、升级提示的无障碍名称
+    'Rulesets are the recommended replacement for classic branch protections. They support rule layering, evaluate mode, and organization-wide policies.':
+      '建议用规则集替代经典分支保护。规则集支持规则分层、评估模式和组织范围的策略。',
+    'Learn more about Rulesets.': '了解规则集。',
+    'Rulesets are the preferred path': '推荐使用规则集',
+    'Upgrade to GitHub Team or make this repository public to enable this feature.':
+      '升级到 GitHub 团队版或将此存储库设为公共以启用此功能。',
     'View the protected branches documentation': '查看受保护分支文档',
     'People, teams, or apps who can force push': '可以强制推送的人员、团队或应用',
     'Organization and repository administrators (automatic)': '组织和存储库管理员（自动）',
@@ -247,6 +259,9 @@ export default {
     ', and so on.': '等的标签。'
   },
   regexp: [
+    // 分支保护规则列表：操作菜单与删除按钮的无障碍名称（规则名是分支名模式，照原文）
+    [/^Branch protection rule actions for (.+)$/, '分支保护规则 $1 的操作'],
+    [/^Delete branch protection rule for (.+)$/, '删除分支保护规则 $1'],
     // 规则列表与编辑器：匹配的分支数
     [
       /^(Currently applies|Applies) to (\d+) branch(?:es)?(\.?)$/,
@@ -254,5 +269,16 @@ export default {
     ],
     [/^Applies to (\d+) branch(?:es)?:$/, '适用于 $1 个分支：'],
     [/^Applies to (\d+) tags?(\.?)$/, (_, count: string, dot: string) => `适用于 ${count} 个标签${dot ? '。' : ''}`]
+  ],
+  inline: [
+    // 专用存储库分支保护未生效横幅：Your protected branch rules for your <strong>main</strong> branch won't be enforced …
+    [
+      "Your protected branch rules for your {} branch won't be enforced on this private repository until you upgrade your organization account to a GitHub Team or Enterprise account.",
+      '在将组织帐户升级到 GitHub 团队版或企业版帐户之前，{} 分支的受保护分支规则不会在此专用存储库上强制实施。'
+    ],
+    [
+      'Your protected branch rules for your {} branch won’t be enforced on this private repository until you upgrade your organization account to a GitHub Team or Enterprise account.',
+      '在将组织帐户升级到 GitHub 团队版或企业版帐户之前，{} 分支的受保护分支规则不会在此专用存储库上强制实施。'
+    ]
   ]
 } satisfies PageDictionary

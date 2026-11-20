@@ -14,6 +14,7 @@ import rulesets from '../../../src/locales/zh-CN/repo-settings/rulesets'
 import developerApps from '../../../src/locales/zh-CN/settings-developer/apps'
 import accountModeration from '../../../src/locales/zh-CN/settings-developer/moderation'
 import developerPermissions from '../../../src/locales/zh-CN/settings-developer/permissions'
+import { zhCN } from '../../../src/locales/zh-CN/index'
 import { zhTW } from '../../../src/locales/zh-TW/index'
 import twOrgSettings from '../../../src/locales/zh-TW/org-settings'
 import {
@@ -978,6 +979,27 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     ],
     misses: ['Some runner groups']
   },
+  // 操作策略：列表计数、包含 / 排除模式与事件的删除按钮提示、运行器组工作流格式错误
+  {
+    hits: [
+      ['2 actions policies', '2 个操作策略'],
+      ['1 actions policy', '1 个操作策略']
+    ],
+    misses: ['actions policies']
+  },
+  { hits: [['Delete include of src/**', '删除包含项 src/**']], misses: ['Delete include of '] },
+  { hits: [['Delete exclude of 1', '删除排除项 1']], misses: ['Delete exclude of'] },
+  {
+    hits: [
+      ['Delete pull_request_target', '删除 pull_request_target'],
+      ['Delete fork', '删除 fork']
+    ],
+    misses: ['Delete Fork', 'Delete pull-request']
+  },
+  {
+    hits: [['Workflow "0" is malformed. Format should be:', '工作流“0”格式错误。格式应为：']],
+    misses: ['Workflow is malformed. Format should be:']
+  },
   {
     hits: [
       ['Copy ubuntu-latest', '复制 ubuntu-latest'],
@@ -1221,6 +1243,14 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       ]
     ],
     misses: ['This will permanently delete the rule and potentially reopen associated alerts.']
+  },
+  // 安全配置应用后的提示
+  {
+    hits: [
+      ["Security settings updated for octo-org's repositories.", '已更新 octo-org 的存储库安全设置。'],
+      ['Security settings updated for octo-org’s repositories.', '已更新 octo-org 的存储库安全设置。']
+    ],
+    misses: ['Security settings updated.']
   },
   // 推送保护绕过列表
   {
@@ -1505,6 +1535,153 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       ['Are you sure you want to restore hello-world?', '确定要恢复 hello-world 吗？']
     ],
     misses: ['Are you sure you want to restore this repository?']
+  },
+  // 组织角色：分配计数、分页标题、角色说明、分配与移除提示
+  { hits: [['2 roles assigned', '已分配 2 个角色']], misses: ['Two roles assigned'] },
+  { hits: [['Users 1 of 1', '用户 1/1']], misses: ['Members 1 of 1'] },
+  { hits: [['Info about All-repository read', '关于“所有存储库读取”的信息']], misses: ['Info about'] },
+  {
+    hits: [
+      [
+        "You're about to remove the direct assignment of the All-repository read role from the 0.0 team.",
+        '你即将移除 0.0 团队的“所有存储库读取”角色直接分配。'
+      ]
+    ],
+    misses: ["You're about to remove the direct assignment of the role."]
+  },
+  {
+    hits: [
+      [
+        "You're about to remove the direct assignment of the All-repository read role from octocat. However, this role will still be assigned through 0.0 team.",
+        '你即将移除 octocat 的“所有存储库读取”角色直接分配。该角色仍会通过 0.0 团队分配。'
+      ]
+    ],
+    misses: ['However, this role will still be assigned through the team.']
+  },
+  {
+    hits: [
+      [
+        'The All-repository read role for octo-org has been removed from the 0.0 team.',
+        '已从 0.0 团队移除 octo-org 的“所有存储库读取”角色。'
+      ]
+    ],
+    misses: ['The role has been removed from the team.']
+  },
+  {
+    hits: [
+      ['The All-repository read role for octo-org has been removed from octocat.', '已从 octocat 移除 octo-org 的“所有存储库读取”角色。']
+    ],
+    misses: ['The role has been removed.']
+  },
+  {
+    hits: [['octocat has been assigned the All-repository read role for octo-org.', '已为 octocat 分配 octo-org 的“所有存储库读取”角色。']],
+    misses: ['octocat has been assigned the role.']
+  },
+  {
+    hits: [['has been assigned the All-repository read role for', '已获分配以下组织的“所有存储库读取”角色：']],
+    misses: ['has been assigned the role']
+  },
+  {
+    hits: [['All-repository read roles have not been assigned to any teams.', '尚未向任何团队分配“所有存储库读取”角色。']],
+    misses: ['All-repository read roles have not been assigned to any groups.']
+  },
+  {
+    hits: [['roles have not been assigned to any users.', '角色尚未分配给任何用户。']],
+    misses: ['roles have not been assigned to anyone.']
+  },
+  // 基本权限：项目数
+  {
+    hits: [['This will change the base permissions for 3 projects.', '这将更改 3 个项目的基本权限。']],
+    misses: ['This will change the base permissions for all projects.']
+  },
+  // 规则集仪表板图表：数据点、数据系列、提示框日期
+  { hits: [['Saturday, Nov 14, 2026, 0. Passes.', '2026年11月14日周六，0。通过。']], misses: ['Saturday, Nov 14, 2026, 0. Skips.'] },
+  {
+    hits: [['Passes, line 1 of 3 with 8 data points.', '通过，第 1 条线（共 3 条），包含 8 个数据点。']],
+    misses: ['Skips, line 1 of 3 with 8 data points.']
+  },
+  { hits: [['Saturday, Nov 14, 2026', '2026年11月14日周六']], misses: ['Someday, Nov 14, 2026'] },
+  // 议题字段：标题后半段、选项操作与拖动
+  { hits: [['/ Effort', '/ 工作量']], misses: ['/ Custom field'] },
+  { hits: [['Open field actions for Urgent', '打开“紧急”的操作']], misses: ['Open actions for Urgent'] },
+  { hits: [['Move High', '移动“高”']], misses: ['Move Critical'] },
+  // 自定义属性：批量设置、删除前的用量检查、匹配数
+  { hits: [['Set properties on demo-repository', '设置 demo-repository 的属性']], misses: ['Set properties'] },
+  {
+    hits: [['2 repositories found that use the property:', '找到 2 个使用此属性的存储库：']],
+    misses: ['Some repositories found that use the property:']
+  },
+  { hits: [['Matching 2 repositories', '匹配 2 个存储库']], misses: ['Matching repositories'] },
+  // 议题字段：删除确认
+  { hits: [['Delete "Target date" issue field', '删除议题字段“Target date”']], misses: ['Delete issue field'] },
+  {
+    hits: [
+      [
+        'This will remove the "Target date" issue field from all of your issues and projects. This action cannot be undone.',
+        '这将从你的所有议题和项目中移除议题字段“Target date”。此操作无法撤消。'
+      ]
+    ],
+    misses: ['This will remove the issue field from all of your issues and projects.']
+  },
+  { hits: [['Please type "Target date" to confirm', '请输入“Target date”以确认']], misses: ['Please type the name to confirm'] },
+  // Copilot 代码审查允许列表：删除规则
+  { hits: [['Delete rule example.com', '删除规则 example.com']], misses: ['Delete rule for example.com'] },
+  // Web 钩子：URL 缺少协议
+  { hits: [['example.com is missing a scheme', 'example.com 缺少协议']], misses: ['URL is missing'] },
+  // 身份验证安全与代码质量：双因素确认、启用费用、验证码有效期
+  {
+    hits: [
+      [
+        'Are you sure you want to require two-factor authentication and only allow secure methods for all users in the octo-org organization?',
+        '确定要求 octo-org 组织的所有用户启用双因素身份验证并仅允许安全方式吗？'
+      ]
+    ],
+    misses: ['Are you sure you want to require two-factor authentication?']
+  },
+  {
+    hits: [
+      [
+        'Are you sure you want to remove the two-factor authentication requirement for the octo-org organization?',
+        '确定移除 octo-org 组织的双因素身份验证要求吗？'
+      ]
+    ],
+    misses: ['Are you sure you want to remove the two-factor authentication requirement?']
+  },
+  {
+    hits: [
+      [
+        'Enabling across 1 repository in this organization will incur additional costs based on:',
+        '在此组织的 1 个存储库中启用将根据以下各项产生额外费用：'
+      ]
+    ],
+    misses: ['Enabling across all repositories in this organization will incur additional costs based on:']
+  },
+  { hits: [['$10 per active committer/month', '每位活跃提交者每月 $10']], misses: ['$10 per user/month'] },
+  {
+    hits: [['Please note that the code will expire in 7 days.', '请注意，验证码将在 7 天后过期。']],
+    misses: ['Please note that the code will expire soon.']
+  },
+  // 已验证与已批准的域：确认、批准、删除
+  { hits: [['Confirm approval of example.com', '确认批准 example.com']], misses: ['Confirm approval of domain'] },
+  {
+    hits: [['Are you sure you want to approve the domain example.com?', '确定批准域 example.com 吗？']],
+    misses: ['Are you sure you want to approve the domain?']
+  },
+  { hits: [['You approved the domain example.com.', '你已批准域 example.com。']], misses: ['You approved the domain.'] },
+  { hits: [['Confirm deleting example.com', '确认删除 example.com']], misses: ['Confirm deleting domain'] },
+  {
+    hits: [['Are you sure you want to delete the domain example.com?', '确定删除域 example.com 吗？']],
+    misses: ['Are you sure you want to delete the domain?']
+  },
+  { hits: [['Delete example.com', '删除 example.com']], misses: ['Delete the example.com domain'] },
+  { hits: [['Approve example.com', '批准 example.com']], misses: ['Approve the example.com domain'] },
+  {
+    hits: [
+      ['Type: Text', '类型：文本'],
+      ['Type: Single select', '类型：单选'],
+      ['Type: True/false', '类型：真/假']
+    ],
+    misses: ['Type: Date']
   }
 ]
 
@@ -2083,10 +2260,11 @@ describe('org-settings 页面词条', () => {
     expect(dict.scoped?.['Select repository']).toBeUndefined()
   })
 
-  it('不收录 Type（与全局搜索提示「Type / to search」同形）', () => {
+  it('新建属性表单的 Type 标签译作“类型”；全局搜索提示「Type <kbd>/</kbd> to search」由 common 整句收录，不受影响', () => {
     expect(dict.static?.Type).toBeUndefined()
-    expect(dict.scoped?.Type).toBeUndefined()
-    expect(translate('Type')).toBeUndefined()
+    expect(translate('Type')).toBe('类型')
+    const full = createMatcher(zhCN)
+    expect(full.translate('Type / to search', ['common', 'org-settings'])).toBe('按 / 搜索')
   })
 
   it('Dependabot 规则「目标警报」自动补全里的筛选取值照原文（要原样输入查询，只译分组标题）', () => {
@@ -2235,6 +2413,54 @@ describe('org-settings 页面渲染', () => {
       `<div> Budget was <strong>${action}</strong> with a limit of <span class="context">0</span> (<span class="context">PreventFurtherUsage</span>). <span>Budget alerts are enabled.</span> </div>`
     )
     expect(document.querySelector('div')!.textContent?.trim()).toBe(`${translated}预算，限额为 0（PreventFurtherUsage）。预算警报已启用。`)
+  })
+
+  it.each([
+    [
+      '双因素要求（开头是登录名纯文本）',
+      'setube removed secure two-factor requirement for <a class="Link--inTextBlock">octo-org</a> organization.',
+      'setube 移除了 octo-org 组织的安全双因素要求。'
+    ],
+    [
+      '令牌有效期（开头的 strong 是参与者）',
+      '<strong>setube</strong> changed personal access tokens (classic) maximum lifetime from 7 days to 366 days (Not exempting administrators)',
+      'setube 将个人访问令牌（经典）的最长有效期从 7 天改为 366 天（不豁免管理员）'
+    ],
+    [
+      '令牌访问限制',
+      '<strong>setube</strong> has restricted access via fine-grained personal access tokens to the organization',
+      'setube 已限制通过精细个人访问令牌访问组织'
+    ],
+    [
+      '域（域名是纯文本）',
+      'Removed the example.com domain from the <a class="Link--inTextBlock">octo-org</a> organization.',
+      '从 octo-org 组织中移除了域 example.com。'
+    ],
+    [
+      'Dependabot 规则',
+      'Force disabled Dependabot rule "Dismiss package malware alerts" for <span class="context"><a class="Link--inTextBlock">octo-org</a></span>',
+      '为 octo-org 强制禁用了 Dependabot 规则“消除软件包恶意软件警报”'
+    ],
+    [
+      '复刻拉取请求审批策略（槽位取值也译）',
+      'Set policy to require approval for fork pull request workflows from <span class="context">all outside collaborators</span> for <span class="context"><a class="Link--inTextBlock">octo-org</a></span>.',
+      '将策略设为来自 所有外部协作者 的复刻拉取请求工作流需经批准，适用于 octo-org。'
+    ],
+    [
+      '组织角色（三个槽位顺序不变）',
+      'unassigned <strong class="context"> themselves </strong> from the <strong class="context"> all_repo_read</strong> organization role in the <span class="context">octo-org</span> organization',
+      '将 自己 从 all_repo_read 组织角色中取消分配 于 octo-org 组织'
+    ]
+  ])('审核日志事件说明：%s', (_, html, expected) => {
+    run(`<div> ${html} </div>`)
+    expect(document.querySelector('div')!.textContent?.replace(/\s+/g, ' ').trim()).toBe(expected)
+  })
+
+  it('审核日志条目展开后的原始字段表照原文', () => {
+    // private 在组织设置页面类型下译作“专用”，字段表里不译
+    run('<table class="entry-details-table"><tbody><tr><th>visibility</th><td> private </td></tr></tbody></table><p>private</p>')
+    expect(document.querySelector('td')!.textContent?.trim()).toBe('private')
+    expect(document.querySelector('p')!.textContent).toBe('专用')
   })
 })
 

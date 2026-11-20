@@ -330,6 +330,10 @@ export default {
     'What you get in your premium free trial': '進階免費試用包含的內容',
     'What you get in your premium free trial:': '進階免費試用包含：',
     "Unlock GitHub's premium features": '取得 GitHub 的進階功能',
+    // 企业云试用注册页：页面标题、图片替代文字
+    'Set up your GitHub Enterprise Cloud trial': '設定 GitHub 企業雲端試用',
+    'GitHub, Copilot and Advanced Security icons.': 'GitHub、Copilot 與進階安全性圖示。',
+    'Waiting for verification.': '等待驗證。',
     'Try GitHub Enterprise Cloud, Advanced Security, and Copilot Business to see how they can transform your workflow.':
       '試用 GitHub 企業雲端、進階安全性和 Copilot 商務版，看看它們如何改變你的工作流程。',
     'Simplify management with an enterprise account': '使用企業帳號簡化管理',

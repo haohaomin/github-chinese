@@ -17,6 +17,11 @@ export const DEPENDABOT_RULES_SCOPED: Readonly<Record<string, string>> = {
   'Managed by GitHub': '由 GitHub 管理',
   'Edit curated rule': '编辑精选规则',
   'Edit rule': '编辑规则',
+  // GitHub 预设规则：恶意软件警报
+  'Dismiss package malware alerts': '消除软件包恶意软件警报',
+  'Matches malware:package': '匹配 malware:package',
+  'This rule auto-dismisses alerts for false positives from private packages as well as public packages where all versions are flagged as malicious.':
+    '此规则会自动消除专用软件包误报的警报，以及所有版本都被标记为恶意的公共软件包的警报。',
   'Dismiss low-impact alerts for development-scoped dependencies': '消除开发范围依赖项的低影响警报',
   'In a developer (non-production or runtime) environment, these alerts are unlikely to be exploitable or have limited effect like slow builds or long-running tests.':
     '在开发环境（非生产、非运行时）中，这些警报不太可能被利用，影响也有限，例如构建变慢或测试耗时较长。',
@@ -91,6 +96,60 @@ export const BYPASS_ACTOR_ACTIONS_RULE: RegExpRule = [
  */
 export default {
   static: {
+    // 双因素身份验证、部署密钥策略的保存提示
+    'Disabled two-factor authentication requirement policy.': '已禁用双因素身份验证要求策略。',
+    'Deploy key policy enabled.': '已启用部署密钥策略。',
+    'Deploy key policy disabled.': '已禁用部署密钥策略。',
+    // 代码质量（组织）：启用范围选项说明、强制访问、启用确认对话框、保存提示
+    'Code Quality will be disabled on all current and future repositories.': '所有当前和未来的存储库都将禁用代码质量。',
+    'Code Quality will be disabled on all current and futurerepositories.': '所有当前和未来的存储库都将禁用代码质量。',
+    'Maintains access for currently enabled repositories and allows future changes.': '保留当前已启用存储库的访问权限，并允许今后更改。',
+    'Maintains access for currently enabled repositoriesand allows future changes.': '保留当前已启用存储库的访问权限，并允许今后更改。',
+    'Choose which repositories Code Quality should be enabled and disabled in.': '选择在哪些存储库中启用和禁用代码质量。',
+    'Enforce access': '强制实施访问设置',
+    'Prevent repository admins from overriding access settings to Code Quality.': '禁止存储库管理员覆盖代码质量的访问设置。',
+    'Review enablement and billing changes': '查看启用和计费变更',
+    'Licenses and usage': '许可证和使用情况',
+    'AI credits usage': 'AI 额度使用情况',
+    'Action minutes consumed': '消耗的操作分钟数',
+    'Based on usage': '按使用量计费',
+    'Code Quality scans your pull requests and default branch, using a mix of deterministic and AI scans.':
+      '代码质量结合确定性扫描和 AI 扫描，检查你的拉取请求和默认分支。',
+    'Code Quality scans your pull requests and default branch, using a mix of deterministic and AI scans. Learn more about our billing model':
+      '代码质量结合确定性扫描和 AI 扫描，检查你的拉取请求和默认分支。了解计费模式',
+    'Learn more about our billing model': '了解计费模式',
+    'Settings saved.': '设置已保存。',
+    'Changes are being applied in the background and may take some time to take effect.': '更改正在后台应用，可能需要一段时间才能生效。',
+    // 合规：SOC、ISO、CSA 报告说明
+    'Our SOC 2 reports assume the use of certain security features only available to Enterprise customers, such as SAML SSO. As a non-Enterprise customer, your account cannot make use of these security features and the SOC 2 report does not apply; as such, we cannot share this report where it is not applicable.':
+      '我们的 SOC 2 报告以使用某些仅面向企业版客户的安全功能（如 SAML SSO）为前提。作为非企业版客户，你的帐户无法使用这些安全功能，SOC 2 报告并不适用；因此，在不适用的情况下我们无法共享此报告。',
+    'We provide a SOC 3 report to non-Enterprise customers in order to confirm:': '我们向非企业版客户提供 SOC 3 报告，用于确认：',
+    'that controls have been operating throughout the period (as in our SOC 1 and 2 reports, the Auditor’s opinion is included in our SOC 3 report);':
+      '控制措施在整个期间内持续运行（与 SOC 1 和 SOC 2 报告一样，SOC 3 报告也包含审计师意见）；',
+    "that controls have been operating throughout the period (as in our SOC 1 and 2 reports, the Auditor's opinion is included in our SOC 3 report);":
+      '控制措施在整个期间内持续运行（与 SOC 1 和 SOC 2 报告一样，SOC 3 报告也包含审计师意见）；',
+    'the scope of GitHub’s services;': 'GitHub 服务的范围；',
+    "the scope of GitHub's services;": 'GitHub 服务的范围；',
+    'our CUECs (Complementary User Entity Controls), which prospective customers want to see so they know what controls they need to have/implement on their side in order to rely on GitHub’s SOC reports.':
+      '我们的 CUEC（补充用户实体控制），潜在客户可据此了解自己需要具备或实施哪些控制措施，才能依赖 GitHub 的 SOC 报告。',
+    "our CUECs (Complementary User Entity Controls), which prospective customers want to see so they know what controls they need to have/implement on their side in order to rely on GitHub's SOC reports.":
+      '我们的 CUEC（补充用户实体控制），潜在客户可据此了解自己需要具备或实施哪些控制措施，才能依赖 GitHub 的 SOC 报告。',
+    'ISO, the International Organization for Standardization, brings global experts together to agree on the best way of doing things.':
+      'ISO（国际标准化组织）汇集全球专家，就做事的最佳方式达成共识。',
+    "The Cloud Security Alliance Consensus Assessment Initiative Questionnaire (CSA-CAIQ or CAIQ) is a self-assessment that evaluates a cloud provider against CSA's Cloud Control Matrix.":
+      '云安全联盟共识评估倡议问卷（CSA-CAIQ 或 CAIQ）是一项自我评估，依据 CSA 的云控制矩阵评估云提供商。',
+    'The Cloud Security Alliance Consensus Assessment Initiative Questionnaire (CSA-CAIQ or CAIQ) is a self-assessment that evaluates a cloud provider against CSA’s Cloud Control Matrix.':
+      '云安全联盟共识评估倡议问卷（CSA-CAIQ 或 CAIQ）是一项自我评估，依据 CSA 的云控制矩阵评估云提供商。',
+    // 已验证和批准的域：验证说明、菜单、确认对话框
+    'Wait until your DNS configuration changes. This could take up to 72 hours to propagate.':
+      '等待 DNS 配置生效。传播最多可能需要 72 小时。',
+    'An error occurred while verifying this DNS record.': '验证此 DNS 记录时出错。',
+    'Pending verification': '待验证',
+    'Domain menu': '域菜单',
+    'Delete this domain': '删除此域',
+    'The domain was deleted.': '域已删除。',
+    'Are you sure you want to approve this domain? This will allow notifications from GitHub to be sent to users with an email address ending in':
+      '确定批准此域吗？这将允许 GitHub 向以下结尾的电子邮件地址发送通知',
     // 身份验证安全：双因素身份验证要求（「… owned by the <strong>组织</strong> organization, …」见 inline）
     'Two-factor authentication adds another level of security for your organization.': '双因素身份验证可为组织增加一层安全保护。',
     'Learn more about requiring two-factor authentication in your organization.': '了解如何在组织中要求双因素身份验证。',
@@ -299,6 +358,56 @@ export default {
     'Cloud Security Alliance CAIQ self-assessment (CSA CAIQ - Level 1)': '云安全联盟 CAIQ 自评估 (CSA CAIQ - Level 1)'
   },
   scoped: {
+    // 新建 / 编辑安全配置（/organizations/<组织>/settings/security_products/configurations/new）
+    'Name*': '名称*',
+    'Receive alerts for detected secrets, keys, or other tokens.': '检测到机密、密钥或其他令牌时接收警报。',
+    'Verify if a secret is valid by sending it to the relevant partner. GitHub will check detected provider.':
+      '将机密发送给相关合作伙伴以验证其是否有效。GitHub 将检查检测到的提供程序。',
+    'When enabled, GitHub will attempt to enrich detected secrets with additional metadata from the relevant provider.':
+      '启用后，GitHub 将尝试用相关提供程序的其他元数据补充检测到的机密。',
+    'Scan for generic secrets using deterministic methods, including traditional pattern matching and regex detectors.':
+      '使用确定性方法扫描通用机密，包括传统模式匹配和正则表达式检测器。',
+    'AI-detected secrets': 'AI 检测到的机密',
+    'Scan for generic secrets detected with AI.': '扫描 AI 检测到的通用机密。',
+    'Block AI-detected secrets': '阻止 AI 检测到的机密',
+    'Block AI-detected secrets: Not set': '阻止 AI 检测到的机密：未设置',
+    'Block AI-detected secrets: Enabled': '阻止 AI 检测到的机密：已启用',
+    'Block AI-detected secrets: Disabled': '阻止 AI 检测到的机密：已禁用',
+    'consumes AI credits': '消耗 AI 额度',
+    'Your organization cannot consume AI credits.': '你的组织无法使用 AI 额度。',
+    'Manage protected patterns': '管理受保护的模式',
+    'View custom role assignments.': '查看自定义角色分配。',
+    'Actors must submit requests to dismiss an alert.': '参与者必须提交请求才能消除警报。',
+    'Receive alerts for automatically detected vulnerabilities and coding errors using CodeQL default configuration. Code scanning uses GitHub Actions and costs Actions minutes.':
+      '使用 CodeQL 默认配置自动检测漏洞和编码错误并接收警报。代码扫描使用 GitHub 操作，会消耗操作分钟数。',
+    'Receive alerts for automatically detected vulnerabilities and coding errors using CodeQL default configuration.':
+      '使用 CodeQL 默认配置自动检测漏洞和编码错误并接收警报。',
+    'Code scanning uses GitHub Actions and costs Actions minutes.': '代码扫描使用 GitHub 操作，会消耗操作分钟数。',
+    'Define the runner used for code scanning.': '定义用于代码扫描的运行器。',
+    'Not Set': '未设置',
+    'Display license information and vulnerability severity for your dependencies.': '显示依赖项的许可证信息和漏洞严重性。',
+    'Automatically detect and report build-time dependencies for select ecosystems. Automatic dependency submission uses GitHub Actions and costs Actions minutes.':
+      '自动检测并报告选定生态系统的构建时依赖项。自动依赖项提交使用 GitHub 操作，会消耗操作分钟数。',
+    'Receive alerts for vulnerabilities that affect your dependencies.': '接收影响依赖项的漏洞警报。',
+    'Allow Dependabot to open pull requests automatically to resolve alerts. For more specific pull request configurations, disable this setting to use Dependabot rules.':
+      '允许 Dependabot 自动创建拉取请求来解决警报。如需更具体的拉取请求配置，请禁用此设置以使用 Dependabot 规则。',
+    'Require organization owners and security managers to dismiss Dependabot alerts instead of allowing repository collaborators to dismiss alerts directly.':
+      '要求由组织所有者和安全管理员消除 Dependabot 警报，不允许存储库协作者直接消除警报。',
+    'Receive alerts when malware is detected in dependencies.': '在依赖项中检测到恶意软件时接收警报。',
+    'Allow your community to privately report potential security vulnerabilities in public repositories.':
+      '允许社区私下报告公共存储库中潜在的安全漏洞。',
+    'Block repository owners from changing features that are enabled or disabled by this configuration. Repository owners will still be able to change features that are not set.':
+      '禁止存储库所有者更改此配置已启用或禁用的功能。存储库所有者仍可更改未设置的功能。',
+    'Enforce for repository owners': '对存储库所有者强制实施',
+    'This configuration enables GitHub Advanced Security features. Applying it to private repositories will only enable free security features.':
+      '此配置会启用 GitHub 高级安全功能。应用于专用存储库时只会启用免费安全功能。',
+    // 安全配置列表：默认配置、允许修改、各配置的摘要
+    'Default for new repositories': '新存储库的默认值',
+    'Allow repository owners to modify features': '允许存储库所有者修改功能',
+    'Receive alerts for and block secret leaks, validate secrets and scan with AI.': '接收机密泄露警报并阻止泄露、验证机密并使用 AI 扫描。',
+    'Receive alerts for vulnerabilities, coding errors, and advanced dependency management.':
+      '接收漏洞和编码错误警报，并获得高级依赖项管理。',
+    'Receive alerts for vulnerable dependencies with automated update pull requests.': '接收易受攻击依赖项的警报，并获得自动更新拉取请求。',
     // 安全配置页的提示标题与按钮
     Information: '信息',
     'Set up': '设置',
@@ -475,6 +584,31 @@ export default {
     'Approve domain': '批准域'
   },
   regexp: [
+    // 双因素身份验证要求的确认对话框（含组织名）
+    [
+      /^Are you sure you want to require two-factor authentication and only allow secure methods for all users in the ([\w.-]+) organization\?$/,
+      '确定要求 $1 组织的所有用户启用双因素身份验证并仅允许安全方式吗？'
+    ],
+    [
+      /^Are you sure you want to remove the two-factor authentication requirement for the ([\w.-]+) organization\?$/,
+      '确定移除 $1 组织的双因素身份验证要求吗？'
+    ],
+    // 代码质量启用确认：存储库数、按提交者计价
+    [
+      /^Enabling across (\d+) repositor(?:y|ies) in this organization will incur additional costs based on:$/,
+      '在此组织的 $1 个存储库中启用将根据以下各项产生额外费用：'
+    ],
+    [/^(\$[\d,.]+) per active committer\/month$/, '每位活跃提交者每月 $1'],
+    // 域：验证码有效期、批准 / 删除确认（域名照录）
+    [/^Please note that the code will expire in (\d+) days?\.$/, '请注意，验证码将在 $1 天后过期。'],
+    [/^Confirm approval of ([\w-]+(?:\.[\w-]+)+)$/, '确认批准 $1'],
+    [/^Are you sure you want to approve the domain ([\w-]+(?:\.[\w-]+)+)\?$/, '确定批准域 $1 吗？'],
+    [/^Approve ([\w-]+(?:\.[\w-]+)+)$/, '批准 $1'],
+    [/^You approved the domain ([\w-]+(?:\.[\w-]+)+?)(\.?)$/, (_, domain: string, dot: string) => `你已批准域 ${domain}${dot ? '。' : ''}`],
+    [/^Confirm deleting ([\w-]+(?:\.[\w-]+)+)$/, '确认删除 $1'],
+    [/^Are you sure you want to delete the domain ([\w-]+(?:\.[\w-]+)+)\?$/, '确定删除域 $1 吗？'],
+    [/^Delete ([\w-]+(?:\.[\w-]+)+)$/, '删除 $1'],
+    [/^Security settings updated for ([\w.-]+)[’']s repositories\.$/, '已更新 $1 的存储库安全设置。'],
     // 双因素身份验证要求的确认对话框与说明（组织名在句中）
     [
       /^Are you sure you want to require two-factor authentication for all users in ([\w.-]+)\?$/,
@@ -569,10 +703,32 @@ export default {
     // 推送保护绕过列表标题：「3 actors」
     [/^(\d+) actors?$/, '$1 个参与者'],
     // 绕过列表每行菜单按钮的读屏名称：「<名称> Bypass actor actions」（与存储库设置共用）
-    BYPASS_ACTOR_ACTIONS_RULE,
-    [/^Approve ([\w-]+(?:\.[\w-]+)+)$/, '批准 $1']
+    BYPASS_ACTOR_ACTIONS_RULE
   ],
   inline: [
+    // 批准域确认：「… with an email address ending in <strong>@example.com</strong>.」
+    [
+      'Are you sure you want to approve this domain? This will allow notifications from GitHub to be sent to users with an email address ending in {}.',
+      '确定批准此域吗？这将允许 GitHub 向电子邮件地址以 {} 结尾的用户发送通知。'
+    ],
+    // 新建安全配置：被链接、注释拆开的说明
+    [
+      "Use AI to block pushes containing secrets that don't match known patterns. This feature {}.{}",
+      '使用 AI 阻止包含与已知模式不匹配的机密的推送。此功能会{}。{}'
+    ],
+    [
+      'Block commits that contain supported secrets. {} with Pattern configurations under Global Settings.',
+      '阻止包含受支持机密的提交。在“全局设置”的“模式配置”中{}。'
+    ],
+    [
+      'Actors with privileges can bypass push protection and approve bypass requests. Bypass privileges can also be granted via custom organization roles. {}',
+      '拥有权限的参与者可以绕过推送保护并批准绕过请求。也可以通过自定义组织角色授予绕过权限。{}'
+    ],
+    // 未购买高级安全的组织：「This organization does not have <a>GitHub Advanced Security</a>, please <a>contact sales</a>. …」
+    [
+      'This organization does not have {}, please {}. Private repositories will only have free features enabled.',
+      '此组织没有 {}，请{}。专用存储库只会启用免费功能。'
+    ],
     ['The {} label is used by default. Learn how to {}.', '默认使用 {} 标签。了解如何{}。'],
     ['Identify code security findings using AI. All features {}. {}.', '使用 AI 识别代码安全发现。所有功能都会{}。{}。'],
     [

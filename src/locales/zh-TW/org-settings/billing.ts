@@ -30,9 +30,15 @@ const GROUPS: Readonly<Record<string, string>> = {
   'Cost center': '成本中心'
 }
 
+/** 分组名查表：图表标题里的分组名可能全小写（grouped by skus），不区分大小写 */
+function groupName(group: string): string {
+  const key = Object.keys(GROUPS).find(name => name.toLowerCase() === group.toLowerCase())
+  return key === undefined ? group : GROUPS[key]!
+}
+
 /** 图表标题中的分组说明：「依產品分組」，英文名两侧加空格「依 SKU 分組」 */
 function groupedBy(group: string): string {
-  return joinCjk(joinCjk('依', GROUPS[group] ?? group), '分組')
+  return joinCjk(joinCjk('依', groupName(group)), '分組')
 }
 
 /**
@@ -136,6 +142,19 @@ function dateRange(start: string, end: string): string {
  */
 export default {
   static: {
+    // 包含的计算额度说明、预算表单、开票偏好提示
+    'Included compute is shared by eligible GitHub-hosted runners and Sandbox.': '符合條件的 GitHub 託管執行器和沙箱共用內含的運算額度。',
+    'On paid GitHub plans, Larger Hosted Runners can also use this allowance. Each product retains its own meter and rate.':
+      '在付費 GitHub 方案中，較大型託管執行器也可以使用此額度。各產品分別計量、單獨計費。',
+    'Learn more about included compute': '瞭解內含的運算額度',
+    'Scoped budgets track spending for all repositories in the organization': '範圍預算追蹤組織內所有儲存庫的支出',
+    'Set a budget amount to track your spending on a monthly basis': '設定預算金額以按月追蹤支出',
+    'Receive emails when usage reaches 75%, 90%, and 100% of the budget amount': '使用量達到預算金額的 75%、90% 和 100% 時接收電子郵件',
+    'Account owners and billing managers receive budget alert emails by default. You can add other recipients if needed.':
+      '帳號擁有者和帳務管理員預設會收到預算警示電子郵件。如有需要，可以新增其他收件者。',
+    'Select users': '選擇使用者',
+    'Search for users': '搜尋使用者',
+    'Successfully updated invoicing preference': '已更新開立發票偏好設定',
     // 概览：计算使用量
     'About included compute usage': '關於包含的運算使用量',
     'Included compute usage': '包含的運算使用量',
@@ -201,6 +220,9 @@ export default {
       '按一下「連接」即表示你確認要透過所選的 Azure 訂閱支付計量服務的費用'
   },
   scoped: {
+    // 按流量计费的使用情况：分组菜单（全大写缩写的复数），图表说明
+    SKUs: 'SKU',
+    'All times in UTC': '所有時間皆為 UTC',
     // 概览的用量分组名、使用量公式的减号图标；付款信息「by <a>signing</a> the …」的链接（整句见 inline）
     Compute: '運算',
     Sandbox: '沙箱',
@@ -537,7 +559,7 @@ export default {
       (_, by: string | undefined, group: string) => `${by ? '分組依據' : '分組'}：${GROUPS[group] ?? group}`
     ],
     [
-      /^(Metered usage|AI usage|Actions usage|Copilot usage|Codespaces usage|Git_lfs usage|Git LFS usage|Packages usage|Models usage|Spark usage|Advanced Security usage) grouped by (Products?|SKUs?|Repositor(?:y|ies)|Models?|Organizations?|Users?)$/,
+      /^(Metered usage|AI usage|Actions usage|Copilot usage|Codespaces usage|Git_lfs usage|Git LFS usage|Packages usage|Models usage|Spark usage|Advanced Security usage) grouped by ([Pp]roducts?|SKUs?|skus?|[Rr]epositor(?:y|ies)|[Mm]odels?|[Oo]rganizations?|[Uu]sers?)$/,
       (_, product: string, group: string) => joinCjk(`${groupedBy(group)}的`, USAGE_PRODUCTS[product] ?? product)
     ],
     [

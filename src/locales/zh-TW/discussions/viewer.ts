@@ -240,7 +240,6 @@ export default {
     'Too heated': '過於激烈',
 
     // 未登录时的评论框（其余片段由 common-ui 翻译）
-    'Remember, contributions to this repository should follow our': '請記得，對此儲存庫的貢獻應遵守我們的',
     'contributing guidelines': '貢獻指南',
 
     // 投票

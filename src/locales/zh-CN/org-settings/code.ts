@@ -1,9 +1,37 @@
 import type { PageDictionary } from '../../../core/types'
 import { joinCjk } from '../helpers'
 import { CHART_A11Y_RULES } from '../insights/charts'
+import { WEEKDAY_DATE_SOURCE, translateTokenDate } from '../settings-developer/tokens'
 
 const ORG = '([\\w.-]+)'
 const BRANCH = '([\\w./-]+)'
+
+/** 规则集仪表板图表的数据系列：规则套件的通过 / 失败 / 绕过 */
+const RULE_SUITE_SERIES: Readonly<Record<string, string>> = { Passes: '通过', Failures: '失败', Bypasses: '绕过' }
+const SERIES = `(${Object.keys(RULE_SUITE_SERIES).join('|')})`
+
+/** 自定义属性类型（类型菜单按钮的无障碍名称「Type: <类型>」） */
+const PROPERTY_TYPES: Readonly<Record<string, string>> = {
+  Text: '文本',
+  'Single select': '单选',
+  'Multi select': '多选',
+  'True/false': '真/假',
+  URL: 'URL'
+}
+
+/** 议题字段：预置字段名、预置单选选项（组织自定义的是用户内容，照录） */
+const PRESET_FIELDS: Readonly<Record<string, string>> = {
+  Priority: '优先级',
+  'Start date': '开始日期',
+  'Target date': '目标日期',
+  Effort: '工作量'
+}
+const PRESET_OPTIONS: Readonly<Record<string, string>> = { Urgent: '紧急', High: '高', Medium: '中', Low: '低' }
+
+/** 查表：键可能是用户内容（选项名），不取原型链上的键 */
+function pick(map: Readonly<Record<string, string>>, key: string): string | undefined {
+  return Object.hasOwn(map, key) ? map[key] : undefined
+}
 
 /**
  * 代码、规划和自动化（Copilot、Actions、Web 钩子除外）：存储库常规设置（默认分支、提交签署、默认标签）、
@@ -14,6 +42,62 @@ const BRANCH = '([\\w./-]+)'
  */
 export default {
   static: {
+    // 自定义属性：推荐属性的说明（属性名是标识符，不译）、新建 / 删除属性、设置值
+    'What application does this support?': '此存储库支持哪个应用？',
+    'Who owns this repository?': '谁拥有此存储库？',
+    'Which compliance frameworks apply?': '适用哪些合规框架？',
+    'Are personal identifiers present?': '是否包含个人身份信息？',
+    'Is this repository a monorepo?': '此存储库是否为单体存储库？',
+    'No properties': '暂无属性',
+    'No properties that match': '没有匹配的属性',
+    'A short description about this property': '此属性的简短描述',
+    'Match regular expression': '匹配正则表达式',
+    'Use regular expression': '使用正则表达式',
+    'Repository users and apps with the repository-level "custom properties" fine-grained permission can set and update the value for their repository.':
+      '拥有存储库级“自定义属性”精细权限的存储库用户和应用可以为其存储库设置和更新此值。',
+    'Repository users and apps with the repository-level “custom properties” fine-grained permission can set and update the value for their repository.':
+      '拥有存储库级“自定义属性”精细权限的存储库用户和应用可以为其存储库设置和更新此值。',
+    'Name contains invalid characters:': '名称包含无效字符：',
+    'Property definition successfully created.': '已创建属性定义。',
+    'Property attributes': '属性特征',
+    'Additional options': '其他选项',
+    'Permanently delete this property and its values from all repositories.': '从所有存储库中永久删除此属性及其值。',
+    'No repositories found that use the property:': '未找到使用此属性的存储库：',
+    'No other GitHub features found that use the property:': '未找到使用此属性的其他 GitHub 功能：',
+    'This will permanently delete this property.': '这将永久删除此属性。',
+    'Checking usages..': '正在检查使用情况..',
+    'Checking usages...': '正在检查使用情况...',
+    'Property definition successfully deleted.': '已删除属性定义。',
+    // 代码空间：用户访问
+    'Codespaces access updated': '代码空间访问权限已更新',
+    'Add user or team to Codespaces': '向代码空间添加用户或团队',
+    'No users or teams allowed to access Codespaces yet': '尚未允许任何用户或团队访问代码空间',
+    'You can add any number of organization members or teams': '可以添加任意数量的组织成员或团队',
+    // 议题字段：编辑页（权限、置顶到议题）、删除确认
+    'Unique name for your issue field': '议题字段的唯一名称',
+    'Choose who should be able to see this field and its value': '选择谁可以查看此字段及其值',
+    'Field is visible to organization members and any repository collaborators': '组织成员和所有存储库协作者可以看到此字段',
+    'Field is visible to organization members and any repositorycollaborators': '组织成员和所有存储库协作者可以看到此字段',
+    'Field is visible to anyone viewing the issue': '查看议题的任何人都可以看到此字段',
+    'Pin to issues': '置顶到议题',
+    'Choose which issue types show this field when viewing and creating issues.': '选择在查看和创建议题时显示此字段的议题类型。',
+    'Edit field visibility': '编辑字段可见性',
+    'Show this field on the selected issue types when viewing or creating issues.': '查看或创建议题时，在所选议题类型上显示此字段。',
+    'When the issue has no type': '议题没有类型时',
+    'Pin to selected types': '置顶到所选类型',
+    'Edits to this field are global. Any changes apply to all of your issues and projects.':
+      '对此字段的编辑是全局性的，任何更改都会应用到你的所有议题和项目。',
+    'Modifying this issue field will affect all of your issues and projects.': '修改此议题字段将影响你的所有议题和项目。',
+    'Apply to all issues and projects': '应用到所有议题和项目',
+    'Save complete': '保存完成',
+    'To pick up a draggable item, press the space bar. While dragging, use the arrow keys to move the item. Press space again to drop the item in its new position, or press escape to cancel.':
+      '要拾取可拖动项，请按空格键。拖动时，使用方向键移动该项。再次按空格键将其放到新位置，或按 Esc 键取消。',
+    // 规则集仪表板：图表外的「Values」轴标题等见 scoped；Slack 集成跳转
+    'You are being redirected to Slack in order to authenticate.': '正在重定向到 Slack 进行身份验证。',
+    'click here': '点击此处',
+    // 设置保存提示
+    'Pages settings updated for this organization.': '已更新此组织的页面设置。',
+    'Packages settings updated for this organization.': '已更新此组织的软件包设置。',
     // 代码空间：用户访问设置的保存按钮（无障碍名称）
     'Save user access settings': '保存用户访问设置',
     // 存储库自定义属性：分页、筛选、推荐属性（属性名 cloud_providers 等是标识符，不译）
@@ -266,6 +350,21 @@ export default {
     'Failover network': '故障转移网络'
   },
   scoped: {
+    // 规则集仪表板图表（Highcharts SVG，见 core/ignore.ts 放行）：图例、Y 轴标题
+    Passes: '通过',
+    Failures: '失败',
+    Bypasses: '绕过',
+    Values: '值',
+    // 议题字段：类型按钮、权限选项、置顶对话框的分组、单选选项的文本框
+    'Single Select': '单选',
+    Restricted: '受限',
+    Types: '类型',
+    'Label text': '标签文本',
+    'issue types': '议题类型',
+    // 自定义属性：批量设置值时保持原值的选项
+    unchanged: '保持不变',
+    // 自定义属性：新建属性表单的「Type」标签（全局搜索提示「Type <kbd>/</kbd> to search」由 kbd 整句处理，不受影响）
+    Type: '类型',
     // 预置议题字段与议题类型的名称（组织自定义的名称是用户内容，不收）
     Priority: '优先级',
     'Start date': '开始日期',
@@ -284,7 +383,6 @@ export default {
     label: '个标签',
     labels: '个标签',
     Properties: '属性',
-    // 不收录 Type：与全局搜索提示「Type / to search」同形
     Text: '文本',
     Number: '数字',
     'Learn more about custom properties.': '了解自定义属性。',
@@ -347,6 +445,32 @@ export default {
     'There are no verified domains for this organization.': '此组织暂无已验证的域。'
   },
   regexp: [
+    // 规则集仪表板图表（Highcharts SVG 放行后）：数据点、数据系列的无障碍名称，提示框的日期
+    [
+      new RegExp(`^(${WEEKDAY_DATE_SOURCE}), (-?[\\d,.]+)\\. ${SERIES}\\.$`),
+      (_, date: string, value: string, series: string) => `${translateTokenDate(date)}，${value}。${RULE_SUITE_SERIES[series]}。`
+    ],
+    [
+      new RegExp(`^${SERIES}, line (\\d+) of (\\d+) with (\\d+) data points?\\.$`),
+      (_, series: string, index: string, total: string, points: string) =>
+        `${RULE_SUITE_SERIES[series]}，第 ${index} 条线（共 ${total} 条），包含 ${points} 个数据点。`
+    ],
+    [new RegExp(`^(${WEEKDAY_DATE_SOURCE})$`), (_, date: string) => translateTokenDate(date)],
+    // 议题字段编辑页：标题「<a>议题字段</a> / Effort」的后半段、单选选项的操作与拖动按钮
+    [new RegExp(`^/ (${Object.keys(PRESET_FIELDS).join('|')})$`), (_, name: string) => `/ ${PRESET_FIELDS[name]}`],
+    [/^Open field actions for (.+)$/, (_, name: string) => `打开“${pick(PRESET_OPTIONS, name) ?? name}”的操作`],
+    [new RegExp(`^Move (${Object.keys(PRESET_OPTIONS).join('|')})$`), (_, name: string) => `移动“${pick(PRESET_OPTIONS, name) ?? name}”`],
+    // 自定义属性：设置值、删除前的使用情况、匹配的存储库数（筛选框计数「N repositories matching」由 org-policies 收录）
+    [/^Set properties on (.+)$/, '设置 $1 的属性'],
+    [/^(\d+) repositor(?:y|ies) found that uses? the property:$/, '找到 $1 个使用此属性的存储库：'],
+    [/^Matching (\d+) repositor(?:y|ies)$/, '匹配 $1 个存储库'],
+    // 议题字段：删除确认（字段名是确认口令，保留原文）
+    [/^Delete "(.+)" issue field$/, '删除议题字段“$1”'],
+    [
+      /^This will remove the "(.+)" issue field from all of your issues and projects\. This action cannot be undone\.$/,
+      '这将从你的所有议题和项目中移除议题字段“$1”。此操作无法撤消。'
+    ],
+    [/^Please type "(.+)" to confirm$/, '请输入“$1”以确认'],
     // 规则集仪表板的图表：类型、坐标轴（同洞察页图表）
     ...CHART_A11Y_RULES,
     // 议题字段计数，自定义字段与类型的无障碍名称、操作提示
@@ -373,9 +497,13 @@ export default {
     [/^(\d+) issue fields?$/, '$1 个议题字段'],
     [/^(\d+) network configurations?$/, '$1 个网络配置'],
     [new RegExp(`^No recoverable packages were found for ${ORG}\\.$`), '未找到 $1 中可恢复的软件包。'],
-    [/^Successfully verified ([\w-]+(?:\.[\w-]+)+?)(\.?)$/, (_, domain: string, dot: string) => `已成功验证 ${domain}${dot ? '。' : ''}`]
+    [/^Successfully verified ([\w-]+(?:\.[\w-]+)+?)(\.?)$/, (_, domain: string, dot: string) => `已成功验证 ${domain}${dot ? '。' : ''}`],
+    // 新建自定义属性：类型菜单按钮的无障碍名称
+    [/^Type: (Text|Single select|Multi select|True\/false|URL)$/, (_, type: string) => `类型：${PROPERTY_TYPES[type]}`]
   ],
   inline: [
+    // 议题字段「置顶到议题」说明：Choose which <a>issue types</a> show this field …
+    ['Choose which {} show this field when viewing and creating issues.', '选择在查看和创建议题时显示此字段的{}。'],
     [
       'Choose whether {} are enabled or disabled by default for repositories in this organization. Individual repositories can override this default. Existing commit comments are not affected by this setting and will remain viewable, editable, and deletable.',
       '选择此组织的存储库默认启用还是禁用{}。各存储库可以覆盖此默认设置。现有提交评论不受此设置影响，仍可查看、编辑和删除。'

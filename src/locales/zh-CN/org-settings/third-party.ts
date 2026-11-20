@@ -19,6 +19,17 @@ function period(dot: string): string {
  */
 export default {
   static: {
+    // 个人访问令牌策略保存提示
+    'Personal access tokens are now able to access your organization.': '个人访问令牌现在可以访问你的组织。',
+    'Personal access tokens are no longer able to access your organization.': '个人访问令牌不能再访问你的组织。',
+    'All fine-grained personal access tokens requested for this organization will work immediately':
+      '为此组织请求的所有精细个人访问令牌将立即生效',
+    'All organization fine-grained personal access token requests are now subject to administrator review.':
+      '所有组织精细个人访问令牌请求现在都须经管理员审查。',
+    'Personal access tokens expiration policy disabled': '已禁用个人访问令牌有效期策略',
+    'Personal access tokens expiration policy updated': '已更新个人访问令牌有效期策略',
+    'Personal access tokens (classic) are now able to access your organization.': '个人访问令牌（经典）现在可以访问你的组织。',
+    'Personal access tokens (classic) are no longer able to access your organization.': '个人访问令牌（经典）不能再访问你的组织。',
     // 个人访问令牌：分类导航、最长有效期、搜索（无障碍名称与占位文字）
     'Personal Access tokens categories navigation': '个人访问令牌类别导航',
     'Are you sure you want to update your selection?': '确定要更新所选内容吗？',

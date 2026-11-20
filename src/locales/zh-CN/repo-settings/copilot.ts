@@ -210,6 +210,7 @@ export default {
     'Organization custom allowlist': '组织自定义允许列表'
   },
   scoped: {
+    Adaptive: '自适应',
     // 「With」+ 链接「Copilot in the cloud」+「, developers can …」
     With: '借助',
     'Copilot references': 'Copilot 会参考',

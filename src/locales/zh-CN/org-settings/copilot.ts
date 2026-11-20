@@ -11,6 +11,32 @@ const ENTITY_TYPES: Readonly<Record<string, string>> = { enterprise: '企业', o
  */
 export default {
   static: {
+    // 代码审查：审查力度、Copilot 批准、机密保护 AI 扫描
+    'Copilot picks the effort for each pull request': 'Copilot 为每个拉取请求选择审查力度',
+    'Copilot approvals are enabled for every repository in this organization.': '此组织的所有存储库均启用 Copilot 批准。',
+    'Repository admins can decide this in repository settings.': '存储库管理员可以在存储库设置中决定。',
+    'Enable for selected repositories': '为所选存储库启用',
+    'Copilot approvals are enabled only in the repositories you select.': '仅在你选择的存储库中启用 Copilot 批准。',
+    'Copilot approvals are disabled for every repository in this organization.': '此组织的所有存储库均禁用 Copilot 批准。',
+    'Scans use Secret Protection AI credits.': '扫描会消耗机密保护 AI 额度。',
+    // 互联网访问：防火墙、允许列表
+    'Let repository admins decide whether to enable the firewall': '由存储库管理员决定是否启用防火墙',
+    'Require the firewall to be enabled across all repositories': '要求所有存储库启用防火墙',
+    'Disable the firewall across all repositories': '在所有存储库中禁用防火墙',
+    'Custom allowlist for Copilot code review': 'Copilot 代码审查的自定义允许列表',
+    'Add items to the allowlist to enable Copilot code review to access specific domains, IP addresses, or URLs.':
+      '向允许列表添加条目，使 Copilot 代码审查能够访问特定域、IP 地址或 URL。',
+    'Allow repository administrators to add custom allowlist rules in all repositories':
+      '允许存储库管理员在所有存储库中添加自定义允许列表规则',
+    'Prevent repository administrators from adding custom allowlist rules': '禁止存储库管理员添加自定义允许列表规则',
+    'Let repository admins decide whether to use the recommended allowlist': '由存储库管理员决定是否使用推荐的允许列表',
+    'Enable the recommended allowlist across all repositories': '在所有存储库中启用推荐的允许列表',
+    'Disable the recommended allowlist across all repositories': '在所有存储库中禁用推荐的允许列表',
+    // 运行器类型（云端智能体）
+    'Edit runner type for Copilot cloud agent': '编辑 Copilot 云端智能体的运行器类型',
+    'Copilot cloud agent will use standard GitHub runners.': 'Copilot 云端智能体将使用标准 GitHub 运行器。',
+    'Copilot cloud agent will use labeled GitHub or self-hosted runners that you may define.':
+      'Copilot 云端智能体将使用你定义的带标签的 GitHub 运行器或自托管运行器。',
     // 启用引导（「… will have access to <a>GitHub Copilot</a> inside your organization.」：句尾见 scoped）
     'AI coding agent for tasks, projects, and automated work. Once you complete onboarding, you’ll have the ability to manage policies and control which users or teams will have access to':
       '用于任务、项目和自动化工作的 AI 编码智能体。完成入门设置后，你可以管理策略，并控制组织内哪些用户或团队可以使用',
@@ -213,6 +239,10 @@ export default {
     'Enable GitHub Copilot': '启用 GitHub Copilot'
   },
   scoped: {
+    // 代码审查力度选项、机密保护 AI 扫描说明的片段（整句见 inline）
+    Adaptive: '自适应',
+    'Scans use': '扫描会消耗',
+    'Secret Protection AI credits': '机密保护 AI 额度',
     // 自动化分组标题、代码审查的批准分组、合作伙伴智能体名后的标签
     Automations: '自动化',
     Approvals: '批准',
@@ -350,6 +380,8 @@ export default {
     'Repositories and paths to exclude': '要排除的存储库和路径'
   },
   regexp: [
+    // 自定义允许列表：删除规则按钮的无障碍名称（规则是域名、IP 或 URL）
+    [/^Delete rule (\S+)$/, '删除规则 $1'],
     [/^(\d+) seats? assigned$/, '已分配 $1 个席位'],
     // 省略号随原文
     [/^(\d+) members? selected(\.\.\.|…)$/, '已选择 $1 个成员$2'],
@@ -397,6 +429,11 @@ export default {
     ]
   ],
   inline: [
+    // 机密保护 AI 扫描：「…pull requests. Scans use <a>Secret Protection AI credits</a>.」
+    [
+      'Uses machine learning and known patterns to detect secrets when Copilot reviews pull requests. Scans use {}.',
+      'Copilot 审查拉取请求时，使用机器学习和已知模式检测机密。扫描会消耗{}。'
+    ],
     ['Runner type configuration has moved to its own {} settings page.', '运行器类型配置已移至单独的{}设置页。'],
     ['Internet access configuration has moved to its own {} settings page.', '互联网访问配置已移至单独的{}设置页。'],
     ['Allow Claude {}', '允许 Claude {}'],

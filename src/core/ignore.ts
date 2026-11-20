@@ -35,7 +35,10 @@ export const SKIP_TAG_RELEASE_SELECTORS: readonly string[] = [
   // 提交详情页头：1 parent <sha> commit <sha>（<pre> 只为保留 flex 子项间的空格）
   '[class*="commitBranchContainer__"] > pre',
   // 个人主页活动概览雷达图：标签是界面文字，脚本一次性绘制
-  'svg.js-activity-overview-graph'
+  'svg.js-activity-overview-graph',
+  // Highcharts 图表（洞察页、规则集仪表板等）：图例、坐标轴标题、提示框（foreignObject 内的 HTML）、
+  // 数据点与数据系列的无障碍名称都是界面文字；重绘时引擎按插入的文本重译
+  'svg.highcharts-root'
 ]
 
 /** 通用退出标记：其内不翻译，重新进入区域也不越过 */
@@ -130,8 +133,10 @@ export const IGNORE_SELECTORS: readonly string[] = [
   ...EXIT_SELECTORS,
 
   // Markdown 渲染内容：README、议题 / 评论正文、Wiki、发行说明
-  // （赞助档位上方的自定义金额提示也带这两个类，但文字由 GitHub 生成，不忽略）
-  '.markdown-body:not(#sponsors-custom-amount-message)',
+  // （赞助档位上方的自定义金额提示也带这两个类，但文字由 GitHub 生成，不忽略；
+  // 市场开发人员协议等 details-dialog 法律文本的正文 .Box-body.overflow-auto、
+  // 组织合规页报告说明 .f5.color-fg-muted.mt-2 也是 GitHub 生成的文字，由词典逐段收录）
+  '.markdown-body:not(#sponsors-custom-amount-message):not(.Box-body.overflow-auto):not(.f5.color-fg-muted.mt-2)',
   '.markdown-title',
   '.comment-body:not(#sponsors-custom-amount-message)',
 

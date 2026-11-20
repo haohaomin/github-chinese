@@ -1455,6 +1455,26 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['octocat, Copilot Max']
   },
   // plans
+  // 商业版结账页：帐户类型与成员数、每用户价格、计费周期与席位、链接账单信息后的提示
+  {
+    hits: [
+      ['Organization • 1 member', '组织 • 1 名成员'],
+      ['Organization • 12 members', '组织 • 12 名成员']
+    ],
+    misses: ['Organization • members']
+  },
+  { hits: [['$19 / user', '$19 / 用户']], misses: ['$19 / seat'] },
+  {
+    hits: [
+      ['Monthly • No seats assigned yet', '每月 • 尚未分配席位'],
+      ['Yearly • No seats assigned yet', '每年 • 尚未分配席位']
+    ],
+    misses: ['Weekly • No seats assigned yet']
+  },
+  {
+    hits: [['Billing information successfully linked to octo-org', '已将账单信息链接到 octo-org']],
+    misses: ['Billing information successfully linked']
+  },
   {
     hits: [['300 premium requests to use the latest models and code review', '300 个高级请求可用于最新模型和代码审查']],
     misses: ['Premium requests to use the latest models and code review']

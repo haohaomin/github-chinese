@@ -270,9 +270,7 @@ export default {
     Request: '请求',
     Response: '响应',
     Redeliver: '重新传递',
-    Headers: '标头',
-    Payload: '有效负载',
-    Body: '正文',
+    // 请求详情的区块名 Headers / Payload / Body 照原文（用户定）
     // 请求详情标签页的读屏名称（原文拼写如此，兼收正确拼写）
     'Hook request and reponse': 'Web 钩子请求和响应',
     'Hook request and response': 'Web 钩子请求和响应',

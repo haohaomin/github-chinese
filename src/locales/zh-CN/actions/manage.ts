@@ -130,6 +130,7 @@ export default {
     'Download report': '下载报告',
     'Job runs': '作业运行',
     'Runtime OS': '运行时操作系统',
+    'Source repository': '源存储库',
     'Runner labels': '运行器标签',
     'No table data available yet.': '暂无表格数据。',
     'You don’t have workflows on any of your organization repositories.': '你的组织存储库中没有任何工作流。',

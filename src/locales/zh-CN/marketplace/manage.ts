@@ -4,10 +4,13 @@ import type { PageDictionary } from '../../../core/types'
  * 市场上架项的创建与管理：新建上架项草稿（/marketplace/new、/marketplace/new/<类型>/<id>）、
  * 编辑页各步骤（/marketplace/<上架项>/edit、edit/contact、edit/description、edit/plans、security_compliance、hook）、
  * 交易（/marketplace/<上架项>/insights/transactions）。
- * 开发人员协议正文、语言选择列表不翻译（见 ignore）。logo 按用户规定作“图标”（与应用设置页一致）。
+ * 语言选择列表不翻译（见 ignore）；开发人员协议弹窗正文见 agreement.ts。logo 按用户规定作“图标”（与应用设置页一致）。
  */
 export default {
   static: {
+    // 截图说明的编辑按钮、上架项状态
+    'Save caption': '保存说明',
+    'Edit caption': '编辑说明',
     // 上架项图标裁剪对话框与保存提示（logo 作“图标”，同应用设置页）
     'Crop your new Marketplace listing logo': '裁剪新的上架项图标',
     'Set new Marketplace listing logo': '设置新的上架项图标',
@@ -286,6 +289,7 @@ export default {
     'for more information on this page.': '了解此页面的更多信息。'
   },
   scoped: {
+    Published: '已发布',
     // 截图说明输入框、必填项校验（短词，只在本页面类型生效）
     caption: '说明',
     'cannot be blank': '不能为空',
@@ -368,8 +372,6 @@ export default {
   ],
   ignore: [
     // 语言选择列表：语言名
-    '.js-languages-menu .select-menu-item-text',
-    // 开发人员协议正文（法律文本）
-    'details-dialog > .Box-body.markdown-body'
+    '.js-languages-menu .select-menu-item-text'
   ]
 } satisfies PageDictionary

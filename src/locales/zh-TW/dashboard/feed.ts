@@ -91,6 +91,8 @@ export default {
     'commented on an issue in': '在議題中留言於',
     'commented on a pull request in': '在拉取請求中留言於',
     'created a branch in': '建立了分支於',
+    // 组织动态：「<组织> created」与「a branch in <存储库>」分在两个 span
+    'a branch in': '分支於',
 
     // 条目选项菜单（标点随原文：推荐原因不加冒号）
     'Feed item options': '動態項目選項',
@@ -110,6 +112,8 @@ export default {
     'Repo Details': '儲存庫詳細資料'
   },
   scoped: {
+    // 组织动态的创建分支条目：<分支> in <存储库>
+    in: '於',
     // 标签页
     'For you': '為你推薦',
     // 筛选对话框的事件类型（Sponsors 指赞助事件，由 common 的全局词条译“贊助”，不再收 scoped 副本）
@@ -161,6 +165,8 @@ export default {
     [/^Repo Details (\d+)$/, '儲存庫詳細資料 $1'],
     [/^([\d,]+) stargazers?$/, '$1 位加星號的使用者'],
     // 追踪按钮：Follow octocat / Unfollow octocat
-    [/^(Follow|Unfollow) ([A-Za-z\d][\w-]*)$/, (_, action, user) => `${action === 'Follow' ? '追蹤' : '取消追蹤'} ${user}`]
+    [/^(Follow|Unfollow) ([A-Za-z\d][\w-]*)$/, (_, action, user) => `${action === 'Follow' ? '追蹤' : '取消追蹤'} ${user}`],
+    // 最近推送提示被关闭后的反馈
+    [/^Dismissed a push from ([\w.-]+\/[\w.-]+)\. Thank you for the feedback!$/, '已忽略來自 $1 的推送。感謝你的意見回饋！']
   ]
 } satisfies PageDictionary

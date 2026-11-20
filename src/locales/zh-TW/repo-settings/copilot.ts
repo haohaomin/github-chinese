@@ -212,6 +212,7 @@ export default {
     'Organization custom allowlist': '組織自訂允許清單'
   },
   scoped: {
+    Adaptive: '自適應',
     // 「With」+ 链接「Copilot in the cloud」+「, developers can …」（与 new.ts 的 With 同译「透過」）
     With: '透過',
     // 「Copilot references」+ 链接「repository custom instructions」+「when reviewing pull requests.」

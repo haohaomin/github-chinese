@@ -12,6 +12,51 @@ const ORG = '([\\w.-]+)'
  */
 export default {
   static: {
+    // 操作设置保存后的提示
+    'Allowed actions policy updated.': '允许的操作策略已更新。',
+    'Custom image retention settings updated successfully!': '自定义映像保留设置已更新！',
+    'Standard hosted runners setting saved.': '标准托管运行器设置已保存。',
+    'Job debugger self-hosted runners settings changed.': '自托管运行器的作业调试器设置已更改。',
+    'Retention setting saved.': '保留设置已保存。',
+    'Subject claim configuration saved successfully.': '主题声明配置已保存。',
+    // 操作策略（settings/actions/rules）
+    'Protect your most important actions workflows': '保护最重要的操作工作流',
+    'Policies define whether actions can run in specific contexts.': '策略定义操作能否在特定上下文中运行。',
+    'New actions policy': '新建操作策略',
+    'This policy does not target any resources and will not be applied.': '此策略未针对任何资源，不会生效。',
+    'Workflows that match the matching pattern will be targeted by this policy.': '与匹配模式相符的工作流将成为此策略的目标。',
+    'Workflow execution protections': '工作流执行保护',
+    'GitHub features such as Dependabot, code scanning, Codespaces prebuilds, and Pages are exempt from these protections.':
+      'Dependabot、代码扫描、代码空间预构建和 GitHub 页面等 GitHub 功能不受这些保护限制。',
+    'Restrict actors': '限制参与者',
+    'Choose specific actors that are authorized to trigger Actions workflows.': '选择有权触发操作工作流的特定参与者。',
+    'Restrict events': '限制事件',
+    'Choose specific GitHub events that will trigger Actions workflows.': '选择会触发操作工作流的特定 GitHub 事件。',
+    'Require lockfile': '需要锁定文件',
+    'Require workflows to use a lockfile.': '要求工作流使用锁定文件。',
+    'Allowed events': '允许的事件',
+    'Caution: This event runs with write permissions and access to secrets, even when triggered from a fork. Use with care.':
+      '注意：即使由复刻触发，此事件也会以写入权限运行并可访问机密。请谨慎使用。',
+    'Learn more about pull_request_target': '了解 pull_request_target',
+    // 运行器组：公共存储库警告、工作流限制
+    'Runners can be used by public repositories. Allowing self-hosted or image-generation runners on public repositories and allowing workflows on public forks introduces a significant security risk. Learn more about self-hosted runners.':
+      '公共存储库可以使用运行器。允许公共存储库使用自托管或映像生成运行器，以及允许在公共复刻上运行工作流，会带来重大安全风险。了解自托管运行器。',
+    'Runners can be used by public repositories. Allowing self-hosted or image-generation runners on public repositories and allowing workflows on public forks introduces a significant security risk.':
+      '公共存储库可以使用运行器。允许公共存储库使用自托管或映像生成运行器，以及允许在公共复刻上运行工作流，会带来重大安全风险。',
+    'Learn more about self-hosted runners.': '了解自托管运行器。',
+    'Control how these runners are used by restricting them to specific workflows. Learn more about managing runner groups.':
+      '将这些运行器限制为特定工作流，以控制其使用方式。了解如何管理运行器组。',
+    'Control how these runners are used by restricting them to specific workflows.': '将这些运行器限制为特定工作流，以控制其使用方式。',
+    'Learn more about managing runner groups.': '了解如何管理运行器组。',
+    'Restrict these runners to specific workflow files.': '将这些运行器限制为特定工作流文件。',
+    'Any workflow can use these runners.': '任何工作流都可以使用这些运行器。',
+    'Enter the workflow files allowed to use this runner group:': '输入允许使用此运行器组的工作流文件：',
+    'References are mandatory: branches, tags, and SHAs are allowed.': '必须指定引用：可以使用分支、标签和 SHA。',
+    'managing access to runner groups': '管理对运行器组的访问',
+    // OIDC 主题声明模板校验
+    'The template has one or more unsupported claim keys.': '模板包含一个或多个不受支持的声明键。',
+    'Template must not be empty': '模板不能为空',
+    'Template is valid.': '模板有效。',
     // 常规：存储库自托管运行器、自定义映像保留（「Your enterprise has set a maximum limit of <strong>100</strong> …」见 inline）
     'Repository self-hosted runners': '存储库自托管运行器',
     'Choose the default settings for custom image retention in this enterprise.': '选择此企业中自定义映像保留的默认设置。',
@@ -178,6 +223,9 @@ export default {
     'dependencies and build outputs to improve workflow execution time.': '依赖项和构建输出，以缩短工作流执行时间。'
   },
   scoped: {
+    // 操作策略：包含 / 排除模式的路径前缀「path: 」
+    path: '路径',
+    Saving: '保存中',
     // 实时调试下拉的选项、自定义映像保留输入框后的单位
     'Not allowed': '不允许',
     versions: '个版本',
@@ -263,6 +311,13 @@ export default {
     '` to your workflow’s YAML to send jobs to this runner.': '` 添加到工作流 YAML 即可将作业发送到此运行器。'
   },
   regexp: [
+    // 操作策略列表计数、包含 / 排除模式与事件的删除按钮提示（事件名是标识符，照原文）
+    [/^(\d+) actions? polic(?:y|ies)$/, '$1 个操作策略'],
+    [/^Delete include of (.+)$/, '删除包含项 $1'],
+    [/^Delete exclude of (.+)$/, '删除排除项 $1'],
+    [/^Delete ([a-z]+(?:_[a-z]+)*)$/, '删除 $1'],
+    // 运行器组：工作流文件格式错误
+    [/^Workflow "([^"]+)" is malformed\. Format should be:$/, '工作流“$1”格式错误。格式应为：'],
     // 复刻拉取请求：需要批准的外部贡献者（组织名在句中）
     [
       /^All users that are not a member or owner of the repository and not a member of the ([\w.-]+) organization will require approval to run workflows\.$/,
@@ -302,9 +357,15 @@ export default {
   ],
   // 策略说明：Applies to <strong>public</strong> repositories only，only 在片段里译不出来，整句收录
   inline: [
+    // 操作策略列表空状态：「<Policies> define whether actions can run in specific contexts.」
+    ['{} define whether actions can run in specific contexts.', '{}定义操作能否在特定上下文中运行。'],
     ['Your enterprise has set a maximum limit of {#} versions per image.', '企业设置的上限为每个映像 {#} 个版本。'],
     ['Your enterprise has set a maximum limit of {#} days for unused version retention.', '企业设置的未使用版本保留期上限为 {#} 天。'],
     ['Your enterprise has set a maximum limit of {#} days for maximum version age.', '企业设置的版本最长存在时间上限为 {#} 天。'],
     ['Applies to {} repositories only', '仅适用于{}存储库']
+  ],
+  ignore: [
+    // 操作策略的事件、参与者、包含 / 排除列表中的名称（事件名是标识符；带警告图标的 pull_request_target 行不忽略，提示文字照常翻译）
+    '[class*="settingsEditable"] li.Box-row > span.wb-break-word:not(:has(> button))'
   ]
 } satisfies PageDictionary

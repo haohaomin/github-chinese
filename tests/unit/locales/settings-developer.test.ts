@@ -1270,7 +1270,6 @@ describe('settings-developer 页面词条', () => {
     ['Show more options', '显示更多选项'],
     ['Suspend', '暂停'],
     ['Unsuspend', '恢复'],
-    ['Headers', '标头'],
     ['Secret scanning', '机密扫描'],
     ['Copilot code completions quota usage', 'Copilot 代码补全额度使用情况'],
     ['Period:', '时间段：'],

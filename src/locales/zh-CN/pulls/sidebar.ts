@@ -191,7 +191,12 @@ export default {
     [/^(\d+) more reviewers?$/, '另外 $1 个审查者'],
     [new RegExp(`^Re-request review from ${REVIEWER}$`), '重新请求 $1 审查'],
     [new RegExp(`^Request review from ${REVIEWER}$`), '请求 $1 审查'],
-    [/^Request up to (\d+) reviewers$/, '最多请求 $1 个审查者'],
+    [/^Request up to (\d+) reviewers?$/, '最多请求 $1 个审查者'],
+    // 经典侧栏选择菜单：选满上限时的提示
+    [
+      /^You can only select (\d+) (reviewers?|assignees?)\.$/,
+      (_, count: string, kind: string) => `最多只能选择 ${count} 个${kind.startsWith('reviewer') ? '审查者' : '受理人'}。`
+    ],
     // 经典侧栏审查者区无审查时的提示（— 连接两分句）
     [/^No reviews—at least (\d+) approving reviews? (?:is|are) required\.$/, '暂无审查——至少需要 $1 个批准审查。'],
     // 概述页审查者行

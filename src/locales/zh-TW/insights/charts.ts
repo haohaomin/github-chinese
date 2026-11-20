@@ -129,7 +129,7 @@ export const CHART_A11Y_RULES: readonly RegExpRule[] = [
 /**
  * ChartCard（见解页各图表的卡片外壳）与 Highcharts 无障碍文字：
  * 图表菜单、自定义设置对话框、屏幕阅读器描述、导航器手柄。
- * SVG 内的坐标轴标签、提示框不在翻译范围内。
+ * SVG 内的图例、坐标轴标题、提示框按 core/ignore.ts 放行后照常翻译（数据系列名等由各页面词典收录）。
  */
 export default {
   static: {

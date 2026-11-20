@@ -131,6 +131,7 @@ export default {
     'Download report': '下載報告',
     'Job runs': '作業執行',
     'Runtime OS': '執行階段作業系統',
+    'Source repository': '來源儲存庫',
     'Runner labels': '執行器標籤',
     'No table data available yet.': '尚無表格資料。',
     'You don’t have workflows on any of your organization repositories.': '你的組織儲存庫中沒有任何工作流程。',

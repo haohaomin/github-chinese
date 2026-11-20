@@ -5,6 +5,7 @@ import type { PageDictionary, PageKey } from '../../../src/core/types'
 import common from '../../../src/locales/zh-CN/common'
 import commonUi from '../../../src/locales/zh-CN/common-ui'
 import marketplace from '../../../src/locales/zh-CN/marketplace'
+import agreement, { agreementText } from '../../../src/locales/zh-CN/marketplace/agreement'
 import marketplaceHook from '../../../src/locales/zh-CN/marketplace-hook'
 import developerApps from '../../../src/locales/zh-CN/settings-developer/apps'
 import marketplaceTW from '../../../src/locales/zh-TW/marketplace'
@@ -318,6 +319,62 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       ['Plan bullet 4', '计划要点 4']
     ],
     misses: ['Plan bullet']
+  },
+  // 订单与安装：下一步提示、按比例计费区间、跳转、已安装、取消计划、卸载确认与完成提示
+  {
+    hits: [['Next: Authorize Render to access your account.', '下一步：授权 Render 访问你的帐户。']],
+    misses: ['Next: Authorize the app.']
+  },
+  { hits: [['Prorated for Nov 19th-Dec 18th', '11月19日至12月18日按比例计费']], misses: ['Prorated for November'] },
+  {
+    hits: [['You are being redirected to Render to continue installation.', '正在重定向到 Render 以继续安装。']],
+    misses: ['You are being redirected.']
+  },
+  {
+    hits: [
+      [
+        'You have already installed and set up a plan for Render on setube-organization. To proceed, please select a different plan or account.',
+        '你已在 setube-organization 上安装 Render 并设置了计划。如需继续，请选择其他计划或帐户。'
+      ]
+    ],
+    misses: ['You have already installed and set up a plan.']
+  },
+  {
+    hits: [
+      [
+        'Cancelling this plan will end your subscription to this app on 2026-11-19. Are you sure you wish to continue?',
+        '取消此计划将于 2026-11-19 终止你对此应用的订阅。确定继续吗？'
+      ]
+    ],
+    misses: ['Cancelling this plan will end your subscription.']
+  },
+  {
+    hits: [
+      [
+        'It looks like Render has already been installed on your account. You can view your current installation or continue with setting up this plan.',
+        'Render 似乎已安装在你的帐户上。可以查看当前安装或继续设置此计划。'
+      ]
+    ],
+    misses: ['It looks like it has already been installed.']
+  },
+  {
+    hits: [
+      [
+        'This action cannot be undone. Are you sure you want to uninstall this GitHub App from 1 repository?',
+        '此操作无法撤消。确定从 1 个存储库卸载此 GitHub 应用吗？'
+      ]
+    ],
+    misses: ['Are you sure you want to uninstall this GitHub App?']
+  },
+  {
+    hits: [["You're all set! A job has been queued to uninstall the 'Render' app.", '已完成！卸载“Render”应用的作业已加入队列。']],
+    misses: ["You're all set!"]
+  },
+  // 开发人员协议：生效日期；与收录原文只差编号写法、标点的段落（规范化后查表）
+  { hits: [['Effective Date: May 27, 2025', '生效日期：2025年5月27日']], misses: ['Effective Date: soon'] },
+  {
+    hits: [['ii. Notify users when they are interacting with generative AI content;', 'ii. 在用户与生成式 AI 内容交互时通知用户；']],
+    misses: ['Notify users when they are interacting with other content;']
   }
 ]
 
@@ -777,8 +834,13 @@ describe('marketplace 标点随原文', () => {
     expect(extraPunctuation('A is a tool. It supports B, C.', '甲是工具。支持乙、丙。')).toEqual([])
   })
 
+  /** 开发人员协议正文是法律长文，按中文法律文书断句、加标点（见 marketplace/agreement.ts），不在此查 */
+  const isAgreement = (source: string): boolean => Object.hasOwn(agreement.scoped, source)
+  const uiEntries = (): [string, string][] =>
+    [...Object.entries(dict.static ?? {}), ...Object.entries(dict.scoped ?? {})].filter(([source]) => !isAgreement(source))
+
   it('静态与页面词条不加原文没有的逗号、顿号、冒号、分号、引号、括号', () => {
-    const entries = [...Object.entries(dict.static ?? {}), ...Object.entries(dict.scoped ?? {})]
+    const entries = uiEntries()
     expect(entries.flatMap(([source, translation]) => extraPunctuation(source, translation))).toEqual([])
   })
 
@@ -789,7 +851,7 @@ describe('marketplace 标点随原文', () => {
     expect(sourceSentences('Sorry, we couldn’t find it. Here’s the latest version.')).toBe(2)
     expect(sourceSentences('1. Publisher')).toBe(1)
     expect(sourceSentences('Individual traders can use a P.O. Box.')).toBe(1)
-    const entries = [...Object.entries(dict.static ?? {}), ...Object.entries(dict.scoped ?? {})]
+    const entries = uiEntries()
     expect(entries.filter(([source, translation]) => splitTranslation(translation).length < sourceSentences(source))).toEqual([])
   })
 
@@ -840,6 +902,83 @@ describe('marketplace 新建计划（真实结构）', () => {
   })
 })
 
+describe('marketplace 开发人员协议弹窗（真实结构）', () => {
+  let translator: Translator | undefined
+
+  afterEach(() => {
+    translator?.stop()
+    translator = undefined
+    document.body.innerHTML = ''
+  })
+
+  function start(html: string): void {
+    document.body.innerHTML = html
+    translator = createTranslator({ matcher: fullMatcher, host: window, resolvePages: () => ['common', 'marketplace'] })
+    translator.start()
+  }
+
+  const text = (selector: string): string => (document.querySelector(selector)?.textContent ?? '').replace(/\s+/g, ' ').trim()
+
+  it('上架项编辑页的协议弹窗正文译出：标题、含链接的段落、编号写法不同的列表项', () => {
+    start(`
+      <details class="details-reset details-overlay">
+        <summary>GitHub Marketplace Developer Agreement</summary>
+        <details-dialog class="Box Box--overlay d-flex flex-column">
+          <div class="Box-body markdown-body overflow-auto">
+            <h2 class="heading">1. DEFINITIONS</h2>
+            <p class="terms">Capitalized terms utilized in this Agreement and not defined shall otherwise have the meaning provided in the GitHub Terms of Service located at <a href="https://docs.github.com/articles/github-terms-of-service">https://docs.github.com/articles/github-terms-of-service</a>. Those Terms of Service are referred to as the “Terms” or “ToS”.</p>
+            <ol><li class="item">ii. Notify users when they are interacting with generative AI content;</li></ol>
+            <p class="purpose"><strong>b. Purpose Limitation.</strong></p>
+          </div>
+        </details-dialog>
+      </details>`)
+    expect(text('.heading')).toBe('1. 定义')
+    expect(text('.terms')).toBe(
+      '本协议中使用但未另行定义的大写术语，其含义以位于 https://docs.github.com/articles/github-terms-of-service 的 GitHub 服务条款为准。该服务条款简称“条款”或“ToS”。'
+    )
+    expect(text('.item')).toBe('ii. 在用户与生成式 AI 内容交互时通知用户；')
+    expect(text('.purpose')).toBe('b. 目的限制。')
+  })
+
+  it('订单页的市场服务条款弹窗保留原文，所在的同意条款整句照常翻译', () => {
+    start(`
+      <div class="js-marketplace-form-wrapper">
+        <div class="text-small color-fg-muted text-center mb-0 lh-condensed">
+          By clicking "Issue plan changes and begin installation", you are agreeing to
+          Render’s <a class="Link--inTextBlock" href="https://render.com/terms">Terms of Service</a> and
+          the <a class="Link--inTextBlock" href="https://render.com/privacy">Privacy Policy</a>.
+
+          You previously agreed to the
+
+          <details class="details-reset details-overlay details-overlay-dark lh-default color-fg-default d-inline-block text-left">
+            <summary class="btn-link ws-normal" role="button">
+              Marketplace Terms of Service.
+            </summary>
+            <details-dialog aria-label="GitHub Marketplace Terms of Service v1.11" class="Box Box--overlay d-flex flex-column" role="dialog" aria-modal="true">
+              <div class="Box-header"><h3 class="Box-title">GitHub Marketplace Terms of Service v1.11</h3></div>
+              <div class="Box-body markdown-body overflow-auto"><h2 class="tos">1. DEFINITIONS</h2></div>
+            </details-dialog>
+          </details>
+        </div>
+      </div>`)
+    expect(text('.tos')).toBe('1. DEFINITIONS')
+    expect(text('.text-small > details > summary')).toBe('市场服务条款。')
+    // 弹窗不显示、summary 为块级（首尾空白不显示）：按页面所见拼接
+    const host = document.querySelector('.text-small')!
+    const shown = [...host.childNodes]
+      .map(node => (node instanceof HTMLDetailsElement ? (node.querySelector('summary')?.textContent ?? '').trim() : node.textContent))
+      .join('')
+      .replace(/\s+/g, ' ')
+      .trim()
+    expect(shown).toBe('单击“提交计划变更并开始安装”即表示你同意 Render 的服务条款和隐私政策。你之前已同意市场服务条款。')
+  })
+
+  it('非协议正文不被末条正则误译', () => {
+    expect(() => agreementText('Lorem ipsum dolor sit amet')).toThrow()
+    expect(translate('Lorem ipsum dolor sit amet')).toBeUndefined()
+  })
+})
+
 describe('marketplace-hook 上架项 Web 钩子页', () => {
   const HOOK_PAGES: PageKey[] = ['common', 'marketplace', 'marketplace-hook']
   const hookMatcher = createMatcher([
@@ -857,8 +996,6 @@ describe('marketplace-hook 上架项 Web 钩子页', () => {
     ['Redeliver', '重新请求', '重新傳遞'],
     ['Request', '请求', '請求'],
     ['Response', '响应', '回應'],
-    ['Headers', '标头', '標頭'],
-    ['Payload', '有效负载', '承載'],
     ['Completed in 0.09 seconds.', '耗时 0.09 秒。', '耗時 0.09 秒。'],
     ['Completed in 1 second', '耗时 1 秒', '耗時 1 秒'],
     [
@@ -871,12 +1008,15 @@ describe('marketplace-hook 上架项 Web 钩子页', () => {
     expect(twHookMatcher.translate(input, HOOK_PAGES)).toBe(tw)
   })
 
-  it.each(['Recent Deliveries', 'Recent deliveries', 'Redeliver', 'Response', 'Headers', 'Payload'])(
-    '请求记录与 GitHub 应用设置页同译：%s',
-    input => {
-      expect(hookMatcher.translate(input, HOOK_PAGES)).toBe(appsMatcher.translate(input, ['common', 'settings']))
-    }
-  )
+  it.each(['Headers', 'Payload', 'Body'])('请求详情的区块名照原文：%s', input => {
+    expect(hookMatcher.translate(input, HOOK_PAGES)).toBeUndefined()
+    expect(twHookMatcher.translate(input, HOOK_PAGES)).toBeUndefined()
+    expect(appsMatcher.translate(input, ['common', 'settings'])).toBeUndefined()
+  })
+
+  it.each(['Recent Deliveries', 'Recent deliveries', 'Redeliver', 'Response'])('请求记录与 GitHub 应用设置页同译：%s', input => {
+    expect(hookMatcher.translate(input, HOOK_PAGES)).toBe(appsMatcher.translate(input, ['common', 'settings']))
+  })
 
   it('不在其他市场页面生效：Request 仍作“申请”，耗时不译', () => {
     expect(hookMatcher.translate('Request', ['common', 'marketplace'])).toBe('申请')

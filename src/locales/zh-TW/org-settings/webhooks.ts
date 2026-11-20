@@ -27,6 +27,8 @@ const EVENTS: Readonly<Record<string, string>> = {
  */
 export default {
   scoped: {
+    // Web 钩子网址校验：<网址> is missing a scheme
+    'is missing a scheme': '缺少通訊協定',
     // 事件：项目 v2 状态更新（「Feedback is welcome in <a> this discussion</a>.」见 inline）
     'Projects v2 status updates': '專案 v2 狀態更新',
     'Projects v2 feedback discussion': '專案 v2 意見回饋討論',
@@ -56,9 +58,7 @@ export default {
     redelivery: '重新傳遞',
     Request: '請求',
     Response: '回應',
-    Headers: '標頭',
-    Payload: '承載',
-    Body: '內文',
+    // 请求详情的区块名 Headers / Payload / Body 照原文（用户定）
     // 请求详情标签页的读屏名称（原文拼写如此，兼收正确拼写）
     'Hook request and reponse': 'Web 鉤子請求和回應',
     'Hook request and response': 'Web 鉤子請求和回應',
@@ -68,6 +68,7 @@ export default {
     ...EVENTS
   },
   regexp: [
+    [/^(\S+) is missing a scheme$/, '$1 缺少通訊協定'],
     // 交付耗时（句号随原文，与存储库 Web 钩子一致）
     [/^Completed in (\d+(?:\.\d+)?) seconds?(\.?)$/, (_, seconds: string, dot: string) => `耗時 ${seconds} 秒${dot ? '。' : ''}`],
     [/^(\d+) webhooks?$/, '$1 個 Web 鉤子']

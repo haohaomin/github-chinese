@@ -198,6 +198,11 @@ const ROLE_ICONS: Readonly<Record<string, string>> = {
   Organization: '組織'
 }
 
+/** 句中的角色名：已知的预定义角色译成中文，自定义角色照录 */
+function roleName(name: string): string {
+  return Object.hasOwn(ROLE_ICONS, name) ? ROLE_ICONS[name]! : name
+}
+
 /** 转义正则元字符：权限名含括号、点号、斜杠 */
 function escapeRegExp(text: string): string {
   return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
@@ -219,6 +224,25 @@ function alternatives(table: Readonly<Record<string, string>>): string {
  */
 export default {
   static: {
+    // 角色分配：分配表单、筛选、空状态、移除提示
+    'Organization roles are used to grant access to subsets of organization settings to teams and members.':
+      '組織角色用於向團隊和成員授予部分組織設定的存取權。',
+    'Learn more about organization roles': '瞭解組織角色',
+    'Learn more about organization roles.': '瞭解組織角色。',
+    'Assign role to': '將角色指派給',
+    'Select user or team': '選擇使用者或團隊',
+    'Org team': '組織團隊',
+    'Please select an actor and role to assign.': '請選擇要指派的執行者和角色。',
+    'Search organization role assignments': '搜尋組織角色指派',
+    'Assignee type': '受指派者類型',
+    'Enterprise Open-Source License Manager': '企業開放原始碼授權管理員',
+    'Enterprise Security Manager': '企業安全性管理員',
+    "We couldn't find any assignments": '找不到指派',
+    'We couldn’t find any assignments': '找不到指派',
+    'No assignments match your search criteria. Adjust your search or clear the filter to see all role assignments.':
+      '沒有符合搜尋條件的指派。調整搜尋或清除篩選條件以檢視所有角色指派。',
+    'Inherited roles can only be removed by removing the member or role from the team.':
+      '繼承的角色只能透過從團隊中移除該成員或角色來移除。',
     // 组织角色：说明、预定义角色（审核、应用管理员、CI/CD 管理员、开源许可证管理员）与详情里的分组
     'Organization roles are used to grant access to specific organization and repository settings. Repository permissions are granted across every repository in the organization.':
       '組織角色用於授予特定組織設定和儲存庫設定的存取權。儲存庫權限適用於組織內的每個儲存庫。',
@@ -339,6 +363,9 @@ export default {
     'Mixed roles': '混合角色'
   },
   scoped: {
+    // 角色分配列表：筛选按钮、行内说明
+    'Role:': '角色：',
+    'Assigned via:': '指派途徑：',
     // 存储库角色 Moderate（全局 static 是安全严重性“中”）、角色详情里的分组标题
     Moderate: '審核',
     'Moderate:': '審核：',
@@ -399,6 +426,43 @@ export default {
     'Are you sure you want to remove this role assignment?': '確定要移除此角色指派嗎？'
   },
   regexp: [
+    // 角色分配：计数、分页标题、角色说明按钮、分配 / 移除提示（用户名、团队名、组织名照录）
+    [/^(\d+) roles? assigned$/, '已指派 $1 個角色'],
+    [
+      /^(Users|Teams) (\d+) of (\d+)$/,
+      (_, kind: string, shown: string, total: string) => `${kind === 'Users' ? '使用者' : '團隊'} ${shown}/${total}`
+    ],
+    [/^Info about (.+)$/, (_, role: string) => `關於「${roleName(role)}」的資訊`],
+    [
+      /^You[’']re about to remove the direct assignment of the (.+?) role from the (.+) team\.$/,
+      (_, role: string, team: string) => `你即將移除 ${team} 團隊的「${roleName(role)}」角色直接指派。`
+    ],
+    [
+      /^You[’']re about to remove the direct assignment of the (.+?) role from (.+?)\. However, this role will still be assigned through (.+) team\.$/,
+      (_, role: string, user: string, team: string) =>
+        `你即將移除 ${user} 的「${roleName(role)}」角色直接指派。該角色仍會透過 ${team} 團隊指派。`
+    ],
+    [
+      /^The (.+?) role for ([\w.-]+) has been removed from the (.+) team\.$/,
+      (_, role: string, org: string, team: string) => `已從 ${team} 團隊移除 ${org} 的「${roleName(role)}」角色。`
+    ],
+    [
+      /^The (.+?) role for ([\w.-]+) has been removed from (.+?)\.$/,
+      (_, role: string, org: string, user: string) => `已從 ${user} 移除 ${org} 的「${roleName(role)}」角色。`
+    ],
+    [
+      /^(.+?) has been assigned the (.+?) role for ([\w.-]+)\.$/,
+      (_, who: string, role: string, org: string) => `已為 ${who} 指派 ${org} 的「${roleName(role)}」角色。`
+    ],
+    [/^has been assigned the (.+?) role for$/, (_, role: string) => `已獲指派下列組織的「${roleName(role)}」角色：`],
+    [
+      /^(.+) roles have not been assigned to any (teams|users)\.$/,
+      (_, role: string, kind: string) => `尚未向任何${kind === 'teams' ? '團隊' : '使用者'}指派「${roleName(role)}」角色。`
+    ],
+    [
+      /^roles have not been assigned to any (teams|users)\.$/,
+      (_, kind: string) => `角色尚未指派給任何${kind === 'teams' ? '團隊' : '使用者'}。`
+    ],
     // 组织角色详情：• <权限名>（权限名按表整段匹配）；角色图标：<角色名> icon
     [new RegExp(`^• (${alternatives(BULLET_PERMISSIONS)})$`), (_, name: string) => `• ${BULLET_PERMISSIONS[name] ?? name}`],
     [new RegExp(`^(${alternatives(ROLE_ICONS)}) icon$`), (_, name: string) => `${ROLE_ICONS[name] ?? name}圖示`],
@@ -412,6 +476,13 @@ export default {
     [
       /^In addition to the available pre-defined roles, you can create up to (\d+) custom roles to fit your needs\.$/,
       '除了可用的預先定義角色之外，你還可以視需要建立最多 $1 個自訂角色。'
+    ]
+  ],
+  inline: [
+    // 分配成功提示：<strong>用户</strong> has been assigned the <角色> role for <strong>组织</strong>.
+    [
+      /^\{\} has been assigned the (.+?) role for \{\}(\.?)$/,
+      (_, role: string, dot: string) => `已為 {} 指派 {} 的「${roleName(role)}」角色${dot ? '。' : ''}`
     ]
   ]
 } satisfies PageDictionary

@@ -67,6 +67,8 @@ export default {
     'Check the sidebar for available repository settings.': '請在側邊欄查看可用的儲存庫設定。'
   },
   scoped: {
+    // 侧栏「安全和质量」分组
+    'Code quality': '程式碼品質',
     // 与组织设置、个人设置同名的菜单项
     General: '一般',
     Access: '存取',

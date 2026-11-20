@@ -232,7 +232,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       ['2 files changed', '已更改 2 个文件'],
       ['1 file changed', '已更改 1 个文件']
     ],
-    misses: ['files changed']
+    misses: ['many files changed']
   },
   {
     hits: [
@@ -498,7 +498,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       ['12 contributors', '12 个贡献者'],
       ['1 contributor', '1 个贡献者']
     ],
-    misses: ['contributors']
+    misses: ['many contributors']
   },
   {
     hits: [
@@ -763,6 +763,30 @@ describe('commits 两点比较页头说明（DOM）', () => {
     const text = document.getElementById('two-dot')?.textContent?.replace(/\s+/g, ' ').trim()
     expect(text).toBe('这是对此存储库或其相关存储库中两个提交的直接比较。查看此范围的默认比较 或 了解差异比较。')
     expect(translator.drainUntranslated()).toEqual([])
+  })
+
+  it('经典比较页摘要栏：数字与单位分在相邻 span，单位按页面词条译出', () => {
+    document.body.innerHTML = [
+      '<ul class="summary">',
+      '<li class="flex-1"><svg class="octicon"></svg> <span class="text-emphasized"> 1 </span> <span class="color-fg-muted">commit</span></li>',
+      '<li class="flex-1"><svg class="octicon"></svg> <span class="text-emphasized"> 1 </span> <span class="color-fg-muted">file changed</span></li>',
+      '<li class="flex-1"><svg class="octicon"></svg> <span class="text-emphasized"> 2 </span> <span class="color-fg-muted">contributors</span></li>',
+      '</ul>'
+    ].join('')
+    translator = createTranslator({ matcher, host: window, resolvePages: () => COMPARE_SCOPE })
+    translator.start()
+    const items = [...document.querySelectorAll('.summary li')].map(li => li.textContent?.replace(/\s+/g, ' ').trim())
+    expect(items).toEqual(['1 提交', '1 个文件已更改', '2 个贡献者'])
+  })
+
+  it('经典提交列表：作者链接（用户提及）只改写提示，用户名不动', () => {
+    document.body.innerHTML =
+      '<div class="f6"><a class="commit-author user-mention" title="View all commits by octocat" href="/octo-org/hello-world/commits?author=octocat">octocat</a> committed</div>'
+    translator = createTranslator({ matcher, host: window, resolvePages: () => COMPARE_SCOPE })
+    translator.start()
+    const author = document.querySelector('a.commit-author')!
+    expect(author.getAttribute('title')).toBe('查看 octocat 的所有提交')
+    expect(author.textContent).toBe('octocat')
   })
 })
 

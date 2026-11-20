@@ -321,6 +321,12 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       'Block pasted',
       'Block removed, none left'
     ]
+  },
+  {
+    hits: [
+      ['Dismissed a push from octo-org/hello-world. Thank you for the feedback!', '已忽略来自 octo-org/hello-world 的推送。感谢你的反馈！']
+    ],
+    misses: ['Dismissed a push. Thank you for the feedback!']
   }
 ]
 

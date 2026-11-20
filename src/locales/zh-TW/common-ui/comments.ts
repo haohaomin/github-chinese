@@ -274,6 +274,9 @@ export default {
     '. Already have an account?': '。已有帳號？',
     'Sign in to comment': '登入後留言',
     'Remember, contributions to this repository should follow its': '請記得，對此儲存庫的貢獻應遵守其',
+    // 仓库没有行为准则时：… should follow our <a>GitHub Community Guidelines</a>.
+    'Remember, contributions to this repository should follow our': '請記得，對此儲存庫的貢獻應遵守我們的',
+    'GitHub Community Guidelines': 'GitHub 社群守則',
     'code of conduct': '行為準則',
     'security policy': '安全性政策',
 

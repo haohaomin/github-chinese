@@ -29,9 +29,6 @@ const NOT_REUSED: ReadonlySet<string> = new Set([
   '(not recommended)',
   'not recommended',
   'Response',
-  'Headers',
-  'Payload',
-  'Body',
   'Hook request and reponse',
   'Hook request and response',
   // security

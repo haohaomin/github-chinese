@@ -75,6 +75,37 @@ interface RegExpCase {
 const REGEXP_CASES: Readonly<Record<PartName, readonly RegExpCase[]>> = {
   nav: [{ hits: [['Settings: octo-org/hello-world', '设置：octo-org/hello-world']], misses: ['Settings: hello-world'] }],
   general: [
+    // 讨论设为组织成员讨论来源时无法禁用；组织策略限制设置
+    {
+      hits: [
+        [
+          "Discussions cannot be disabled because they are set as the source for the octo-org organization's member discussions.",
+          '讨论无法禁用，因为已被设为 octo-org 组织成员讨论的来源。'
+        ],
+        [
+          'Discussions cannot be disabled because they are set as the source for the octo-org organization’s member discussions.',
+          '讨论无法禁用，因为已被设为 octo-org 组织成员讨论的来源。'
+        ]
+      ],
+      misses: ['Discussions cannot be disabled.']
+    },
+    {
+      hits: [
+        [
+          "Some settings on this page can't be changed because of a octo-org policy. We recommend using",
+          '由于 octo-org 的策略，此页面上的部分设置无法更改。建议使用'
+        ]
+      ],
+      misses: ["Some settings on this page can't be changed."]
+    },
+    // 运行器类型对话框标题
+    {
+      hits: [
+        ['Edit runner type for Dependabot', '编辑 Dependabot 的运行器类型'],
+        ['Edit runner type for code scanning', '编辑代码扫描的运行器类型']
+      ],
+      misses: ['Edit runner type for Copilot']
+    },
     // 存储库名称
     { hits: [['hello-world is available.', 'hello-world 可用。']], misses: ['my.repo_2 is available'] },
     {
@@ -381,6 +412,12 @@ const REGEXP_CASES: Readonly<Record<PartName, readonly RegExpCase[]>> = {
     }
   ],
   branches: [
+    // 分支保护规则列表：操作菜单与删除按钮的无障碍名称
+    {
+      hits: [['Branch protection rule actions for release/*', '分支保护规则 release/* 的操作']],
+      misses: ['Branch protection rule actions']
+    },
+    { hits: [['Delete branch protection rule for main', '删除分支保护规则 main']], misses: ['Delete the branch protection rule for main'] },
     {
       hits: [
         ['Currently applies to 2 branches', '当前适用于 2 个分支'],
