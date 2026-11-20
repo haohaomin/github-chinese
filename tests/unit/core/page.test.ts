@@ -133,7 +133,9 @@ describe('detectPages', () => {
     ['https://github.com/enterprises/acme/security', ['common', 'security']],
     ['https://github.com/enterprises/acme/security/coverage', ['common', 'security']],
     ['https://github.com/enterprises/acme', ['common']],
-    ['https://github.com/enterprises/acme/settings/security_analysis', ['common']],
+    // 企业设置页同组织设置的词典（组织升级为企业后的结账页等）
+    ['https://github.com/enterprises/acme/settings/security_analysis', ['common', 'org-settings']],
+    ['https://github.com/enterprises/acme/settings/billing/upgrade_from_organization?seats=1', ['common', 'org-settings']],
     ['https://github.com/enterprises/acme/constructor', ['common']],
     ['https://github.com/organizations/vuejs/settings/security_products', ['common', 'org-settings']],
     // 组织拥有的应用设置页叠加 org-apps，组织 Web 钩子页不叠加

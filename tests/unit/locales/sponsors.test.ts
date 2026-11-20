@@ -132,6 +132,18 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     ]
   },
   { hits: [['Receive email updates from octocat', '接收 octocat 的电子邮件动态']], misses: ['Receive email updates'] },
+  { hits: [["octo-org's a sponsor.", 'octo-org 是赞助者。']], misses: ['a sponsor.', "octo-org's a sponsor"] },
+  {
+    hits: [
+      ['$5 a month tier', '每月 $5 等级'],
+      ['$1,000 one time tier', '一次性 $1,000 等级']
+    ],
+    misses: ['$5 tier', 'a month tier']
+  },
+  {
+    hits: [['Save $0.03 in fees when you switch to', '如需节省 $0.03 费用可切换到']],
+    misses: ['Save in fees when you switch to']
+  },
 
   // 探索页
   {
@@ -170,6 +182,23 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       ]
     ],
     misses: ['does not directly depend on any repositories']
+  },
+  {
+    hits: [
+      [
+        'does not directly depend on any repositories in the Cargo ecosystem whose maintainers can be sponsored.',
+        '没有直接依赖 Cargo 生态系统中任何维护者可赞助的存储库。'
+      ],
+      [
+        'octo-org does not directly depend on any repositories in the npm ecosystem whose maintainers can be sponsored.',
+        'octo-org 没有直接依赖 npm 生态系统中任何维护者可赞助的存储库。'
+      ],
+      [
+        "You don't directly depend on any repositories in the pip ecosystem whose maintainers can be sponsored.",
+        '你没有直接依赖 pip 生态系统中任何维护者可赞助的存储库。'
+      ]
+    ],
+    misses: ['does not directly depend on any repositories in the ecosystem']
   },
   {
     hits: [

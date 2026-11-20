@@ -70,6 +70,7 @@ interface RegExpCase {
 const REGEXP_CASES: readonly RegExpCase[] = [
   // 首页框架与分区列表
   { hits: [['Switch dashboard: octocat', '切换仪表板：octocat']], misses: ['Switch dashboard'] },
+  { hits: [['Go to octocat dashboard', '前往 octocat 的仪表板']], misses: ['Go to the dashboard', 'Go to octocat'] },
   // 拉取请求与问题条目共用同一模板，拉取请求的动词 open → 创建，问题条目随同句一致
   {
     hits: [
@@ -327,6 +328,13 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       ['Dismissed a push from octo-org/hello-world. Thank you for the feedback!', '已忽略来自 octo-org/hello-world 的推送。感谢你的反馈！']
     ],
     misses: ['Dismissed a push. Thank you for the feedback!']
+  },
+  {
+    hits: [
+      ['@octocat profile', '@octocat 的个人资料'],
+      ['@dependabot[bot] profile', '@dependabot[bot] 的个人资料']
+    ],
+    misses: ['octocat profile', '@octocat profile picture']
   }
 ]
 

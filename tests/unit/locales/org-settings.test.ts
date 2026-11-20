@@ -668,6 +668,74 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     ],
     misses: ['Many Code Quality licenses', '3 Copilot Business licenses']
   },
+  // 组织升级为企业：升级结果列表、名称保留期，结账页的席位数下限与单价
+  {
+    hits: [
+      [
+        'A new enterprise account in which setube-organization will be the first member organization created.',
+        '将创建新的企业帐户，setube-organization 将成为其第一个成员组织。'
+      ]
+    ],
+    misses: ['A new enterprise account will be created.']
+  },
+  {
+    hits: [
+      [
+        'All current owners of octo-org will become owners of the new enterprise account.',
+        'octo-org 的所有现有所有者将成为新企业帐户的所有者。'
+      ]
+    ],
+    misses: ['All current owners will become owners of the new enterprise account.']
+  },
+  {
+    hits: [
+      [
+        'All current billing managers of octo-org will become billing managers of the new enterprise account.',
+        'octo-org 的所有现有账单管理员将成为新企业帐户的账单管理员。'
+      ]
+    ],
+    misses: ['All current billing managers will become billing managers of the new enterprise account.']
+  },
+  {
+    hits: [
+      [
+        "The current billing details of octo-org, including the organization's billing email address, will become the billing details of the new enterprise account.",
+        'octo-org 的当前账单详细信息（包括组织的账单电子邮件地址）将成为新企业帐户的账单详细信息。'
+      ],
+      [
+        'The current billing details of octo-org, including the organization’s billing email address, will become the billing details of the new enterprise account.',
+        'octo-org 的当前账单详细信息（包括组织的账单电子邮件地址）将成为新企业帐户的账单详细信息。'
+      ]
+    ],
+    misses: ['The current billing details will become the billing details of the new enterprise account.']
+  },
+  {
+    hits: [
+      [
+        'This enterprise name and slug will be reserved for 5 days until payment is processed. If the purchase is not completed, the account',
+        '此企业名称和标识将保留 5 天，直至付款处理完成。如果未完成购买，此帐户'
+      ],
+      [
+        'This enterprise name and slug will be reserved for 1 day until payment is processed. If the purchase is not completed, the account will be deleted and the name and slug will become available again.',
+        '此企业名称和标识将保留 1 天，直至付款处理完成。如果未完成购买，此帐户将被删除，名称和标识将重新可用。'
+      ]
+    ],
+    misses: ['This enterprise name and slug will be reserved until payment is processed.']
+  },
+  {
+    hits: [
+      ['You need at least 1 seat to support your organization', '至少需要 1 个席位才能支持你的组织'],
+      ['You need at least 5 seats to support your organization', '至少需要 5 个席位才能支持你的组织']
+    ],
+    misses: ['You need at least one seat to support your organization']
+  },
+  {
+    hits: [
+      ['On GitHub Enterprise each seat costs $21 per month.', 'GitHub 企业版的每个席位每月 $21。'],
+      ['On GitHub Enterprise each seat costs $231 per year.', 'GitHub 企业版的每个席位每年 $231。']
+    ],
+    misses: ['On GitHub Enterprise each seat costs $21.']
+  },
 
   // 组织规则集洞察的图表（沿用洞察页的图表无障碍描述）
   { hits: [['Bar chart with 3 bars.', '包含 3 个柱的柱状图。']], misses: ['Bar chart with many bars.'] },

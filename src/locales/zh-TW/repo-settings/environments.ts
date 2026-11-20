@@ -111,6 +111,8 @@ export default {
     [
       /^Applies to (\d+) branch(?:es)?\. Based on the existing repository branch protection rules\.$/,
       '適用於 $1 個分支。依據現有的儲存庫分支保護規則。'
-    ]
+    ],
+    // 新建环境后的提示（环境名照录）
+    [/^Environment ["“](.{1,255})["”] created\.$/, '已建立環境「$1」。']
   ]
 } satisfies PageDictionary

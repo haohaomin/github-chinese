@@ -135,6 +135,7 @@ function dateRange(start: string, end: string): string {
  * 计费页面的长句与个人计费共用，已由个人设置收录为 static；
  * 个人计费页的短词与正则只在个人设置生效，组织计费页（org-settings 页面类型）在这里另收一份。
  * 邀请账单管理员页、计划升级页属于 organization 页面类型，词条放 static。
+ * 组织升级为企业：创建企业帐户页（组织设置）与结账页（企业设置，同组织设置的词典，见 core/page.ts）。
  */
 export default {
   static: {
@@ -210,9 +211,52 @@ export default {
     'By clicking "Connect", you are confirming that you want to be billed for metered services via the selected Azure subscription':
       '单击“连接”即表示你确认通过所选 Azure 订阅支付按流量计费服务的费用',
     'By clicking “Connect”, you are confirming that you want to be billed for metered services via the selected Azure subscription':
-      '单击“连接”即表示你确认通过所选 Azure 订阅支付按流量计费服务的费用'
+      '单击“连接”即表示你确认通过所选 Azure 订阅支付按流量计费服务的费用',
+
+    // 组织升级为企业（/organizations/<组织>/settings/enterprise_purchase_upgrades/new）：创建企业帐户与升级结果说明，
+    // 结果列表与名称保留期见 regexp（组织名照录）；提交后等待企业帐户创建
+    'Create enterprise account': '创建企业帐户',
+    'Upgrading this organization to an enterprise will result in the following:': '将此组织升级为企业将产生以下结果：',
+    'will be deleted and the name and slug will become available again.': '将被删除，名称和标识将重新可用。',
+    'Continue to payment': '继续付款',
+    'Creating your enterprise account': '正在创建企业帐户',
+    'You will continue to payment automatically when your enterprise account is ready.': '企业帐户就绪后将自动继续付款。',
+    'You will continue to payment automaticallywhen your enterprise account is ready.': '企业帐户就绪后将自动继续付款。',
+    // 两段被 <br> 隔开时的片段（整句见 inline）
+    'You will continue to payment automatically': '将自动继续付款',
+    'when your enterprise account is ready.': '（待企业帐户就绪）。',
+    'Your GitHub Enterprise purchase has been cancelled.': '你的 GitHub 企业版购买已取消。',
+    'Your GitHub Enterprise purchase has been canceled.': '你的 GitHub 企业版购买已取消。',
+    // 升级的结账页（/enterprises/<企业>/settings/billing/upgrade_from_organization）
+    'Enterprise navigation': '企业导航',
+    'Upgrade to a GitHub Enterprise account': '升级到 GitHub 企业版帐户',
+    'If you require invoices, or are interested in Enterprise Managed Users, contact our sales team.':
+      '如需发票或对企业托管用户感兴趣，请联系我们的销售团队。',
+    'How often do you want to be billed?': '你希望多久计费一次？',
+    'How many seats do you want to include?': '你希望包含多少个席位？',
+    'Please contact us at https://github.com/enterprise/contact for pricing and purchasing information.':
+      '请通过 https://github.com/enterprise/contact 联系我们，了解定价和购买信息。',
+    'You have not added billing information for your account.': '你尚未为帐户添加账单信息。',
+    'Complete GitHub Enterprise purchase': '完成 GitHub 企业版购买',
+    'Saving your billing information': '正在保存账单信息',
+    'You will return to checkout when your billing information has been processed.': '账单信息处理完成后将返回结账页面。',
+    'We could not confirm your billing information was saved': '无法确认账单信息是否已保存',
+    'Your request has not been repeated. Return to checkout to check your billing information.':
+      '你的请求未重复提交。请返回结账页面检查账单信息。'
   },
   scoped: {
+    // 升级的结账页：席位步进器（按钮提示与输入框的读屏名称）、编辑按钮的读屏文字、合计、按钮
+    'contact our sales team': '联系我们的销售团队',
+    'Remove seat': '移除席位',
+    'Add seat': '添加席位',
+    'Number of seats': '席位数',
+    'billing information': '账单信息',
+    'New monthly total': '新的每月总额',
+    'New yearly total': '新的每年总额',
+    '/ month': '/ 月',
+    '/ year': '/ 年',
+    'Cancel purchase': '取消购买',
+    'Return to checkout': '返回结账页面',
     // 按流量计费的使用情况：分组菜单（全大写缩写的复数），图表说明
     SKUs: 'SKU',
     'All times in UTC': '所有时间均为 UTC',
@@ -611,9 +655,63 @@ export default {
       /^([\d,]+) (GitHub )?(Advanced Security|Secret Protection|Code Security|Code Quality) licenses?$/,
       (_, count: string, github: string | undefined, product: string) =>
         `${count} 个${github ? ' GitHub ' : ''}${PRODUCTS[product] ?? product}许可证`
+    ],
+    // 组织升级为企业：升级结果列表（组织名照录）、名称保留期（前半句与后半句被 <br> 隔开时分别匹配）
+    [
+      /^A new enterprise account in which ([\w.-]+) will be the first member organization created\.$/,
+      '将创建新的企业帐户，$1 将成为其第一个成员组织。'
+    ],
+    [
+      /^All current owners of ([\w.-]+) will become owners of the new enterprise account\.$/,
+      '$1 的所有现有所有者将成为新企业帐户的所有者。'
+    ],
+    [
+      /^All current billing managers of ([\w.-]+) will become billing managers of the new enterprise account\.$/,
+      '$1 的所有现有账单管理员将成为新企业帐户的账单管理员。'
+    ],
+    [
+      /^The current billing details of ([\w.-]+), including the organization[’']s billing email address, will become the billing details of the new enterprise account\.$/,
+      '$1 的当前账单详细信息（包括组织的账单电子邮件地址）将成为新企业帐户的账单详细信息。'
+    ],
+    [
+      /^This enterprise name and slug will be reserved for (\d+) days? until payment is processed\. If the purchase is not completed, the account(?: will be deleted and the name and slug will become available again\.)?$/,
+      (match: string, days: string) =>
+        `此企业名称和标识将保留 ${days} 天，直至付款处理完成。如果未完成购买，此帐户${match.endsWith('.') ? '将被删除，名称和标识将重新可用。' : ''}`
+    ],
+    // 升级的结账页：席位数下限、单价
+    [/^You need at least (\d+) seats? to support your organization$/, '至少需要 $1 个席位才能支持你的组织'],
+    [
+      new RegExp(`^On GitHub Enterprise each seat costs ${MONEY} per (month|year)\\.$`),
+      (_, price: string, period: string) => `GitHub 企业版的每个席位每${period === 'month' ? '月' : '年'} ${price}。`
     ]
   ],
   inline: [
+    // 组织升级为企业：「…automatically<br>when your enterprise account is ready.」
+    ['You will continue to payment automatically{}when your enterprise account is ready.', '企业帐户就绪后{}将自动继续付款。'],
+    // 升级结果列表里的组织名在 <strong> 中时
+    [
+      'A new enterprise account in which {} will be the first member organization created.',
+      '将创建新的企业帐户，{} 将成为其第一个成员组织。'
+    ],
+    ['All current owners of {} will become owners of the new enterprise account.', '{} 的所有现有所有者将成为新企业帐户的所有者。'],
+    [
+      'All current billing managers of {} will become billing managers of the new enterprise account.',
+      '{} 的所有现有账单管理员将成为新企业帐户的账单管理员。'
+    ],
+    [
+      /^The current billing details of \{\}, including the organization[’']s billing email address, will become the billing details of the new enterprise account\.$/,
+      '{} 的当前账单详细信息（包括组织的账单电子邮件地址）将成为新企业帐户的账单详细信息。'
+    ],
+    // 升级的结账页：发票与企业托管用户（链接：联系我们的销售团队）、席位合计（<span>1</span> seats @ $21/month each）、同意条款
+    ['If you require invoices, or are interested in Enterprise Managed Users, {}.', '如需发票或对企业托管用户感兴趣，请{}。'],
+    [
+      /^\{#\} seats? @ (\$[\d,]+(?:\.\d{2})?)\/(month|year) each$/,
+      (_, price: string, period: string) => `{} 个席位，每个 ${price}/${period === 'month' ? '月' : '年'}`
+    ],
+    [
+      /^By clicking ["“]Complete GitHub Enterprise purchase["”], you are accepting the \{\} and confirming that you have the authority to do so on behalf of your organization\. For more information about GitHub[’']s privacy practices, see the \{\}\.$/,
+      '单击“完成 GitHub 企业版购买”即表示你接受{}，并确认你有权代表你的组织执行此操作。有关 GitHub 隐私做法的详细信息，请参阅{}。'
+    ],
     [
       'An organization owner or billing manager must link their personal billing information with this organization account. You can switch to a business account to use your business’ billing information by {} the {}.',
       '组织所有者或账单管理员必须将个人账单信息链接到此组织帐户。若要切换为企业帐户以使用企业账单信息请{} {}。'

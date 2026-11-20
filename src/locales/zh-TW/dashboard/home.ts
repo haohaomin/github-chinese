@@ -37,6 +37,8 @@ export default {
   static: {
     // 仪表板上下文切换
     'Switch dashboard context': '切換儀表板帳號',
+    // 新版首页侧栏：上下文区域的读屏名称（切换菜单、常用存储库图标的读屏名称见 scoped）
+    'Account context': '帳號情境',
     'Manage organizations': '管理組織',
     'Create organization': '建立組織',
     'Try the new dashboard experience': '試用新版儀表板',
@@ -138,6 +140,9 @@ export default {
     // 左侧栏
     'Recent activity': '最近活動',
     'Switch back': '切換回舊版',
+    // 上下文切换菜单、常用存储库图标的读屏名称
+    dashboards: '儀表板',
+    Repository: '儲存庫',
 
     // 分区列表：“查看全部”后的读屏文字、筛选菜单（分区标题“Agent sessions”、时间范围由全局词条翻译）
     sessions: '工作階段',
@@ -175,6 +180,8 @@ export default {
   regexp: [
     // 上下文切换按钮
     [/^Switch dashboard: (.+)$/, '切換儀表板：$1'],
+    // 新版首页侧栏的上下文切换按钮（读屏名称）：Go to octocat dashboard
+    [/^Go to (?!(?:the|your|my) )([A-Za-z\d][\w-]*) dashboard$/, '前往 $1 的儀表板'],
     // 拉取请求 / 议题条目说明：owner/repo#12 · Opened by octocat · Updated + <relative-time>
     // 拉取请求与议题条目共用同一模板（IssueListItem / PullRequestListItem），无法区分；
     // 拉取请求、议题的动词 open 都作“建立”（GLOSSARY.zh-TW pull request、Open 行）

@@ -56,6 +56,7 @@ export default {
     'Encrypted secrets allow you to store private access tokens so that Dependabot can update dependencies from private registries.':
       '加密机密可用于存储私密访问令牌，以便 Dependabot 更新来自专用注册表的依赖项。',
     'No organization secrets have been authorized for this repository.': '尚未授权此存储库使用任何组织机密。',
+    'There are no organization secrets available to this repository.': '此存储库没有可用的组织机密。',
     'No organization variables have been authorized for this repository.': '尚未授权此存储库使用任何组织变量。',
 
     // 部署密钥
@@ -175,6 +176,15 @@ export default {
     // 删除确认
     [/^Are you sure you want to delete ([A-Z_][A-Z0-9_]{0,99})\?$/, '确定要删除 $1 吗？'],
     // 机密 / 变量列表行按钮的读屏名称：Edit NPM_TOKEN、Delete NPM_TOKEN
-    [/^(Edit|Delete|Update|Remove) ([A-Z_][A-Z0-9_]{1,99})$/, (_, verb: string, name: string) => `${ROW_ACTION[verb] ?? verb} ${name}`]
+    [/^(Edit|Delete|Update|Remove) ([A-Z_][A-Z0-9_]{1,99})$/, (_, verb: string, name: string) => `${ROW_ACTION[verb] ?? verb} ${name}`],
+    // 部署密钥：组织策略禁止写入访问时复选框旁的说明「Disabled by <组织>」（组织名是纯文字）
+    [/^Disabled by (?![Dd]efault$)([\w.-]+)$/, '已被 $1 禁用']
+  ],
+  inline: [
+    // 部署密钥页的组织策略横幅：「… because of a <b>组织</b> policy. We recommend using <a>GitHub Apps</a> instead … and <a>enhanced security</a>.」
+    [
+      /^Some settings on this page can[’']t be changed because of a \{\} policy\. We recommend using \{\} instead for fine grained control over repositories and \{\}\.$/,
+      '由于 {} 的策略，此页面上的部分设置无法更改。建议改用{}来获得对存储库的精细控制和{}。'
+    ]
   ]
 } satisfies PageDictionary

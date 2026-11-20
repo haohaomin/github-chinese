@@ -44,6 +44,8 @@ export default {
     'None of your dependencies can be sponsored': '你的依赖都不可赞助',
     "You don't directly depend on any repositories whose maintainers can be sponsored.": '你没有直接依赖任何维护者可赞助的存储库。',
     'You don’t directly depend on any repositories whose maintainers can be sponsored.': '你没有直接依赖任何维护者可赞助的存储库。',
+    // 主语（组织名）在单独的元素里时的后半句
+    'does not directly depend on any repositories whose maintainers can be sponsored.': '没有直接依赖任何维护者可赞助的存储库。',
     'developers who maintain your dependencies': '个维护你的依赖的开发者',
     'Explore people and projects': '探索人员和项目',
     'Bulk Sponsor': '批量赞助',
@@ -148,6 +150,12 @@ export default {
     [
       /^(.+) does not directly depend on any repositories whose maintainers can be sponsored\.$/,
       '$1 没有直接依赖任何维护者可赞助的存储库。'
+    ],
+    // 按生态系统筛选后（主语在单独的元素里时只剩后半句）：… in the Cargo ecosystem whose maintainers can be sponsored.
+    [
+      /^(?:(.+?) )?(?:does not|don['’]t) directly depend on any repositories in the (.+) ecosystem whose maintainers can be sponsored\.$/,
+      (_, subject: string | undefined, ecosystem: string) =>
+        `${subject === 'You' ? '你' : subject ? `${subject} ` : ''}没有直接依赖 ${ecosystem} 生态系统中任何维护者可赞助的存储库。`
     ],
     [/^(\d[\d,]*) repositor(?:y|ies) they own or maintain$/, '他们拥有或维护的 $1 个存储库'],
     [/^others? sponsor, including (\d[\d,]*) organizations?$/, '个其他赞助者，包括 $1 个组织'],

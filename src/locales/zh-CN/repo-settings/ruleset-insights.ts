@@ -1,4 +1,6 @@
 import type { PageDictionary } from '../../../core/types'
+import { CHART_A11Y_RULES } from '../insights/charts'
+import { WEEKDAY_DATE_SOURCE, translateTokenDate } from '../settings-developer/tokens'
 
 /** 规则集运行结果：英文 → 中文 */
 const RESULT: Readonly<Record<string, string>> = {
@@ -10,6 +12,10 @@ const RESULT: Readonly<Record<string, string>> = {
 
 /** 单项结果：2 rulesets passed */
 const RESULT_PART = /^(\d+\+?) rulesets? (passed|failed|bypassed|skipped)$/
+
+/** 规则集仪表板图表的数据系列：规则套件的通过 / 失败 / 绕过 */
+const RULE_SUITE_SERIES: Readonly<Record<string, string>> = { Passes: '通过', Failures: '失败', Bypasses: '绕过' }
+const SERIES = `(${Object.keys(RULE_SUITE_SERIES).join('|')})`
 
 /**
  * 「2 rulesets passed, 1 ruleset bypassed and 1 ruleset failed」→「2 个规则集通过、1 个规则集被绕过、1 个规则集失败」；
@@ -140,7 +146,15 @@ export default {
     '(renamed from': '（重命名自',
     // 绕过请求：<a>Bypass request</a> approved by <user>
     'approved by': '批准者',
-    'rejected by': '拒绝者'
+    'rejected by': '拒绝者',
+    // 仪表板图表（Highcharts SVG，见 core/ignore.ts 放行）：图例、Y 轴标题（组织规则集仪表板同一组件）
+    Passes: '通过',
+    Failures: '失败',
+    Bypasses: '绕过',
+    Values: '值',
+    // 仪表板指标卡片标题（规则集运行：允许 / 失败）
+    Allowed: '已允许',
+    Failed: '失败'
   },
   regexp: [
     // 详细信息对话框标题下的结果：2 rulesets passed and 1 ruleset failed
@@ -160,7 +174,20 @@ export default {
     // 绕过请求的其他处理人：and 2 others.
     [/^and (\d+) others\.$/, '及另外 $1 人。'],
     // 违规列表：Found 120 violations (showing first 100)
-    [/^Found (\d+) violations \(showing first (\d+)\)$/, '发现 $1 处违规（显示前 $2 处）']
+    [/^Found (\d+) violations \(showing first (\d+)\)$/, '发现 $1 处违规（显示前 $2 处）'],
+    // 仪表板图表（Highcharts SVG 放行后，组织规则集仪表板同一组件）：数据点、数据系列的无障碍名称，提示框的日期
+    [
+      new RegExp(`^(${WEEKDAY_DATE_SOURCE}), (-?[\\d,.]+)\\. ${SERIES}\\.$`),
+      (_, date: string, value: string, series: string) => `${translateTokenDate(date)}，${value}。${RULE_SUITE_SERIES[series]}。`
+    ],
+    [
+      new RegExp(`^${SERIES}, line (\\d+) of (\\d+) with (\\d+) data points?\\.$`),
+      (_, series: string, index: string, total: string, points: string) =>
+        `${RULE_SUITE_SERIES[series]}，第 ${index} 条线（共 ${total} 条），包含 ${points} 个数据点。`
+    ],
+    [new RegExp(`^(${WEEKDAY_DATE_SOURCE})$`), (_, date: string) => translateTokenDate(date)],
+    // 仪表板图表的类型、坐标轴说明（同洞察页图表）
+    ...CHART_A11Y_RULES
   ],
   // 运行记录的分支重命名注记：<span> (renamed to <BranchName>新分支</BranchName>)</span>，右括号是单独的文本
   inline: [

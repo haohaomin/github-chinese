@@ -1463,6 +1463,13 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     ],
     misses: ['Organization • members']
   },
+  {
+    hits: [
+      ['Enterprise • 0 organizations', '企业 • 0 个组织'],
+      ['Enterprise • 1 organization', '企业 • 1 个组织']
+    ],
+    misses: ['Enterprise • organizations']
+  },
   { hits: [['$19 / user', '$19 / 用户']], misses: ['$19 / seat'] },
   {
     hits: [

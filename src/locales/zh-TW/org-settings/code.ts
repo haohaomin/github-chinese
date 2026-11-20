@@ -1,14 +1,8 @@
 import type { PageDictionary } from '../../../core/types'
 import { joinCjk } from '../helpers'
-import { CHART_A11Y_RULES } from '../insights/charts'
-import { WEEKDAY_DATE_SOURCE, translateTokenDate } from '../settings-developer/tokens'
 
 const ORG = '([\\w.-]+)'
 const BRANCH = '([\\w./-]+)'
-
-/** 规则集仪表板图表的数据系列：规则套件的通过 / 失败 / 绕过 */
-const RULE_SUITE_SERIES: Readonly<Record<string, string>> = { Passes: '通過', Failures: '失敗', Bypasses: '繞過' }
-const SERIES = `(${Object.keys(RULE_SUITE_SERIES).join('|')})`
 
 /** 自定义属性类型（类型菜单按钮的无障碍名称「Type: <类型>」） */
 const PROPERTY_TYPES: Readonly<Record<string, string>> = {
@@ -92,7 +86,7 @@ export default {
     'Save complete': '儲存完成',
     'To pick up a draggable item, press the space bar. While dragging, use the arrow keys to move the item. Press space again to drop the item in its new position, or press escape to cancel.':
       '若要拾取可拖曳項目，請按空白鍵。拖曳時，使用方向鍵移動該項目。再次按空白鍵將其放到新位置，或按 Esc 鍵取消。',
-    // 规则集仪表板：图表外的「Values」轴标题等见 scoped；Slack 集成跳转
+    // Slack 集成跳转（规则集仪表板图表的图例、数据点与坐标轴说明见 repo-settings/ruleset-insights.ts）
     'You are being redirected to Slack in order to authenticate.': '正在重新導向至 Slack 以驗證身分。',
     'click here': '按一下這裡',
     // 设置保存提示
@@ -350,11 +344,6 @@ export default {
     'Failover network': '容錯移轉網路'
   },
   scoped: {
-    // 规则集仪表板图表（Highcharts SVG，见 core/ignore.ts 放行）：图例、Y 轴标题
-    Passes: '通過',
-    Failures: '失敗',
-    Bypasses: '繞過',
-    Values: '值',
     // 议题字段：类型按钮、权限选项、置顶对话框的分组、单选选项的文本框
     'Single Select': '單選',
     Restricted: '受限',
@@ -445,17 +434,6 @@ export default {
     'There are no verified domains for this organization.': '此組織沒有已驗證的網域。'
   },
   regexp: [
-    // 规则集仪表板图表（Highcharts SVG 放行后）：数据点、数据系列的无障碍名称，提示框的日期
-    [
-      new RegExp(`^(${WEEKDAY_DATE_SOURCE}), (-?[\\d,.]+)\\. ${SERIES}\\.$`),
-      (_, date: string, value: string, series: string) => `${translateTokenDate(date)}，${value}。${RULE_SUITE_SERIES[series]}。`
-    ],
-    [
-      new RegExp(`^${SERIES}, line (\\d+) of (\\d+) with (\\d+) data points?\\.$`),
-      (_, series: string, index: string, total: string, points: string) =>
-        `${RULE_SUITE_SERIES[series]}，第 ${index} 條線（共 ${total} 條），包含 ${points} 個資料點。`
-    ],
-    [new RegExp(`^(${WEEKDAY_DATE_SOURCE})$`), (_, date: string) => translateTokenDate(date)],
     // 议题字段编辑页：标题「<a>议题字段</a> / Effort」的后半段、单选选项的操作与拖动按钮
     [new RegExp(`^/ (${Object.keys(PRESET_FIELDS).join('|')})$`), (_, name: string) => `/ ${PRESET_FIELDS[name]}`],
     [/^Open field actions for (.+)$/, (_, name: string) => `開啟「${pick(PRESET_OPTIONS, name) ?? name}」的動作`],
@@ -471,8 +449,6 @@ export default {
       '這將從你的所有議題和專案中移除議題欄位「$1」。此動作無法復原。'
     ],
     [/^Please type "(.+)" to confirm$/, '請輸入「$1」以確認'],
-    // 规则集仪表板的图表：类型、坐标轴（同洞察页图表）
-    ...CHART_A11Y_RULES,
     // 议题字段计数，自定义字段与类型的无障碍名称、操作提示
     [/^(\d+) Issue fields?$/, '$1 個議題欄位'],
     [/^Issue field: (.+)$/, '議題欄位：$1'],

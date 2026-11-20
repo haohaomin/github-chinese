@@ -66,7 +66,17 @@ export default {
     'Your sponsorships': '你的赞助',
     'Sponsorship log': '赞助日志',
     'Switch to invoiced billing': '切换到开票计费',
-    'GitHub Invoiced Sponsor Agreement': 'GitHub 发票赞助协议'
+    'GitHub Invoiced Sponsor Agreement': 'GitHub 发票赞助协议',
+    // 等级回报的默认说明
+    'Get a Sponsor badge on your profile': '在个人资料上获得赞助者徽章',
+    // 结账页所选等级为自定义金额时的说明（位于 .markdown-body，按 core/ignore.ts 的占位文字放行）
+    'Custom amount. A Public Sponsor achievement will be added to your profile.': `自定义金额。${PUBLIC_SPONSOR_ACHIEVEMENT}`,
+    'Sponsorship summary': '赞助摘要',
+    // 下月扣款说明的片段（金额在 <span> 中，整句见 inline）
+    'Next month your billing cycle starts again and you will see a charge for': '下个月计费周期重新开始时将向你收取',
+    '. You can cancel at any time.': '。你可以随时取消。',
+    // 自定义金额的输入校验
+    'Please choose a whole-dollar amount': '请选择整美元金额'
   },
   scoped: {
     Invoices: '发票',
@@ -86,7 +96,13 @@ export default {
     'sponsors this goal': '支持此目标',
     'sponsor this goal': '支持此目标',
     'you’re a sponsor.': '你是赞助者。',
-    "you're a sponsor.": '你是赞助者。'
+    "you're a sponsor.": '你是赞助者。',
+    // 结账页：标题「赞助 <strong>reedy</strong> / Tier confirmation」、编辑按钮的读屏文字、费用
+    '/ Tier confirmation': '/ 等级确认',
+    'selected tier': '所选等级',
+    Fees: '费用',
+    // 「Save $0.03 in fees when you switch to <a>invoiced billing.</a>」的链接文字（前半见 regexp）
+    'invoiced billing.': '开票计费。'
   },
   regexp: [
     // 页面标题与按钮
@@ -120,7 +136,23 @@ export default {
     ],
 
     // 结账
-    [/^Receive email updates from (.+)$/, '接收 $1 的电子邮件动态']
+    [/^Receive email updates from (.+)$/, '接收 $1 的电子邮件动态'],
+    // 以组织身份赞助时徽章说明的后半：setube-organization's a sponsor.（前半见 static 的 Hover over your avatar…）
+    [/^([\w.-]+)['’]s a sponsor\.$/, '$1 是赞助者。'],
+    // 等级选择按钮的读屏文字：选择 + $5 a month tier
+    [
+      /^(\$[\d,]+(?:\.\d{2})?) (a month|one time) tier$/,
+      (_, amount: string, frequency: string) => `${frequency === 'a month' ? '每月' : '一次性'} ${amount} 等级`
+    ],
+    // 费用说明：Save $0.03 in fees when you switch to <a>invoiced billing.</a>
+    [/^Save (\$[\d,]+(?:\.\d{2})?) in fees when you switch to$/, '如需节省 $1 费用可切换到']
+  ],
+  inline: [
+    // 下月扣款说明：「… you will see a charge for <span>$1.06</span>. You can cancel at any time.」
+    [
+      'Next month your billing cycle starts again and you will see a charge for {}. You can cancel at any time.',
+      '下个月计费周期重新开始时将向你收取 {}。你可以随时取消。'
+    ]
   ],
   ignore: [
     // 头部所在地

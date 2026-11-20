@@ -134,8 +134,14 @@ export default {
     'Workflows in other repositories cannot access this repository.': '其他儲存庫中的工作流程無法存取此儲存庫。',
     'Controls how this repository can be used by GitHub Actions workflows in other repositories.':
       '控制其他儲存庫中的 GitHub 動作工作流程如何使用此儲存庫。',
+    'Control how this repository is used by GitHub Actions workflows in other repositories.':
+      '控制其他儲存庫中的 GitHub 動作工作流程如何使用此儲存庫。',
+    'Learn more about allowing other repositories to access to Actions components in this repository.':
+      '瞭解如何允許其他儲存庫存取此儲存庫中的動作元件。',
+    'Save access setting': '儲存存取設定',
 
     // 运行器列表
+    'Self-hosted runners were disabled by your organization admin.': '組織管理員已停用自架執行器。',
     'New self-hosted runner': '新增自架執行器',
     'Host your own runners and customize the environment used to run jobs in your GitHub Actions workflows.':
       '架設你自己的執行器，並自訂執行 GitHub 動作工作流程作業的環境。',
@@ -298,6 +304,23 @@ export default {
     // 运行器详细信息：把标签加入工作流 YAML
     [/^Add `([^`]{1,100})` to your workflow[’']s YAML to send jobs to this runner\.$/, '將 `$1` 加入工作流程 YAML 以傳送作業至此執行器。'],
     // 新建自托管运行器：页面标题文本（含 owner/repo）
-    [/^Add new self-hosted runner · ([\w.-]+\/[\w.-]+)$/, '新增自架執行器 · $1']
+    [/^Add new self-hosted runner · ([\w.-]+\/[\w.-]+)$/, '新增自架執行器 · $1'],
+    // 产物和日志保留：上级设置的上限（「期限不得少於 1。」等校验在同一段落）
+    [
+      /^The (organization|enterprise) has set a maximum duration of (\d+) days?$/,
+      (_, owner: string, days: string) => `${owner === 'organization' ? '組織' : '企業'}設定的最長期限為 ${days} 天`
+    ],
+    // OIDC：不可变主题声明自动启用（其后的链接「瞭解不可變的主體宣告。」由 static 翻译）
+    [
+      new RegExp(
+        `^Automatically enabled for this repository\\. Repositories created or renamed after (${DATE_SOURCE}) use immutable subject claims\\.$`
+      ),
+      (_, date: string) =>
+        `已為此儲存庫自動啟用。${joinCjk(translateDate(date) ?? date, '之後')}建立或重新命名的儲存庫使用不可變的主體宣告。`
+    ]
+  ],
+  inline: [
+    // 策略列表空状态：「<a>Policies</a> define whether actions can run in specific contexts.」（同组织设置）
+    ['{} define whether actions can run in specific contexts.', '{}定義動作能否在特定情境中執行。']
   ]
 } satisfies PageDictionary

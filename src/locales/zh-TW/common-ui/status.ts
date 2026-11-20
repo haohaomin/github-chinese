@@ -34,7 +34,9 @@ const LABELS: Readonly<Record<string, string>> = {
   'Public mirror': '公開鏡像',
   Preview: '預覽',
   'Public preview': '公開預覽',
-  Staff: '員工'
+  Staff: '員工',
+  // 未设置时的占位（如存储库访问页的基本角色）
+  None: '無'
 }
 
 /** 作者关系说明的主语：This user is → 此使用者；You are → 你 */
@@ -156,7 +158,7 @@ export default {
       (_, state: string) => `狀態：${STATES[state]!}`
     ],
     [
-      /^Label: (Verified|Unverified|GitHub Sponsor|Public|Private|Internal|Public archive|Private archive|Public template|Private template|Public mirror|Preview|Public preview|Staff)$/,
+      /^Label: (Verified|Unverified|GitHub Sponsor|Public|Private|Internal|Public archive|Private archive|Public template|Private template|Public mirror|Preview|Public preview|Staff|None)$/,
       (_, label: string) => `標籤：${LABELS[label]!}`
     ],
 

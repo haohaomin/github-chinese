@@ -333,6 +333,8 @@ export const IGNORE_SELECTORS: readonly string[] = [
  *   （其余子节点只有空白文字）、段落里只有一个文本节点（用户内容的段落带 dir="auto"）。
  * - 发行版表单的标签、上一个标签按钮里字段名之后的值（PLACEHOLDER_SELECTOR，见 repository 词典的忽略规则）：
  *   未选择时是 Select tag、Auto，选择后是标签名。
+ * - 赞助结账页所选等级的说明（PLACEHOLDER_SELECTOR）：自定义金额时 .markdown-body 里只有 GitHub 写入的一句说明，
+ *   维护者编写的等级说明渲染后总有段落元素。
  * 其他忽略区域（标题、描述、标签名等）里同样的文字是用户内容，保持原文
  */
 export const PLACEHOLDER_TEXTS: ReadonlySet<string> = new Set([
@@ -341,18 +343,21 @@ export const PLACEHOLDER_TEXTS: ReadonlySet<string> = new Set([
   'Loading preview…',
   'Error rendering preview',
   'Select tag',
-  'Auto'
+  'Auto',
+  'Custom amount. A Public Sponsor achievement will be added to your profile.'
 ])
 
 /**
  * 占位文字所在的区域根：Markdown 编辑器的预览窗格（带哈希类名，或屏幕阅读器播报区域）下的 .markdown-body；
- * 发行版表单的标签、上一个标签按钮里字段名（.fgColor-muted）之后的值（类名有 名称__哈希、模块-module_哈希_名称 两种写法）
+ * 发行版表单的标签、上一个标签按钮里字段名（.fgColor-muted）之后的值（类名有 名称__哈希、模块-module_哈希_名称 两种写法）；
+ * 赞助结账页（/sponsors/<名称>/sponsorships）所选等级卡片里的说明
  */
 export const PLACEHOLDER_SELECTOR = [
   '[class*="previewViewerWrapper__"] > .markdown-body',
   '[aria-live="polite"] > .markdown-body',
   '[id^="ref-picker-releases-"] [class*="RefSelectorText__"] > span:not(.fgColor-muted)',
-  '[id^="ref-picker-releases-"] [class*="_RefSelectorText"] > span:not(.fgColor-muted)'
+  '[id^="ref-picker-releases-"] [class*="_RefSelectorText"] > span:not(.fgColor-muted)',
+  '.border.rounded-2 > .markdown-body.comment-body.p-0'
 ].join(', ')
 
 /** 占位段落所在的区域根：经典评论框（.js-previewable-comment-form）的预览区 .comment-body.markdown-body.js-preview-body */

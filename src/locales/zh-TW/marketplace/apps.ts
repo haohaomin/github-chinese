@@ -116,7 +116,9 @@ export default {
     'Review your order': '查看訂單',
     'Cancel this plan': '取消此方案',
     'billing overview page': '帳務總覽頁面',
-    '(current plan)': '（目前方案）'
+    '(current plan)': '（目前方案）',
+    // 订单完成后的跳转说明里的链接（整句见 inline）
+    'setup page': '設定頁面'
   },
   regexp: [
     // 订单页：下一步、按比例计费区间、跳转、已安装 / 取消 / 卸载确认（第三方应用名、组织名、日期照录）
@@ -174,6 +176,8 @@ export default {
     [/^Install (.+)$/, '安裝 $1']
   ],
   inline: [
+    // 订单完成后的跳转说明：「… please visit this <a>setup page</a> to continue.」
+    ['If your browser does not redirect you automatically, please visit this {} to continue.', '如果瀏覽器沒有自動跳轉，請前往此{}繼續。'],
     // 订单页同意条款：「By clicking "…", you are agreeing to Render’s <a>服务条款</a> and the <a>隐私政策</a>. You previously agreed to the <details>市场服务条款。</details>」
     [
       /^By clicking ["“](Complete order and begin installation|Issue plan changes and begin installation)["”], you are agreeing to (.+?)[’']s \{\} and(?: the)? \{\}\. You previously agreed to the \{\}$/,

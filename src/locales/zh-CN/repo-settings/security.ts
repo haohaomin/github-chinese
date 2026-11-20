@@ -295,7 +295,11 @@ export default {
     // Dependabot 规则页（与组织设置共用；New rule、/ New rule、Rules 由 branches.ts、nav.ts 收录）
     ...DEPENDABOT_RULES_SCOPED,
     // 「Dismiss alerts」的期限选项（组织设置由 moderation.ts 收录，不放进共用常量）
-    Indefinitely: '无限期'
+    Indefinitely: '无限期',
+    // Dependabot 运行器类型：说明中的链接文字（整句见 inline）、编辑对话框的字段（同组织设置）
+    'runner type': '运行器类型',
+    'Runner label': '运行器标签',
+    'Runner group name': '运行器组名称'
   },
   regexp: [
     // 代码扫描：上次扫描 / 下次扫描时间
@@ -309,5 +313,10 @@ export default {
     BYPASS_ACTOR_ACTIONS_RULE,
     // Dependabot 规则（与组织设置共用）；「Managed by <组织>」由 rulesets.ts 收录
     ...DEPENDABOT_RULES_REGEXP
+  ],
+  inline: [
+    // Dependabot 运行器类型：「Select the <a>runner type</a> used by …」「The <code>dependabot</code> label is used by default. …」
+    ['Select the {} used by Dependabot for scans, versions and security updates.', '选择 Dependabot 用于扫描、版本更新和安全更新的{}。'],
+    ['The {} label is used by default. Learn how to {}.', '默认使用 {} 标签。了解如何{}。']
   ]
 } satisfies PageDictionary

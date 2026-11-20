@@ -285,6 +285,16 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       ['New budget in dollars for mona', 'mona 的新预算美元金额']
     ],
     misses: ['New budget in euros for octocat']
+  },
+  // 组织升级为企业未完成
+  {
+    hits: [
+      [
+        'Your upgrade for 165a1sd6a1sdasd1 is incomplete. Please complete the purchase to upgrade your account.',
+        '你对 165a1sd6a1sdasd1 的升级尚未完成。请完成购买以升级帐户。'
+      ]
+    ],
+    misses: ['Your upgrade is incomplete. Please complete the purchase to upgrade your account.']
   }
 ]
 

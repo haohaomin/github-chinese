@@ -180,7 +180,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   {
     hits: [
       ['Label: Verified', '标签：已验证'],
-      ['Label: Public archive', '标签：公共存档']
+      ['Label: Public archive', '标签：公共存档'],
+      ['Label: None', '标签：无']
     ],
     misses: ['Label: bug']
   },

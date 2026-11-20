@@ -286,6 +286,9 @@ export default {
     'Account:': '帐户：',
     '/ month': '/ 月',
     'Current plan': '当前计划',
+    // 订单页计划价格的单位（per&nbsp;user/&nbsp;month）
+    'per user/ month': '每用户/月',
+    'per user / month': '每用户 / 月',
     separate: '单独的',
     Requirements: '要求',
     Developer: '开发人员',

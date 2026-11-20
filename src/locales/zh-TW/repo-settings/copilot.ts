@@ -61,6 +61,13 @@ export default {
     'In a personal repository, only the owner and direct collaborators can request reviews.':
       '在個人儲存庫中，只有擁有者和直接協作者可以請求審查。',
     'Automatic reviews from rulesets still run.': '規則集觸發的自動審查仍會執行。',
+    'Limits the review effort Copilot can use in this repository. Organization and enterprise limits still apply.':
+      '限制 Copilot 在此儲存庫中可使用的審查強度。組織和企業的限制仍然適用。',
+    'Search public repositories': '搜尋公開儲存庫',
+    'Copilot can search public repositories that a pull request uses for context when it reviews pull requests in this repository.':
+      'Copilot 審查此儲存庫中的拉取請求時，可以搜尋拉取請求使用的公開儲存庫來取得脈絡。',
+    // 机密保护 AI 扫描：组织停用时的说明（整句见 inline）
+    'Disabled by your organization.': '已由你的組織停用。',
 
     // 云代理 / 编码代理
     "You can configure Copilot cloud agent for other users with access to this repository, but you won't be able to assign tasks to Copilot because you don't have a Copilot Pro, Copilot Pro+, Copilot Business or Copilot Enterprise license.":
@@ -93,6 +100,22 @@ export default {
       '設定 Copilot 雲端代理在請求人工審查前，用來驗證其工作並迭代的工具。',
     'Configure which tools Copilot in the cloud uses to validate its work and iterate before requesting human review.':
       '設定雲端 Copilot 在請求人工審查前，用來驗證其工作並迭代的工具。',
+    "Actions workflows wait for approval from someone with write access before they run on Copilot's changes.":
+      '動作工作流程在 Copilot 的變更上執行前，須等待具有寫入權限的人員核准。',
+    'Actions workflows wait for approval from someone with write access before they run on Copilot’s changes.':
+      '動作工作流程在 Copilot 的變更上執行前，須等待具有寫入權限的人員核准。',
+    // 沙箱资源
+    'Sandbox resources': '沙箱資源',
+    'Choose the compute size for new cloud agent sandboxes. Existing sandboxes keep their current size. For tasks using multiple repositories, the largest repository setting is used.':
+      '為新的雲端代理沙箱選擇運算規格。現有沙箱維持目前規格。使用多個儲存庫的任務會採用其中最大的儲存庫設定。',
+    'Sandbox size': '沙箱規格',
+    'No repository default': '無儲存庫預設值',
+    'Small (S)': '小 (S)',
+    'Medium (M)': '中 (M)',
+    'Large (L)': '大 (L)',
+    'No repository-specific size is set. Choose a size to save a repository default.':
+      '未設定儲存庫專用規格。選擇規格即可儲存為儲存庫預設值。',
+    'Save sandbox size': '儲存沙箱規格',
 
     // 自动化
     'When enabled, users with write access can create automations that automatically run agents on a schedule or in response to events like new issues or updated pull requests.':
@@ -107,6 +130,14 @@ export default {
     'Limit automation writes to the triggering resource': '將自動化的寫入範圍限制在觸發資源',
     'When enabled, automation runs can only change the issue, pull request, or discussion that triggered them, and anything they create. This does not apply to scheduled runs, security alert runs, or runs started by another automation.':
       '啟用後，自動化執行只能變更觸發它的議題、拉取請求或討論，以及它自己建立的內容。此限制不適用於排程執行、安全性警示執行，或由其他自動化啟動的執行。',
+    "Shared automations belong to the repository and run as its owner, so their usage is billed to the owner. When disabled, shared automations are hidden and the owner isn't billed for them.":
+      '共用自動化屬於儲存庫，並以其擁有者身分執行，因此使用量會向擁有者計費。停用後，共用自動化會隱藏，擁有者也不會為其付費。',
+    'Shared automations belong to the repository and run as its owner, so their usage is billed to the owner. When disabled, shared automations are hidden and the owner isn’t billed for them.':
+      '共用自動化屬於儲存庫，並以其擁有者身分執行，因此使用量會向擁有者計費。停用後，共用自動化會隱藏，擁有者也不會為其付費。',
+    'Workflows on automation pull requests wait for approval, even when "Require approval for workflow runs" is off.':
+      '即使「工作流程執行需要核准」已關閉，自動化拉取請求上的工作流程仍須等待核准。',
+    'Workflows on automation pull requests wait for approval, even when “Require approval for workflow runs” is off.':
+      '即使「工作流程執行需要核准」已關閉，自動化拉取請求上的工作流程仍須等待核准。',
     'CodeQL code scanning': 'CodeQL 程式碼掃描',
     'Use CodeQL to scan for security vulnerabilities.': '使用 CodeQL 掃描安全性漏洞。',
     'Use Copilot code review to identify code quality issues.': '使用 Copilot 程式碼審查找出程式碼品質問題。',
@@ -246,6 +277,23 @@ export default {
     Use: '使用',
     'to toggle the': '切換',
     'key moving focus. Alternatively, use': '鍵是否移動焦點。也可以按',
-    'to move to the next interactive element on the page.': '移到頁面上的下一個互動元素。'
-  }
+    'to move to the next interactive element on the page.': '移到頁面上的下一個互動元素。',
+    // 自动化分组标题；「<span>已啟用</span> <span>by your organization</span>」的后半
+    Automations: '自動化',
+    'by your organization': '由你的組織設定',
+    'by your enterprise': '由你的企業設定',
+    // 机密保护 AI 扫描与组织停用说明中的链接文字（整句见 inline）
+    'Scans use': '掃描會消耗',
+    'Secret Protection AI credits': '機密保護 AI 點數',
+    'organization Copilot settings': '組織 Copilot 設定'
+  },
+  inline: [
+    // 机密保护 AI 扫描：「…pull requests. Scans use <a>Secret Protection AI credits</a>.」（同组织设置）
+    [
+      'Uses machine learning and known patterns to detect secrets when Copilot reviews pull requests. Scans use {}.',
+      'Copilot 審查拉取請求時，使用機器學習和已知模式偵測機密。掃描會消耗{}。'
+    ],
+    // 组织停用：「Disabled by your organization. Manage this in <a>organization Copilot settings</a>.」
+    ['Disabled by your organization. Manage this in {}.', '已由你的組織停用。在{}中管理。']
+  ]
 } satisfies PageDictionary

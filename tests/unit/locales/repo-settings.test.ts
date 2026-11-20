@@ -305,6 +305,13 @@ const REGEXP_CASES: Readonly<Record<PartName, readonly RegExpCase[]>> = {
     },
     {
       hits: [
+        ['0 users and', '0 个用户和'],
+        ['1 user and', '1 个用户和']
+      ],
+      misses: ['users and']
+    },
+    {
+      hits: [
         ['2 invitations', '2 个邀请'],
         ['1 invitation', '1 个邀请']
       ],
@@ -683,6 +690,29 @@ const REGEXP_CASES: Readonly<Record<PartName, readonly RegExpCase[]>> = {
     {
       hits: [['Found 120 violations (showing first 100)', '发现 120 处违规（显示前 100 处）']],
       misses: ['Found violations']
+    },
+    // 仪表板图表：数据点、数据系列、提示框日期（组织规则集仪表板同一组件）
+    { hits: [['Saturday, Nov 14, 2026, 0. Passes.', '2026年11月14日周六，0。通过。']], misses: ['Saturday, Nov 14, 2026, 0. Skips.'] },
+    {
+      hits: [['Failures, line 2 of 3 with 7 data points.', '失败，第 2 条线（共 3 条），包含 7 个数据点。']],
+      misses: ['Skips, line 1 of 3 with 8 data points.']
+    },
+    { hits: [['Friday, Nov 20, 2026', '2026年11月20日周五']], misses: ['Someday, Nov 20, 2026'] },
+    // 仪表板图表的类型、坐标轴说明
+    { hits: [['Line chart with 3 lines.', '包含 3 条线的折线图。']], misses: ['Line chart with many lines.'] },
+    {
+      hits: [
+        [
+          'The chart has 1 X axis displaying Time. Data ranges from 2026-11-14 00:00:00 to 2026-11-20 00:00:00.',
+          '图表有 1 条显示时间的 X 轴。数据范围从 2026-11-14 00:00:00 到 2026-11-20 00:00:00。'
+        ],
+        ['The chart has 1 X axis displaying Actor.', '图表有 1 条显示参与者的 X 轴。']
+      ],
+      misses: ['The chart has an X axis.']
+    },
+    {
+      hits: [['The chart has 2 X axes displaying Time, and navigator-x-axis.', '图表的 2 条 X 轴分别显示时间、导航 X 轴。']],
+      misses: ['The chart has two X axes.']
     }
   ],
   rulesetImport: [
@@ -863,6 +893,22 @@ const REGEXP_CASES: Readonly<Record<PartName, readonly RegExpCase[]>> = {
     {
       hits: [['Add new self-hosted runner · octo-org/hello-world', '添加新的自托管运行器 · octo-org/hello-world']],
       misses: ['Add new self-hosted runner · hello-world']
+    },
+    {
+      hits: [
+        ['The organization has set a maximum duration of 90 days', '组织设置的最长时长为 90 天'],
+        ['The enterprise has set a maximum duration of 1 day', '企业设置的最长时长为 1 天']
+      ],
+      misses: ['The organization has set a maximum duration']
+    },
+    {
+      hits: [
+        [
+          'Automatically enabled for this repository. Repositories created or renamed after July 15, 2026 use immutable subject claims.',
+          '已为此存储库自动启用。2026年7月15日之后创建或重命名的存储库使用不可变主题声明。'
+        ]
+      ],
+      misses: ['Automatically enabled for this repository.']
     }
   ],
   webhooks: [
@@ -938,6 +984,13 @@ const REGEXP_CASES: Readonly<Record<PartName, readonly RegExpCase[]>> = {
         ]
       ],
       misses: ['Applies to branches. Based on the existing repository branch protection rules.']
+    },
+    {
+      hits: [
+        ['Environment "123" created.', '已创建环境“123”。'],
+        ['Environment “production” created.', '已创建环境“production”。']
+      ],
+      misses: ['Environment created.']
     }
   ],
   codespaces: [
@@ -1102,6 +1155,10 @@ const REGEXP_CASES: Readonly<Record<PartName, readonly RegExpCase[]>> = {
         ['Remove _PRIVATE_KEY', '移除 _PRIVATE_KEY']
       ],
       misses: ['Edit token', 'Delete A', 'Edit 1TOKEN']
+    },
+    {
+      hits: [['Disabled by setube-organization', '已被 setube-organization 禁用']],
+      misses: ['Disabled by default', 'Disabled by Default', 'Disabled by']
     }
   ],
   copilot: []
@@ -1506,10 +1563,11 @@ describe('repo-settings 页面词条', () => {
     expect(translate('and can get started now by migrating to rulesets.')).toBe('中了解停用详情并立即开始迁移到规则集。')
   })
 
-  it('不收录 Type（与全局搜索提示「Type / to search」同形）', () => {
+  it('成员类型筛选按钮 Type 只放 scoped；全局搜索提示「Type / to search」整句匹配，不受影响', () => {
     expect(dict.static?.Type).toBeUndefined()
-    expect(dict.scoped?.Type).toBeUndefined()
-    expect(translate('Type')).toBeUndefined()
+    expect(translate('Type')).toBe('类型')
+    expect(translate('Type:')).toBe('类型：')
+    expect(createMatcher(zhCN).translate('Type / to search', SCOPE)).toBe('按 / 搜索')
   })
 })
 

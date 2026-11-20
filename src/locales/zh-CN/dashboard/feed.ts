@@ -166,6 +166,8 @@ export default {
     // 关注按钮：Follow octocat / Unfollow octocat
     [/^(Follow|Unfollow) ([A-Za-z\d][\w-]*)$/, (_, action, user) => `${action === 'Follow' ? '关注' : '取消关注'} ${user}`],
     // 最近推送提示被关闭后的反馈
-    [/^Dismissed a push from ([\w.-]+\/[\w.-]+)\. Thank you for the feedback!$/, '已忽略来自 $1 的推送。感谢你的反馈！']
+    [/^Dismissed a push from ([\w.-]+\/[\w.-]+)\. Thank you for the feedback!$/, '已忽略来自 $1 的推送。感谢你的反馈！'],
+    // 动态条目头像的替代文字：@octocat profile
+    [/^@([A-Za-z\d][\w-]*(?:\[bot\])?) profile$/, '@$1 的个人资料']
   ]
 } satisfies PageDictionary

@@ -38,6 +38,10 @@ export default {
     'For organizations ready to improve engineering velocity, code quality, and developer experience. See all features on Business plan.':
       '适合希望提升工程效率、代码质量和开发人员体验的组织。查看商业版计划的全部功能。',
     'Billing Information': '账单信息',
+    // 企业帐户的结账页（/github-copilot/purchase?enterprise=…）：计划列表标题、企业版计划说明
+    'Copilot plans': 'Copilot 计划',
+    'For companies looking to customize Copilot to their organization and infuse AI across the developer workflow. See all features on Enterprise plan.':
+      '适合希望根据组织定制 Copilot 并将 AI 融入整个开发人员工作流的公司。查看企业版计划的全部功能。',
     // Copilot 专业版试用与结账（/github-copilot/pro）
     'Try Copilot Pro for 30 days free': '免费试用 Copilot 专业版 30 天',
     'Everything in Copilot Free and:': 'Copilot 免费版的全部功能，以及：',
@@ -113,11 +117,14 @@ export default {
     'free use FAQ': '免费使用常见问题',
     'Select your preferences': '选择你的首选项',
     'Save and complete setup': '保存并完成设置',
-    'Eligibility requirements': '资格要求'
+    'Eligibility requirements': '资格要求',
+    // 企业帐户的结账页：账单信息卡片里的帐户类型
+    'Enterprise account': '企业帐户'
   },
   regexp: [
     // 结账页：帐户类型与成员数、每用户价格、计费周期与席位、链接账单信息后的提示（组织名照录）
     [/^Organization • (\d+) members?$/, '组织 • $1 名成员'],
+    [/^Enterprise • (\d+) organizations?$/, '企业 • $1 个组织'],
     [/^(\$[\d,.]+) \/ user$/, '$1 / 用户'],
     [/^(Monthly|Yearly) • No seats assigned yet$/, (_, cycle: string) => `${cycle === 'Monthly' ? '每月' : '每年'} • 尚未分配席位`],
     [/^Billing information successfully linked to (\S+)$/, '已将账单信息链接到 $1'],

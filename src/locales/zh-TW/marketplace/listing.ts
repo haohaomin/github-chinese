@@ -287,6 +287,9 @@ export default {
     'Account:': '帳號：',
     '/ month': '/ 月',
     'Current plan': '目前方案',
+    // 订单页方案价格的单位（per&nbsp;user/&nbsp;month）
+    'per user/ month': '每位使用者/月',
+    'per user / month': '每位使用者 / 月',
     separate: '個別的',
     Requirements: '需求',
     Developer: '開發人員',

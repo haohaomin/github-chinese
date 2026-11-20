@@ -46,6 +46,8 @@ export default {
     'None of your dependencies can be sponsored': '你的相依項目都無法贊助',
     "You don't directly depend on any repositories whose maintainers can be sponsored.": '你沒有直接相依於任何維護者可受贊助的儲存庫。',
     'You don’t directly depend on any repositories whose maintainers can be sponsored.': '你沒有直接相依於任何維護者可受贊助的儲存庫。',
+    // 主语（组织名）在单独的元素里时的后半句
+    'does not directly depend on any repositories whose maintainers can be sponsored.': '沒有直接相依於任何維護者可受贊助的儲存庫。',
     'developers who maintain your dependencies': '位維護你相依項目的開發人員',
     'Explore people and projects': '探索人員和專案',
     'Bulk Sponsor': '批次贊助',
@@ -153,6 +155,12 @@ export default {
     [
       /^(.+) does not directly depend on any repositories whose maintainers can be sponsored\.$/,
       '$1 沒有直接相依於任何維護者可受贊助的儲存庫。'
+    ],
+    // 按生态系统筛选后（主语在单独的元素里时只剩后半句）：… in the Cargo ecosystem whose maintainers can be sponsored.
+    [
+      /^(?:(.+?) )?(?:does not|don['’]t) directly depend on any repositories in the (.+) ecosystem whose maintainers can be sponsored\.$/,
+      (_, subject: string | undefined, ecosystem: string) =>
+        `${subject === 'You' ? '你' : subject ? `${subject} ` : ''}沒有直接相依於 ${ecosystem} 生態系統中任何維護者可受贊助的儲存庫。`
     ],
     [/^(\d[\d,]*) repositor(?:y|ies) they own or maintain$/, '他們擁有或維護的 $1 個儲存庫'],
     [/^others? sponsor, including (\d[\d,]*) organizations?$/, '位其他贊助者，包括 $1 個組織'],

@@ -10,7 +10,7 @@ const FULL_REPO = '([\\w.-]+/[\\w.-]+)'
  * 组织设置已收录的「Add people」「Add teams」「Outside Collaborators」「Find a collaborator…」
  * 「Create team」「Mixed roles」、角色说明「Read and clone repositories. …」等不再重复；
  * 「Select all」「Remove」「Collaborator」由 common-ui 收录。
- * 管理访问权限的成员类型筛选按钮「Type」不收录：与页头「Type / to search」的片段同形。
+ * 管理访问权限的成员类型筛选按钮「Type」放 scoped：页头搜索按钮「Type / to search」由引擎整句匹配，不受影响。
  */
 export default {
   static: {
@@ -30,6 +30,8 @@ export default {
     'teams or members have access to this repository. Only': '个团队或成员有权访问此存储库。只有',
     'can contribute to this repository.': '可以为此存储库做贡献。',
     'can access this repository.': '可以访问此存储库。',
+    // 「<strong>No base role set.</strong> Only <a>owners</a> …」，整句见 general.ts 的 inline
+    'No base role set.': '未设置基本角色。',
 
     // 管理访问权限
     "You haven't invited any collaborators yet": '你尚未邀请任何协作者',
@@ -44,6 +46,7 @@ export default {
       '组织所有者可以管理个人和团队对组织存储库的访问权限。团队维护者也可以管理团队的存储库访问权限。',
     'Learn more about organization access': '了解组织访问权限',
     'Filter by member type': '按成员类型筛选',
+    'Access type': '访问类型',
     'Organization Members': '组织成员',
     'Outside collaborator': '外部协作者',
     'Pending Invitations': '待定邀请',
@@ -67,6 +70,8 @@ export default {
     'Search by team name': '按团队名称搜索',
     'Find people': '查找人员',
     'Find a team': '查找团队',
+    'No matching GitHub account found': '未找到匹配的 GitHub 帐户',
+    'No matching team found': '未找到匹配的团队',
     'Invite collaborator': '邀请协作者',
     'Add to repository': '添加到存储库',
     'Select a collaborator above': '在上方选择协作者',
@@ -203,7 +208,10 @@ export default {
     'No limit': '无限制',
     'Add users': '添加用户',
     // 添加对话框按钮的屏幕阅读器文字「Add selection」
-    selection: '所选项'
+    selection: '所选项',
+    // 成员类型筛选按钮（「Type:」后接当前类型）
+    Type: '类型',
+    'Type:': '类型：'
   },
   regexp: [
     // 谁有访问权限：数量与文字可能被 <strong> 拆开（片段由 static 匹配）
@@ -220,6 +228,8 @@ export default {
     [/^(\d+) members?$/, '$1 个成员'],
     [/^(\d+) teams?$/, '$1 个团队'],
     [/^(\d+) users?$/, '$1 个用户'],
+    // 组织访问说明：「<strong>0 users and </strong><strong><a>0 teams</a></strong> can access …」，整句见 general.ts 的 inline
+    [/^(\d+) users? and$/, '$1 个用户和'],
     [/^(\d+) invitations?$/, '$1 个邀请'],
     [/^(\d+) members? selected(…|\.\.\.)$/, '已选择 $1 个成员$2'],
     [

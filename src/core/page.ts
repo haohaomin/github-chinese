@@ -222,7 +222,9 @@ const OWNER_SECTION: Readonly<Record<string, readonly PageKey[]>> = {
 /** /enterprises/<企业>/ 下的三级路径段 → 页面类型 */
 const ENTERPRISE_SECTION: Readonly<Record<string, readonly PageKey[]>> = {
   // 企业安全概览：/enterprises/<企业>/security/coverage 等
-  security: ['security']
+  security: ['security'],
+  // 企业设置：组织升级为企业后的结账页（/enterprises/<企业>/settings/billing/upgrade_from_organization）等，同组织设置的词典
+  settings: ['org-settings']
 }
 
 /** 个人主页 ?tab= 的取值 → 追加的页面类型 */

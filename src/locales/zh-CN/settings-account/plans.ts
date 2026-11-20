@@ -109,6 +109,8 @@ export default {
     'All the basics': '全部基础功能',
     'Advanced tools for private repos': '专用存储库的高级工具',
     'Advanced tools for teams': '面向团队的高级工具',
+    // 计划卡片说明（下方 regexp 的「<应用> support」规则会把结尾的 support 单独译掉，整句收录）
+    'Advanced collaboration & support': '高级协作与支持',
     'Upgrade to Pro': '升级到专业版',
     'Upgrade now': '立即升级',
     'Edit plan': '编辑计划',
@@ -260,6 +262,26 @@ export default {
     'Expiration Date (YYYY) *': '有效期 (YYYY) *',
     '- Select One -': '- 请选择 -',
     'Save payment information': '保存付款信息',
+    // 信用卡表单（Zuora 托管页）的字段名与校验提示：表单在 www.zuora.com 的跨域 iframe 里，由付款表单脚本按 payment-form.ts 翻译；
+    // 这里的词条供 GitHub 页面上的付款错误横幅（.js-zuora-payment-error-message）
+    'Card Number': '卡号',
+    'Expiration Date': '有效期',
+    'Select One': '请选择',
+    'First name should not contain special characters.': '名字不能包含特殊字符。',
+    'Last name should not contain special characters.': '姓氏不能包含特殊字符。',
+    'Required Field Not Completed': '必填字段未填写',
+    'Invalid Card Type': '卡类型无效',
+    // 付款错误横幅（data-error-messages）
+    'We are having trouble contacting our credit cards processing provider. Please use PayPal or try again later.':
+      '暂时无法联系信用卡处理服务商。请使用 PayPal 或稍后重试。',
+    "The credit card was declined by the payment processor, please verify the card's information. If the problem persists, please contact the card's issuer.":
+      '信用卡被支付处理方拒绝，请核对卡片信息。如果问题仍然存在，请联系发卡机构。',
+    'The credit card was declined by the payment processor, please verify the card’s information. If the problem persists, please contact the card’s issuer.':
+      '信用卡被支付处理方拒绝，请核对卡片信息。如果问题仍然存在，请联系发卡机构。',
+    'You have reached the attempts limit. Please refresh the page and try again.': '尝试次数已达上限。请刷新页面后重试。',
+    'Card authentication did not finish. Enter your card details and try again, or use another card.':
+      '卡片验证未完成。请输入卡片信息后重试，或使用其他卡片。',
+    'This payment form expired. Enter your card details and try again.': '此付款表单已过期。请输入卡片信息后重试。',
     // 「You are currently paying with your PayPal account <strong>电子邮件</strong>, but you can switch …」
     'You are currently paying with your PayPal account': '你目前使用的付款方式为 PayPal 帐户',
     ', but you can switch to using a credit or debit card at any time.': '，但可以随时改用信用卡或借记卡。',
@@ -297,6 +319,10 @@ export default {
     'You have not made any payments.': '你尚未付过款。',
     Coupon: '优惠券',
     'Redeem a coupon': '兑换优惠券',
+    'Redeem Coupon': '兑换优惠券',
+    // 优惠码不存在：其后是用户输入的优惠码
+    'Sorry, we couldn’t find a coupon with the code:': '抱歉，未找到此优惠码对应的优惠券：',
+    "Sorry, we couldn't find a coupon with the code:": '抱歉，未找到此优惠码对应的优惠券：',
     // 兑换页（/redeem，只有 common 作用域）
     'Enter coupon code': '输入优惠码',
     Redeem: '兑换',

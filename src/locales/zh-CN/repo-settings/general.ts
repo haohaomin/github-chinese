@@ -328,6 +328,9 @@ export default {
     ],
     [/^(\d+) users? and \{\} can access this repository through the organization\. \{\}\.$/, '$1 个用户和{}可以通过组织访问此存储库。{}。'],
     ['{} and {} can access this repository through the organization. {}.', '{}和{}可以通过组织访问此存储库。{}。'],
+    // 新版结构：「No base role set.」在 <strong> 里；「0 users and」与团队链接各在一个 <strong> 里（片段见 access.ts）
+    ['{} Only {} and those with direct access can access this repository. {}.', '{}只有{}和拥有直接访问权限的人员可以访问此存储库。{}。'],
+    ['{}{} can access this repository through the organization. {}.', '{} {}可以通过组织访问此存储库。{}。'],
     // 代码质量：「We will support … found in this <a>open source repository</a>. …」；组织策略禁用：Disabled by <组织>
     [
       'We will support quality rules and languages found in this {}. The languages supported with CodeQL for standard findings are: C#, Java, JavaScript/TypeScript, Python, Ruby, and Go. Other languages may be scanned with AI, but will not generate standard findings with CodeQL.',

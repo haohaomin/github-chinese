@@ -283,7 +283,16 @@ export default {
     'Terms of service': '服务条款',
     // <relative-time> 的 prefix 属性（如 Actions 运行列表的「Today at 9:04」）
     'Today at': '今天',
-    'Yesterday at': '昨天'
+    'Yesterday at': '昨天',
+
+    // 组织升级为企业未完成时的提示（/account/upgrade 跳回首页、组织计费页；链接 checkout page 拆开的整句见 inline）
+    'You cannot change your plan because this organization is currently being upgraded to an Enterprise Account. Return to the checkout page to complete or cancel the upgrade.':
+      '此组织正在升级为企业帐户，无法更改计划。请返回结账页面完成或取消升级。',
+    'An organization upgrade to GitHub Enterprise has been initiated but not completed. Return to the checkout page to complete or cancel the upgrade.':
+      '组织升级到 GitHub 企业版的操作已开始但尚未完成。请返回结账页面完成或取消升级。',
+    'checkout page': '结账页面',
+    // 表单提交失败的通用提示
+    'Validation failed': '验证失败'
   },
   regexp: [
     // React 应用错误页标签页标题：Error 503
@@ -332,9 +341,30 @@ export default {
     [
       new RegExp(`^New budget in dollars for ([\\w-]+)${BUDGET_TARGET_SOURCE}$`),
       (_, login, label) => `${login} 的新预算美元金额${budgetTarget(label)}`
+    ],
+    // 组织升级为企业未完成（企业标识照录）
+    [
+      /^Your upgrade for ([\w.-]+) is incomplete\. Please complete the purchase to upgrade your account\.$/,
+      '你对 $1 的升级尚未完成。请完成购买以升级帐户。'
     ]
   ],
   inline: [
+    // 组织升级为企业未完成：「… Return to the <a>checkout page</a> to complete or cancel the upgrade.」；企业标识在元素里时
+    [
+      /^(You cannot change your plan because this organization is currently being upgraded to an Enterprise Account|An organization upgrade to GitHub Enterprise has been initiated but not completed)\. Return to the \{\} to complete or cancel the upgrade\.$/,
+      (_, lead: string) =>
+        `${lead.startsWith('You') ? '此组织正在升级为企业帐户，无法更改计划' : '组织升级到 GitHub 企业版的操作已开始但尚未完成'}。请返回{}完成或取消升级。`
+    ],
+    [
+      /^Your upgrade for \{\} is incomplete\. Please complete the purchase to upgrade your account\.$/,
+      '你对 {} 的升级尚未完成。请完成购买以升级帐户。'
+    ],
+    // 取消市场应用计划后的提示：You've cancelled your subscription to <计划> for <应用>. This plan change will take effect on <日期>
+    // （计划名、应用名照录）
+    [
+      /^You[’']ve cancelled your subscription to (.+?) for (.+?)\. This plan change will take effect on \{\}\.?$/,
+      '你已取消 $2 的 $1 计划订阅。此计划变更将于{}生效。'
+    ],
     // Copilot 预算横幅（个人预算用尽）：<span>You've used … from <strong>来源</strong>. Access resumes on <日期>.
     // Your org admins can increase it sooner.</span>。来源（组织或企业名）移到句中，整句收录
     [

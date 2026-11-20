@@ -10,7 +10,7 @@ const FULL_REPO = '([\\w.-]+/[\\w.-]+)'
  * 组织设置已收录的「Add people」「Add teams」「Outside Collaborators」「Find a collaborator…」
  * 「Create team」「Mixed roles」、角色说明「Read and clone repositories. …」等不再重复；
  * 「Select all」「Remove」「Collaborator」由 common-ui 收录。
- * 管理访问权限的成员类型筛选按钮「Type」不收录：与页头「Type / to search」的片段同形。
+ * 管理访问权限的成员类型筛选按钮「Type」放 scoped：页头搜索按钮「Type / to search」由引擎整句匹配，不受影响。
  * 术语：access → 存取 / 存取權（Manage access → 管理存取權），interact → 互動，moderation → 內容審核，
  * remove → 移除，pending invitation → 待處理的邀請，open（拉取请求状态）→ 開放中、open（动词）→ 建立；
  * 计数量词：协作者、成员、使用者是人，用「位」；团队、邀请用「個」；「團隊或成員」混指时用「個」。
@@ -33,6 +33,8 @@ export default {
     'teams or members have access to this repository. Only': '個團隊或成員可以存取此儲存庫。只有',
     'can contribute to this repository.': '可以為此儲存庫做出貢獻。',
     'can access this repository.': '可以存取此儲存庫。',
+    // 「<strong>No base role set.</strong> Only <a>owners</a> …」，整句见 general.ts 的 inline
+    'No base role set.': '未設定基本角色。',
 
     // 管理访问权限
     "You haven't invited any collaborators yet": '你尚未邀請任何協作者',
@@ -47,6 +49,7 @@ export default {
       '組織擁有者可以管理個人和團隊對組織儲存庫的存取權。團隊維護者也可以管理團隊的儲存庫存取權。',
     'Learn more about organization access': '瞭解組織存取權',
     'Filter by member type': '依成員類型篩選',
+    'Access type': '存取類型',
     'Organization Members': '組織成員',
     'Outside collaborator': '外部協作者',
     'Pending Invitations': '待處理的邀請',
@@ -70,6 +73,8 @@ export default {
     'Search by team name': '依團隊名稱搜尋',
     'Find people': '尋找人員',
     'Find a team': '尋找團隊',
+    'No matching GitHub account found': '找不到相符的 GitHub 帳號',
+    'No matching team found': '找不到相符的團隊',
     'Invite collaborator': '邀請協作者',
     'Add to repository': '加入儲存庫',
     'Select a collaborator above': '在上方選取協作者',
@@ -209,7 +214,10 @@ export default {
     'No limit': '無限制',
     'Add users': '新增使用者',
     // 添加对话框按钮的屏幕阅读器文字「Add selection」
-    selection: '選取項目'
+    selection: '選取項目',
+    // 成员类型筛选按钮（「Type:」后接当前类型）
+    Type: '類型',
+    'Type:': '類型：'
   },
   regexp: [
     // 谁有访问权限：数量与文字可能被 <strong> 拆开（片段由 static 匹配）
@@ -226,6 +234,8 @@ export default {
     [/^(\d+) members?$/, '$1 位成員'],
     [/^(\d+) teams?$/, '$1 個團隊'],
     [/^(\d+) users?$/, '$1 位使用者'],
+    // 组织访问说明：「<strong>0 users and </strong><strong><a>0 teams</a></strong> can access …」，整句见 general.ts 的 inline
+    [/^(\d+) users? and$/, '$1 位使用者和'],
     [/^(\d+) invitations?$/, '$1 個邀請'],
     [/^(\d+) members? selected(…|\.\.\.)$/, '已選取 $1 位成員$2'],
     [

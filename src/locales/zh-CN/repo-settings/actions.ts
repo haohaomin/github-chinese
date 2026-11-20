@@ -129,8 +129,14 @@ export default {
     'Workflows in other repositories cannot access this repository.': '其他存储库中的工作流无法访问此存储库。',
     'Controls how this repository can be used by GitHub Actions workflows in other repositories.':
       '控制其他存储库中的 GitHub 操作工作流如何使用此存储库。',
+    'Control how this repository is used by GitHub Actions workflows in other repositories.':
+      '控制其他存储库中的 GitHub 操作工作流如何使用此存储库。',
+    'Learn more about allowing other repositories to access to Actions components in this repository.':
+      '了解如何允许其他存储库访问此存储库中的操作组件。',
+    'Save access setting': '保存访问设置',
 
     // 运行器列表
+    'Self-hosted runners were disabled by your organization admin.': '组织管理员已禁用自托管运行器。',
     'New self-hosted runner': '新建自托管运行器',
     'Host your own runners and customize the environment used to run jobs in your GitHub Actions workflows.':
       '托管你自己的运行器，并自定义运行 GitHub 操作工作流作业的环境。',
@@ -295,6 +301,22 @@ export default {
       '将 `$1` 添加到工作流 YAML 即可将作业发送到此运行器。'
     ],
     // 新建自托管运行器：页面标题文本（含 owner/repo）
-    [/^Add new self-hosted runner · ([\w.-]+\/[\w.-]+)$/, '添加新的自托管运行器 · $1']
+    [/^Add new self-hosted runner · ([\w.-]+\/[\w.-]+)$/, '添加新的自托管运行器 · $1'],
+    // 产物和日志保留：上级设置的上限（「时长不能少于 1。」等校验在同一段落）
+    [
+      /^The (organization|enterprise) has set a maximum duration of (\d+) days?$/,
+      (_, owner: string, days: string) => `${owner === 'organization' ? '组织' : '企业'}设置的最长时长为 ${days} 天`
+    ],
+    // OIDC：不可变主题声明自动启用（其后的链接「了解不可变主题声明。」由 static 翻译）
+    [
+      new RegExp(
+        `^Automatically enabled for this repository\\. Repositories created or renamed after (${DATE_SOURCE}) use immutable subject claims\\.$`
+      ),
+      (_, date: string) => `已为此存储库自动启用。${joinCjk(translateDate(date) ?? date, '之后')}创建或重命名的存储库使用不可变主题声明。`
+    ]
+  ],
+  inline: [
+    // 策略列表空状态：「<a>Policies</a> define whether actions can run in specific contexts.」（同组织设置）
+    ['{} define whether actions can run in specific contexts.', '{}定义操作能否在特定上下文中运行。']
   ]
 } satisfies PageDictionary
