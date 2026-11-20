@@ -36,6 +36,9 @@ const VISIBILITY_VERB: Readonly<Record<string, string>> = {
  */
 const base = {
   static: {
+    // 创建组织后的等待页
+    'Creating your organization': '正在建立組織',
+    'You will continue automatically when your organization is ready.': '組織就緒後將自動繼續。',
     // 新建存储库：页头
     'Create a new repository': '建立新儲存庫',
     "Repositories contain a project's files and version history.": '儲存庫包含專案的檔案和版本歷史記錄。',

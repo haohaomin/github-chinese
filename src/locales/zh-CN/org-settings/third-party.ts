@@ -19,6 +19,12 @@ function period(dot: string): string {
  */
 export default {
   static: {
+    // 个人访问令牌：分类导航、最长有效期、搜索（无障碍名称与占位文字）
+    'Personal Access tokens categories navigation': '个人访问令牌类别导航',
+    'Are you sure you want to update your selection?': '确定要更新所选内容吗？',
+    'Select the maximum lifetime for fine-grained personal access tokens': '选择精细个人访问令牌的最长有效期',
+    'Enter a custom maximum lifetime for fine-grained personal access tokens': '输入精细个人访问令牌的自定义最长有效期',
+    'Search token names or filter with owner:, repository:, permission:': '搜索令牌名称，或使用 owner:、repository:、permission: 筛选',
     // 已安装的 GitHub 应用：待处理的安装请求
     'Members in your organization can request that GitHub Apps be installed. Pending requests are listed below.':
       '你组织中的成员可以请求安装 GitHub 应用。下方列出了待处理的请求。',
@@ -118,6 +124,7 @@ export default {
     "There aren't any fine-grained tokens for this organization": '此组织暂无精细令牌',
     'There aren’t any fine-grained tokens for this organization': '此组织暂无精细令牌',
     'Fine-grained personal access token requests': '精细个人访问令牌请求',
+    'Fine-grained Personal Access Token Requests': '精细个人访问令牌请求',
     'Filter fine-grained personal access tokens requests': '筛选精细个人访问令牌请求',
     "There aren't any personal access token requests for this organization": '此组织暂无个人访问令牌请求',
     'There aren’t any personal access token requests for this organization': '此组织暂无个人访问令牌请求',

@@ -9,7 +9,8 @@ export const APP_DELIVERY_KEYS: ReadonlySet<string> = new Set([
   'Redeliver',
   'redelivery',
   'Redeliver payload?',
-  'Yes, redeliver this payload'
+  'Yes, redeliver this payload',
+  'Oops, there was an error while trying to redeliver this payload.'
 ])
 
 /**

@@ -1,4 +1,6 @@
 import type { PageDictionary } from '../../../core/types'
+import { joinCjk } from '../helpers'
+import { CHART_A11Y_RULES } from '../insights/charts'
 
 const ORG = '([\\w.-]+)'
 const BRANCH = '([\\w./-]+)'
@@ -12,6 +14,71 @@ const BRANCH = '([\\w./-]+)'
  */
 export default {
   static: {
+    // 代码空间：用户访问设置的保存按钮（无障碍名称）
+    'Save user access settings': '保存用户访问设置',
+    // 存储库自定义属性：分页、筛选、推荐属性（属性名 cloud_providers 等是标识符，不译）
+    'Page selector navigation': '页面选择器导航',
+    'Page selector': '页面选择器',
+    'Filter properties': '筛选属性',
+    'Suggested custom properties': '推荐的自定义属性',
+    'See more suggested properties': '查看更多推荐属性',
+    'Which cloud providers are used?': '使用了哪些云提供商？',
+    'Are external packages used here?': '是否使用了外部软件包？',
+    'How protected is the default branch?': '默认分支的保护程度如何？',
+    // 议题字段：说明、预置字段（名称、说明、无障碍名称与操作提示；自定义字段见 regexp）
+    'Issue fields let you define structured data to capture for each issue, helping you keep information consistent across all of your repositories.':
+      '议题字段可用于定义每个议题要记录的结构化数据，使所有存储库中的信息保持一致。',
+    'Current importance level assigned to this issue': '为此议题指定的当前重要程度',
+    'Date when work on issue will begin': '议题工作的开始日期',
+    'Expected completion date for this issue': '此议题的预计完成日期',
+    'Relative level of effort for completing this issue': '完成此议题所需的相对工作量',
+    'Issue field: Priority': '议题字段：优先级',
+    'Issue field: Start date': '议题字段：开始日期',
+    'Issue field: Target date': '议题字段：目标日期',
+    'Issue field: Effort': '议题字段：工作量',
+    'Open field options for Priority': '打开优先级字段选项',
+    'Open field options for Start date': '打开开始日期字段选项',
+    'Open field options for Target date': '打开目标日期字段选项',
+    'Open field options for Effort': '打开工作量字段选项',
+    // 议题类型：说明、预置类型（Task / Bug / Feature，与议题页的默认类型名称表一致）
+    'New type': '新建类型',
+    'Customize your issue types. Issue types can be used to classify and manage issues in your repositories.':
+      '自定义议题类型。议题类型可用于对存储库中的议题进行分类和管理。',
+    'List of issue types': '议题类型列表',
+    '"Task" Issue type list item': '议题类型列表项“任务”',
+    '"Bug" Issue type list item': '议题类型列表项“缺陷”',
+    '"Feature" Issue type list item': '议题类型列表项“功能”',
+    'Open type options for Task': '打开任务类型选项',
+    'Open type options for Bug': '打开缺陷类型选项',
+    'Open type options for Feature': '打开功能类型选项',
+    // 存储库默认设置：不可变发行版、标签空状态（「Choose whether <a>commit comments</a> are …」见 inline）
+    'Choose whether repositories will publish immutable releases. Immutable releases improve security by disallowing changes to assets and tags after the release is published.':
+      '选择存储库是否发布不可变发行版。不可变发行版禁止在发布后更改资产和标签，从而提高安全性。',
+    'Require immutable releases for all repositories': '要求所有存储库使用不可变发行版',
+    'Require immutable releases for specifically selected repositories': '要求所选存储库使用不可变发行版',
+    'Each repository chooses whether to make releases immutable': '由各存储库选择是否将发行版设为不可变',
+    'No labels!': '暂无标签',
+    'There aren’t any labels for this organization quite yet. Click on the "New Label" button above to create one.':
+      '此组织暂无标签。点击上方的“新建标签”按钮创建标签。',
+    'There aren\'t any labels for this organization quite yet. Click on the "New Label" button above to create one.':
+      '此组织暂无标签。点击上方的“新建标签”按钮创建标签。',
+    // 规则集仪表板（组织）：筛选、图表、绕过统计（图表的类型、坐标轴说明由 insights/charts.ts 的规则翻译）
+    'Filter rule insights dashboard': '筛选规则洞察仪表板',
+    'Rule Suites': '规则套件',
+    'Rule Suites. Interactive chart.': '规则套件。交互式图表。',
+    'Show Passes': '显示通过',
+    'Show Failures': '显示失败',
+    'Show Bypasses': '显示绕过',
+    'View allowed runs': '查看允许的运行',
+    'View failed runs': '查看失败的运行',
+    'View bypassed runs': '查看绕过的运行',
+    'in the time period': '此时间段内',
+    'Bypasses by actor': '按参与者统计的绕过',
+    'Bypasses by actor. Interactive chart.': '按参与者统计的绕过。交互式图表。',
+    'Members who have bypassed the most': '绕过次数最多的成员',
+    'Top repositories by bypasses': '绕过次数最多的存储库',
+    'No bypasses found': '未找到绕过',
+    'No repositories have any rule bypasses for the selected filters': '所选筛选条件下没有存储库存在规则绕过',
     // 存储库：默认分支
     'Choose the default branch for new repositories in this organization. You might want to change the default name due to different workflows, or because your integrations still require “master” as the default branch name. You can always change the default branch name on individual repositories.':
       '为此组织中的新存储库选择默认分支。你可能因工作流不同，或集成仍要求使用“master”作为默认分支名称而需要更改默认名称。你随时可以更改单个存储库的默认分支名称。',
@@ -199,6 +266,16 @@ export default {
     'Failover network': '故障转移网络'
   },
   scoped: {
+    // 预置议题字段与议题类型的名称（组织自定义的名称是用户内容，不收）
+    Priority: '优先级',
+    'Start date': '开始日期',
+    'Target date': '目标日期',
+    Effort: '工作量',
+    Task: '任务',
+    Bug: '缺陷',
+    Feature: '功能',
+    // 「Choose whether <a>commit comments</a> are …」里的链接
+    'commit comments': '提交评论',
     // 与个人设置、存储库设置共用
     'Description (optional)': '描述（可选）',
     Color: '颜色',
@@ -270,6 +347,16 @@ export default {
     'There are no verified domains for this organization.': '此组织暂无已验证的域。'
   },
   regexp: [
+    // 规则集仪表板的图表：类型、坐标轴（同洞察页图表）
+    ...CHART_A11Y_RULES,
+    // 议题字段计数，自定义字段与类型的无障碍名称、操作提示
+    [/^(\d+) Issue fields?$/, '$1 个议题字段'],
+    [/^Issue field: (.+)$/, '议题字段：$1'],
+    [/^Open field options for (.+)$/, (_, name: string) => joinCjk(joinCjk('打开', name), '字段选项')],
+    [/^"(.+)" Issue type list item$/, '议题类型列表项“$1”'],
+    [/^Open type options for (.+)$/, (_, name: string) => joinCjk(joinCjk('打开', name), '类型选项')],
+    // 新建标签的颜色色块：Color #b60205
+    [/^Color (#[\da-fA-F]{6})$/, '颜色 $1'],
     [
       new RegExp(`^New repositories created in ${ORG} will use ${BRANCH} as their default branch\\.$`),
       '在 $1 中创建的新存储库将使用 $2 作为默认分支。'
@@ -287,5 +374,11 @@ export default {
     [/^(\d+) network configurations?$/, '$1 个网络配置'],
     [new RegExp(`^No recoverable packages were found for ${ORG}\\.$`), '未找到 $1 中可恢复的软件包。'],
     [/^Successfully verified ([\w-]+(?:\.[\w-]+)+?)(\.?)$/, (_, domain: string, dot: string) => `已成功验证 ${domain}${dot ? '。' : ''}`]
+  ],
+  inline: [
+    [
+      'Choose whether {} are enabled or disabled by default for repositories in this organization. Individual repositories can override this default. Existing commit comments are not affected by this setting and will remain viewable, editable, and deletable.',
+      '选择此组织的存储库默认启用还是禁用{}。各存储库可以覆盖此默认设置。现有提交评论不受此设置影响，仍可查看、编辑和删除。'
+    ]
   ]
 } satisfies PageDictionary

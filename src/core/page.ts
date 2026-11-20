@@ -210,7 +210,9 @@ const OWNER_SECTION: Readonly<Record<string, readonly PageKey[]>> = {
   // 更改用户名的完成页：/users/<用户>/rename，与帐户设置（/settings/admin）同词典
   rename: ['settings'],
   // 组织安全概览：/orgs/<org>/security/overview、coverage、alerts/…、campaigns/…
-  security: ['security']
+  security: ['security'],
+  // 组织主题页：/orgs/<org>/topics，带组织设置侧栏
+  topics: ['org-settings']
 }
 
 /** /enterprises/<企业>/ 下的三级路径段 → 页面类型 */
@@ -235,6 +237,9 @@ const REPO_SUBPAGE: Readonly<Record<string, readonly PageKey[]>> = {
 
 /** 组织设置下的应用设置页（/organizations/<组织>/settings/apps/*、applications/*）：在 org-settings 上叠加 org-apps */
 const ORG_APP_SECTIONS: ReadonlySet<string> = new Set(['apps', 'applications'])
+
+/** 组织设置下的存储库策略页（settings/policies/*）：在 org-settings 上叠加 org-policies（目标存储库筛选框） */
+const ORG_POLICY_SECTION = 'policies'
 
 /** /organizations/ 下不是组织名的二级段 */
 const ORGANIZATIONS_PAGES = new Set(['new', 'plan', 'enterprise_plan'])
@@ -263,11 +268,17 @@ function detectOwnerScope(kind: string, parts: readonly string[]): readonly Page
     if (section === 'repositories' && parts[3] === 'new') return ['new']
     // 组织计划页与个人设置的计划页同一组件
     if (section === 'billing') return ['settings', 'org-settings']
+    // 重命名组织的进度与完成页
+    if (section === 'rename') return ['org-settings']
     if (section !== 'settings') return ['organization']
+    if (parts[3] === ORG_POLICY_SECTION) return ['org-settings', 'org-policies']
     return ORG_APP_SECTIONS.has(parts[3] ?? '') ? ['org-settings', 'org-apps'] : ['org-settings']
   }
-  const base: PageKey = kind === 'users' ? 'profile' : 'organization'
-  return [base, ...(own(OWNER_SECTION, section) ?? [])]
+  if (kind === 'users') return ['profile', ...(own(OWNER_SECTION, section) ?? [])]
+  // 组织下的重命名完成页同组织设置（OWNER_SECTION 的 rename 是个人帐户的）
+  if (section === 'rename') return ['organization', 'org-settings']
+  const keys: PageKey[] = ['organization', ...(own(OWNER_SECTION, section) ?? [])]
+  return section === 'settings' && parts[3] === ORG_POLICY_SECTION ? [...keys, 'org-policies'] : keys
 }
 
 /** 顶级路径段是否是站点页面（不是用户名 / 组织名） */
@@ -343,6 +354,8 @@ export function detectPages(url: UrlLike): PageKey[] {
     return unique(['common', ...detectOwnerScope(first, parts)])
   }
   if (first === 'enterprises') return unique(['common', ...(own(ENTERPRISE_SECTION, third) ?? [])])
+  // 市场上架项的 Web 钩子页（/marketplace/<上架项>/hook）：在 marketplace 上叠加 marketplace-hook（最近请求，同 GitHub 应用设置）
+  if (first === 'marketplace' && third === 'hook' && second !== 'actions') return ['common', 'marketplace', 'marketplace-hook']
   if (isSitePath(first)) {
     return unique(['common', ...(own(TOP_SUBSECTION, `${first}/${second ?? ''}`) ?? own(TOP_SECTION, first) ?? [])])
   }

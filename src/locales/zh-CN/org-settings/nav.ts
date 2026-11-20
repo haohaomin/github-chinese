@@ -18,6 +18,15 @@ import type { PageDictionary } from '../../../core/types'
  */
 export default {
   static: {
+    // 侧栏：规则集与策略的洞察、仪表板，存储库属性；导航与功能标签的读屏名称
+    'Ruleset insights': '规则集洞察',
+    'Ruleset dashboard': '规则集仪表板',
+    'Repository ruleset dashboard': '存储库规则集仪表板',
+    'Repository properties': '存储库属性',
+    'Policy insights': '策略洞察',
+    'Organization navigation': '组织导航',
+    'Organization settings': '组织设置',
+    'Feature Release Label: Public preview': '功能发布标签：公开预览',
     // 页头
     'Organization account': '组织帐户',
     'Go to your organization profile': '转到组织个人资料',
@@ -65,6 +74,8 @@ export default {
     'GitHub Publisher Verification': 'GitHub 发布者验证'
   },
   scoped: {
+    // Copilot 分组下的云端智能体设置
+    Cloud: '云端',
     // 组织页头标签（设置页也显示）
     People: '人员',
 

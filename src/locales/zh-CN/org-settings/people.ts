@@ -8,6 +8,19 @@ import type { PageDictionary } from '../../../core/types'
  */
 export default {
   static: {
+    // 人员：批量选择、双因素身份验证标记、角色说明、转换为外部协作者、删除直接成员身份
+    'Select all members': '选择所有成员',
+    '2FA enabled': '已启用双因素身份验证',
+    'Has full administrative access to the entire organization.': '拥有对整个组织的完全管理权限。',
+    'Can see every member and non-secret team in the organization, and can create new repositories.':
+      '可以查看组织中的每个成员和非机密团队，并可以创建新存储库。',
+    'Members cannot be converted to outside collaborators when membership through an identity provider group or enterprise team prevents removal from the organization.':
+      '如果通过身份提供商组或企业团队获得的成员身份阻止将成员移出组织，则无法将其转换为外部协作者。',
+    'Their repository access will be preserved by making them collaborators on all repositories that their teams gave them access to. They will retain access to repositories that they were previously collaborators on, but all other access to this organization’s repositories will be lost. If the user does not have access to any repositories, they will be removed from the organization.':
+      '他们将成为其团队授权访问的所有存储库的协作者，以保留存储库访问权限。他们会保留对之前已是协作者的存储库的访问权限，但会失去对此组织存储库的其他所有访问权限。如果用户无权访问任何存储库，将被移出组织。',
+    "Their repository access will be preserved by making them collaborators on all repositories that their teams gave them access to. They will retain access to repositories that they were previously collaborators on, but all other access to this organization's repositories will be lost. If the user does not have access to any repositories, they will be removed from the organization.":
+      '他们将成为其团队授权访问的所有存储库的协作者，以保留存储库访问权限。他们会保留对之前已是协作者的存储库的访问权限，但会失去对此组织存储库的其他所有访问权限。如果用户无权访问任何存储库，将被移出组织。',
+    'Direct membership for the following members will be removed:': '将删除以下成员的直接成员身份：',
     // 左侧栏与标题片段
     Invitations: '邀请',
     'Security Managers': '安全管理员',

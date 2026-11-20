@@ -53,6 +53,14 @@ const USAGE_PRODUCTS: Readonly<Record<string, string>> = {
   'Advanced Security usage': '進階安全性使用量'
 }
 
+/** 预算列表操作菜单（读屏名称）中的产品名；Copilot、Git LFS、Spark 是品牌词或技术缩写，保留 */
+const BUDGET_PRODUCTS: Readonly<Record<string, string>> = {
+  Actions: '動作',
+  Packages: '套件',
+  Codespaces: '程式碼空間',
+  Models: '模型'
+}
+
 /** 授权页的产品名（与 nav.ts 的 scoped、common/marketing.ts 的 static 一致） */
 const PRODUCTS: Readonly<Record<string, string>> = {
   'Advanced Security': '進階安全性',
@@ -128,6 +136,27 @@ function dateRange(start: string, end: string): string {
  */
 export default {
   static: {
+    // 概览：计算使用量
+    'About included compute usage': '關於包含的運算使用量',
+    'Included compute usage': '包含的運算使用量',
+    'Actions and Packages storage': '動作和套件儲存空間',
+    // 预算：筛选、分页（读屏）
+    'Filter by scope, repository, product, SKU or user': '依範圍、儲存庫、產品、SKU 或使用者篩選',
+    'Clear Filter by scope, repository, product, SKU or user': '清除依範圍、儲存庫、產品、SKU 或使用者的篩選',
+    // AI 使用情况
+    'Filter by user or model': '依使用者或模型篩選',
+    'Included AI credits progress': '包含的 AI 點數進度',
+    'Spend on additional AI credits exceeding your included credits.': '超出包含點數的額外 AI 點數支出。',
+    'Usage grouped by models': '依模型分組的使用量',
+    // 付款信息、订阅
+    'Saving invoice preference': '正在儲存發票偏好設定',
+    'Label: Primary': '標籤：主要',
+    'Edit primary email address': '編輯主要電子郵件地址',
+    // 许可：Copilot 商业版
+    'Learn more about Copilot Business': '瞭解 Copilot 商務版',
+    'Copilot builds features, fixes bugs, reviews code, and opens pull requests. Developers can use it in GitHub, their editor, the command line, or the Copilot app. You control access and set usage limits.':
+      'Copilot 可以建置功能、修正錯誤、審查程式碼並建立拉取請求。開發人員可以在 GitHub、編輯器、命令列或 Copilot 應用程式中使用它。你可以控制存取權並設定使用上限。',
+    'Sign up for Copilot Business': '註冊 Copilot 商務版',
     // 邀请帐务管理员
     '/ Add a billing manager': '/ 新增帳務管理員',
     'Add a billing manager': '新增帳務管理員',
@@ -172,6 +201,11 @@ export default {
       '按一下「連接」即表示你確認要透過所選的 Azure 訂閱支付計量服務的費用'
   },
   scoped: {
+    // 概览的用量分组名、使用量公式的减号图标；付款信息「by <a>signing</a> the …」的链接（整句见 inline）
+    Compute: '運算',
+    Sandbox: '沙箱',
+    Minus: '減號',
+    signing: '簽署',
     // 帐务联系人
     'Billing Contacts': '帳務聯絡人',
     'Billing contacts': '帳務聯絡人',
@@ -369,6 +403,22 @@ export default {
       '由於系統錯誤，目前無法顯示授權使用量和付款摘要。請嘗試重新載入頁面，若問題持續發生，請'
   },
   regexp: [
+    // 概览：已用金额 / 包含金额；预算：分页、使用率与操作菜单（读屏）
+    [new RegExp(`^${MONEY} used / ${MONEY} included$`), '已使用 $1 / 包含 $2'],
+    [/^Showing (\d+) to (\d+) of (\d+) budgets?$/, '顯示 $3 個預算中的第 $1 至 $2 個'],
+    [/^Budget utilization for ([\w.-]+)$/, '$1 的預算使用率'],
+    [
+      /^View actions for (Actions|Packages|Codespaces|Git LFS|Copilot|Models|Spark) budget for Organization ([\w.-]+)$/,
+      (_, product: string, org: string) => joinCjk(joinCjk(`檢視組織 ${org} 的`, BUDGET_PRODUCTS[product] ?? product), '預算的可用動作')
+    ],
+    // AI 使用情况：包含额度的说明（日期按浏览器语言格式化，可能已是中文日期）
+    [
+      new RegExp(
+        `^Included AI credits consumed by users in your account\\. Monthly limit resets in (\\d+) days? on (${DATE_SOURCE}|\\d{4}年\\d{1,2}月\\d{1,2}日)\\.$`
+      ),
+      (_, days: string, date: string) =>
+        `帳號中使用者消耗的包含 AI 點數。每月上限將${joinCjk(joinCjk(`在 ${days} 天後於`, date.includes('年') ? date : translateTime(date)), '重設')}。`
+    ],
     // 成员请求：标题与升级横幅（「octo-org is on the」+「Free organization plan」）；方案名译成中文
     [/^Member requests for GitHub (Team|Enterprise)$/, (_, plan: string) => `GitHub ${PLANS[plan]}的成員請求`],
     [/^(Team|Enterprise) Features$/, (_, plan: string) => `${PLANS[plan]}功能`],
@@ -551,6 +601,12 @@ export default {
       /^([\d,]+) (GitHub )?(Advanced Security|Secret Protection|Code Security|Code Quality) licenses?$/,
       (_, count: string, github: string | undefined, product: string) =>
         `${count} 個${github ? ' GitHub ' : ''}${PRODUCTS[product] ?? product}授權`
+    ]
+  ],
+  inline: [
+    [
+      'An organization owner or billing manager must link their personal billing information with this organization account. You can switch to a business account to use your business’ billing information by {} the {}.',
+      '組織擁有者或帳務管理員必須將個人帳單資訊連結到此組織帳號。若要切換到商業帳號以使用公司的帳單資訊請{} {}。'
     ]
   ]
 } satisfies PageDictionary

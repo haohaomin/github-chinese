@@ -672,6 +672,15 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['Travis CI is denied access']
   },
 
+  // 切换令牌过期
+  {
+    hits: [
+      ['Token expiration is being enabled for test.', '正在为 test 启用令牌过期。'],
+      ['Token expiration is being disabled for My App.', '正在为 My App 禁用令牌过期。']
+    ],
+    misses: ['Token expiration is being changed for test.']
+  },
+
   // GitHub App：安装、转移、公共/专用、客户端密钥、可选功能、最近交付
   {
     hits: [['Only allow this GitHub App to be installed on the @octocat account.', '仅允许将此 GitHub 应用安装在 @octocat 帐户上。']],

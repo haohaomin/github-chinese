@@ -15,10 +15,12 @@ import gist from './gist'
 import insights from './insights'
 import issues from './issues'
 import marketplace from './marketplace'
+import marketplaceHook from './marketplace-hook'
 import mcp from './mcp'
 import newPages from './new'
 import notifications from './notifications'
 import orgApps from './org-apps'
+import orgPolicies from './org-policies'
 import orgSettings from './org-settings'
 import organization from './organization'
 import packages from './packages'
@@ -63,6 +65,7 @@ export const zhTW: LocaleBundle = [
   ['settings', settingsDeveloper],
   ['org-settings', orgSettings],
   ['org-apps', orgApps],
+  ['org-policies', orgPolicies],
   ['notifications', notifications],
   ['search', search],
   ['new', newPages],
@@ -71,6 +74,7 @@ export const zhTW: LocaleBundle = [
   ['copilot', copilot],
   ['auth', auth],
   ['marketplace', marketplace],
+  ['marketplace-hook', marketplaceHook],
   ['sponsors', sponsors],
   ['education', education],
   ['mcp', mcp],

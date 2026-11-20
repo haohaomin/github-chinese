@@ -1,4 +1,4 @@
-import type { PageDictionary } from '../../../core/types'
+import type { PageDictionary, RegExpRule } from '../../../core/types'
 import { joinCjk } from '../helpers'
 
 /** 贡献者图、代码频率图的指标名（数据系列名） */
@@ -64,6 +64,9 @@ const CHART_UNIT: Readonly<Record<string, string>> = {
 
 /** Highcharts 无障碍描述：坐标轴名 */
 const AXIS_NAME: Readonly<Record<string, string>> = {
+  Values: '值',
+  Actor: '参与者',
+  'Number of bypasses': '绕过次数',
   Time: '时间',
   Contributions: '贡献',
   Commits: '提交',
@@ -96,6 +99,32 @@ function axisDisplaying(name: string, axis: string): string {
 
 /** 坐标轴取值：数字或 2026-07-26 00:00:00 */
 const AXIS_VALUE = '(-?[\\d,.]+|\\d{4}-\\d{2}-\\d{2}(?: \\d{2}:\\d{2}:\\d{2})?)'
+
+/** Highcharts 无障碍描述：图表类型、坐标轴（组织规则集仪表板等其他页面的图表复用） */
+export const CHART_A11Y_RULES: readonly RegExpRule[] = [
+  // 图表类型：Bar chart with 14 bars.（原文只有句号，译文不加逗号，改语序）
+  [
+    /^(Combination chart|Line chart|Bar chart|Pie chart|Scatter chart|Bubble chart|Boxplot|Chart) with ([\d,]+) (data series|data points?|lines?|bars?|slices?|pies?|points?|bubbles?|box(?:es)?)\.$/,
+    (_, type, count, unit) => `包含 ${count} ${CHART_UNIT[unit]}的${CHART_TYPE[type]}。`
+  ],
+  // 坐标轴：The chart has 1 X axis displaying Time. Data ranges from A to B.（原文无逗号、冒号，译文不加；Data range: 的冒号随原文）
+  [
+    new RegExp(
+      `^The chart has 1 (X|Y) axis displaying ([^.]+)\\.(?: Data ranges from ${AXIS_VALUE} to ${AXIS_VALUE}\\.| Data range: ([\\d,.]+) (categories|days|hours|minutes|seconds)\\.)?$`
+    ),
+    (_, axis, name, from, to, amount, unit) => {
+      let range = ''
+      if (from) range = `数据范围从 ${from} 到 ${to}。`
+      else if (amount) range = `数据范围：${unit === 'categories' ? `${amount} 个类别` : `${amount} ${RANGE_UNIT[unit]}`}。`
+      return `图表有 1 条${axisDisplaying(name, axis)}。${range}`
+    }
+  ],
+  // 多条坐标轴：The chart has 2 X axes displaying Time, and navigator-x-axis.（原文的逗号只在名称列表里，译作顿号；不另加逗号）
+  [
+    /^The chart has (\d+) (X|Y) axes displaying ([^.]+)\.$/,
+    (_, count, axis, names) => `图表的 ${count} 条 ${axis} 轴分别${displaying(names.split(/, and |, | and /))}。`
+  ]
+]
 
 /**
  * ChartCard（洞察页各图表的卡片外壳）与 Highcharts 无障碍文字：
@@ -157,27 +186,6 @@ export default {
     [/^(.+) Axis zoom$/, (_, title) => joinCjk(translateChartTitle(title), '的坐标轴缩放')],
     // 图例条目：Show Additions
     [/^Show (Commits|Additions|Deletions)$/, (_, metric) => `显示${METRIC[metric]}`],
-    // 图表类型：Bar chart with 14 bars.（原文只有句号，译文不加逗号，改语序）
-    [
-      /^(Combination chart|Line chart|Bar chart|Pie chart|Scatter chart|Bubble chart|Boxplot|Chart) with ([\d,]+) (data series|data points?|lines?|bars?|slices?|pies?|points?|bubbles?|box(?:es)?)\.$/,
-      (_, type, count, unit) => `包含 ${count} ${CHART_UNIT[unit]}的${CHART_TYPE[type]}。`
-    ],
-    // 坐标轴：The chart has 1 X axis displaying Time. Data ranges from A to B.（原文无逗号、冒号，译文不加；Data range: 的冒号随原文）
-    [
-      new RegExp(
-        `^The chart has 1 (X|Y) axis displaying ([^.]+)\\.(?: Data ranges from ${AXIS_VALUE} to ${AXIS_VALUE}\\.| Data range: ([\\d,.]+) (categories|days|hours|minutes|seconds)\\.)?$`
-      ),
-      (_, axis, name, from, to, amount, unit) => {
-        let range = ''
-        if (from) range = `数据范围从 ${from} 到 ${to}。`
-        else if (amount) range = `数据范围：${unit === 'categories' ? `${amount} 个类别` : `${amount} ${RANGE_UNIT[unit]}`}。`
-        return `图表有 1 条${axisDisplaying(name, axis)}。${range}`
-      }
-    ],
-    // 多条坐标轴：The chart has 2 X axes displaying Time, and navigator-x-axis.（原文的逗号只在名称列表里，译作顿号；不另加逗号）
-    [
-      /^The chart has (\d+) (X|Y) axes displaying ([^.]+)\.$/,
-      (_, count, axis, names) => `图表的 ${count} 条 ${axis} 轴分别${displaying(names.split(/, and |, | and /))}。`
-    ]
+    ...CHART_A11Y_RULES
   ]
 } satisfies PageDictionary

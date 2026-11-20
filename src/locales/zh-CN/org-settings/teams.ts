@@ -8,6 +8,19 @@ import type { PageDictionary } from '../../../core/types'
  */
 export default {
   static: {
+    // 团队列表：批量选择、可见性与成员筛选（无障碍名称）、空结果；新建团队：父团队搜索、推荐标签
+    'Select all teams': '选择所有团队',
+    'Filter by team visibility': '按团队可见性筛选',
+    'Team visibility - All': '团队可见性 - 全部',
+    'Team visibility - Secret': '团队可见性 - 机密',
+    'Team visibility - Visible': '团队可见性 - 可见',
+    'Members - All': '成员 - 全部',
+    'Members - My teams': '成员 - 我的团队',
+    'Members - No members': '成员 - 无成员',
+    'Sorry. We couldn’t find any matching teams.': '未找到匹配的团队。',
+    "Sorry. We couldn't find any matching teams.": '未找到匹配的团队。',
+    'No teams found.': '未找到团队。',
+    'Label: Recommended': '标签：推荐',
     // 团队列表（无团队时的介绍）
     'Seamless communication with teams': '借助团队无缝沟通',
     'Teams are a great way for groups of people to communicate and work on code together. Take a look at why they’re great.':

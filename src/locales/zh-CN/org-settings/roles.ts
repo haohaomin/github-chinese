@@ -120,6 +120,97 @@ const ORGANIZATION_PERMISSIONS: Readonly<Record<string, string>> = {
   'View Copilot usage metrics for your organization.': '查看组织的 Copilot 使用情况指标。'
 }
 
+/** 只在组织角色详情（「• 」开头的权限条目）里出现的存储库 / 组织权限 */
+const ROLE_DETAIL_PERMISSIONS: Readonly<Record<string, string>> = {
+  'Create a label': '创建标签',
+  'Edit a label': '编辑标签',
+  'Remove a label': '移除标签',
+  'Create a milestone': '创建里程碑',
+  'Edit a milestone': '编辑里程碑',
+  'Remove an assigned user': '移除已分配的用户',
+  'Comment on a locked issue': '评论已锁定的议题',
+  'Edit an issue title and body': '编辑议题标题和正文',
+  'Edit a comment on an issue': '编辑议题上的评论',
+  'Lock and unlock an issue conversation': '锁定和解锁议题对话',
+  'Minimize an issue comment': '最小化议题评论',
+  'Unminimize an issue comment': '取消最小化议题评论',
+  'Set an issue type': '设置议题类型',
+  'Transfer an issue': '转移议题',
+  'View code quality alerts': '查看代码质量警报',
+  'Dismiss or reopen code quality alerts': '消除或重新打开代码质量警报',
+  'Close a discussion': '关闭讨论',
+  'Reopen a discussion': '重新打开讨论',
+  'Delete a discussion': '删除讨论',
+  'Delete a discussion comment': '删除讨论评论',
+  'Edit a discussion comment': '编辑讨论评论',
+  'Edit category on a discussion': '编辑讨论的类别',
+  'Award and revoke discussion badges': '授予和撤销讨论徽章',
+  'Manage repository Actions secrets': '管理存储库操作机密',
+  'Manage repository Actions variables': '管理存储库操作变量',
+  'Manage repository Actions runners': '管理存储库操作运行器',
+  'Manage repository Actions policies': '管理存储库操作策略',
+  'Manage repository environments, environment secrets and variables': '管理存储库环境、环境机密和变量',
+  'Create a protected tag': '创建受保护标签',
+  'Delete a protected tag': '删除受保护标签',
+  'Edit repository announcement banners': '编辑存储库公告横幅',
+  'Manage topics': '管理主题',
+  'Edit repository custom properties values at the repository level': '在存储库级别编辑存储库自定义属性值',
+  'Delete code scanning analyses': '删除代码扫描分析',
+  'View security advisories': '查看安全公告',
+  'Create, edit, and manage security advisories (includes Read)': '创建、编辑和管理安全公告（包括读取）',
+  'Publish security advisories and request CVEs. Requires Read or Write security advisories.':
+    '发布安全公告并申请 CVE。需要“读取或写入安全公告”权限。',
+  'Accept private vulnerability reports and close or reopen security advisories. Requires Read or Write security advisories.':
+    '接受专用漏洞报告，关闭或重新打开安全公告。需要“读取或写入安全公告”权限。',
+  'Create organization owned integrations': '创建组织拥有的集成',
+  'Edit organization owned integrations': '编辑组织拥有的集成',
+  'Delete organization owned integrations': '删除组织拥有的集成',
+  'View all organization owned integrations': '查看组织拥有的所有集成',
+  'View organization Actions usage metrics': '查看组织操作使用情况指标',
+  'Edit organization hosted compute network configurations': '编辑组织托管计算网络配置',
+  'Bypass secret scanning alert closure requests': '绕过机密扫描警报关闭请求',
+  'Review license compliance closure requests': '审查许可证合规关闭请求',
+  'View license compliance closure requests': '查看许可证合规关闭请求',
+  'View repository license policy': '查看存储库许可证策略'
+}
+
+/** 组织角色详情的权限条目：「• 」+ 权限名，按存储库 / 组织权限表与上表整段匹配 */
+const BULLET_PERMISSIONS: Readonly<Record<string, string>> = {
+  ...REPOSITORY_PERMISSIONS,
+  ...ORGANIZATION_PERMISSIONS,
+  ...ROLE_DETAIL_PERMISSIONS
+}
+
+/** 角色图标的无障碍名称：<角色名> icon（all_repo_read 是内部名） */
+const ROLE_ICONS: Readonly<Record<string, string>> = {
+  all_repo_read: '所有存储库读取',
+  'All-repository read': '所有存储库读取',
+  'All-repository write': '所有存储库写入',
+  'All-repository triage': '所有存储库分类',
+  'All-repository moderate': '所有存储库审核',
+  'All-repository maintain': '所有存储库维护',
+  'All-repository admin': '所有存储库管理员',
+  'Apps manager': '应用管理员',
+  'CI/CD Admin': 'CI/CD 管理员',
+  'Security manager': '安全管理员',
+  'Open-source license manager': '开源许可证管理员',
+  Repository: '存储库',
+  Organization: '组织'
+}
+
+/** 转义正则元字符：权限名含括号、点号、斜杠 */
+function escapeRegExp(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+/** 名称表拼成正则备选：长名在前（Delete a discussion comment 先于 Delete a discussion） */
+function alternatives(table: Readonly<Record<string, string>>): string {
+  return Object.keys(table)
+    .sort((a, b) => b.length - a.length)
+    .map(escapeRegExp)
+    .join('|')
+}
+
 /**
  * 组织角色（角色管理、角色分配、自定义组织角色）与存储库角色（预定义角色、自定义存储库角色）。
  * 「Organization roles」「Role management」已由 organization 收录；「Add permissions」「Users」「Merge queue」
@@ -127,6 +218,29 @@ const ORGANIZATION_PERMISSIONS: Readonly<Record<string, string>> = {
  */
 export default {
   static: {
+    // 组织角色：说明、预定义角色（审核、应用管理员、CI/CD 管理员、开源许可证管理员）与详情里的分组
+    'Organization roles are used to grant access to specific organization and repository settings. Repository permissions are granted across every repository in the organization.':
+      '组织角色用于授予特定组织设置和存储库设置的访问权限。存储库权限适用于组织内的每个存储库。',
+    'All-repository moderate': '所有存储库审核',
+    'Grants Moderate access to all repositories in the organization.': '授予组织内所有存储库的审核权限。',
+    'Apps manager': '应用管理员',
+    'Grants the ability to manage all GitHub Apps owned by an organization.': '授予管理组织拥有的所有 GitHub 应用的权限。',
+    'CI/CD Admin': 'CI/CD 管理员',
+    'Grants admin access to manage Actions policies, runners, runner groups, network configurations, secrets, variables, and usage metrics for an organization.':
+      '授予管理组织操作策略、运行器、运行器组、网络配置、机密、变量和使用情况指标的管理员权限。',
+    'Open-source license manager': '开源许可证管理员',
+    'Grants the ability to review open-source license compliance closure requests and update repository license policies.':
+      '授予审查开源许可证合规关闭请求和更新存储库许可证策略的权限。',
+    'Base repository role:': '基本存储库角色：',
+    'Apps and automation': '应用和自动化',
+    'All read permissions plus…': '所有读取权限，外加…',
+    // 角色分配：页面说明、空状态（「No」「organization」「roles assigned」是相邻文本节点，整体匹配）
+    'Assign teams or people an organization role': '为团队或人员分配组织角色',
+    'No organization roles assigned': '暂无已分配的组织角色',
+    'Organization roles have not been assigned to any users or teams.': '尚未向任何用户或团队分配组织角色。',
+    // 存储库角色：审核（Moderate）角色的说明
+    'Triage permissions plus edit and moderate issues, manage labels, milestones, etc.':
+      '分类权限，外加编辑和审核议题、管理标签、里程碑等。',
     // 组织角色：预定义角色
     'Pre-defined roles': '预定义角色',
     'Predefined roles': '预定义角色',
@@ -223,6 +337,12 @@ export default {
     'Mixed roles': '混合角色'
   },
   scoped: {
+    // 存储库角色 Moderate（全局 static 是安全严重性“中”）、角色详情里的分组标题
+    Moderate: '审核',
+    'Moderate:': '审核：',
+    'Issue and Pull Request': '议题和拉取请求',
+    'Pull Request': '拉取请求',
+    'Merge Queue': '合并队列',
     ...REPOSITORY_PERMISSIONS,
     ...ORGANIZATION_PERMISSIONS,
     Members: '成员',
@@ -277,6 +397,9 @@ export default {
     'Are you sure you want to remove this role assignment?': '确定要删除此角色分配吗？'
   },
   regexp: [
+    // 组织角色详情：• <权限名>（权限名按表整段匹配）；角色图标：<角色名> icon
+    [new RegExp(`^• (${alternatives(BULLET_PERMISSIONS)})$`), (_, name: string) => `• ${BULLET_PERMISSIONS[name] ?? name}`],
+    [new RegExp(`^(${alternatives(ROLE_ICONS)}) icon$`), (_, name: string) => `${ROLE_ICONS[name] ?? name}图标`],
     [/^(\d+) roles?$/, '$1 个角色'],
     [/^(\d+) permissions?$/, '$1 项权限'],
     [/^(\d+) custom roles?$/, '$1 个自定义角色'],

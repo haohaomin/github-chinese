@@ -247,7 +247,7 @@ GitHub App、OAuth app → GitHub 應用程式、OAuth 應用程式。现有繁�
 | permission / role / admin | 權限 / 角色 / 管理員 | 储存库角色 Read / Triage / Write / Maintain / Admin → 讀取 / 分類 / 寫入 / 維護 / 管理員（角色 Write 与留言框分页 Write 分译，见 write 行、第 5 节）；Base permissions → 基本權限；Repository roles → 儲存庫角色；read access / write access → 讀取權限 / 寫入權限 |
 | triage | 分類 | triage access → 分類權限 |
 | block / report | 封鎖 / 檢舉 | 台湾社群网站通行（Facebook、LINE 繁中）；现有繁体表同。Unblock → 解除封鎖；Blocked users → 已封鎖的使用者；Block or report → 封鎖或檢舉；Report abuse → 檢舉濫用；Report content → 檢舉內容；Report to repository admins → 向儲存庫管理員檢舉；议题依赖 Blocked by / Blocking → 受阻於 / 阻擋（不用「封鎖」）；稽核记录 Blocked by → 封鎖者；报表义 report → 報告 |
-| moderation / moderators | 內容審核 / 版主 | moderators 取台湾论坛、Facebook 社团通行的「版主」；moderation 取「內容審核」，与 audit（稽核）、review（審查）分开（简体作「调解」）。Moderation options → 內容審核選項；动词 moderate → 審核；严重性 Moderate → 中 |
+| moderation / moderators | 內容審核 / 版主 | moderators 取台湾论坛、Facebook 社团通行的「版主」；moderation 取「內容審核」，与 audit（稽核）、review（審查）分开（简体作「调解」）。Moderation options → 內容審核選項；动词 moderate → 審核；存储库角色 Moderate → 審核（All-repository moderate → 所有儲存庫審核）；严重性 Moderate → 中 |
 | interaction limits | 互動限制 | Temporary interaction limits → 暫時互動限制；Limit to existing users / prior contributors / repository collaborators → 僅限現有使用者 / 僅限先前的貢獻者 / 僅限儲存庫協作者 |
 | audit log / security log | 稽核記錄 / 安全性記錄 | audit 取台湾通行的「稽核」（iThome 20 次，「審計」0 次）；log → 記錄 |
 | saved replies / scheduled reminders | 已儲存的回覆 / 排定的提醒 | scheduled 取微软繁中「排定」 |
@@ -278,7 +278,7 @@ GitHub App、OAuth app → GitHub 應用程式、OAuth 應用程式。现有繁�
 | keyboard shortcuts / accessibility | 鍵盤快速鍵 / 無障礙 | VS Code 繁中「鍵盤快速鍵」31 次；accessibility 取 Chromium 繁中「無障礙」（台湾政府与网页通行；微软作「協助工具」，Apple 作「輔助使用」） |
 | codespace / prebuild | 程式碼空間 / 預先建置 | 用户规定（第 3 节）。Create codespace → 建立程式碼空間；Your codespaces → 你的程式碼空間；Prebuild configuration → 預先建置設定；dev container → 開發容器 |
 | build | 建置 | VS Code 繁中、iThome（建置 56 次、「構建」0 次）。没有例外：页面（Pages）设定 Build and deployment → 建置和部署 |
-| webhook / payload | Web 鉤子 / 承載 | 用户规定（2026-10-28 简体作「Web 钩子」，繁体保留同样的 Web + 中文结构）。hook 不取微软繁中的「勾點」（VS Code 繁中 勾點 100 / 鉤點 15）：「鉤子」与简体「钩子」一一对应，一般读者更易懂；「鉤」用教育部标准字，不写「鈎」。payload 取微软繁中「承載」。Webhooks → Web 鉤子；Add webhook → 新增 Web 鉤子；Payload URL → 承載 URL；Recent Deliveries → 最近傳遞；Deliveries → 傳遞記錄；Redeliver → 重新傳遞；hook → 鉤子（指 webhook 时 → Web 鉤子）；pre-receive hook → 預先接收鉤子。GitHub 应用、OAuth 应用设置页同样作「傳遞」（简体作“请求”） |
+| webhook / payload | Web 鉤子 / 承載 | 用户规定（2026-10-28 简体作「Web 钩子」，繁体保留同样的 Web + 中文结构）。hook 不取微软繁中的「勾點」（VS Code 繁中 勾點 100 / 鉤點 15）：「鉤子」与简体「钩子」一一对应，一般读者更易懂；「鉤」用教育部标准字，不写「鈎」。payload 取微软繁中「承載」。Webhooks → Web 鉤子；Add webhook → 新增 Web 鉤子；Payload URL → 承載 URL；Recent Deliveries → 最近傳遞；Deliveries → 傳遞記錄；Redeliver → 重新傳遞；hook → 鉤子（指 webhook 时 → Web 鉤子）；pre-receive hook → 預先接收鉤子。GitHub 应用、OAuth 应用设置页及市集上架资讯的 Web 鉤子页同样作「傳遞」（简体作“请求”） |
 | gist / wiki / README | 程式碼片段 / Wiki / 讀我檔案 | gist、README 按用户规定（2026-10-28）译出，GitHub Gist → GitHub 程式碼片段；README 取微软繁中术语的「讀我檔案」；Wiki 是技术词，保留（第 3 节）。New gist → 新增程式碼片段；public gist / secret gist → 公開程式碼片段 / 祕密程式碼片段；Fork gist → 分叉程式碼片段；Add a README → 新增讀我檔案；profile README → 個人檔案讀我檔案；README.md 等文件名、gist.github.com 等网址照原文 |
 | single sign-on / identity provider | 單一登入 / 身分識別提供者 | 微软繁中。SSO、SAML、IdP 保留 |
 | code owner / achievement | 程式碼擁有者 / 成就 | CODEOWNERS 保留；成就名保留英文 |
@@ -290,7 +290,7 @@ GitHub App、OAuth app → GitHub 應用程式、OAuth 應用程式。现有繁�
 | 繁体补充：view（动词）/ view（名词） | 查看 / 檢視 | 动词取 Google 繁中常用的「查看」（View all → 查看全部；Viewed → 已查看）；名词（专案的 view、compare view）取「檢視」（VS Code 繁中 880 次） |
 | 繁体补充：session | 工作階段 | 微软、Chromium 繁中。Sign-in sessions → 登入工作階段；agent session → 代理工作階段 |
 | 繁体补充：community | 社群 | iThome 34 / 社區 0。Community Standards → 社群標準；Code of conduct → 行為準則；Contributing → 貢獻指南 |
-| 繁体补充：policy | 政策 | Privacy policy → 隱私權政策；Security policy → 安全性政策；retention policy → 保留政策 |
+| 繁体补充：policy | 政策 | Privacy policy → 隱私權政策；Security policy → 安全性政策；retention policy → 保留政策；Repository policies → 儲存庫政策；allow list → 允許清單 |
 | 繁体补充：certificate / credential | 憑證 / 認證資訊 | 台湾媒体两者常都写「憑證」，界面要分开：certificate → 憑證（Chromium 繁中 110 次），credential → 認證資訊 |
 | 繁体补充：theme / appearance | 佈景主題 / 外觀 | 与 topic（主題）分开（VS Code 繁中「佈景主題」）。Light / Dark → 淺色 / 深色；dark mode → 深色模式 |
 | 繁体补充：reply / quote / reference | 回覆 / 引用 / 參考 | N replies → N 則回覆；Quote reply → 引用回覆 |

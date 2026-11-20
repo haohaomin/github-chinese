@@ -19,7 +19,10 @@ const ENFORCEMENT: Readonly<Record<string, string>> = {
 const ENFORCEMENT_DESCRIPTION: Readonly<Record<string, string>> = {
   'This ruleset will be enforced': '将强制实施此规则集',
   'Evaluate this ruleset to trial rules and view insights': '评估此规则集以试用规则并查看洞察',
-  'This ruleset will not be enforced': '不会强制实施此规则集'
+  'This ruleset will not be enforced': '不会强制实施此规则集',
+  // 组织存储库策略的只读页
+  'This policy will be enforced': '将强制实施此策略',
+  'This policy will not be enforced': '不会强制实施此策略'
 }
 
 /** 绕过参与者分类：英文 → 中文 */
@@ -467,9 +470,9 @@ export default {
       /^(All|Roles|Teams|Apps|Users|Others), Filter actors by category$/,
       (_, category: string) => `${ACTOR_CATEGORY[category] ?? category}，按类别筛选参与者`
     ],
-    // 只读规则集页：Active - This ruleset will be enforced
+    // 只读规则集页：Active - This ruleset will be enforced；组织存储库策略的只读页同此
     [
-      /^- (This ruleset will be enforced|Evaluate this ruleset to trial rules and view insights|This ruleset will not be enforced)$/,
+      new RegExp(`^- (${Object.keys(ENFORCEMENT_DESCRIPTION).join('|')})$`),
       (_, description: string) => `- ${ENFORCEMENT_DESCRIPTION[description] ?? description}`
     ],
     // 绕过列表按类别筛选后为空

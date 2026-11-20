@@ -294,6 +294,11 @@ export default {
     Headers: '標頭',
     Payload: '承載',
     Body: '內文',
+    // 请求详情标签页的读屏名称（原文拼写如此，兼收正确拼写）
+    'Hook request and reponse': 'Web 鉤子請求和回應',
+    'Hook request and response': 'Web 鉤子請求和回應',
+    // 重新传递失败提示
+    'Oops, there was an error while trying to redeliver this payload.': '重新傳遞此承載時發生錯誤。',
     'Check runs': '檢查執行',
     'Check suites': '檢查套件',
     'Commit comments': '提交留言',

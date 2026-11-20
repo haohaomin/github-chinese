@@ -67,6 +67,9 @@ export function passwordProblems(list: string): string {
  */
 export default {
   static: {
+    // 双因素身份验证已启用时访问设置向导的提示
+    'Two-factor authentication is already enabled, You can manage your configuration from this page.':
+      '双因素身份验证已启用，可在此页面管理配置。',
     // 更改密码：要求说明被 <strong> 拆开
     'Old password': '旧密码',
     'New password': '新密码',

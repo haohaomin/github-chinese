@@ -1,11 +1,14 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { createMatcher, normalizeText } from '../../../src/core/matcher'
 import { createTranslator, type Translator } from '../../../src/core/translator'
-import type { PageDictionary } from '../../../src/core/types'
+import type { PageDictionary, PageKey } from '../../../src/core/types'
 import common from '../../../src/locales/zh-CN/common'
 import commonUi from '../../../src/locales/zh-CN/common-ui'
 import marketplace from '../../../src/locales/zh-CN/marketplace'
+import marketplaceHook from '../../../src/locales/zh-CN/marketplace-hook'
+import developerApps from '../../../src/locales/zh-CN/settings-developer/apps'
 import marketplaceTW from '../../../src/locales/zh-TW/marketplace'
+import marketplaceHookTW from '../../../src/locales/zh-TW/marketplace-hook'
 
 /** 以通用类型访问词条，便于用任意字符串取值 */
 const dict: PageDictionary = marketplace
@@ -823,5 +826,60 @@ describe('marketplace 新建计划（真实结构）', () => {
     expect(text('.for')).toBe('适用于个人帐户和组织')
     expect(text('.for-js')).toBe('仅限组织')
     expect(text('.qty')).toBe('seat（此计划内）')
+  })
+
+  it('计划升级 URL 说明：链接与占位符代码按槽位译出', () => {
+    document.body.innerHTML =
+      '<p class="upgrade">The <a href="#">upgrade URL</a> for this plan, where the customer’s account ID from the API replaces <code>CUSTOMER_ACCOUNT_ID</code>, is:</p>'
+    translator = createTranslator({ matcher: fullMatcher, host: window, resolvePages: () => ['common', 'marketplace'] })
+    translator.start()
+    const paragraph = document.querySelector('.upgrade')!
+    expect(paragraph.querySelector('a')?.textContent).toBe('升级 URL')
+    expect(paragraph.querySelector('code')?.textContent).toBe('CUSTOMER_ACCOUNT_ID')
+    expect(paragraph.textContent).toBe('此计划的升级 URL 如下，其中 CUSTOMER_ACCOUNT_ID 会替换为 API 中的客户帐户 ID：')
+  })
+})
+
+describe('marketplace-hook 上架项 Web 钩子页', () => {
+  const HOOK_PAGES: PageKey[] = ['common', 'marketplace', 'marketplace-hook']
+  const hookMatcher = createMatcher([
+    ['marketplace', marketplace],
+    ['marketplace-hook', marketplaceHook]
+  ])
+  const twHookMatcher = createMatcher([
+    ['marketplace', marketplaceTW],
+    ['marketplace-hook', marketplaceHookTW]
+  ])
+  const appsMatcher = createMatcher([['settings', developerApps]])
+
+  it.each([
+    ['Recent Deliveries', '最近请求', '最近傳遞'],
+    ['Redeliver', '重新请求', '重新傳遞'],
+    ['Request', '请求', '請求'],
+    ['Response', '响应', '回應'],
+    ['Headers', '标头', '標頭'],
+    ['Payload', '有效负载', '承載'],
+    ['Completed in 0.09 seconds.', '耗时 0.09 秒。', '耗時 0.09 秒。'],
+    ['Completed in 1 second', '耗时 1 秒', '耗時 1 秒'],
+    [
+      "Sorry, something went wrong and we weren't able to fetch this delivery's details.",
+      '出错了，无法获取此请求的详细信息。',
+      '發生錯誤，無法取得此傳遞的詳細資料。'
+    ]
+  ])('%s → %s / %s', (input, cn, tw) => {
+    expect(hookMatcher.translate(input, HOOK_PAGES)).toBe(cn)
+    expect(twHookMatcher.translate(input, HOOK_PAGES)).toBe(tw)
+  })
+
+  it.each(['Recent Deliveries', 'Recent deliveries', 'Redeliver', 'Response', 'Headers', 'Payload'])(
+    '请求记录与 GitHub 应用设置页同译：%s',
+    input => {
+      expect(hookMatcher.translate(input, HOOK_PAGES)).toBe(appsMatcher.translate(input, ['common', 'settings']))
+    }
+  )
+
+  it('不在其他市场页面生效：Request 仍作“申请”，耗时不译', () => {
+    expect(hookMatcher.translate('Request', ['common', 'marketplace'])).toBe('申请')
+    expect(hookMatcher.translate('Completed in 0.09 seconds.', ['common', 'marketplace'])).toBeUndefined()
   })
 })

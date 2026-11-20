@@ -70,6 +70,13 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     ],
     misses: ['1 through 10 of 24', '1‒10 of 24']
   },
+  {
+    hits: [
+      ['1-4 of 4', '4 个中的第 1-4 个'],
+      ['11-20 of 1,024', '1,024 个中的第 11-20 个']
+    ],
+    misses: ['1-4 of many', '1 - 4 of 4']
+  },
   // 选择面板的读屏播报
   {
     hits: [
@@ -423,6 +430,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     ],
     misses: ['Add bold text, Ctrl+b']
   },
+  // 工具栏溢出菜单：Primer 用已译出的名称拼接
+  { hits: [['More Markdown 工具栏 items', '更多 Markdown 工具栏项']], misses: ['More toolbar items'] },
   {
     hits: [
       ['1 column', '1 列'],

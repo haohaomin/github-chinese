@@ -137,6 +137,8 @@ export const PAGE_KEYS = [
   'org-settings',
   // 组织拥有的应用设置页（/organizations/<组织>/settings/apps/*、applications/*），叠加在 org-settings 之上
   'org-apps',
+  // 组织设置的存储库策略页（settings/policies/*）：目标存储库筛选框，叠加在 org-settings 之上
+  'org-policies',
   'notifications',
   'search',
   'new',
@@ -145,6 +147,8 @@ export const PAGE_KEYS = [
   'copilot',
   'auth',
   'marketplace',
+  // 市场上架项的 Web 钩子页（/marketplace/<上架项>/hook），叠加在 marketplace 之上
+  'marketplace-hook',
   'sponsors',
   'education',
   'mcp',

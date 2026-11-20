@@ -221,7 +221,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
         '图表有 1 条显示频率的 Y 轴。数据范围从 -30722 到 60130。'
       ],
       ['The chart has 1 X axis displaying categories.', '图表有 1 条显示类别的 X 轴。'],
-      ['The chart has 1 X axis displaying Values. Data range: 7 days.', '图表有 1 条显示 Values 的 X 轴。数据范围：7 天。'],
+      ['The chart has 1 X axis displaying Values. Data range: 7 days.', '图表有 1 条显示值的 X 轴。数据范围：7 天。'],
       ['The chart has 1 X axis displaying categories. Data range: 15 categories.', '图表有 1 条显示类别的 X 轴。数据范围：15 个类别。']
     ],
     misses: ['The chart has 1 Z axis displaying Time.']
@@ -230,7 +230,7 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [
       ['The chart has 2 X axes displaying Time, and navigator-x-axis.', '图表的 2 条 X 轴分别显示时间、导航 X 轴。'],
       ['The chart has 2 Y axes displaying Contributions, and navigator-y-axis.', '图表的 2 条 Y 轴分别显示贡献、导航 Y 轴。'],
-      ['The chart has 3 X axes displaying Time, Values, and navigator-x-axis.', '图表的 3 条 X 轴分别显示时间、Values、导航 X 轴。']
+      ['The chart has 3 X axes displaying Time, Values, and navigator-x-axis.', '图表的 3 条 X 轴分别显示时间、值、导航 X 轴。']
     ],
     misses: ['The chart has many X axes displaying Time.']
   },

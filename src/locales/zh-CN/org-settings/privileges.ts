@@ -31,6 +31,52 @@ function quotedPermission(quote: string, permission: string): string {
  */
 export default {
   static: {
+    // 成员权限：基本权限为“无”时的说明（“authorized team”版本）
+    'Members will only be able to clone and pull public repositories. To give a member additional access, you’ll need to add them to an authorized team or make them a collaborator on individual repositories.':
+      '成员只能克隆和拉取公共存储库。要授予成员更多权限，需要将其添加到已授权的团队，或设为单个存储库的协作者。',
+    "Members will only be able to clone and pull public repositories. To give a member additional access, you'll need to add them to an authorized team or make them a collaborator on individual repositories.":
+      '成员只能克隆和拉取公共存储库。要授予成员更多权限，需要将其添加到已授权的团队，或设为单个存储库的协作者。',
+    // 部署密钥页：「… For more information, see <a>the GitHub Apps documentation</a>. Please note … see <a>managing deploy keys</a>.」按文本节点分段
+    'Deploy keys use an SSH key to grant readonly or write access to a single repository. If you have a more complex project or want more fine-grain control over permissions, consider using a GitHub App instead. For more information, see':
+      '部署密钥使用 SSH 密钥授予对单个存储库的只读或写入权限。如果项目更复杂或需要更细粒度的权限控制，请考虑改用 GitHub 应用。详情请参阅',
+    '. Please note that deploy keys are not protected by a passphrase and can be a security risk if your server is compromised. For more information on deploy keys, see':
+      '。请注意，部署密钥不受密码短语保护，服务器遭入侵时可能带来安全风险。有关部署密钥的详细信息，请参阅',
+    'the GitHub Apps documentation': 'GitHub 应用文档',
+    'managing deploy keys': '管理部署密钥',
+    'Deploy keys are not allowed to be created and used within this organization. Cloning public repositories will be unaffected by this policy.':
+      '不允许在此组织中创建和使用部署密钥。克隆公共存储库不受此策略影响。',
+    'Deploy keys are allowed to be created and used within this organization.': '允许在此组织中创建和使用部署密钥。',
+    'Are you sure you want to disable deploy keys?': '确定要禁用部署密钥吗？',
+    // 存储库策略：空状态「<a>Repository policies</a> define whether …」、新建 / 编辑表单、保存提示
+    'Protect your most important repositories': '保护你最重要的存储库',
+    'define whether members can perform operations on repositories such as delete and transfer.':
+      '定义成员能否对存储库执行删除、转让等操作。',
+    'New repository policy': '新建存储库策略',
+    'Policy Name': '策略名称',
+    'Exempt roles, teams, agents, and apps from this policy by adding them to the allow list.':
+      '将角色、团队、智能体和应用添加到允许列表，使其不受此策略约束。',
+    'Choose which roles, teams, agents, and apps can bypass this policy': '选择可以绕过此策略的角色、团队、智能体和应用',
+    'Repository migrations': '存储库迁移',
+    'Which policies should be applied?': '应应用哪些策略？',
+    'Restrict visibility': '限制可见性',
+    'New repositories and visibility changes are limited to specified visibilities, unless the actor is on the allow list.':
+      '新存储库和可见性更改仅限于指定的可见性，允许列表中的参与者除外。',
+    'Only allow users on the allow list to create repositories.': '仅允许允许列表中的用户创建存储库。',
+    'Only allow users on the allow list to delete repositories.': '仅允许允许列表中的用户删除存储库。',
+    'Restrict transfers': '限制转让',
+    'Only allow users on the allow list to transfer repositories out of the organization.': '仅允许允许列表中的用户将存储库转让出组织。',
+    'Restrict names': '限制名称',
+    'New repository names and name changes are limited to the specific patterns, unless the actor is on the allow list or is a transferred repository.':
+      '新存储库名称和名称更改仅限于特定模式，允许列表中的参与者或转让来的存储库除外。',
+    'Must not match': '不得匹配',
+    'Naming pattern': '命名模式',
+    'Define the naming pattern using a regular expression.': '使用正则表达式定义命名模式。',
+    'Test pattern...': '测试模式...',
+    'This policy will be enforced': '将强制实施此策略',
+    'This policy will not be enforced': '不会强制实施此策略',
+    'Policy created': '策略已创建',
+    'Policy updated': '策略已更新',
+    'Policy deleted': '策略已删除',
     // 基本权限
     'Member repository permissions': '成员存储库权限',
     'Base permissions': '基本权限',
@@ -201,6 +247,8 @@ export default {
     'Repository policy': '存储库策略'
   },
   scoped: {
+    // 限制名称的条件（Must match / Must not match）
+    Condition: '条件',
     'No permission': '无权限',
     'No access': '无权限',
     public: '公共',
@@ -234,6 +282,8 @@ export default {
       '创建、使用或删除部署密钥的脚本、应用或工作流将无法继续运行。'
   },
   regexp: [
+    // 策略列表计数：0 repository policies
+    [/^(\d+) repository polic(?:y|ies)$/, '$1 个存储库策略'],
     [
       new RegExp(`^Change (base|default) permissions? to ${OPEN_QUOTE}${PERMISSION_SOURCE}${CLOSE_QUOTE}$`),
       (_, kind: string, quote: string, permission: string) =>
@@ -256,5 +306,9 @@ export default {
       new RegExp(`^If enabled, all users with read access can create and comment on discussions in ${ORG}[’']s repositories\\.$`),
       '启用后，所有拥有读取访问权限的用户都可以在 $1 的存储库中创建讨论并发表评论。'
     ]
+  ],
+  inline: [
+    ['{} use deploy keys. Disabling deploy keys may break existing workflows.', '{}使用部署密钥。禁用部署密钥可能导致现有工作流中断。'],
+    ['Existing deploy keys in {} will disabled.', '{} 中的现有部署密钥将被禁用。']
   ]
 } satisfies PageDictionary

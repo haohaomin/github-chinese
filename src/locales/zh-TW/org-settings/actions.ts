@@ -1,4 +1,5 @@
 import type { PageDictionary } from '../../../core/types'
+import { DATE_SOURCE, joinCjk, translateDate } from '../helpers'
 
 const ORG = '([\\w.-]+)'
 
@@ -14,6 +15,41 @@ const ORG = '([\\w.-]+)'
  */
 export default {
   static: {
+    // 常规：存储库自托管运行器、自定义映像保留（「Your enterprise has set a maximum limit of <strong>100</strong> …」见 inline）
+    'Repository self-hosted runners': '儲存庫自架執行器',
+    'Choose the default settings for custom image retention in this enterprise.': '選擇此企業中自訂映像檔保留的預設設定。',
+    'Maximum versions per image': '每個映像檔的版本數上限',
+    'Unused version retention': '未使用版本的保留期限',
+    'Maximum version age': '版本最長存在時間',
+    // 标准托管运行器（「<strong>Note:</strong> Once disabled …」各节点分别匹配）
+    'Standard hosted runners': '標準託管執行器',
+    'Choose if repositories are allowed to use standard hosted runner labels. If disabled, hosted runners can only be accessed via a runner group.':
+      '選擇是否允許儲存庫使用標準託管執行器標籤。停用後，只能透過執行器群組存取託管執行器。',
+    'Once disabled you will lose any concurrency settings you have set up.': '停用後將遺失已設定的所有並行設定。',
+    'For more information on concurrency see our documentation.': '有關並行的詳細資訊，請參閱我們的說明文件。',
+    // 自托管运行器的实时调试
+    'Allow live debugging on self-hosted runners. Repositories must individually opt in.':
+      '允許在自架執行器上進行即時偵錯。儲存庫須個別選擇啟用。',
+    'Allow live debugging on self-hosted runners': '允許在自架執行器上進行即時偵錯',
+    'Do not allow live debugging on self-hosted runners': '不允許在自架執行器上進行即時偵錯',
+    // 保留期、复刻拉取请求工作流（专用和内部存储库）
+    'Choose the default repository settings for checks, workflow runs, statuses, artifacts, and logs.':
+      '選擇檢查、工作流程執行、狀態、成品和記錄的預設儲存庫設定。',
+    'Duration must be 400 or less': '期限不得超過 400',
+    'Fork pull request workflows in private and internal repositories': '私人和內部儲存庫中的分叉拉取請求工作流程',
+    'These settings apply to private and internal repositories. Repository administrators will only be able to change the settings that are enabled here.':
+      '這些設定適用於私人和內部儲存庫。儲存庫管理員只能變更此處已啟用的設定。',
+    'Save fork pull request workflows settings': '儲存分叉拉取請求工作流程設定',
+    // OIDC：主题声明模板、自定义属性声明
+    'Subject claim template': '主體宣告範本',
+    'Order-dependent list of comma-separated template variables.': '以逗號分隔、區分順序的範本變數清單。',
+    'List of available template variables.': '可用範本變數清單。',
+    'Custom property claims': '自訂屬性宣告',
+    'Specify which custom properties should be included as claims in the OIDC token.': '指定要作為宣告包含在 OIDC 權杖中的自訂屬性。',
+    'No custom properties defined': '未定義自訂屬性',
+    'Define custom properties to include them as claims in OIDC tokens.': '定義自訂屬性，以將其作為宣告包含在 OIDC 權杖中。',
+    'Learn more about repository custom properties.': '瞭解儲存庫自訂屬性。',
+    'Manage custom properties': '管理自訂屬性',
     // 常规：策略
     'General actions permissions': '一般動作權限',
     'Choose which repositories are permitted to use GitHub Actions.': '選擇允許使用 GitHub 動作的儲存庫。',
@@ -150,6 +186,9 @@ export default {
     'dependencies and build outputs to improve workflow execution time.': '相依項目和建置輸出以縮短工作流程執行時間。'
   },
   scoped: {
+    // 实时调试下拉的选项、自定义映像保留输入框后的单位
+    'Not allowed': '不允許',
+    versions: '個版本',
     // 「Applies to」+ <public> +「repositories only」：整句由 inline 收录（僅適用於公開儲存庫），这两条是片段后备；
     // 「Applies to」与合并进来的规则集词典共用，译法一致
     'Applies to': '適用於',
@@ -233,6 +272,16 @@ export default {
     '` to your workflow’s YAML to send jobs to this runner.': '` 加入工作流程 YAML 以傳送作業至此執行器。'
   },
   regexp: [
+    // 复刻拉取请求：需要批准的外部贡献者（组织名在句中）
+    [
+      /^All users that are not a member or owner of the repository and not a member of the ([\w.-]+) organization will require approval to run workflows\.$/,
+      '所有不是儲存庫成員或擁有者、也不是 $1 組織成員的使用者都需要核准才能執行工作流程。'
+    ],
+    // 策略：pull_request_target 限制公告的前半句（同存储库设置，后半句由存储库设置的 static 匹配）
+    [
+      new RegExp(`^On (${DATE_SOURCE}), GitHub will restrict$`),
+      (_, date: string) => `${joinCjk(translateDate(date) ?? date, '起')}，GitHub 將預設在公開儲存庫中限制`
+    ],
     [/^(\d+) selected repositor(?:y|ies)$/, '$1 個選取的儲存庫'],
     // 「Allow all actions and reusable workflows」由存储库设置的 static 收录，组织名排除 all
     [new RegExp(`^Allow (?!all )${ORG} actions and reusable workflows$`), '允許 $1 的動作和可重複使用的工作流程'],
@@ -264,5 +313,10 @@ export default {
     ]
   ],
   // 策略说明：Applies to <strong>public</strong> repositories only，only 在片段里译不出来，整句收录
-  inline: [['Applies to {} repositories only', '僅適用於{}儲存庫']]
+  inline: [
+    ['Your enterprise has set a maximum limit of {#} versions per image.', '企業設定的上限為每個映像檔 {#} 個版本。'],
+    ['Your enterprise has set a maximum limit of {#} days for unused version retention.', '企業設定的未使用版本保留期限上限為 {#} 天。'],
+    ['Your enterprise has set a maximum limit of {#} days for maximum version age.', '企業設定的版本最長存在時間上限為 {#} 天。'],
+    ['Applies to {} repositories only', '僅適用於{}儲存庫']
+  ]
 } satisfies PageDictionary

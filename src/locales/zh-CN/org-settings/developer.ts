@@ -31,6 +31,9 @@ const NOT_REUSED: ReadonlySet<string> = new Set([
   'Response',
   'Headers',
   'Payload',
+  'Body',
+  'Hook request and reponse',
+  'Hook request and response',
   // security
   'Dependabot alerts',
   'IP allow list',

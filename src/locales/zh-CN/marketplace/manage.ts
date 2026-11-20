@@ -8,6 +8,41 @@ import type { PageDictionary } from '../../../core/types'
  */
 export default {
   static: {
+    // 上架项图标裁剪对话框与保存提示（logo 作“图标”，同应用设置页）
+    'Crop your new Marketplace listing logo': '裁剪新的上架项图标',
+    'Set new Marketplace listing logo': '设置新的上架项图标',
+    'Your Marketplace listing logo has been updated. It may take a few minutes to update across the site.':
+      '上架项图标已更新。全站同步可能需要几分钟。',
+    // 产品截图：放大、说明、删除
+    'Click to zoom': '点击放大',
+    'No caption': '无说明',
+    'Delete screenshot': '删除截图',
+    'Are you sure you want to delete this screenshot?': '确定要删除此截图吗？',
+    // 计划：详情、发布、更新、上线后锁定、升级 URL（「The <a>upgrade URL</a> for this plan, … replaces <code>…</code>, is:」见 inline）、删除确认
+    'View Details': '查看详情',
+    'Publish this plan': '发布此计划',
+    'Your plan has been published.': '计划已发布。',
+    'Update this plan': '更新此计划',
+    'Pricing cannot be updated because this listing is live': '因上架项已上线而无法更新定价',
+    'Name cannot be updated because this listing is live': '因上架项已上线而无法更新名称',
+    'upgrade URL': '升级 URL',
+    'Any existing subscriptions will be removed when the plan is deleted, are you sure you want to continue?':
+      '删除计划将移除所有现有订阅，确定要继续吗？',
+    // 提交审核：审核中、撤回、待发布
+    "Your listing is under review by GitHub for publishing. We'll notify you via email with updates.":
+      '上架项正在接受 GitHub 发布审核。我们会通过电子邮件通知进展。',
+    'Your listing is under review by GitHub for publishing. We’ll notify you via email with updates.':
+      '上架项正在接受 GitHub 发布审核。我们会通过电子邮件通知进展。',
+    'Withdraw request': '撤回申请',
+    'Thank you for your submission. We will review your listing and get back to you shortly.': '感谢提交。我们将审核你的上架项并尽快回复。',
+    'Withdraw approval request so you can make additional changes': '撤回审批申请以便进行更多更改',
+    'Pending for publish': '待发布',
+    'Your listing is no longer awaiting review from GitHub staff. You may make additional changes and resubmit when ready.':
+      '上架项已不再等待 GitHub 工作人员审核。你可以进行更多更改并在准备就绪时重新提交。',
+    // 安全与合规：保存提示、透明度披露的占位文字（多行；按规范化后的整段匹配，译文保留换行）
+    'Security and compliance information saved': '安全与合规信息已保存',
+    "Provide available details about your extension's safety and security measures. Include any applicable information about: - Security Measures: authentication methods, access controls, incident response plans - Data Handling: data encryption, data collection and usage, privacy protections, data retention policies, cross-border transfers (if applicable) - Compliance: list any compliance certifications, links to reports, and expiration dates (e.g. SOC II/III, ISO 27001, HIPAA, GDPR, FedRAMP) - High-Risk Systems: If you declared your extension as high-risk under EU AI Act, also include system accuracy metrics, human oversight procedures, risk monitoring methods and known limitations Please link to supporting documentation where available and use H2 headers (##) for better readability.":
+      '提供扩展的安全保障措施的现有详细信息。请包括以下适用信息：\n\n- 安全措施：身份验证方法、访问控制、事件响应计划\n- 数据处理：数据加密、数据收集和使用、隐私保护、数据保留策略、跨境传输（如适用）\n- 合规：列出合规认证、报告链接和到期日期（例如 SOC II/III、ISO 27001、HIPAA、GDPR、FedRAMP）\n- 高风险系统：如果已根据欧盟《人工智能法》将扩展声明为高风险，还需包括系统准确性指标、人工监督程序、风险监控方法和已知限制\n\n请尽可能链接到支持文档并使用 H2 标题 (##) 以提高可读性。',
     // 新建上架项草稿
     'Create a draft GitHub Marketplace listing from one of your tools': '用你的某个工具创建 GitHub 市场上架项草稿',
     'Create a new GitHub Marketplace draft listing': '新建 GitHub 市场上架项草稿',
@@ -251,6 +286,9 @@ export default {
     'for more information on this page.': '了解此页面的更多信息。'
   },
   scoped: {
+    // 截图说明输入框、必填项校验（短词，只在本页面类型生效）
+    caption: '说明',
+    'cannot be blank': '不能为空',
     // 侧栏、步骤名（短词）
     Transactions: '交易',
     Incomplete: '未完成',
@@ -311,6 +349,10 @@ export default {
     [/^Plan bullet (\d+)$/, '计划要点 $1']
   ],
   inline: [
+    [
+      'The {} for this plan, where the customer’s account ID from the API replaces {}, is:',
+      '此计划的{} 如下，其中 {} 会替换为 API 中的客户帐户 ID：'
+    ],
     // 计划预览「<svg> For <span>personal accounts and organizations</span>」：For 并入适用对象（同详情页 For organizations only → 仅限组织）
     ['{} For {}', '{}{}'],
     ['Add and modify your pricing plans for {}. More information can be found in {}.', '为 {} 添加和修改定价计划。更多信息请参阅{}。'],

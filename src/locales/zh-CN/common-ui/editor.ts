@@ -184,6 +184,8 @@ export default {
     [/^Markdown input: (edit|preview|hybrid) mode selected\.$/, (_, mode: string) => `Markdown 输入：已选择${MODES[mode]!}模式。`],
     [/^Heading ([1-6])$/, '$1 级标题'],
     [new RegExp(`^${TOOLBAR_SOURCE}, <([^<>]+)>$`), (_, label: string, keys: string) => `${TOOLBAR[label]!}，<${keys}>`],
+    // 工具栏溢出菜单：Primer 用已译出的 aria-label 拼出「More Markdown 工具栏 items」，名称含中文时整段改写
+    [/^More (.*[一-鿿].*) items$/, (_, name: string) => joinCjk('更多', `${name}项`)],
     // 斜杠命令 /table 的行列数
     [/^([1-9]\d?) (columns?|rows?)$/, (_, count: string, unit: string) => `${count} ${unit.startsWith('c') ? '列' : '行'}`],
 

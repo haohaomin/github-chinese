@@ -10,6 +10,19 @@ import type { PageDictionary } from '../../../core/types'
  */
 export default {
   static: {
+    // 人员：批量选择、双因素身份验证标记、角色说明、转换为外部协作者、删除直接成员身份
+    'Select all members': '選擇所有成員',
+    '2FA enabled': '已啟用雙重驗證',
+    'Has full administrative access to the entire organization.': '擁有整個組織的完整管理權限。',
+    'Can see every member and non-secret team in the organization, and can create new repositories.':
+      '可以查看組織中的每位成員和非祕密團隊，並可以建立新儲存庫。',
+    'Members cannot be converted to outside collaborators when membership through an identity provider group or enterprise team prevents removal from the organization.':
+      '如果透過身分識別提供者群組或企業團隊取得的成員資格阻止將成員從組織中移除，則無法將其轉換為外部協作者。',
+    'Their repository access will be preserved by making them collaborators on all repositories that their teams gave them access to. They will retain access to repositories that they were previously collaborators on, but all other access to this organization’s repositories will be lost. If the user does not have access to any repositories, they will be removed from the organization.':
+      '對方將成為其團隊授予存取權之所有儲存庫的協作者，以保留儲存庫存取權。對方會保留原本已是協作者之儲存庫的存取權，但會失去此組織儲存庫的其他所有存取權。如果使用者無權存取任何儲存庫，將從組織中移除。',
+    "Their repository access will be preserved by making them collaborators on all repositories that their teams gave them access to. They will retain access to repositories that they were previously collaborators on, but all other access to this organization's repositories will be lost. If the user does not have access to any repositories, they will be removed from the organization.":
+      '對方將成為其團隊授予存取權之所有儲存庫的協作者，以保留儲存庫存取權。對方會保留原本已是協作者之儲存庫的存取權，但會失去此組織儲存庫的其他所有存取權。如果使用者無權存取任何儲存庫，將從組織中移除。',
+    'Direct membership for the following members will be removed:': '將移除以下成員的直接成員資格：',
     // 左侧栏与标题片段
     Invitations: '邀請',
     'Security Managers': '安全性管理員',

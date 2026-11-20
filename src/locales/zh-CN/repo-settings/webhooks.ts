@@ -273,6 +273,11 @@ export default {
     Headers: '标头',
     Payload: '有效负载',
     Body: '正文',
+    // 请求详情标签页的读屏名称（原文拼写如此，兼收正确拼写）
+    'Hook request and reponse': 'Web 钩子请求和响应',
+    'Hook request and response': 'Web 钩子请求和响应',
+    // 重新传递失败提示
+    'Oops, there was an error while trying to redeliver this payload.': '重新传递此有效负载时出错。',
     'Check runs': '检查运行',
     'Check suites': '检查套件',
     'Commit comments': '提交评论',

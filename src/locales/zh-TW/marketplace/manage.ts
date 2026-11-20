@@ -8,6 +8,42 @@ import type { PageDictionary } from '../../../core/types'
  */
 export default {
   static: {
+    // 上架项图标裁剪对话框与保存提示（logo 作“图标”，同应用设置页）
+    'Crop your new Marketplace listing logo': '裁切新的上架資訊標誌',
+    'Set new Marketplace listing logo': '設定新的上架資訊標誌',
+    'Your Marketplace listing logo has been updated. It may take a few minutes to update across the site.':
+      '上架資訊標誌已更新。全站更新可能需要幾分鐘。',
+    // 产品截图：放大、说明、删除
+    'Click to zoom': '點擊放大',
+    'No caption': '無說明',
+    'Delete screenshot': '刪除螢幕擷取畫面',
+    'Are you sure you want to delete this screenshot?': '確定要刪除此螢幕擷取畫面嗎？',
+    // 计划：详情、发布、更新、上线后锁定、升级 URL（「The <a>upgrade URL</a> for this plan, … replaces <code>…</code>, is:」见 inline）、删除确认
+    'View Details': '檢視詳細資料',
+    'Publish this plan': '發佈此方案',
+    'Your plan has been published.': '方案已發佈。',
+    'Update this plan': '更新此方案',
+    'Pricing cannot be updated because this listing is live': '因上架資訊已上線而無法更新定價',
+    'Name cannot be updated because this listing is live': '因上架資訊已上線而無法更新名稱',
+    'upgrade URL': '升級 URL',
+    'Any existing subscriptions will be removed when the plan is deleted, are you sure you want to continue?':
+      '刪除方案將移除所有現有訂閱，確定要繼續嗎？',
+    // 提交审核：审核中、撤回、待发布
+    "Your listing is under review by GitHub for publishing. We'll notify you via email with updates.":
+      '上架資訊正在接受 GitHub 發佈審查。我們會透過電子郵件通知最新進度。',
+    'Your listing is under review by GitHub for publishing. We’ll notify you via email with updates.':
+      '上架資訊正在接受 GitHub 發佈審查。我們會透過電子郵件通知最新進度。',
+    'Withdraw request': '撤回申請',
+    'Thank you for your submission. We will review your listing and get back to you shortly.':
+      '感謝你的提交。我們將審查你的上架資訊並盡快回覆。',
+    'Withdraw approval request so you can make additional changes': '撤回核准申請以便進行更多變更',
+    'Pending for publish': '待發佈',
+    'Your listing is no longer awaiting review from GitHub staff. You may make additional changes and resubmit when ready.':
+      '上架資訊已不再等待 GitHub 工作人員審查。你可以進行更多變更並在準備就緒時重新提交。',
+    // 安全与合规：保存提示、透明度披露的占位文字（多行；按规范化后的整段匹配，译文保留换行）
+    'Security and compliance information saved': '安全性與合規性資訊已儲存',
+    "Provide available details about your extension's safety and security measures. Include any applicable information about: - Security Measures: authentication methods, access controls, incident response plans - Data Handling: data encryption, data collection and usage, privacy protections, data retention policies, cross-border transfers (if applicable) - Compliance: list any compliance certifications, links to reports, and expiration dates (e.g. SOC II/III, ISO 27001, HIPAA, GDPR, FedRAMP) - High-Risk Systems: If you declared your extension as high-risk under EU AI Act, also include system accuracy metrics, human oversight procedures, risk monitoring methods and known limitations Please link to supporting documentation where available and use H2 headers (##) for better readability.":
+      '提供擴充功能的安全防護措施的現有詳細資料。請包括以下適用資訊：\n\n- 安全性措施：驗證方式、存取控制、事件應變計畫\n- 資料處理：資料加密、資料收集和使用、隱私保護、資料保留政策、跨境傳輸（如適用）\n- 合規性：列出合規認證、報告連結和到期日期（例如 SOC II/III、ISO 27001、HIPAA、GDPR、FedRAMP）\n- 高風險系統：如果已根據歐盟《人工智慧法》將擴充功能聲明為高風險，還需包括系統準確性指標、人工監督程序、風險監控方法和已知限制\n\n請盡可能連結到支援文件並使用 H2 標題 (##) 以提升可讀性。',
     // 新增上架资讯草稿
     'Create a draft GitHub Marketplace listing from one of your tools': '使用你的工具建立 GitHub 市集上架資訊草稿',
     'Create a new GitHub Marketplace draft listing': '建立新的 GitHub 市集上架資訊草稿',
@@ -251,6 +287,9 @@ export default {
     'for more information on this page.': '以瞭解此頁面的詳細資訊。'
   },
   scoped: {
+    // 截图说明输入框、必填项校验（短词，只在本页面类型生效）
+    caption: '說明',
+    'cannot be blank': '不能為空白',
     // 侧栏、步骤名（短词）
     Transactions: '交易',
     Incomplete: '未完成',
@@ -311,6 +350,10 @@ export default {
     [/^Plan bullet (\d+)$/, '方案要點 $1']
   ],
   inline: [
+    [
+      'The {} for this plan, where the customer’s account ID from the API replaces {}, is:',
+      '此方案的{} 如下，其中 {} 會替換為 API 中的客戶帳號 ID：'
+    ],
     // 方案预览「<svg> For <span>personal accounts and organizations</span>」：For 并入适用对象（同详情页 For organizations only → 僅限組織）
     ['{} For {}', '{}{}'],
     ['Add and modify your pricing plans for {}. More information can be found in {}.', '為 {} 新增和修改定價方案。詳細資訊請參閱{}。'],

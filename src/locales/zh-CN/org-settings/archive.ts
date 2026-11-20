@@ -22,6 +22,8 @@ const FILTER_TARGET: Readonly<Record<string, string>> = {
  */
 export default {
   static: {
+    // 审核日志：导出截断提示（「… or the <a>REST API</a> for complete results.」见 inline）、预算事件
+    'Budget alerts are enabled.': '预算警报已启用。',
     // 预定提醒（组织）
     'No scheduled reminders created.': '暂无预定提醒。',
     'To keep projects moving, you can now remind your teams about pull requests they need to review.':
@@ -65,6 +67,8 @@ export default {
       '启用后，你可以在组织审核日志事件中查看当前成员的 IP 地址。此功能会自动公开用户的 IP 地址，你应与法务团队评估此更改，确定是否需要通知用户。在企业级别启用后，企业拥有的所有组织都会自动启用；反之则不然。'
   },
   scoped: {
+    // 预算事件「Budget was <strong>updated</strong> …」中的动作；created / deleted 用规则集洞察的「创建了」「删除了」
+    updated: '更新了',
     // 预定提醒
     'here.': '此处。',
     'Add workspace': '添加工作区',
@@ -113,6 +117,9 @@ export default {
       '这些存储库已被此组织的成员删除。存储库删除后 90 天内可以恢复。'
   },
   regexp: [
+    // 审核日志事件：更新组织头像；条目头像链接的无障碍名称
+    [/^Updated profile picture for ([\w.-]+)$/, '更新了 $1 的头像'],
+    [/^View ([\w.-]+)'s profile$/, '查看 $1 的个人资料'],
     [/^Ignore with (\d+) or more approvals?$/, '有 $1 个或更多批准时忽略'],
     [/^Found (\d+) events?$/, '找到 $1 个事件'],
     // 审核日志搜索建议的无障碍标签：「action: filter by action」
@@ -123,5 +130,30 @@ export default {
     [new RegExp(`^This is where you can review activity from ${ORG}[’']s sponsorships\\.$`), '你可以在这里查看 $1 的赞助活动。'],
     [new RegExp(`^No recoverable repositories were found for ${ORG}\\.$`), '未找到 $1 可恢复的存储库。'],
     [/^Are you sure you want to restore ([\w.-]+(?:\/[\w.-]+)?)\?$/, '确定要恢复 $1 吗？']
+  ],
+  inline: [
+    [
+      'Exported results are truncated. Size limit reached for the requested time range. Please, try a smaller time range or the {} for complete results.',
+      '导出结果已截断。所请求的时间范围已达到大小上限。请缩小时间范围，或使用 {} 获取完整结果。'
+    ],
+    // 审核日志事件说明（槽位顺序不能调换）
+    ['Added themselves to the {} team', '将自己添加到 {} 团队'],
+    ['Created the team {}', '创建了团队 {}'],
+    ['Renamed organization from {} to {}', '将组织从 {} 重命名为 {}'],
+    ['Created the ruleset {} in {}', '创建了规则集 {} 于 {}'],
+    ['Budget was {} with a limit of {#} ({}). {}', '{}预算，限额为 {#}（{}）。{}'],
+    ['Updated Codespaces ownership to User in {}', '在 {} 中将代码空间所有权更新为用户'],
+    ['Created the {} organization', '创建了 {} 组织'],
+    ['Added themselves to the {} organization with {} permission', '将自己添加到 {} 组织并获得 {} 权限'],
+    ['Created the label {}', '创建了标签 {}'],
+    ['Set policy to default workflow token permission to read for {}', '为 {} 将默认工作流令牌权限策略设为读取'],
+    [
+      'Set policy to default workflow token can create or approve PR to false for {}',
+      '为 {} 将默认工作流令牌可创建或批准 PR 策略设为 false'
+    ],
+    [
+      'Members can no longer create and use deploy keys to repositories in the {} organization.',
+      '成员不能再为 {} 组织中的存储库创建和使用部署密钥。'
+    ]
   ]
 } satisfies PageDictionary

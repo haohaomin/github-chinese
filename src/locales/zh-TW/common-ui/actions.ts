@@ -390,6 +390,8 @@ export default {
     // DataTable 分页的可见范围（mergeText 整段合并）：
     // 1<span>&nbsp;through&nbsp;</span><span aria-hidden="true">‒</span>10<!-- --> of <!-- -->24（‒ 为 U+2012）
     [/^(\d[\d,]*) through ‒(\d[\d,]*) of (\d[\d,]*)$/, '$3 筆中的第 $1‒$2 筆'],
+    // 列表分页的可见范围（相邻文本节点整段合并）：1<!-- -->-<!-- -->4<!-- --> of <!-- -->4（组织预算列表）
+    [/^(\d[\d,]*)-(\d[\d,]*) of (\d[\d,]*)$/, '$3 筆中的第 $1-$2 筆'],
     // 选择面板的读屏播报
     [
       new RegExp(`^${COUNT} items? available, ${COUNT} selected\\.$`),

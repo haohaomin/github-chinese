@@ -343,6 +343,12 @@ export default {
       '请注意删除 OAuth 应用会使用户授权的所有访问令牌失效。'
   },
   scoped: {
+    // OAuth 应用图标的裁剪对话框与保存提示、应用更新提示
+    'Crop your new application logo': '裁剪新的应用图标',
+    'Set new application logo': '设置新的应用图标',
+    'Your application logo has been updated. It may take a few minutes to update across the site.':
+      '应用图标已更新。全站同步可能需要几分钟。',
+    'Application updated successfully': '应用已更新',
     // 列表（与组织开发人员设置共用；Developer settings 菜单项由 settings-account 收录）
     'GitHub Apps': 'GitHub 应用',
     'OAuth Apps': 'OAuth 应用',
@@ -373,6 +379,11 @@ export default {
     'Yes, redeliver this payload': '是，重新请求此有效负载',
     Headers: '标头',
     Payload: '有效负载',
+    Body: '正文',
+    // 请求详情标签页的读屏名称（原文拼写如此，兼收正确拼写）
+    'Hook request and reponse': 'Web 钩子请求和响应',
+    'Hook request and response': 'Web 钩子请求和响应',
+    'Oops, there was an error while trying to redeliver this payload.': '重新请求此有效负载时出错。',
 
     // 设置页（General、Install 由 settings-account、common-ui 收录）
     Advanced: '高级',
@@ -403,6 +414,11 @@ export default {
     'Installed on': '安装在'
   },
   regexp: [
+    // 切换令牌过期：Token expiration is being enabled for <应用>.
+    [
+      /^Token expiration is being (enabled|disabled) for (.+)\.$/,
+      (_, state: string, app: string) => `正在为 ${app} ${state === 'enabled' ? '启用' : '禁用'}令牌过期。`
+    ],
     [/^Only allow this GitHub App to be installed on the (@[\w-]+) account\.$/, '仅允许将此 GitHub 应用安装在 $1 帐户上。'],
     [/^Choose an account to install (.+) on:$/, '选择要安装 $1 的帐户：'],
     [/^Install (.+) on this account\.$/, '将 $1 安装到此帐户。'],

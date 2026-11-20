@@ -1,7 +1,8 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { createMatcher, normalizeText } from '../../../src/core/matcher'
 import { createTranslator, type Translator } from '../../../src/core/translator'
-import type { PageDictionary } from '../../../src/core/types'
+import type { PageDictionary, PageKey } from '../../../src/core/types'
+import orgPolicies from '../../../src/locales/zh-CN/org-policies'
 import orgSettings from '../../../src/locales/zh-CN/org-settings'
 import moderation from '../../../src/locales/zh-CN/org-settings/moderation'
 import { DEPENDABOT_RULES_REGEXP, DEPENDABOT_RULES_SCOPED } from '../../../src/locales/zh-CN/org-settings/security'
@@ -39,6 +40,7 @@ interface RegExpCase {
 /** 按词典中的正则顺序排列，每条正则至少一个正例、一个反例 */
 const REGEXP_CASES: readonly RegExpCase[] = [
   // 常规：组织资料、危险区域
+  { hits: [['View setube-organization settings', '查看 setube-organization 的设置']], misses: ['View the settings'] },
   { hits: [['Link to social profile 2', '社交帐户链接 2']], misses: ['Link to social profile two'] },
   {
     hits: [['Your organization octo-org is being archived.', '正在存档组织 octo-org。']],
@@ -76,6 +78,23 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
 
   // 角色
+  {
+    hits: [
+      ['• Manage webhooks', '• 管理 Web 钩子'],
+      [
+        '• Access to the audit log for the organization. The audit log may contain metadata for repositories in the organization.',
+        '• 可访问组织的审核日志。审核日志可能包含组织内存储库的元数据。'
+      ]
+    ],
+    misses: ['• Manage everything']
+  },
+  {
+    hits: [
+      ['Security manager icon', '安全管理员图标'],
+      ['All-repository read icon', '所有存储库读取图标']
+    ],
+    misses: ['Custom role icon']
+  },
   {
     hits: [
       ['5 roles', '5 个角色'],
@@ -186,7 +205,23 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['If enabled, all users with read access can create and comment on discussions.']
   },
 
+  // 存储库策略列表计数
+  {
+    hits: [
+      ['0 repository policies', '0 个存储库策略'],
+      ['1 repository policy', '1 个存储库策略']
+    ],
+    misses: ['Some repository policies']
+  },
+
   // 调解：版主、阻止用户、占位帐户
+  {
+    hits: [
+      ['280 characters remaining.', '还可输入 280 个字符。'],
+      ['1 character remaining.', '还可输入 1 个字符。']
+    ],
+    misses: ['No characters remaining.']
+  },
   {
     hits: [
       ['Successfully added @octocat as a moderator', '已将 @octocat 添加为版主'],
@@ -263,6 +298,29 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
 
   // 计费
+  { hits: [['$1.50 used / $10.00 included', '已用 $1.50 / 包含 $10.00']], misses: ['1.50 used / 10.00 included'] },
+  { hits: [['Showing 1 to 3 of 3 budgets', '显示 3 个预算中的第 1 至 3 个']], misses: ['Showing budgets'] },
+  { hits: [['Budget utilization for setube-organization', 'setube-organization 的预算使用率']], misses: ['Budget utilization'] },
+  {
+    hits: [
+      ['View actions for Actions budget for Organization setube-organization', '查看组织 setube-organization 的操作预算的可用操作'],
+      ['View actions for Git LFS budget for Organization setube-organization', '查看组织 setube-organization 的 Git LFS 预算的可用操作']
+    ],
+    misses: ['View actions for Storage budget for Organization setube-organization']
+  },
+  {
+    hits: [
+      [
+        'Included AI credits consumed by users in your account. Monthly limit resets in 11 days on Dec 1, 2026.',
+        '帐户中用户消耗的包含 AI 额度。每月限额将在 11天后于 2026年12月1日重置。'
+      ],
+      [
+        'Included AI credits consumed by users in your account. Monthly limit resets in 1 day on 2026年12月1日.',
+        '帐户中用户消耗的包含 AI 额度。每月限额将在 1天后于 2026年12月1日重置。'
+      ]
+    ],
+    misses: ['Included AI credits consumed by users in your account.']
+  },
   {
     hits: [
       ['Member requests for GitHub Team', 'GitHub 团队版的成员请求'],
@@ -610,6 +668,42 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['Many Code Quality licenses', '3 Copilot Business licenses']
   },
 
+  // 组织规则集洞察的图表（沿用洞察页的图表无障碍描述）
+  { hits: [['Bar chart with 3 bars.', '包含 3 个柱的柱状图。']], misses: ['Bar chart with many bars.'] },
+  {
+    hits: [
+      ['The chart has 1 X axis displaying Values.', '图表有 1 条显示值的 X 轴。'],
+      [
+        'The chart has 1 Y axis displaying Number of bypasses. Data ranges from 0 to 12.',
+        '图表有 1 条显示绕过次数的 Y 轴。数据范围从 0 到 12。'
+      ]
+    ],
+    misses: ['The chart has one X axis.']
+  },
+  {
+    hits: [['The chart has 2 X axes displaying Actor, Values.', '图表的 2 条 X 轴分别显示参与者、值。']],
+    misses: ['The chart has many axes.']
+  },
+  // 议题字段、议题类型、标签颜色
+  {
+    hits: [
+      ['3 Issue fields', '3 个议题字段'],
+      ['1 Issue field', '1 个议题字段']
+    ],
+    misses: ['Many Issue fields']
+  },
+  { hits: [['Issue field: Story points', '议题字段：Story points']], misses: ['Issue field'] },
+  {
+    hits: [
+      ['Open field options for Story points', '打开 Story points 字段选项'],
+      ['Open field options for 迭代', '打开迭代字段选项']
+    ],
+    misses: ['Open field options']
+  },
+  { hits: [['"Spike" Issue type list item', '议题类型列表项“Spike”']], misses: ['Issue type list item'] },
+  { hits: [['Open type options for Spike', '打开 Spike 类型选项']], misses: ['Open type options'] },
+  { hits: [['Color #b60205', '颜色 #b60205']], misses: ['Color red'] },
+
   // 存储库默认设置、标签、自定义属性、规划、网络、软件包、Pages
   {
     hits: [
@@ -807,6 +901,19 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   // Actions
   {
     hits: [
+      [
+        'All users that are not a member or owner of the repository and not a member of the setube-organization organization will require approval to run workflows.',
+        '不是存储库成员或所有者、也不是 setube-organization 组织成员的所有用户都需要批准才能运行工作流。'
+      ]
+    ],
+    misses: ['All users will require approval to run workflows.']
+  },
+  {
+    hits: [['On March 2, 2026, GitHub will restrict', '2026年3月2日起，GitHub 将默认在公共存储库中限制']],
+    misses: ['On some day, GitHub will restrict']
+  },
+  {
+    hits: [
       ['3 selected repositories', '3 个所选存储库'],
       ['12 selected repositories', '12 个所选存储库']
     ],
@@ -916,6 +1023,62 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
 
   // 身份验证安全、代码安全全局设置
+  {
+    hits: [
+      [
+        'Are you sure you want to require two-factor authentication for all users in setube-organization?',
+        '确定要求 setube-organization 中的所有用户启用双因素身份验证吗？'
+      ]
+    ],
+    misses: ['Are you sure you want to require two-factor authentication?']
+  },
+  {
+    hits: [
+      [
+        'Two-factor authentication will no longer be required to access any resources in the setube-organization organization.',
+        '访问 setube-organization 组织中的任何资源将不再需要双因素身份验证。'
+      ]
+    ],
+    misses: ['Two-factor authentication will no longer be required.']
+  },
+  {
+    hits: [
+      [
+        'Users will be required to set up two-factor authentication using a secure method in order to access the setube-organization organization.',
+        '用户必须使用安全方法设置双因素身份验证才能访问 setube-organization 组织。'
+      ]
+    ],
+    misses: ['Users will be required to set up two-factor authentication.']
+  },
+  {
+    hits: [
+      [
+        'Users will be required to set up two-factor authentication in order to access the setube-organization organization.',
+        '用户必须设置双因素身份验证才能访问 setube-organization 组织。'
+      ]
+    ],
+    misses: ['Users will be required to set up two-factor authentication in order to access the organization.']
+  },
+  {
+    hits: [
+      [
+        "Secure methods of two-factor authentication will no longer be required to access any organization's resources in the setube-organization organization.",
+        '访问 setube-organization 组织中的资源将不再需要安全的双因素身份验证方法。'
+      ]
+    ],
+    misses: ['Secure methods of two-factor authentication will no longer be required.']
+  },
+  // 合规报告
+  { hits: [['Download SOC 2 Report', '下载 SOC 2 报告']], misses: ['Download SOC Report'] },
+  {
+    hits: [['GitHub.com ISO/IEC 27001:2022 certification', 'GitHub.com ISO/IEC 27001:2022 认证']],
+    misses: ['GitHub.com ISO certification']
+  },
+  {
+    hits: [['Download GitHub.com ISO/IEC 27001:2022 certification', '下载 GitHub.com ISO/IEC 27001:2022 认证']],
+    misses: ['Download GitHub.com ISO certification']
+  },
+  { hits: [['2026-01-01 to 2026-03-31', '2026-01-01 至 2026-03-31']], misses: ['2026-01 to 2026-03'] },
   {
     hits: [
       ['Require two-factor authentication for everyone in the octo-org organization.', '要求 octo-org 组织中的所有人启用双因素身份验证。'],
@@ -1151,6 +1314,13 @@ const REGEXP_CASES: readonly RegExpCase[] = [
 
   // 开发人员设置：沿用个人开发人员设置的 GitHub 应用与权限正则
   {
+    hits: [
+      ['Token expiration is being enabled for test.', '正在为 test 启用令牌过期。'],
+      ['Token expiration is being disabled for My App.', '正在为 My App 禁用令牌过期。']
+    ],
+    misses: ['Token expiration is being changed for test.']
+  },
+  {
     hits: [['Only allow this GitHub App to be installed on the @octo-org account.', '仅允许将此 GitHub 应用安装在 @octo-org 帐户上。']],
     misses: ['Only allow this GitHub App to be installed on this account.']
   },
@@ -1294,6 +1464,8 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
 
   // 预定提醒、审核日志、赞助日志、已删除的存储库
+  { hits: [['Updated profile picture for setube-organization', '更新了 setube-organization 的头像']], misses: ['Updated profile picture'] },
+  { hits: [["View setube's profile", '查看 setube 的个人资料']], misses: ['View profile'] },
   {
     hits: [
       ['Ignore with 2 or more approvals', '有 2 个或更多批准时忽略'],
@@ -2028,6 +2200,88 @@ describe('org-settings 页面渲染', () => {
     expect(paragraph.textContent?.replace(/\s+/g, '')).toBe('试用为组织中的存储库提供所有机密保护和代码安全功能。')
     expect(paragraph.textContent).not.toMatch(/\s。|，/)
     expect(translator?.drainUntranslated()).toEqual([])
+  })
+
+  it('部署密钥说明：两个链接前后的文字按文本节点翻译', () => {
+    // 结构同组织设置 · 部署密钥页（句型超过 300 字符，不走 inline）
+    run(
+      '<p> Deploy keys use an SSH key to grant readonly or write access to a single repository. If you have a more complex project or want more fine-grain control over permissions, consider using a GitHub App instead. For more information, see <a class="Link--inTextBlock">the GitHub Apps documentation</a>. Please note that deploy keys are not protected by a passphrase and can be a security risk if your server is compromised. For more information on deploy keys, see <a class="Link--inTextBlock">managing deploy keys</a>. </p>'
+    )
+    const paragraph = document.querySelector('p')!
+    expect(paragraph.textContent?.trim()).toBe(
+      '部署密钥使用 SSH 密钥授予对单个存储库的只读或写入权限。如果项目更复杂或需要更细粒度的权限控制，请考虑改用 GitHub 应用。详情请参阅 GitHub 应用文档。请注意，部署密钥不受密码短语保护，服务器遭入侵时可能带来安全风险。有关部署密钥的详细信息，请参阅 管理部署密钥。'
+    )
+    expect(translator?.drainUntranslated()).toEqual([])
+  })
+
+  it('要求双因素身份验证的确认说明：组织名与链接之间的文字按文本节点翻译', () => {
+    run(
+      '<p> Organization members who do not have two-factor authentication enabled will be unable to access resources owned by the <strong>octo-org</strong> organization, but will remain a member of <strong>octo-org</strong> until they update their settings. Outside collaborators who do not have two-factor authentication enabled will be removed from the organization and notified. <a class="Link--inTextBlock">View organization membership</a> to see which users will be impacted. </p>'
+    )
+    expect(document.querySelector('p')!.textContent?.trim()).toBe(
+      '未启用双因素身份验证的组织成员将无法访问 octo-org 组织拥有的资源，但在更新设置之前仍是 octo-org 的成员。未启用双因素身份验证的外部协作者将被移出组织并收到通知。查看组织成员资格 以查看哪些用户会受影响。'
+    )
+    // 组织名是用户内容，不计入未翻译
+    expect(translator?.drainUntranslated().map(([text]) => text)).toEqual(['octo-org'])
+  })
+
+  it.each([
+    ['created', '创建了'],
+    ['updated', '更新了'],
+    ['deleted', '删除了']
+  ])('审核日志的预算事件：Budget was %s → %s预算', (action, translated) => {
+    // 结构同审核日志条目；动作词与规则集洞察共用 scoped
+    run(
+      `<div> Budget was <strong>${action}</strong> with a limit of <span class="context">0</span> (<span class="context">PreventFurtherUsage</span>). <span>Budget alerts are enabled.</span> </div>`
+    )
+    expect(document.querySelector('div')!.textContent?.trim()).toBe(`${translated}预算，限额为 0（PreventFurtherUsage）。预算警报已启用。`)
+  })
+})
+
+describe('org-policies 存储库策略页', () => {
+  const policyMatcher = createMatcher([
+    ['org-settings', orgSettings],
+    ['org-policies', orgPolicies]
+  ])
+  const twMatcher = createMatcher(zhTW)
+  const POLICY_PAGES: PageKey[] = ['common', 'org-settings', 'org-policies']
+  let translator: Translator | undefined
+
+  afterEach(() => {
+    translator?.stop()
+    translator = undefined
+    document.body.innerHTML = ''
+  })
+
+  it.each([
+    ['0 repositories matching', '0 个匹配的存储库', '0 個符合的儲存庫'],
+    ['1 repository matching', '1 个匹配的存储库', '1 個符合的儲存庫'],
+    ['Add a filter using the input to match repositories.', '在输入框中添加筛选器以匹配存储库。', '使用輸入框新增篩選器以比對儲存庫。'],
+    [
+      'No filter added. Add a filter using the input to match repositories.',
+      '未添加筛选器。在输入框中添加筛选器以匹配存储库。',
+      '未新增篩選器。使用輸入框新增篩選器以比對儲存庫。'
+    ],
+    // 目标存储库筛选框与存储库列表筛选框同一组件，沿用 organization/repos-filter
+    ['Exclude visibility', '排除可见性', '排除可見度'],
+    ['Filter contains 1 issue:', '筛选器有 1 处错误：', '篩選器有 1 處錯誤：']
+  ])('%s → %s / %s', (input, cn, tw) => {
+    expect(policyMatcher.translate(input, POLICY_PAGES)).toBe(cn)
+    expect(twMatcher.translate(input, POLICY_PAGES)).toBe(tw)
+  })
+
+  it('筛选框词条不在其他组织设置页生效', () => {
+    expect(policyMatcher.translate('0 repositories matching', ['common', 'org-settings'])).toBeUndefined()
+    expect(policyMatcher.translate('Exclude visibility', ['common', 'org-settings'])).toBeUndefined()
+  })
+
+  it('匹配计数的数量、名词、matching 是相邻文本节点，整体翻译', () => {
+    document.body.innerHTML = '<div id="count"></div><ul><li id="issue">Empty value for <code>visibility</code></li></ul>'
+    document.getElementById('count')!.append('0', ' repositories', ' matching')
+    translator = createTranslator({ matcher: policyMatcher, host: window, resolvePages: () => POLICY_PAGES })
+    translator.start()
+    expect(document.getElementById('count')!.textContent).toBe('0 个匹配的存储库')
+    expect(document.getElementById('issue')!.textContent).toBe('以下筛选器的值为空 visibility')
   })
 })
 

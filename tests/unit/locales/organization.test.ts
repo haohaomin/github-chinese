@@ -31,6 +31,48 @@ interface RegExpCase {
 
 /** 按词典中的正则顺序排列，每条正则至少一个正例、一个反例 */
 const REGEXP_CASES: readonly RegExpCase[] = [
+  // 人员角色计数与更改确认、团队搜索结果、主题侧栏、新组织欢迎页
+  {
+    hits: [
+      ['5 roles', '5 个角色'],
+      ['1 role', '1 个角色']
+    ],
+    misses: ['Many roles']
+  },
+  {
+    hits: [
+      ['Change the role of 3 members?', '要更改 3 个成员的角色吗？'],
+      ['Change the role of 1 member?', '要更改 1 个成员的角色吗？']
+    ],
+    misses: ['Change the role?']
+  },
+  { hits: [['Change the role of octocat?', '要更改 octocat 的角色吗？']], misses: ['Change the role of the selected members?'] },
+  {
+    hits: [
+      ['Search teams, Found 2 teams', '搜索团队，找到 2 个团队'],
+      ['Search teams, Found 1 team', '搜索团队，找到 1 个团队']
+    ],
+    misses: ['Search teams']
+  },
+  {
+    hits: [['setube-organization repositories you contribute to', '你参与贡献的 setube-organization 存储库']],
+    misses: ['Repositories you contribute to']
+  },
+  {
+    hits: [
+      [
+        'There are no repositories in setube-organization that you’ve contributed to and that you can set topics on.',
+        'setube-organization 中没有你参与贡献且可设置主题的存储库。'
+      ],
+      [
+        "There are no repositories in setube-organization that you've contributed to and that you can set topics on.",
+        'setube-organization 中没有你参与贡献且可设置主题的存储库。'
+      ]
+    ],
+    misses: ['There are no repositories.']
+  },
+  { hits: [['Welcome to setube-organization', '欢迎来到 setube-organization']], misses: ['Welcome to the organization'] },
+
   // 头部
   { hits: [['Users following vuejs', '关注 vuejs 的用户']], misses: ['Users following', 'Label: Public'] },
   {

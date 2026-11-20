@@ -11,6 +11,71 @@ const ENTITY_TYPES: Readonly<Record<string, string>> = { enterprise: '企业', o
  */
 export default {
   static: {
+    // 启用引导（「… will have access to <a>GitHub Copilot</a> inside your organization.」：句尾见 scoped）
+    'AI coding agent for tasks, projects, and automated work. Once you complete onboarding, you’ll have the ability to manage policies and control which users or teams will have access to':
+      '用于任务、项目和自动化工作的 AI 编码智能体。完成入门设置后，你可以管理策略，并控制组织内哪些用户或团队可以使用',
+    "AI coding agent for tasks, projects, and automated work. Once you complete onboarding, you'll have the ability to manage policies and control which users or teams will have access to":
+      '用于任务、项目和自动化工作的 AI 编码智能体。完成入门设置后，你可以管理策略，并控制组织内哪些用户或团队可以使用',
+    // 云端 Copilot：无许可证提示、说明（「With」「Copilot in the cloud」「, developers …」是相邻文本节点，整体匹配）
+    "You can enable Copilot in the cloud for other users, but you won't be able to assign tasks to Copilot because you don't have a Copilot Pro, Copilot Pro+, Copilot Business or Copilot Enterprise license.":
+      '你可以为其他用户启用云端 Copilot，但因没有 Copilot 专业版、Copilot 专业增强版、Copilot 商业版或 Copilot 企业版许可证而无法向 Copilot 分配任务。',
+    'Buy or request a seat': '购买或申请席位',
+    'With Copilot in the cloud, developers can delegate tasks to Copilot, freeing them to focus on the creative, complex, and high-impact work that matters most. Simply assign a task to Copilot, wait for the agent to request review, then leave feedback on the pull request to iterate.':
+      '借助云端 Copilot，开发人员可以把任务委派给 Copilot，从而专注于最重要的创造性、复杂和高影响力的工作。只需向 Copilot 分配任务，等待智能体请求审查，然后在拉取请求上留下反馈进行迭代。',
+    'Choose which repositories Copilot in the cloud should be enabled in. You can select up to 500 repositories or enable all repositories. To be able to assign an issue to Copilot, the user must have access to Copilot in the cloud and it must be enabled for the repository.':
+      '选择要在哪些存储库中启用云端 Copilot。最多可选择 500 个存储库，也可以为所有存储库启用。要将议题分配给 Copilot，用户必须有权使用云端 Copilot，且存储库已启用该功能。',
+    // 自动化
+    'Let users with write access create automations that run on a schedule or in response to events.':
+      '允许具有写入权限的用户创建按计划或响应事件运行的自动化。',
+    'Allow shared automations': '允许共享自动化',
+    "Shared automations belong to the repository and run as the organization, so their usage is billed to the organization. When disabled, shared automations are hidden and the organization isn't billed for them.":
+      '共享自动化属于存储库并以组织身份运行，因此用量向组织计费。禁用后，共享自动化将隐藏，组织也不会为其付费。',
+    'Require write access to trigger automations': '需要写入权限才能触发自动化',
+    'Automations only run for events from users with write access.': '自动化仅针对具有写入权限的用户触发的事件运行。',
+    'Only allow automations to update the resource that triggered them': '仅允许自动化更新触发它的资源',
+    "Runs can only change the issue, pull request, or discussion that triggered them, and anything the run created. Doesn't apply to scheduled runs, security alert runs, or runs started by another automation.":
+      '运行只能更改触发它的议题、拉取请求或讨论，以及该运行创建的内容。不适用于计划运行、安全警报运行或由其他自动化启动的运行。',
+    'Require approval for workflows on automation pull requests': '自动化拉取请求上的工作流需要批准',
+    "Workflows on automation pull requests wait for approval, even in repositories that let workflows run on Copilot's changes without approval.":
+      '自动化拉取请求上的工作流会等待批准，即使存储库允许工作流在 Copilot 的更改上无需批准即可运行。',
+    // 设置已移动的提示（「… has moved to its own <a>Runner type</a> settings page.」见 inline）
+    'Some settings have moved': '部分设置已移动',
+    // 合作伙伴智能体（「Allow Claude <span>coding agent</span>」见 inline）
+    "Enabling an agent allows it to be mentioned in issues and pull requests, and assigned to issues and open pull requests. Agents can only be triggered by organization members and repository collaborators, and can only be used in this organization's repositories where the cloud agent feature is enabled.":
+      '启用智能体后，可以在议题和拉取请求中提及它，并将其分配给议题和打开的拉取请求。智能体只能由组织成员和存储库协作者触发，且只能在此组织已启用云端智能体功能的存储库中使用。',
+    // 运行器类型（「Select … for」「Copilot cloud agent」「sessions.」是相邻文本节点，整体匹配）
+    'Select the default runner type for Copilot cloud agent sessions.': '选择 Copilot 云端智能体会话的默认运行器类型。',
+    'Select the runner type for Copilot cloud agent sessions.': '选择 Copilot 云端智能体会话的运行器类型。',
+    'Select the default runner type for Copilot code review sessions.': '选择 Copilot 代码审查会话的默认运行器类型。',
+    'Select the runner type for Copilot code review sessions.': '选择 Copilot 代码审查会话的运行器类型。',
+    'Repositories in this organization will use the selected runner type unless overridden at the repository level.':
+      '除非在存储库级别覆盖，否则此组织中的存储库将使用所选运行器类型。',
+    'When enabled, repositories can specify their own runner via their copilot-setup-steps.yml file.':
+      '启用后，存储库可以通过各自的 copilot-setup-steps.yml 文件指定运行器。',
+    'When enabled, repositories can specify their own runner via their copilot-code-review.yml file.':
+      '启用后，存储库可以通过各自的 copilot-code-review.yml 文件指定运行器。',
+    // 互联网访问（组织级）
+    'Configure firewall rules for Copilot in the cloud across all repositories in this organization.':
+      '为此组织所有存储库中的云端 Copilot 配置防火墙规则。',
+    'Limit Internet access for Copilot in the cloud to only allow access to allowlisted locations.':
+      '仅允许云端 Copilot 访问允许列表中的互联网位置。',
+    'Configure firewall rules for Copilot code review across all repositories in this organization.':
+      '为此组织所有存储库中的 Copilot 代码审查配置防火墙规则。',
+    'Limit Internet access for Copilot code review to only allow access to allowlisted locations.':
+      '仅允许 Copilot 代码审查访问允许列表中的互联网位置。',
+    'Allow repository administrators to add their own custom allowlist rules in addition to the organization allowlist.':
+      '允许存储库管理员在组织允许列表之外添加自己的自定义允许列表规则。',
+    'Allow access to specific domains, IP addresses, or URLs for all repositories in this organization.':
+      '允许此组织的所有存储库访问特定域、IP 地址或 URL。',
+    // 代码审查默认设置
+    "These are the defaults for this organization's repositories. Repository admins can override them.":
+      '以下是此组织存储库的默认设置。存储库管理员可以覆盖这些设置。',
+    'Secret Protection AI Scan': '机密保护 AI 扫描',
+    'Uses machine learning and known patterns to detect secrets when Copilot reviews pull requests.':
+      'Copilot 审查拉取请求时，使用机器学习和已知模式检测机密。',
+    'Choose where Copilot can approve pull requests and where those approvals can count toward merge requirements.':
+      '选择 Copilot 可以在哪些位置批准拉取请求，以及这些批准在哪些位置计入合并要求。',
+    'Disabled everywhere': '全部禁用',
     // 未启用 Copilot 时的引导
     'The AI powered pair programmer for your organization. Once you complete onboarding, you’ll have the ability to manage policies and control which users or teams will have access to':
       '面向组织的 AI 结对编程助手。完成入门设置后，你可以管理策略，并控制组织内哪些用户或团队可以使用',
@@ -148,6 +213,10 @@ export default {
     'Enable GitHub Copilot': '启用 GitHub Copilot'
   },
   scoped: {
+    // 自动化分组标题、代码审查的批准分组、合作伙伴智能体名后的标签
+    Automations: '自动化',
+    Approvals: '批准',
+    'coding agent': '编码智能体',
     // 「…will have access to」+「Copilot」+「inside your organization.」
     'inside your organization.': '。',
     'Pending cancellation': '待取消',
@@ -326,5 +395,11 @@ export default {
       /^Excluded paths inherited from (enterprise|organization) (.+):$/,
       (_, level: string, name: string) => `排除路径继承自${ENTITY_TYPES[level]} ${name}：`
     ]
+  ],
+  inline: [
+    ['Runner type configuration has moved to its own {} settings page.', '运行器类型配置已移至单独的{}设置页。'],
+    ['Internet access configuration has moved to its own {} settings page.', '互联网访问配置已移至单独的{}设置页。'],
+    ['Allow Claude {}', '允许 Claude {}'],
+    ['Allow Codex {}', '允许 Codex {}']
   ]
 } satisfies PageDictionary

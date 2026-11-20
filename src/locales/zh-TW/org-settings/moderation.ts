@@ -32,6 +32,31 @@ function enabledRemaining(qualifier: string | undefined, amount: string, unit: s
  */
 export default {
   static: {
+    // 交互限制：打开的拉取请求数上限（「Currently, … up to <strong>1</strong> open pull request …」见 inline）与豁免规则
+    'Restrict how many pull requests users without write access can have open at one time in any single public repository in this organization. A limit configured on an individual repository overrides this setting. This setting stays in effect until you change it.':
+      '限制沒有寫入權限的使用者在此組織的任一公開儲存庫中同時可有多少個開放中的拉取請求。個別儲存庫設定的限制會覆寫此設定。此設定在你變更之前會持續生效。',
+    'Enter a number from 1 to 1000. Users who have more open pull requests than the above limit will not be able to create new pull requests in the repository.':
+      '輸入 1 到 1000 之間的數字。開放中拉取請求數量超過上述限制的使用者將無法在儲存庫中建立新的拉取請求。',
+    'Save limit settings': '儲存限制設定',
+    'Exemption rules': '豁免規則',
+    'Users who meet any enabled rule can open pull requests regardless of the configured limit.':
+      '符合任一已啟用規則的使用者建立拉取請求時不受設定的限制。',
+    'Exempt users based on account age': '依帳號建立時長豁免使用者',
+    'Minimum account age in days': '帳號最短建立天數',
+    'Exempt users based on merged pull requests': '依已合併的拉取請求豁免使用者',
+    'Minimum merged pull requests in each repository': '每個儲存庫中已合併拉取請求的最少數量',
+    'Enter a number from 1 to 100': '輸入 1 到 100 之間的數字',
+    'Save exemption rules': '儲存豁免規則',
+    // 阻止用户：时长按钮前缀、备注说明（备注剩余字数见 regexp）
+    'Block:': '封鎖：',
+    'Maximum 250 characters. Please don’t include any personal information such as legal names or email addresses. All org admins and moderators can see this note.':
+      '最多 250 個字元。請勿包含任何個人資訊，例如法定姓名或電子郵件地址。所有組織管理員和版主都能看到此備註。',
+    "Maximum 250 characters. Please don't include any personal information such as legal names or email addresses. All org admins and moderators can see this note.":
+      '最多 250 個字元。請勿包含任何個人資訊，例如法定姓名或電子郵件地址。所有組織管理員和版主都能看到此備註。',
+    // 版主、导入/导出（无障碍名称）
+    'Add a member or team as a moderator': '將成員或團隊新增為版主',
+    'Import/Export Navigation': '匯入/匯出導覽',
+    'Search mannequins by login or email': '依登入名稱或電子郵件搜尋佔位帳號',
     // 已阻止的用户
     'Block a user': '封鎖使用者',
     'Blocking a user prevents the following on all your repositories:': '封鎖使用者後，對方將無法在你的所有儲存庫中：',
@@ -169,6 +194,8 @@ export default {
     Unset: '取消設定'
   },
   regexp: [
+    // 阻止用户的备注：250 characters remaining.（带句号，common-ui 的规则不带）
+    [/^(\d[\d,]*) characters? remaining\.$/, '還可輸入 $1 個字元。'],
     // 版主
     [/^Successfully added (@[\w.-]+(?:\/[\w.-]+)?) as a moderator$/, '已將 $1 新增為版主'],
     [/^Successfully removed (@[\w.-]+(?:\/[\w.-]+)?) as a moderator$/, '已將 $1 從版主中移除'],
@@ -199,5 +226,15 @@ export default {
 
     // 导入/导出
     [/^(\d+) mannequins?$/, '$1 個佔位帳號']
+  ],
+  inline: [
+    [
+      'Currently, users without write access can have up to {#} open pull request at a time in each public repository in this organization. Draft pull requests do not count toward this limit.',
+      '目前，沒有寫入權限的使用者在此組織的每個公開儲存庫中同時最多可有 {#} 個開放中的拉取請求。草稿拉取請求不計入此限制。'
+    ],
+    [
+      'Currently, users without write access can have up to {#} open pull requests at a time in each public repository in this organization. Draft pull requests do not count toward this limit.',
+      '目前，沒有寫入權限的使用者在此組織的每個公開儲存庫中同時最多可有 {#} 個開放中的拉取請求。草稿拉取請求不計入此限制。'
+    ]
   ]
 } satisfies PageDictionary

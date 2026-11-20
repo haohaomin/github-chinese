@@ -71,7 +71,7 @@
 | GitHub Desktop / GitHub Mobile | GitHub 桌面版 / GitHub 移动版 | GitHub CLI、Copilot CLI 保留（CLI 是技术缩写） |
 | GitHub Education / GitHub Classroom / GitHub Skills | GitHub 教育 / GitHub 课堂 / GitHub 技能 | Student Developer Pack → 学生开发人员包；GitHub Campus Expert → GitHub 校园专家 |
 | Copilot Chat / Spaces / Memory / Autofix / Workspace | Copilot 聊天 / 空间 / 记忆 / 自动修复 / 工作区 | Copilot code review / cloud agent / coding agent → Copilot 代码审查 / 云端智能体 / 编码智能体 |
-| Mission Control | 任务控制中心 | 智能体的任务控制中心（No Mission Control environments available → 没有可用的任务控制中心环境） |
+| Mission Control / Copilot in the cloud | 任务控制中心 / 云端 Copilot | 智能体的任务控制中心（No Mission Control environments available → 没有可用的任务控制中心环境） |
 | Enterprise Cloud / Enterprise Server / Enterprise Managed Users (EMU) | 企业云 / 企业服务器 / 企业托管用户 (EMU) | GitHub Enterprise Cloud → GitHub 企业云 |
 | Premium support / Pulse / Beta | 高级支持 / 统计 / 测试版 | Premium Plus Support → 高级增强支持；Preview 仍 → 预览 |
 | Code Quality / GitHub Stars | 代码质量 / GitHub 之星 | GitHub Stars 是社区计划，与星标无关；GitHub Universe（活动名）保留 |
@@ -183,11 +183,12 @@ GitHub App、OAuth app 按官方词汇表译「GitHub 应用」「OAuth 应用�
 | personal access token / fine-grained | 个人访问令牌 / 精细 | 官方正文（精细 99 / 细粒度 32）。Fine-grained tokens → 精细令牌；Tokens (classic) → 令牌（经典）；token → 令牌（含 OAuth token、模型用量的 token）：N tokens → N 个令牌，input / output tokens → 输入 / 输出令牌。经典令牌列表的作用域代码显示为说明、以顿号分隔（admin:enterprise, admin:gpg_key → 完全控制企业、完全控制用户公开 GPG 密钥），新建、编辑表单里的代码不译 |
 | ruleset / branch protection rule | 规则集 / 分支保护规则 | 官方正文。New branch ruleset / New tag ruleset → 新建分支规则集 / 新建标签规则集；Add classic branch protection rule → 添加经典分支保护规则；Branch name pattern → 分支名称模式；protected branch → 受保护分支 |
 | enforce | 强制实施 | 官方正文（214 / 强制执行 86）。Enforce HTTPS → 强制实施 HTTPS；Enforcement status → 强制实施状态 |
+| policy / allow list | 策略 / 允许列表 | 组织设置的存储库策略：Repository policies → 存储库策略；New repository policy → 新建存储库策略；allow list → 允许列表。法律文件仍作“政策”：Privacy policy → 隐私政策 |
 | app / integration | 应用 / 集成 | 官方词汇表。GitHub App → GitHub 应用；OAuth app → OAuth 应用；Authorized OAuth Apps → 授权的 OAuth 应用；Authorized GitHub Apps → 授权的 GitHub 应用；Install / Configure / Suspend → 安装 / 配置 / 暂停 |
 | permission / role / admin | 权限 / 角色 / 管理员 | 官方正文。存储库角色 Read / Triage / Write / Maintain / Admin → 读取 / 分类 / 写入 / 维护 / 管理员；Base permissions → 基本权限；Repository roles → 存储库角色；read access / write access → 读取访问权限 / 写入访问权限 |
 | triage | 分类 | 官方正文（81 / 会审 24）。triage access → 分类权限 |
 | block / report | 阻止 / 举报 | 官方正文（阻止 1201 / 屏蔽 66）；官方词汇表 block“块”属误译。Unblock → 取消阻止；Blocked users → 已阻止的用户；Block or report → 阻止或举报；Report abuse → 举报滥用行为；Report content → 报告内容；Report to repository admins → 向存储库管理员报告；议题依赖 Blocked by / Blocking → 被阻止 / 阻止；审核日志 Blocked by → 阻止者；报表义 report → 报告 |
-| moderation / moderators | 调解 / 版主 | 官方正文（moderation → 调解 10 / 管理 10；moderators → 管理员 22 / 审查者 12 / 版主 8，前两者与 admin、reviewer 撞词）。Moderation options → 调解选项；动词 moderate → 管理；“审核”只用于 audit log；严重性 Moderate → 中 |
+| moderation / moderators | 调解 / 版主 | 官方正文（moderation → 调解 10 / 管理 10；moderators → 管理员 22 / 审查者 12 / 版主 8，前两者与 admin、reviewer 撞词）。Moderation options → 调解选项；动词 moderate → 管理；“审核”只用于 audit log 和存储库角色 Moderate（与 Admin 管理员区分；All-repository moderate → 所有存储库审核）；严重性 Moderate → 中 |
 | interaction limits | 交互限制 | 官方正文（界面名）。Temporary interaction limits → 临时交互限制；Limit to existing users / prior contributors / repository collaborators → 限于现有用户 / 限于之前的贡献者 / 限于存储库协作者 |
 | audit log / security log | 审核日志 / 安全日志 | 官方正文（审核日志 215 / 审计日志 3）、词汇表 |
 | saved replies / scheduled reminders | 已保存回复 / 预定提醒 | 官方词汇表、正文（已保存回复 69 / 已保存的回复 15；预定提醒 73 / 定时提醒 14） |
@@ -218,7 +219,7 @@ GitHub App、OAuth app 按官方词汇表译「GitHub 应用」「OAuth 应用�
 | keyboard shortcuts / accessibility | 键盘快捷方式 / 辅助功能 | 官方正文（快捷方式 57 / 快捷键 19；辅助功能 34 / 可访问性 5） |
 | codespace / prebuild | 代码空间 / 预生成 | 用户规定（第 3 节；官方正文 codespace 1610 / 代码空间 891）；预生成 286 / 预构建 82。Create codespace → 创建代码空间；Your codespaces → 你的代码空间；Prebuild configuration → 预生成配置；dev container → 开发容器 |
 | build | 构建 | 官方正文。Build → 构建；例外：页面（Pages）设置 Build and deployment → 生成和部署，prebuild → 预生成 |
-| webhook / payload | Web 钩子 / 有效负载 | 用户规定（2026-10-28，第 3 节；与参考仓库一致；官方正文 Webhook 1928 / 网络钩子 66）。Webhooks → Web 钩子；Add webhook → 添加 Web 钩子；Payload URL → 有效负载 URL；Recent Deliveries → 最近交付；Deliveries → 交付记录；Redeliver → 重新传递；hook → 钩子（指 webhook 时 → Web 钩子）；pre-receive hook → 预接收钩子。GitHub 应用、OAuth 应用设置页（个人与组织拥有的）的 delivery 作“请求”（用户规定 2026-11-20）：Recent deliveries → 最近请求；Redeliver、redelivery → 重新请求；存储库、组织 Web 钩子页不变 |
+| webhook / payload | Web 钩子 / 有效负载 | 用户规定（2026-10-28，第 3 节；与参考仓库一致；官方正文 Webhook 1928 / 网络钩子 66）。Webhooks → Web 钩子；Add webhook → 添加 Web 钩子；Payload URL → 有效负载 URL；Recent Deliveries → 最近交付；Deliveries → 交付记录；Redeliver → 重新传递；hook → 钩子（指 webhook 时 → Web 钩子）；pre-receive hook → 预接收钩子。GitHub 应用、OAuth 应用设置页（个人与组织拥有的）及市场上架项的 Web 钩子页的 delivery 作“请求”（用户规定 2026-11-20）：Recent deliveries → 最近请求；Redeliver、redelivery → 重新请求；存储库、组织 Web 钩子页不变 |
 | gist / wiki / README | 代码片段 / Wiki / 自述文件 | gist、README 按用户规定（2026-10-28）译出，GitHub Gist → GitHub 代码片段；Wiki 是技术词，保留（第 3 节）。New gist → 新建代码片段；Your gists → 你的代码片段；public gist / secret gist → 公共代码片段 / 机密代码片段；Fork gist → 复刻代码片段；N gists → N 个代码片段；Add a README → 添加自述文件；profile README → 个人资料自述文件；README.md 等文件名、gist.github.com 等网址照原文 |
 | single sign-on / identity provider | 单一登录 / 标识提供者 | 官方词汇表。SSO、SAML、IdP 保留 |
 | code owner / achievement | 代码所有者 / 成就 | 官方词汇表、正文。CODEOWNERS 保留；成就名保留英文 |

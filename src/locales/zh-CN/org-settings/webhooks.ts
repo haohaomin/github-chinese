@@ -27,6 +27,10 @@ const EVENTS: Readonly<Record<string, string>> = {
  */
 export default {
   scoped: {
+    // 事件：项目 v2 状态更新（「Feedback is welcome in <a> this discussion</a>.」见 inline）
+    'Projects v2 status updates': '项目 v2 状态更新',
+    'Projects v2 feedback discussion': '项目 v2 反馈讨论',
+    'Projects v2 status update feedback discussion': '项目 v2 状态更新反馈讨论',
     'Webhooks /': 'Web 钩子 /',
     '/ Add webhook': '/ 添加 Web 钩子',
     // 列表项 URL 后：「(all events)」
@@ -55,6 +59,11 @@ export default {
     Headers: '标头',
     Payload: '有效负载',
     Body: '正文',
+    // 请求详情标签页的读屏名称（原文拼写如此，兼收正确拼写）
+    'Hook request and reponse': 'Web 钩子请求和响应',
+    'Hook request and response': 'Web 钩子请求和响应',
+    // 重新传递失败提示
+    'Oops, there was an error while trying to redeliver this payload.': '重新传递此有效负载时出错。',
     Redeliver: '重新传递',
     ...EVENTS
   },
@@ -62,5 +71,6 @@ export default {
     // 交付耗时（句号随原文，与存储库 Web 钩子一致）
     [/^Completed in (\d+(?:\.\d+)?) seconds?(\.?)$/, (_, seconds: string, dot: string) => `耗时 ${seconds} 秒${dot ? '。' : ''}`],
     [/^(\d+) webhooks?$/, '$1 个 Web 钩子']
-  ]
+  ],
+  inline: [['Feedback is welcome in {}.', '欢迎反馈至{}。']]
 } satisfies PageDictionary

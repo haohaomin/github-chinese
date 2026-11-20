@@ -11,6 +11,31 @@ const ORG = '([\\w.-]+)'
  */
 export default {
   static: {
+    // 产品指南和推荐
+    'Allow GitHub to use product usage data to provide members of your organization with personalized product guidance and recommendations.':
+      '允许 GitHub 使用产品使用数据，为组织成员提供个性化的产品指南和推荐。',
+    'Unsaved changes to your info form may be lost.': '信息表单中未保存的更改可能会丢失。',
+    'Social account': '社交帐户',
+    // 接受 GitHub 客户协议（「This business — not <strong>用户</strong> (your user account), …」见 inline）
+    'Accept GitHub customer agreement': '接受 GitHub 客户协议',
+    'Do you want to give ownership of your organization to your business?': '是否要将组织的所有权转让给你的企业？',
+    'Yes, I want to sign the GitHub customer agreement on behalf of my business.': '是，我要代表我的企业签署 GitHub 客户协议。',
+    'What is the name of the business that owns this account?': '拥有此帐户的企业名称是什么？',
+    'The name of the company that owns this account': '拥有此帐户的公司名称',
+    'e.g, Acme, Inc.': '例如：Acme, Inc.',
+    'Accepting terms...': '正在接受条款...',
+    'GitHub customer agreement': 'GitHub 客户协议',
+    "GitHub's customer agreement requires you to transfer the ownership of your organization to your business. Enter your business details below to continue. You can change these at any time by accessing your organization’s billing information.":
+      'GitHub 客户协议要求你将组织的所有权转让给你的企业。请在下方输入企业详细信息以继续。你可以随时在组织的计费信息中更改这些信息。',
+    'Business/Institution name': '企业/机构名称',
+    // 重命名、存档
+    'Rename your organization?': '重命名组织？',
+    'Type in the name of the organization to confirm that you want to archive this organization.': '输入组织名称以确认存档此组织。',
+    // 重命名进度与完成页（「Remember to <a>…</a> to point to the new location.」「View <strong>组织</strong> settings」见 inline）
+    'Renaming your organization…': '正在重命名组织…',
+    'Renaming your organization...': '正在重命名组织...',
+    'This may take a few minutes to complete.': '这可能需要几分钟才能完成。',
+    'Your organization has been renamed': '你的组织已重命名',
     // 组织个人资料
     'Organization display name': '组织显示名称',
     'Email (will be public)': '电子邮件（将公开）',
@@ -133,6 +158,11 @@ export default {
     'Delete organization': '删除组织'
   },
   scoped: {
+    // 开关的状态文字（Primer ToggleSwitch）
+    On: '开',
+    Off: '关',
+    // 保存个人资料后的提示
+    'Profile updated.': '组织个人资料已更新。',
     // 与个人设置共用的表单词（「Upload new picture」「Danger zone」团队设置页也用，由 teams 收录为 static）
     Email: '电子邮件',
     Location: '所在地',
@@ -183,6 +213,8 @@ export default {
     'to confirm.': '以确认。'
   },
   regexp: [
+    // 重命名完成页的按钮未拆开时：View <组织> settings（排除常见词，免得误伤“View organization settings”之类）
+    [/^View (?!(?:organization|repository|team|account|all|your|the|my)\b)([\w.-]+) settings$/, '查看 $1 的设置'],
     [/^Link to social profile (\d+)$/, '社交帐户链接 $1'],
     [new RegExp(`^Your organization ${ORG} is being archived\\.$`), '正在存档组织 $1。'],
     [new RegExp(`^Your organization ${ORG} has been unarchived\\.$`), '组织 $1 已取消存档。'],
@@ -204,6 +236,14 @@ export default {
   // 重命名警告：「We」+ <strong>will</strong> / <strong>will not</strong> + 后半句，槽位里的 will / will not
   // 由 billing.ts 的 static 译成“将 / 不会”，拼读为“我们不会为旧的个人资料页面设置重定向。”
   inline: [
+    [
+      'This business — not {} (your user account), will own and/or control any content posted to the organization',
+      '此企业（而非你的用户帐户 {}）将拥有和/或控制发布到组织的任何内容'
+    ],
+    ['By clicking “Accept terms”, you agree to the {} and the {}{}.', '点击“接受条款”即表示你同意 {}和{}{}。'],
+    ['I agree to the {} and the {}{}.', '我同意{}和{}{}。'],
+    ['Remember to {} to point to the new location.', '记得{}，使其指向新位置。'],
+    ['View {} settings', '查看 {} 的设置'],
     ['We {} create redirects for your repositories (web and git access).', '我们{}为你的存储库创建重定向（网页和 Git 访问）。'],
     ['We {} set up redirects for your old profile page.', '我们{}为旧的个人资料页面设置重定向。'],
     ['We {} set up redirects for Pages sites.', '我们{}为页面站点设置重定向。'],

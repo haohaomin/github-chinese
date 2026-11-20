@@ -30,6 +30,31 @@ function enabledRemaining(qualifier: string | undefined, amount: string, unit: s
  */
 export default {
   static: {
+    // 交互限制：打开的拉取请求数上限（「Currently, … up to <strong>1</strong> open pull request …」见 inline）与豁免规则
+    'Restrict how many pull requests users without write access can have open at one time in any single public repository in this organization. A limit configured on an individual repository overrides this setting. This setting stays in effect until you change it.':
+      '限制无写入访问权限的用户在此组织的任一公共存储库中可同时打开的拉取请求数量。单个存储库配置的限制会覆盖此设置。此设置在你更改前一直有效。',
+    'Enter a number from 1 to 1000. Users who have more open pull requests than the above limit will not be able to create new pull requests in the repository.':
+      '输入 1 到 1000 之间的数字。打开的拉取请求数超过上述限制的用户将无法在存储库中创建新的拉取请求。',
+    'Save limit settings': '保存限制设置',
+    'Exemption rules': '豁免规则',
+    'Users who meet any enabled rule can open pull requests regardless of the configured limit.':
+      '符合任一已启用规则的用户创建拉取请求时不受所配置的限制。',
+    'Exempt users based on account age': '按帐户创建时长豁免用户',
+    'Minimum account age in days': '帐户最短创建天数',
+    'Exempt users based on merged pull requests': '按已合并的拉取请求豁免用户',
+    'Minimum merged pull requests in each repository': '每个存储库中已合并拉取请求的最少数量',
+    'Enter a number from 1 to 100': '输入 1 到 100 之间的数字',
+    'Save exemption rules': '保存豁免规则',
+    // 阻止用户：时长按钮前缀、备注说明（备注剩余字数见 regexp）
+    'Block:': '阻止：',
+    'Maximum 250 characters. Please don’t include any personal information such as legal names or email addresses. All org admins and moderators can see this note.':
+      '最多 250 个字符。请勿包含任何个人信息，例如法定姓名或电子邮件地址。所有组织管理员和版主都能看到此备注。',
+    "Maximum 250 characters. Please don't include any personal information such as legal names or email addresses. All org admins and moderators can see this note.":
+      '最多 250 个字符。请勿包含任何个人信息，例如法定姓名或电子邮件地址。所有组织管理员和版主都能看到此备注。',
+    // 版主、导入/导出（无障碍名称）
+    'Add a member or team as a moderator': '将成员或团队添加为版主',
+    'Import/Export Navigation': '导入/导出导航',
+    'Search mannequins by login or email': '按登录名或电子邮件搜索占位帐户',
     // 已阻止的用户
     'Block a user': '阻止用户',
     'Blocking a user prevents the following on all your repositories:': '阻止用户后，将禁止其在你的所有存储库中：',
@@ -166,6 +191,8 @@ export default {
     Unset: '取消设置'
   },
   regexp: [
+    // 阻止用户的备注：250 characters remaining.（带句号，common-ui 的规则不带）
+    [/^(\d[\d,]*) characters? remaining\.$/, '还可输入 $1 个字符。'],
     // 版主
     [/^Successfully added (@[\w.-]+(?:\/[\w.-]+)?) as a moderator$/, '已将 $1 添加为版主'],
     [/^Successfully removed (@[\w.-]+(?:\/[\w.-]+)?) as a moderator$/, '已将 $1 从版主中删除'],
@@ -196,5 +223,15 @@ export default {
 
     // 导入/导出
     [/^(\d+) mannequins?$/, '$1 个占位帐户']
+  ],
+  inline: [
+    [
+      'Currently, users without write access can have up to {#} open pull request at a time in each public repository in this organization. Draft pull requests do not count toward this limit.',
+      '目前，无写入访问权限的用户在此组织的每个公共存储库中最多可同时有 {#} 个打开的拉取请求。草稿拉取请求不计入此限制。'
+    ],
+    [
+      'Currently, users without write access can have up to {#} open pull requests at a time in each public repository in this organization. Draft pull requests do not count toward this limit.',
+      '目前，无写入访问权限的用户在此组织的每个公共存储库中最多可同时有 {#} 个打开的拉取请求。草稿拉取请求不计入此限制。'
+    ]
   ]
 } satisfies PageDictionary

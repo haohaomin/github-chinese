@@ -9,6 +9,19 @@ import type { PageDictionary } from '../../../core/types'
  */
 export default {
   static: {
+    // 团队列表：批量选择、可见性与成员筛选（无障碍名称）、空结果；新建团队：父团队搜索、推荐标签
+    'Select all teams': '選擇所有團隊',
+    'Filter by team visibility': '依團隊可見度篩選',
+    'Team visibility - All': '團隊可見度 - 全部',
+    'Team visibility - Secret': '團隊可見度 - 祕密',
+    'Team visibility - Visible': '團隊可見度 - 可見',
+    'Members - All': '成員 - 全部',
+    'Members - My teams': '成員 - 我的團隊',
+    'Members - No members': '成員 - 無成員',
+    'Sorry. We couldn’t find any matching teams.': '找不到符合的團隊。',
+    "Sorry. We couldn't find any matching teams.": '找不到符合的團隊。',
+    'No teams found.': '找不到團隊。',
+    'Label: Recommended': '標籤：推薦',
     // 团队列表（无团队时的介绍）
     'Seamless communication with teams': '透過團隊無縫溝通',
     'Teams are a great way for groups of people to communicate and work on code together. Take a look at why they’re great.':

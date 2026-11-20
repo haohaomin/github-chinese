@@ -188,6 +188,8 @@ export default {
     // 标题级别按 Word 繁中的样式名写作「標題 2」
     [/^Heading ([1-6])$/, '標題 $1'],
     [new RegExp(`^${TOOLBAR_SOURCE}, <([^<>]+)>$`), (_, label: string, keys: string) => `${TOOLBAR[label]!}，<${keys}>`],
+    // 工具栏溢出菜单：Primer 用已译出的 aria-label 拼出「More Markdown 工具列 items」，名称含中文时整段改写
+    [/^More (.*[一-鿿].*) items$/, (_, name: string) => joinCjk('更多', `${name}項目`)],
     // 斜杠命令 /table 的行列数
     [/^([1-9]\d?) (columns?|rows?)$/, (_, count: string, unit: string) => `${count} ${unit.startsWith('c') ? '欄' : '列'}`],
 

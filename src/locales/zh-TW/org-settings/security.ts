@@ -96,10 +96,97 @@ export const BYPASS_ACTOR_ACTIONS_RULE: RegExpRule = [
  */
 export default {
   static: {
+    // 身份验证安全：双因素身份验证要求（「… owned by the <strong>组织</strong> organization, …」见 inline）
+    'Two-factor authentication adds another level of security for your organization.': '雙重驗證可為組織增加一層安全保護。',
+    'Learn more about requiring two-factor authentication in your organization.': '瞭解如何在組織中要求雙重驗證。',
+    'View organization membership': '檢視組織成員資格',
+    'Users can only use secure two-factor methods: authenticator apps, passkeys, security keys, and the GitHub mobile app.':
+      '使用者只能使用安全的雙重驗證方式：驗證器應用程式、通行金鑰、安全性金鑰和 GitHub 行動版應用程式。',
+    'Existing members will lose access to organization resources if they disable two-factor authentication. Outside collaborators will be removed from the organization if they disable two-factor authentication.':
+      '現有成員若停用雙重驗證，將無法存取組織資源。外部協作者若停用雙重驗證，將從組織中移除。',
+    "Users' two-factor authentication methods will not be affected.": '使用者的雙重驗證方式不受影響。',
+    // 企业版推广
+    'Secure your data and people with GitHub Enterprise': '使用 GitHub 企業版保護你的資料和人員',
+    'SAML single sign-on (SSO) gives GitHub Enterprise accounts a way to control and secure access to organization resources like repositories, issues, and pull requests.':
+      'SAML 單一登入 (SSO) 讓 GitHub 企業版帳號能夠控制和保護對儲存庫、議題、拉取請求等組織資源的存取。',
+    'With an SSH certificate authority, enterprise accounts can provide SSH certificates that members can use to access your resources with Git.':
+      '透過 SSH 憑證授權單位，企業帳號可以提供 SSH 憑證，供成員透過 Git 存取你的資源。',
+    'Certified for compliance': '合規認證',
+    'GitHub Enterprise Cloud is certified for SOC 1 Type 2, SOC 2 Type 2, FedRAMP LiSaaS. Enterprise customers can download these reports, and more, at any time.':
+      'GitHub 企業雲端已通過 SOC 1 Type 2、SOC 2 Type 2、FedRAMP LiSaaS 認證。企業客戶可以隨時下載這些報告及更多內容。',
+    'Team Synchronization': '團隊同步',
+    'Enable and disable team synchronization between your identity provider (IdP) and your organizations on GitHub Enterprise accounts.':
+      '在 GitHub 企業版帳號中啟用和停用身分識別提供者 (IdP) 與組織之間的團隊同步。',
+    'GitHub Enterprise accounts can restrict access to private organization assets by configuring an allow list for specific IP addresses.':
+      'GitHub 企業版帳號可以為特定 IP 位址設定允許清單，以限制對組織私人資產的存取。',
+    // 高级安全全局设置：Dependabot 运行器、CodeQL、AI 扫描（「The <code>dependabot</code> label …」见 inline）
+    'Global Advanced Security settings': '全域進階安全性設定',
+    "Global Advanced Security settings are enabled for all repositories in this organization where the parent feature is enabled. By enabling these features, you're granting us permission to perform read-only analysis on your organization's repositories.":
+      '全域進階安全性設定會套用至此組織中已啟用上層功能的所有儲存庫。啟用這些功能即表示你授權我們對組織的儲存庫執行唯讀分析。',
+    'Configure dependabot rules': '設定 Dependabot 規則',
+    'Select the runner type used by Dependabot for scans and version and security updates.':
+      '選擇 Dependabot 用於掃描及版本和安全性更新的執行器類型。',
+    'Learn about GitHub Actions runners.': '瞭解 GitHub 動作執行器。',
+    'Dependabot will use standard GitHub runners to run scans': 'Dependabot 將使用標準 GitHub 執行器執行掃描',
+    'Dependabot will use labeled GitHub or self-hosted runners that you may define.':
+      'Dependabot 將使用你定義的帶有標籤的 GitHub 執行器或自架執行器。',
+    'Optional runner information': '選用的執行器資訊',
+    'Provide any existing runner information you would like to use for Dependabot.': '提供要用於 Dependabot 的現有執行器資訊。',
+    'Existing name': '現有名稱',
+    'Verify spelling matches an existing runner group to ensure proper setup.': '請確認拼字與現有執行器群組一致，以確保設定正確。',
+    'use or create custom labels': '使用或建立自訂標籤',
+    'Existing label': '現有標籤',
+    'Verify spelling matches an existing label to ensure proper setup.': '請確認拼字與現有標籤一致，以確保設定正確。',
+    'Inactive repositories are repositories with no pushes or pull requests in the last 6 months. Applies only to repositories using code scanning default setup.':
+      '不活躍的儲存庫是指過去 6 個月內沒有推送或拉取請求的儲存庫。僅適用於使用程式碼掃描預設設定的儲存庫。',
+    'Expand CodeQL analysis': '擴充 CodeQL 分析',
+    'Expand CodeQL to recognize more libraries and frameworks in repositories using CodeQL default setup.':
+      '擴充 CodeQL，以在使用 CodeQL 預設設定的儲存庫中辨識更多程式庫和架構。',
+    'Configure CodeQL model packs': '設定 CodeQL 模型套件',
+    'consume AI credits': '消耗 AI 點數',
+    'Scan repository default branches with AI for additional security findings.': '使用 AI 掃描儲存庫預設分支，以取得更多安全性發現。',
+    'Run AI code scan on pull requests. Only applies for non-CodeQL languages.':
+      '對拉取請求執行 AI 程式碼掃描。僅適用於 CodeQL 不支援的語言。',
+    'A valid payment method is required to use AI Scan.': '使用 AI 掃描需要有效的付款方式。',
+    'A valid payment method is required to use Scan for AI applications.': '使用「掃描 AI 應用程式」需要有效的付款方式。',
+    'Add a payment method': '新增付款方式',
+    // 安全配置页：未购买高级安全（「…, <a>upgrade to GitHub Advanced Security.</a>」见 inline）
+    'upgrade to GitHub Advanced Security.': '升級到 GitHub 進階安全性。',
+    'Set up Advanced Security': '設定進階安全性',
+    'Manage Secret scanning, Code scanning and Dependabot.': '管理機密掃描、程式碼掃描和 Dependabot。',
+    // 代码质量（「… will incur charges in <a>action minutes.</a>」「… found in this <a>open source repository</a>. …」见 inline）
+    'Find and fix code quality issues like code coverage, maintainability risks, reliability problems, and more. Get quality insights directly in your development workflow with Copilot-powered autofix.':
+      '尋找並修正程式碼涵蓋範圍、可維護性風險、可靠性問題等程式碼品質問題。透過 Copilot 驅動的自動修正，直接在開發工作流程中取得品質洞察。',
+    'Build resilient code, at scale': '大規模建置穩健的程式碼',
+    'action minutes.': '動作分鐘數費用。',
+    'Enable Code Quality': '啟用程式碼品質',
+    'What happens once I turn on code quality scanning?': '啟用程式碼品質掃描後會發生什麼事？',
+    'GitHub will perform a point-in-time scan of the default branch of the repository, reporting back code quality findings and suggestions to developers. It will also proactively start scanning pull requests for code quality issues.':
+      'GitHub 將對儲存庫的預設分支執行一次即時掃描，並向開發人員回報程式碼品質發現和建議。它還會主動開始掃描拉取請求中的程式碼品質問題。',
+    'To enable code coverage reports, you will need to manually commit a workflow file, once code quality is enabled.':
+      '若要啟用程式碼涵蓋範圍報告，需要在啟用程式碼品質後手動提交工作流程檔案。',
+    'Learn how to configure code coverage': '瞭解如何設定程式碼涵蓋範圍',
+    'Does Code Quality use AI?': '程式碼品質是否使用 AI？',
+    'Along with standard findings that are detected using the default CodeQL query suite, Code Quality also uses AI to detect additional findings, labeled as AI findings.':
+      '除了使用預設 CodeQL 查詢套件偵測到的標準發現外，程式碼品質還會使用 AI 偵測其他發現，並標記為 AI 發現。',
+    'What quality rules and languages are supported?': '支援哪些品質規則和語言？',
+    'open source repository': '開放原始碼儲存庫',
+    // 合规报告与认证
+    'Coverage period': '涵蓋期間',
+    'SOC 3 Report': 'SOC 3 報告',
+    'GitHub ISO certifications': 'GitHub ISO 認證',
+    'View CSA CAIQ': '檢視 CSA CAIQ',
     // 身份验证安全：双因素身份验证
     'Requiring an additional authentication method adds another level of security for your organization.':
       '要求額外的身分驗證方式可為組織多加一層安全防護。',
     'Require two-factor authentication for everyone in your organization': '要求組織中的所有人啟用雙重驗證',
+    // 确认对话框：「… owned by the <strong>组织</strong> organization, but will remain a member of <strong>组织</strong> until … <a>…</a> to see …」按文本节点分段
+    'Organization members who do not have two-factor authentication enabled will be unable to access resources owned by the':
+      '未啟用雙重驗證的組織成員將無法存取',
+    'organization, but will remain a member of': '組織擁有的資源，但在更新設定之前仍是',
+    'until they update their settings. Outside collaborators who do not have two-factor authentication enabled will be removed from the organization and notified.':
+      '的成員。未啟用雙重驗證的外部協作者將從組織中移除並收到通知。',
+    'to see which users will be impacted.': '以查看哪些使用者會受影響。',
     'Only allow secure two-factor methods': '僅允許安全的雙重驗證方式',
     'Members, billing managers, and outside collaborators who do not have two-factor authentication enabled for their personal account will be removed from the organization and will receive an email notifying them about the change.':
       '個人帳號未啟用雙重驗證的成員、帳務管理員和外部協作者將從組織中移除，並會收到通知此變更的電子郵件。',
@@ -219,6 +306,9 @@ export default {
     'Cloud Security Alliance CAIQ self-assessment (CSA CAIQ - Level 1)': '雲端安全聯盟 CAIQ 自我評估 (CSA CAIQ - Level 1)'
   },
   scoped: {
+    // 安全配置页的提示标题与按钮
+    Information: '資訊',
+    'Set up': '設定',
     // 身份验证安全
     'Try risk-free for 30 days': '免費試用 30 天',
     'learn more': '瞭解詳情',
@@ -395,6 +485,32 @@ export default {
     'Approve domain': '核准網域'
   },
   regexp: [
+    // 双因素身份验证要求的确认对话框与说明（组织名在句中）
+    [
+      /^Are you sure you want to require two-factor authentication for all users in ([\w.-]+)\?$/,
+      '確定要求 $1 中的所有使用者啟用雙重驗證嗎？'
+    ],
+    [
+      /^Two-factor authentication will no longer be required to access any resources in the ([\w.-]+) organization\.$/,
+      '存取 $1 組織中的任何資源將不再需要雙重驗證。'
+    ],
+    [
+      /^Users will be required to set up two-factor authentication using a secure method in order to access the ([\w.-]+) organization\.$/,
+      '使用者必須使用安全方式設定雙重驗證才能存取 $1 組織。'
+    ],
+    [
+      /^Users will be required to set up two-factor authentication in order to access the ([\w.-]+) organization\.$/,
+      '使用者必須設定雙重驗證才能存取 $1 組織。'
+    ],
+    [
+      /^Secure methods of two-factor authentication will no longer be required to access any organization's resources in the ([\w.-]+) organization\.$/,
+      '存取 $1 組織中的資源將不再需要安全的雙重驗證方式。'
+    ],
+    // 合规报告：下载按钮与涵盖期间
+    [/^Download SOC (\d) Report$/, '下載 SOC $1 報告'],
+    [/^GitHub\.com (ISO\/IEC [\d:]+) certification$/, 'GitHub.com $1 認證'],
+    [/^Download GitHub\.com (ISO\/IEC [\d:]+) certification$/, '下載 GitHub.com $1 認證'],
+    [/^(\d{4}-\d{2}-\d{2}) to (\d{4}-\d{2}-\d{2})$/, '$1 至 $2'],
     // 句号随原文
     [
       new RegExp(`^Require two-factor authentication for everyone in the ${ORG} organization(\\.?)$`),
@@ -465,5 +581,21 @@ export default {
     // 绕过列表每行菜单按钮的读屏名称：「<名称> Bypass actor actions」（与存储库设置共用）
     BYPASS_ACTOR_ACTIONS_RULE,
     [/^Approve ([\w-]+(?:\.[\w-]+)+)$/, '核准 $1']
+  ],
+  inline: [
+    ['The {} label is used by default. Learn how to {}.', '預設使用 {} 標籤。瞭解如何{}。'],
+    ['Identify code security findings using AI. All features {}. {}.', '使用 AI 識別程式碼安全性發現。所有功能都會{}。{}。'],
+    [
+      'This organization does not have GitHub Advanced Security, which is free for public repositories and billed per active committer for private and internal repositories. To apply configurations with GitHub Advanced Security features to private repositories, {}',
+      '此組織沒有 GitHub 進階安全性，該功能對公開儲存庫免費，對私人和內部儲存庫按活躍提交者計費。若要將包含 GitHub 進階安全性功能的設定套用到私人儲存庫，請{}'
+    ],
+    [
+      'Ensure your codebases are reliable, maintainable, and efficient by proactively scanning for best practices, reducing bugs, improving readability, and enabling easier testing, collaboration, and scalability. Enabling this feature will incur charges in {}',
+      '主動掃描最佳做法、減少錯誤、提升可讀性，讓測試、協作和擴充更輕鬆，確保程式碼庫可靠、可維護且有效率。啟用此功能將產生{}'
+    ],
+    [
+      'We will support quality rules and languages found in this {}. The languages supported with CodeQL for standard findings are: C#, Java, JavaScript/TypeScript, Python, Ruby, and Go. Other languages may be scanned with AI, but will not generate standard findings with CodeQL.',
+      '我們將支援此{}中的品質規則和語言。CodeQL 支援產生標準發現的語言有：C#、Java、JavaScript/TypeScript、Python、Ruby 和 Go。其他語言可以使用 AI 掃描，但不會透過 CodeQL 產生標準發現。'
+    ]
   ]
 } satisfies PageDictionary

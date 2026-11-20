@@ -8,6 +8,10 @@ import type { PageDictionary } from '../../../core/types'
  */
 export default {
   static: {
+    // 机密和变量：选项卡（无障碍名称）、智能体机密说明
+    'Secrets or variables tab': '機密或變數分頁',
+    'Anyone with collaborator access to the repositories with access to a secret or variable can use it for the Copilot cloud agent.':
+      '對可存取機密或變數的儲存庫具有協作者存取權的任何人，都可以將其用於 Copilot 雲端代理。',
     // Actions 机密
     'Organization secrets': '組織機密',
     'This organization has no secrets.': '此組織沒有機密。',

@@ -52,6 +52,22 @@ function metricPeriod(text: string): string {
 
 export default {
   static: {
+    // Copilot 洞察：使用情况指标未启用
+    'Copilot impact dashboard info': 'Copilot 影响仪表板信息',
+    'Copilot impact metrics': 'Copilot 影响指标',
+    'Graph icon': '图表图标',
+    'Copilot usage metrics are currently disabled': 'Copilot 使用情况指标当前已禁用',
+    'Enable Copilot usage metrics to measure how Copilot adoption impacts your organization, or ask an admin to enable them.':
+      '启用 Copilot 使用情况指标，以衡量 Copilot 的采用对组织的影响，或请管理员启用。',
+    'Manage Copilot usage metrics': '管理 Copilot 使用情况指标',
+    // 组织概览：头像、公共自述文件提示（「Create a public repository called <code>.github</code>. …」见 inline）
+    'Change your organization’s avatar': '更改组织头像',
+    'Create Public README': '创建公共自述文件',
+    'Read documentation': '阅读文档',
+    'Invite Member': '邀请成员',
+    'Invite members': '邀请成员',
+    'Authenticate your members with SAML single sign-on': '使用 SAML 单点登录对成员进行身份验证',
+    'dismiss this message': '关闭此消息',
     // 头部：验证徽章
     "We've verified that the organization": '我们已验证组织',
     'We’ve verified that the organization': '我们已验证组织',
@@ -162,6 +178,9 @@ export default {
     'You are viewing the README and pinned repositories as a public user.': '你正以公开用户身份查看自述文件和置顶存储库。'
   },
   scoped: {
+    // 人员页导出按钮的进行状态、主题页空状态
+    Exporting: '导出中',
+    'No repositories': '暂无存储库',
     // 存储库筛选（与 profile 词典一致）
     Type: '类型',
     'Last updated': '最后更新',
@@ -260,6 +279,19 @@ export default {
     'hosted-larger': '更大的托管'
   },
   regexp: [
+    // 人员：角色数、更改角色确认；新建团队：父团队搜索结果（读屏）
+    [/^(\d+) roles?$/, '$1 个角色'],
+    [/^Change the role of (\d[\d,]*) members?\?$/, '要更改 $1 个成员的角色吗？'],
+    [/^Change the role of ([\w.-]+)\?$/, '要更改 $1 的角色吗？'],
+    [/^Search teams, Found (\d+) teams?$/, '搜索团队，找到 $1 个团队'],
+    // 主题页（/orgs/<组织>/topics）：可设置主题的存储库
+    [/^([\w.-]+) repositories you contribute to$/, '你参与贡献的 $1 存储库'],
+    [
+      /^There are no repositories in ([\w.-]+) that you[\u2019']ve contributed to and that you can set topics on\.$/,
+      '$1 中没有你参与贡献且可设置主题的存储库。'
+    ],
+    // 创建组织后的邀请页：Welcome to <组织>
+    [/^Welcome to ([\w.-]+)$/, '欢迎来到 $1'],
     // 头部与存储库条目的「Label: Verified」「Label: Public」由 common-ui 的通用规则翻译
     // 关注者页标题
     [/^Users following ([\w.-]+)$/, '关注 $1 的用户'],
@@ -358,5 +390,11 @@ export default {
     '.d-table.table-fixed .d-table-cell .color-fg-muted.text-small:not(span)',
     // 页头面包屑首项的组织名；只取链接；href 限相对路径
     'header.GlobalNav li:first-child > a[class*="contextCrumb__"][href^="/"]'
+  ],
+  inline: [
+    [
+      "Create a public repository called {}. Once created, add a {}. The README will appear on your organization's profile, visible to anyone.",
+      '创建名为 {} 的公共存储库。创建后添加 {}。自述文件将显示在组织的个人资料中，所有人可见。'
+    ]
   ]
 } satisfies PageDictionary

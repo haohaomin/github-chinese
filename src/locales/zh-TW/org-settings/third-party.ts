@@ -19,6 +19,12 @@ function period(dot: string): string {
  */
 export default {
   static: {
+    // 个人访问令牌：分类导航、最长有效期、搜索（无障碍名称与占位文字）
+    'Personal Access tokens categories navigation': '個人存取權杖類別導覽',
+    'Are you sure you want to update your selection?': '確定要更新所選內容嗎？',
+    'Select the maximum lifetime for fine-grained personal access tokens': '選擇精細個人存取權杖的最長有效期限',
+    'Enter a custom maximum lifetime for fine-grained personal access tokens': '輸入精細個人存取權杖的自訂最長有效期限',
+    'Search token names or filter with owner:, repository:, permission:': '搜尋權杖名稱，或使用 owner:、repository:、permission: 篩選',
     // 已安装的 GitHub 应用：待处理的安装请求
     'Members in your organization can request that GitHub Apps be installed. Pending requests are listed below.':
       '你組織中的成員可以請求安裝 GitHub 應用程式。下方列出了待處理的請求。',
@@ -119,6 +125,7 @@ export default {
     "There aren't any fine-grained tokens for this organization": '此組織沒有任何精細權杖',
     'There aren’t any fine-grained tokens for this organization': '此組織沒有任何精細權杖',
     'Fine-grained personal access token requests': '精細個人存取權杖請求',
+    'Fine-grained Personal Access Token Requests': '精細個人存取權杖請求',
     'Filter fine-grained personal access tokens requests': '篩選精細個人存取權杖請求',
     "There aren't any personal access token requests for this organization": '此組織沒有任何個人存取權杖請求',
     'There aren’t any personal access token requests for this organization': '此組織沒有任何個人存取權杖請求',

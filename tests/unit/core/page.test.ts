@@ -137,6 +137,20 @@ describe('detectPages', () => {
     ['https://github.com/organizations/vuejs/settings/apps/my-app/advanced', ['common', 'org-settings', 'org-apps']],
     ['https://github.com/organizations/vuejs/settings/applications/123/advanced', ['common', 'org-settings', 'org-apps']],
     ['https://github.com/organizations/vuejs/settings/hooks/1', ['common', 'org-settings']],
+    // 存储库策略页叠加 org-policies（目标存储库筛选框）
+    ['https://github.com/organizations/vuejs/settings/policies', ['common', 'org-settings', 'org-policies']],
+    ['https://github.com/organizations/vuejs/settings/policies/new', ['common', 'org-settings', 'org-policies']],
+    ['https://github.com/orgs/vuejs/settings/policies/new', ['common', 'organization', 'org-settings', 'org-policies']],
+    ['https://github.com/organizations/vuejs/settings/policy', ['common', 'org-settings']],
+    // 重命名组织的进度与完成页、组织主题页（带组织设置侧栏）
+    ['https://github.com/organizations/vuejs/rename', ['common', 'org-settings']],
+    ['https://github.com/orgs/vuejs/rename', ['common', 'organization', 'org-settings']],
+    ['https://github.com/orgs/vuejs/topics', ['common', 'organization', 'org-settings']],
+    // 市场上架项的 Web 钩子页叠加 marketplace-hook；Actions 上架项名为 hook 时不叠加
+    ['https://github.com/marketplace/my-listing/hook', ['common', 'marketplace', 'marketplace-hook']],
+    ['https://github.com/marketplace/my-listing/hook?page=2', ['common', 'marketplace', 'marketplace-hook']],
+    ['https://github.com/marketplace/actions/hook', ['common', 'marketplace']],
+    ['https://github.com/marketplace/my-listing/edit', ['common', 'marketplace']],
     // 个人主页的项目标签页
     ['https://github.com/octocat?tab=projects', ['common', 'profile', 'organization', 'projects']],
     ['https://github.com/octocat?tab=projects&query=is%3Aopen', ['common', 'profile', 'organization', 'projects']],
