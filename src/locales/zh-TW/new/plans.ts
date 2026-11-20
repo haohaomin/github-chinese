@@ -8,7 +8,7 @@ import type { PageDictionary } from '../../../core/types'
  * 产品名、方案名译成中文（用户决定，2026-10-27）：表中单独出现的 GitHub Actions / Codespaces / Packages、
  * GitHub Secret Protection / Code Security、Copilot Autofix、Enterprise Cloud / Server / Managed Users、GitHub Connect
  * 在此收录；窄屏计划选择的小写 free / team / enterprise（CSS 首字母大写）同样译「X 版」。
- * 自造品牌词 CodeQL、技术缩写 LDAP 与货币代码 USD 保留原文。
+ * 自造品牌词 CodeQL、技术缩写 LDAP 保留原文；价格后的货币代码 USD 按用户要求译作美元。
  */
 export default {
   scoped: {
@@ -30,6 +30,8 @@ export default {
     Available: '可用',
     Unlimited: '無限制',
     'Usage-based': '依用量計費',
+    // 价格后的币种：$<span>4</span> <span>USD</span>
+    USD: '美元',
     'Ability to increase spend limit': '可提高支出上限',
     // Enterprise Cloud、Enterprise Server 由 common/pages.ts 的全局词条翻译
 

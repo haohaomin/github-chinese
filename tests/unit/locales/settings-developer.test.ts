@@ -1192,7 +1192,8 @@ describe('settings-developer 静态词条', () => {
       '. Enforcement begins July 27th, 2026 in version 1.1 of the GitHub Copilot app. The Copilot CLI policy continues to govern the GitHub Copilot App until version 1.1',
       '。GitHub Copilot 应用 1.1 版自 2026年7月27日起强制实施此策略。Copilot CLI 策略在 1.1 版之前继续管控 GitHub Copilot 应用'
     ],
-    ['Dotfiles repository', 'Dotfiles 存储库'],
+    ['Dotfiles repository', '点文件存储库'],
+    ['Dotfiles', '点文件'],
     // 与拉取请求并列的 open issues → 创建问题；整句与组织、存储库设置同句写法一致
     [
       'Temporarily restrict which external users can interact with your repositories (comment, open issues, or create pull requests) for a configurable period of time.',

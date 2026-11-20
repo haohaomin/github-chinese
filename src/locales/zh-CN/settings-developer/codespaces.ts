@@ -10,20 +10,21 @@ import type { PageDictionary } from '../../../core/types'
 export default {
   static: {
     // Dotfiles
-    'Automatically install dotfiles': '自动安装 dotfiles',
+    Dotfiles: '点文件',
+    'Automatically install dotfiles': '自动安装点文件',
     'Codespaces can automatically install your dotfiles into every codespace you create.':
-      '代码空间可以自动将你的 dotfiles 安装到你创建的每个代码空间中。',
-    'Learn how to set up your dotfiles for Codespaces.': '了解如何为代码空间设置 dotfiles。',
-    'Learn how to set up your dotfiles.': '了解如何设置 dotfiles。',
+      '代码空间可以自动将你的点文件安装到你创建的每个代码空间中。',
+    'Learn how to set up your dotfiles for Codespaces.': '了解如何为代码空间设置点文件。',
+    'Learn how to set up your dotfiles.': '了解如何设置点文件。',
     'This setting installs your dotfiles in environments created by Copilot in the cloud and Codespaces.':
-      '此设置会将你的 dotfiles 安装到云端 Copilot 和代码空间创建的环境中。',
+      '此设置会将你的点文件安装到云端 Copilot 和代码空间创建的环境中。',
     'This setting installs your dotfiles in environments created by Copilot in the cloud.':
-      '此设置会将你的 dotfiles 安装到云端 Copilot 创建的环境中。',
+      '此设置会将你的点文件安装到云端 Copilot 创建的环境中。',
     'This setting automatically installs your dotfiles in environments created by Codespaces and Copilot cloud agent.':
-      '此设置会自动将你的 dotfiles 安装到代码空间和 Copilot 云端智能体创建的环境中。',
-    'Dotfiles repository': 'Dotfiles 存储库',
-    'Select a repository you own to use as your dotfiles repository.': '选择一个你拥有的存储库作为 dotfiles 存储库。',
-    'Failed to update your dotfiles settings. Please try again.': '无法更新 dotfiles 设置。请重试。',
+      '此设置会自动将你的点文件安装到代码空间和 Copilot 云端智能体创建的环境中。',
+    'Dotfiles repository': '点文件存储库',
+    'Select a repository you own to use as your dotfiles repository.': '选择一个你拥有的存储库作为点文件存储库。',
+    'Failed to update your dotfiles settings. Please try again.': '无法更新点文件设置。请重试。',
 
     // 代码空间机密
     'Codespace user secrets': '代码空间用户机密',

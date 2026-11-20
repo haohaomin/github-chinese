@@ -309,6 +309,14 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     ],
     misses: ['View actions for Storage budget for Organization setube-organization']
   },
+  // 编辑预算页的面包屑
+  {
+    hits: [
+      ['Edit Packages', '编辑软件包'],
+      ['Edit Git LFS', '编辑 Git LFS']
+    ],
+    misses: ['Edit Storage']
+  },
   {
     hits: [
       [
@@ -1679,9 +1687,27 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   },
   { hits: [['Saturday, Nov 14, 2026', '2026年11月14日周六']], misses: ['Someday, Nov 14, 2026'] },
   // 议题字段：标题后半段、选项操作与拖动
-  { hits: [['/ Effort', '/ 工作量']], misses: ['/ Custom field'] },
-  { hits: [['Open field actions for Urgent', '打开“紧急”的操作']], misses: ['Open actions for Urgent'] },
-  { hits: [['Move High', '移动“高”']], misses: ['Move Critical'] },
+  {
+    hits: [
+      ['/ Effort', '/ 工作量'],
+      ['/ Task', '/ 任务']
+    ],
+    misses: ['/ Custom field']
+  },
+  {
+    hits: [
+      ['Open field actions for Urgent', '打开“紧急”的操作'],
+      ['Open field actions for Effort', '打开“工作量”的操作']
+    ],
+    misses: ['Open actions for Urgent']
+  },
+  {
+    hits: [
+      ['Move High', '移动“高”'],
+      ['Move Effort', '移动“工作量”']
+    ],
+    misses: ['Move Critical']
+  },
   {
     hits: [
       ['Open edit dialog for Urgent', '打开“紧急”的编辑对话框'],
@@ -1696,7 +1722,13 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     ],
     misses: ['Advanced move High']
   },
-  { hits: [['Remove Urgent', '移除“紧急”']], misses: ['Remove Blocker'] },
+  {
+    hits: [
+      ['Remove Urgent', '移除“紧急”'],
+      ['Remove Target date', '移除“目标日期”']
+    ],
+    misses: ['Remove Blocker']
+  },
   // 单选选项的高级移动对话框：移动结果预览（自定义选项名照录）
   { hits: [['High will be first item in the list.', '“高”将成为列表第一项。']], misses: ['High will be first.'] },
   { hits: [['Blocker will be last item in the list.', '“Blocker”将成为列表最后一项。']], misses: ['Low will be last.'] },
@@ -2692,5 +2724,60 @@ describe('org-settings 繁体（zh-TW 语言包）', () => {
       expect(twMatcher.translate(key, ['common', 'org-settings']), key).toBe(value)
     }
     for (const rule of TW_DEPENDABOT_RULES_REGEXP) expect(twOrgSettings.regexp).toContain(rule)
+  })
+})
+
+describe.each([
+  ['zh-CN', zhCN, ['编辑软件包', '预算金额', '移除 octocat', '显示 octo-org/hello-world', '隐藏其他', '显示软件包', '显示 constructor']],
+  ['zh-TW', zhTW, ['編輯套件', '預算金額', '移除 octocat', '顯示 octo-org/hello-world', '隱藏其他', '顯示套件', '顯示 constructor']]
+])('计费页的预算表单与使用情况图表（%s）', (_, bundle, expected) => {
+  let translator: Translator | undefined
+
+  afterEach(() => {
+    translator?.stop()
+    translator = undefined
+    document.body.innerHTML = ''
+  })
+
+  it('面包屑、金额标签、收件人移除按钮与图例切换按钮译出；用户名、存储库名照录；stop 后还原', () => {
+    const legend = ['octo-org/hello-world', 'All other', 'Packages', 'constructor']
+    document.body.innerHTML = [
+      '<nav><ol><li><a id="crumb" href="#">Edit Packages</a></li></ol></nav>',
+      '<label id="amount" class="prc-components-Label-2mrqP">BudgetAmountInput</label>',
+      '<ul><li class="listItem__Uo4JIa"><p>octocat</p><button id="remove" aria-label="Remove octocat"></button></li></ul>',
+      '<div class="highcharts-a11y-proxy-group highcharts-a11y-proxy-group-legend"><ul>',
+      ...legend.map(
+        (name, index) =>
+          `<li><button class="highcharts-a11y-proxy-element" id="legend-${index}" aria-label="${index === 1 ? 'Hide' : 'Show'} ${name}"></button></li>`
+      ),
+      '</ul></div>'
+    ].join('')
+    translator = createTranslator({ matcher: createMatcher(bundle), host: window, resolvePages: () => ['common', 'org-settings'] })
+    translator.start()
+    const label = (id: string): string | null => document.getElementById(id)?.getAttribute('aria-label') ?? null
+    expect([
+      document.getElementById('crumb')?.textContent,
+      document.getElementById('amount')?.textContent,
+      label('remove'),
+      ...legend.map((_, index) => label(`legend-${index}`))
+    ]).toEqual(expected)
+    translator.stop()
+    expect(label('remove')).toBe('Remove octocat')
+    expect(label('legend-1')).toBe('Hide All other')
+  })
+
+  it('移除按钮的规则只在收件人列表里生效', () => {
+    document.body.innerHTML = '<div><button id="other" aria-label="Remove octocat"></button></div>'
+    translator = createTranslator({ matcher: createMatcher(bundle), host: window, resolvePages: () => ['common', 'org-settings'] })
+    translator.start()
+    expect(document.getElementById('other')?.getAttribute('aria-label')).toBe('Remove octocat')
+  })
+
+  it('议题字段与类型、升级表单的新增词条', () => {
+    const matcher = createMatcher(bundle)
+    const pages: PageKey[] = ['common', 'org-settings', 'settings']
+    for (const source of ['Urgent', "VAT/GST: Vat code can't be blank", 'Move Effort', '/ Task']) {
+      expect(matcher.translate(source, pages), source).toMatch(/[一-鿿]/)
+    }
   })
 })

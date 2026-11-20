@@ -1259,6 +1259,8 @@ describe('settings-account 静态词条', () => {
     ['Which do you want to upgrade?', '要升级哪个帐户？'],
     ['Enter coupon code', '输入优惠码'],
     ['Redeem', '兑换'],
+    // 兑换表单的无障碍名称
+    ['Redeem coupon', '兑换优惠券'],
     // 双因素身份验证管理页的标签页标题
     ['Manage two-factor authentication', '管理双因素身份验证'],
     // 教育福利申请未通过的原因

@@ -38,6 +38,7 @@ import {
   MIRROR_ATTRIBUTES,
   MIRROR_SELECTOR,
   PICKED_TEXT_FIELDS,
+  PLACEHOLDER_LIST_SELECTOR,
   PLACEHOLDER_SELECTOR,
   PLACEHOLDER_TEXTS,
   REENTRY_CONTAINER_CLASS,
@@ -276,25 +277,54 @@ function isCovered(element: Element, roots: ReadonlySet<Element>): boolean {
   return false
 }
 
+/** 元素里唯一的子元素：标签名为 localName、不带属性，其余子节点只有空白文字；否则 null */
+function soleChild(parent: Element | null, localName: string): Element | null {
+  const child = parent?.firstElementChild ?? null
+  if (child === null || child !== parent!.lastElementChild || child.localName !== localName || child.attributes.length > 0) return null
+  for (let node = parent!.firstChild; node; node = node.nextSibling) {
+    if (node !== child && !(isTextNode(node) && !NON_SPACE_RE.test(node.data))) return null
+  }
+  return child
+}
+
+/** 块里只有一个文本节点时为块，否则 null */
+function withSoleText(block: Element | null): Element | null {
+  const node = block?.firstChild ?? null
+  return node !== null && node === block!.lastChild && isTextNode(node) ? block : null
+}
+
 /**
  * 区域里唯一的段落（经典评论框预览区的占位段落，不查选择器）：不带属性的 <p>，其余子节点只有空白文字，
  * 段落里只有一个文本节点；否则 null
  */
 function soleParagraph(region: Element): Element | null {
-  const paragraph = region.firstElementChild
-  if (paragraph === null || paragraph !== region.lastElementChild || paragraph.localName !== 'p') return null
-  const node = paragraph.firstChild
-  if (paragraph.attributes.length > 0 || node === null || node !== paragraph.lastChild || !isTextNode(node)) return null
-  for (let child = region.firstChild; child; child = child.nextSibling) {
-    if (child !== paragraph && !(isTextNode(child) && !NON_SPACE_RE.test(child.data))) return null
-  }
-  return paragraph
+  return withSoleText(soleChild(region, 'p'))
 }
 
-/** 判断占位文字的区域根：元素是区域里唯一的段落时为区域，否则为元素自身 */
+/**
+ * 区域里唯一的列表项（赞助等级的默认回报，不查选择器）：区域里只有一个不带属性的 <ul>、列表里只有一个不带属性的 <li>
+ * （其余子节点只有空白文字），列表项里只有一个文本节点；否则 null
+ */
+function soleListItem(region: Element): Element | null {
+  return withSoleText(soleChild(soleChild(region, 'ul'), 'li'))
+}
+
+/** 判断占位文字的区域根：元素是区域里唯一的段落、唯一的列表或其中唯一的列表项时为区域，否则为元素自身 */
 function placeholderRegionOf(element: Element): Element {
-  const parent = element.localName === 'p' ? element.parentElement : null
-  return parent !== null && soleParagraph(parent) === element ? parent : element
+  const parent = element.parentElement
+  if (parent === null) return element
+  switch (element.localName) {
+    case 'p':
+      return soleParagraph(parent) === element ? parent : element
+    case 'ul':
+      return soleListItem(parent)?.parentElement === element ? parent : element
+    case 'li': {
+      const region = parent.parentElement
+      return region !== null && soleListItem(region) === element ? region : element
+    }
+    default:
+      return element
+  }
 }
 
 /**
@@ -1233,8 +1263,9 @@ export function createTranslator(options: TranslatorOptions): Translator {
       // 根节点自身是重新进入区域时照常遍历
       else if (state === 'search' && parent !== null) {
         walk(root, 'translate', !isReentry(root))
-        // 经典评论框预览区：脚本用 innerHTML 换上的占位段落
-        if (placeholderRegionOf(root) === parent) translateRegionPlaceholder(parent)
+        // 经典评论框预览区：脚本用 innerHTML 换上的占位段落；赞助等级说明里换上的占位列表、列表项
+        const region = placeholderRegionOf(root)
+        if (region !== root) translateRegionPlaceholder(region)
         // 正文整体替换（React 重渲染正文的 HTML）：其中的表单空字段
         if (inFormBody(parent)) translateFormBlanks(root)
         // 标签区域里换上的元素（React 换掉令牌里的文字元素、标签页的标签链接里换上新令牌）：按所在的标签区域根判断
@@ -1276,7 +1307,7 @@ export function createTranslator(options: TranslatorOptions): Translator {
       if (!work && !mergeIndex.selector && !run.some(inline.isPunctNode)) continue
       if (roots.size > 0 && isCovered(element, roots)) continue
       if (insideSkipped(element)) {
-        // 文字在经典评论框预览区的段落里时按预览区判断
+        // 文字在经典评论框预览区的段落里、赞助等级说明的列表项里时按所在区域判断
         translateRegionPlaceholder(placeholderRegionOf(element))
         // 文字在正文的表单空字段里时照常翻译
         translateFormBlank(element)
@@ -1364,19 +1395,27 @@ export function createTranslator(options: TranslatorOptions): Translator {
   }
 
   /**
-   * 占位区域根（自身不是退出标记）里的占位文本节点，且是写过译文的节点或占位原文；否则 null。占位区域根有两种：
+   * 占位区域根（自身不是退出标记）里的占位文本节点，且是写过译文的节点或占位原文；否则 null。占位区域根有三种：
    * 预览窗格（PLACEHOLDER_SELECTOR），节点是其中唯一的文本节点；经典评论框预览区（CLASSIC_PREVIEW_SELECTOR），
-   * 节点是其中唯一段落里的文本节点（见 soleParagraph）。
+   * 节点是其中唯一段落里的文本节点（见 soleParagraph）；赞助等级说明（PLACEHOLDER_LIST_SELECTOR），
+   * 节点是其中唯一列表项里的文本节点（见 soleListItem）。
    * 先做不查选择器的判断：忽略区域里的变动种子都会走到这里
    */
   function placeholderNode(region: Element): Text | null {
     const first = region.firstChild
-    const single = first !== null && first === region.lastChild && isTextNode(first)
-    const node = single ? first : soleParagraph(region)?.firstChild
+    let node: Node | null | undefined
+    let selector: string
+    if (first !== null && first === region.lastChild && isTextNode(first)) {
+      node = first
+      selector = PLACEHOLDER_SELECTOR
+    } else {
+      const paragraph = soleParagraph(region)
+      node = (paragraph ?? soleListItem(region))?.firstChild
+      selector = paragraph ? CLASSIC_PREVIEW_SELECTOR : PLACEHOLDER_LIST_SELECTOR
+    }
     if (!isTextNode(node)) return null
     // 写过译文的节点按记录判断（解析器在译文后追加的文字由 sourceOf 识别），没有记录时看当前文字
     if (!records.hasText(node) && !PLACEHOLDER_TEXTS.has(normalizeText(node.data))) return null
-    const selector = single ? PLACEHOLDER_SELECTOR : CLASSIC_PREVIEW_SELECTOR
     return safeMatches(region, selector) && !safeMatches(region, EXIT_SELECTOR) ? node : null
   }
 

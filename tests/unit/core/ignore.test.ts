@@ -10,6 +10,7 @@ import {
   LIST_NAME_SELECTORS,
   MIRROR_ATTRIBUTES,
   MIRROR_SELECTOR,
+  PLACEHOLDER_LIST_SELECTOR,
   PLACEHOLDER_SELECTOR,
   PLACEHOLDER_TEXTS,
   TRANSLATABLE_ATTRIBUTES
@@ -784,22 +785,31 @@ describe('镜像文字属性白名单', () => {
 })
 
 describe('忽略区域里的占位文字', () => {
-  it('占位区域选择器合法；预览窗格的 .markdown-body、经典评论框预览区都是忽略区域根，普通评论正文不是占位区域', () => {
+  it('占位区域选择器合法；预览窗格的 .markdown-body、经典评论框预览区、赞助等级说明都是忽略区域根，普通评论正文不是占位区域', () => {
     const host = mount(`
       <div aria-live="polite"><h2>Rendered Markdown Preview</h2><div id="pane" class="markdown-body"></div></div>
       <div class="previewViewerWrapper__ayPbFL"><div id="hashed" class="markdown-body"></div></div>
       <div class="js-previewable-comment-form"><div class="comment">
         <div id="classic" class="comment-body markdown-body js-preview-body"><p>Nothing to preview</p></div>
       </div></div>
-      <div id="comment" class="comment-body markdown-body"><p dir="auto">Sample text</p></div>`)
+      <div id="comment" class="comment-body markdown-body"><p dir="auto">Sample text</p></div>
+      <div class="Box"><div class="Box-row"><div id="tier" class="markdown-body comment-body p-0"><ul><li>Sample text</li></ul></div></div></div>
+      <div class="border rounded-2"><div id="checkout" class="markdown-body comment-body p-0"><ul><li>Sample text</li></ul></div></div>`)
     const matches = (id: string): boolean[] => {
       const element = find(host, `#${id}`)
-      return [element.matches(PLACEHOLDER_SELECTOR), element.matches(CLASSIC_PREVIEW_SELECTOR), ignored(element)]
+      return [
+        element.matches(PLACEHOLDER_SELECTOR),
+        element.matches(CLASSIC_PREVIEW_SELECTOR),
+        element.matches(PLACEHOLDER_LIST_SELECTOR),
+        ignored(element)
+      ]
     }
-    expect(matches('pane')).toEqual([true, false, true])
-    expect(matches('hashed')).toEqual([true, false, true])
-    expect(matches('classic')).toEqual([false, true, true])
-    expect(matches('comment')).toEqual([false, false, true])
+    expect(matches('pane')).toEqual([true, false, false, true])
+    expect(matches('hashed')).toEqual([true, false, false, true])
+    expect(matches('classic')).toEqual([false, true, false, true])
+    expect(matches('comment')).toEqual([false, false, false, true])
+    expect(matches('tier')).toEqual([false, false, true, true])
+    expect(matches('checkout')).toEqual([true, false, true, true])
   })
 
   it('占位文字是规范化后的文字（引擎按规范化后的节点文字比较）', () => {

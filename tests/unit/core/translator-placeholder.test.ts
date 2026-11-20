@@ -19,7 +19,8 @@ const BUNDLE: LocaleBundle = [
         'Error rendering preview': '渲染预览时出错',
         Preview: '预览',
         Issues: '议题',
-        'No response': '未填写'
+        'No response': '未填写',
+        'Get a Sponsor badge on your profile': '在个人资料上获得赞助者徽章'
       }
     }
   ]
@@ -39,6 +40,15 @@ const CLASSIC = (content: string, id = 'classic'): string =>
   `<button type="button" class="tabnav-tab js-preview-tab" id="${id}-tab">Preview</button>` +
   '<div class="comment js-suggested-changes-container">' +
   `<div class="comment-body markdown-body js-preview-body" id="${id}">${content}</div></div></div>`
+
+/**
+ * 赞助页（/sponsors/<名称>）的等级卡片：等级说明是 GitHub 给的默认回报时，.markdown-body 里只有一个列表、一个列表项；
+ * 服务器渲染时元素前后有换行
+ */
+const TIER = (content: string, id = 'tier'): string =>
+  `<div class="Box"><div class="Box-row Box-row--hover-blue"><div class="markdown-body comment-body p-0" id="${id}">${content}</div></div></div>`
+const BADGE = '\n<ul>\n<li>Get a Sponsor badge on your profile</li>\n</ul>\n'
+const TRANSLATED_BADGE = '\n\n在个人资料上获得赞助者徽章\n\n'
 
 /** 议题页：评论框所在页面 */
 const ISSUES: readonly PageKey[] = ['common', 'repository', 'issues']
@@ -323,6 +333,66 @@ describe('经典评论框的预览区', () => {
     const t = start(CLASSIC('<p>Error rendering preview</p>'))
     t.setMatcher(createMatcher([['common', { static: { 'Error rendering preview': '预览出错' } }]]))
     expect(text('#classic')).toBe('预览出错')
+  })
+})
+
+describe('赞助等级说明的默认回报', () => {
+  it('等级卡片、结账页所选等级里只有默认回报时照常翻译，换行不变；stop 后还原', () => {
+    const t = start(
+      TIER(BADGE) + `<div class="border rounded-2"><div class="markdown-body comment-body p-0" id="checkout">${BADGE}</div></div>`
+    )
+    expect(text('#tier')).toBe(TRANSLATED_BADGE)
+    expect(text('#checkout')).toBe(TRANSLATED_BADGE)
+    t.stop()
+    expect(text('#tier')).toBe(BADGE.replace(/<\/?\w+>/g, ''))
+  })
+
+  it('维护者编写的说明保持原文：多个列表项、列表项里有元素、列表外有段落、列表或列表项带属性、有序列表、不是默认回报', () => {
+    const contents = [
+      '<ul><li>Get a Sponsor badge on your profile</li><li>Issues</li></ul>',
+      '<ul><li><strong>Get a Sponsor badge on your profile</strong></li></ul>',
+      '<p>Issues</p><ul><li>Get a Sponsor badge on your profile</li></ul>',
+      '<ul dir="auto"><li>Get a Sponsor badge on your profile</li></ul>',
+      '<ul><li dir="auto">Get a Sponsor badge on your profile</li></ul>',
+      '<ol><li>Get a Sponsor badge on your profile</li></ol>',
+      '<ul><li>Issues</li></ul>'
+    ]
+    start(contents.map((content, index) => TIER(content, `tier${index}`)).join(''))
+    expect(contents.map((_, index) => text(`#tier${index}`))).toEqual([
+      'Get a Sponsor badge on your profileIssues',
+      'Get a Sponsor badge on your profile',
+      'IssuesGet a Sponsor badge on your profile',
+      'Get a Sponsor badge on your profile',
+      'Get a Sponsor badge on your profile',
+      'Get a Sponsor badge on your profile',
+      'Issues'
+    ])
+  })
+
+  it('只认等级卡片：普通评论正文、外层也是忽略区域、区域自身带退出标记时都不翻译', () => {
+    start(
+      `<div class="comment-body markdown-body" id="comment">${BADGE}</div>` +
+        `<div class="markdown-body"><div class="Box-row"><div class="markdown-body comment-body p-0" id="nested">${BADGE}</div></div></div>` +
+        `<div class="Box-row"><div class="markdown-body comment-body p-0" translate="no" id="no">${BADGE}</div></div>`
+    )
+    for (const id of ['#comment', '#nested', '#no']) expect(normalized(id)).toBe('Get a Sponsor badge on your profile')
+  })
+
+  it('之后换上的列表、列表项、改写的文字（插入根、种子路径）：是默认回报时翻译，改为其他文字保持原文', async () => {
+    start(TIER('<p>Issues</p>'))
+    $('#tier').innerHTML = '<ul><li>Get a Sponsor badge on your profile</li></ul>'
+    await settle()
+    expect(text('#tier')).toBe('在个人资料上获得赞助者徽章')
+    $('#tier ul').innerHTML = '<li>Get a Sponsor badge on your profile</li>'
+    await settle()
+    expect(text('#tier')).toBe('在个人资料上获得赞助者徽章')
+    const item = $('#tier li')
+    ;(item.firstChild as Text).data = 'Issues'
+    await settle()
+    expect(text('#tier')).toBe('Issues')
+    ;(item.firstChild as Text).data = 'Get a Sponsor badge on your profile'
+    await settle()
+    expect(text('#tier')).toBe('在个人资料上获得赞助者徽章')
   })
 })
 

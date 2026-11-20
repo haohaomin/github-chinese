@@ -101,9 +101,10 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   {
     hits: [
       // 并列计划名：「A 和 B」「A、B 和 C」，原文 and 不译作顿号；常见计划名按方案名译「X 版」，Open Source → 开源
-      ['Open Source and Umbrella plans available.', '提供开源和 Umbrella 计划。'],
+      ['Open Source and Umbrella plans available.', '提供开源和全包版计划。'],
       ['Free plan available.', '提供免费版计划。'],
-      ['Umbrella plan available.', '提供 Umbrella 计划。'],
+      ['Umbrella plan available.', '提供全包版计划。'],
+      ['Nebula plan available.', '提供 Nebula 计划。'],
       [
         'Renovate Community Cloud. Free, hosted Renovate by Mend.io plan available.',
         '提供 Renovate Community Cloud. Free, hosted Renovate by Mend.io 计划。'
@@ -780,7 +781,7 @@ describe('marketplace 计划卡片（真实结构）', () => {
     document.body.innerHTML = [
       '<div data-testid="plans-radio-group" data-component="Stack">',
       planCard('plan-1', 'Open Source', 'Unlimited public repositories', '$0'),
-      planCard('plan-2', 'Umbrella', 'Sample text', '$10', true),
+      planCard('plan-2', 'Nebula', 'Sample text', '$10', true),
       // 描述是发布者填写的，按用户要求不忽略：与全局词条同形时照词条翻译（Free → 免费版）
       planCard('plan-3', 'Pro', 'Free', '$20'),
       planCard('plan-4', 'Open source', 'Sample text', '$0', true),
@@ -790,7 +791,7 @@ describe('marketplace 计划卡片（真实结构）', () => {
     translator.start()
     const name = (id: string): string | undefined => document.querySelector(`label[for="${id}"]`)?.firstChild?.textContent ?? undefined
     expect(name('plan-1')).toBe('开源')
-    expect(name('plan-2')).toBe('Umbrella')
+    expect(name('plan-2')).toBe('Nebula')
     expect(name('plan-3')).toBe('专业版')
     expect(name('plan-4')).toBe('开源')
     expect(document.querySelector('#plan-1-description')?.textContent).toBe('无限公共存储库')

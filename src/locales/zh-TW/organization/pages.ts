@@ -234,6 +234,10 @@ export default {
     'Select all team members': '選取所有團隊成員',
     'Search by team name or create a new team': '依團隊名稱搜尋或建立新團隊',
     'Sorry. That name is already taken.': '抱歉，此名稱已被使用。',
+    'Name must be unique for this org': '名稱在此組織中必須是唯一的',
+    // 团队页：页内导航的标题（读屏）、存储库列表的搜索框
+    'Local navigation': '本頁導覽',
+    'Find a repository': '尋找儲存庫',
     'You’ve successfully updated the team.': '已更新團隊。',
     "You've successfully updated the team.": '已更新團隊。',
     'You’ve successfully deleted the team. Updated permissions may take a few minutes to take effect.':

@@ -392,6 +392,12 @@ export default {
       new RegExp(`^${COUNT} items? available, ${COUNT} selected\\.$`),
       (_, total: string, selected: string) => `${total} 个可用条目，已选择 ${selected} 个。`
     ],
+    // 筛选列表更新后的整句播报：List updated, Focused item: Target date, not selected, 1 of 1
+    [
+      /^List updated, Focused item: (.+), (not selected|selected), (\d+) of (\d+)$/,
+      (_, name: string, state: string, index: string, total: string) =>
+        `列表已更新，当前条目：${name}，${state === 'selected' ? '已选择' : '未选择'}，第 ${index} 个，共 ${total} 个`
+    ],
     [/^Focused item: (.+)$/, '当前条目：$1'],
     [/^(.+), filter text box and list of items$/, '$1，筛选文本框和条目列表'],
     // 选择器按钮的读屏说明：Currently selected: main；令牌输入框：Selected: bug, docs

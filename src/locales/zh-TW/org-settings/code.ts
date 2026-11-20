@@ -21,6 +21,10 @@ const PRESET_FIELDS: Readonly<Record<string, string>> = {
   Effort: '工作量'
 }
 const PRESET_OPTIONS: Readonly<Record<string, string>> = { Urgent: '緊急', High: '高', Medium: '中', Low: '低' }
+/** 议题类型：默认类型名（与 scoped 的类型名一致） */
+const PRESET_TYPES: Readonly<Record<string, string>> = { Task: '任務', Bug: '錯誤', Feature: '功能' }
+/** 字段名与选项名（类型的置顶字段、字段的单选选项共用操作按钮的读屏名称） */
+const PRESET_NAMES: Readonly<Record<string, string>> = { ...PRESET_FIELDS, ...PRESET_OPTIONS }
 
 /** 查表：键可能是用户内容（选项名），不取原型链上的键 */
 function pick(map: Readonly<Record<string, string>>, key: string): string | undefined {
@@ -392,6 +396,8 @@ export default {
     Task: '任務',
     Bug: '錯誤',
     Feature: '功能',
+    // 预置单选选项（High、Medium、Low 由全局词条译出）
+    Urgent: '緊急',
     // 「Choose whether <a>commit comments</a> are …」里的链接
     'commit comments': '提交評論',
     // 与个人设置、存储库设置共用
@@ -478,13 +484,16 @@ export default {
     'will be last item in the list.': '將成為清單最後一項。'
   },
   regexp: [
-    // 议题字段编辑页：标题「<a>议题字段</a> / Effort」的后半段、单选选项的操作与拖动按钮
-    [new RegExp(`^/ (${Object.keys(PRESET_FIELDS).join('|')})$`), (_, name: string) => `/ ${PRESET_FIELDS[name]}`],
-    [/^Open field actions for (.+)$/, (_, name: string) => `開啟「${pick(PRESET_OPTIONS, name) ?? name}」的動作`],
-    [new RegExp(`^Move (${Object.keys(PRESET_OPTIONS).join('|')})$`), (_, name: string) => `移動「${pick(PRESET_OPTIONS, name) ?? name}」`],
+    // 议题字段、议题类型编辑页：标题「<a>议题字段</a> / Effort」「<a>议题类型</a> / Task」的后半段，单选选项、置顶字段的操作与拖动按钮
+    [
+      new RegExp(`^/ (${Object.keys({ ...PRESET_FIELDS, ...PRESET_TYPES }).join('|')})$`),
+      (_, name: string) => `/ ${pick(PRESET_FIELDS, name) ?? PRESET_TYPES[name]}`
+    ],
+    [/^Open field actions for (.+)$/, (_, name: string) => `開啟「${pick(PRESET_NAMES, name) ?? name}」的動作`],
+    [new RegExp(`^Move (${Object.keys(PRESET_NAMES).join('|')})$`), (_, name: string) => `移動「${PRESET_NAMES[name]}」`],
     [/^Open edit dialog for (.+)$/, (_, name: string) => `開啟「${pick(PRESET_OPTIONS, name) ?? name}」的編輯對話方塊`],
     [/^Advanced move (.+?)(\.\.\.|…)$/, (_, name: string, dots: string) => `進階移動「${pick(PRESET_OPTIONS, name) ?? name}」${dots}`],
-    [new RegExp(`^Remove (${Object.keys(PRESET_OPTIONS).join('|')})$`), (_, name: string) => `移除「${PRESET_OPTIONS[name]}」`],
+    [new RegExp(`^Remove (${Object.keys(PRESET_NAMES).join('|')})$`), (_, name: string) => `移除「${PRESET_NAMES[name]}」`],
     // 单选选项的高级移动对话框：移动结果预览
     [/^(.+) will be first item in the list\.$/, (_, name: string) => `「${pick(PRESET_OPTIONS, name) ?? name}」將成為清單第一項。`],
     [/^(.+) will be last item in the list\.$/, (_, name: string) => `「${pick(PRESET_OPTIONS, name) ?? name}」將成為清單最後一項。`],

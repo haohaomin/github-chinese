@@ -328,6 +328,7 @@ export default {
     Coupon: '优惠券',
     'Redeem a coupon': '兑换优惠券',
     'Redeem Coupon': '兑换优惠券',
+    'Redeem coupon': '兑换优惠券',
     // 优惠码不存在：其后是用户输入的优惠码
     'Sorry, we couldn’t find a coupon with the code:': '抱歉，未找到此优惠码对应的优惠券：',
     "Sorry, we couldn't find a coupon with the code:": '抱歉，未找到此优惠码对应的优惠券：',

@@ -155,6 +155,10 @@ export default {
       '帳號擁有者和帳務管理員預設會收到預算警示電子郵件。如有需要，可以新增其他收件者。',
     'Select users': '選擇使用者',
     'At least one alert recipient must be selected': '至少選擇一位警示收件者',
+    // 预算金额输入框的标签（原文是组件名）
+    BudgetAmountInput: '預算金額',
+    // 升级为企业的付款表单：VAT/GST 字段的错误（字段名在前）
+    "VAT/GST: Vat code can't be blank": 'VAT/GST：VAT 稅號不能為空白',
     'Search for users': '搜尋使用者',
     'Successfully updated invoicing preference': '已更新開立發票偏好設定',
     // 概览：计算使用量
@@ -478,6 +482,11 @@ export default {
       /^View actions for (Actions|Packages|Codespaces|Git LFS|Copilot|Models|Spark) budget for Organization ([\w.-]+)$/,
       (_, product: string, org: string) => joinCjk(joinCjk(`檢視組織 ${org} 的`, BUDGET_PRODUCTS[product] ?? product), '預算的可用動作')
     ],
+    // 编辑预算页的面包屑：Edit Packages
+    [
+      /^Edit (Actions|Packages|Codespaces|Git LFS|Copilot|Models|Spark)$/,
+      (_, product: string) => joinCjk('編輯', BUDGET_PRODUCTS[product] ?? product)
+    ],
     // AI 使用情况：包含额度的说明（日期按浏览器语言格式化，可能已是中文日期）
     [
       new RegExp(
@@ -732,6 +741,21 @@ export default {
     [
       'An organization owner or billing manager must link their personal billing information with this organization account. You can switch to a business account to use your business’ billing information by {} the {}.',
       '組織擁有者或帳務管理員必須將個人帳單資訊連結到此組織帳號。若要切換到商業帳號以使用公司的帳單資訊請{} {}。'
+    ]
+  ],
+  attributeRules: [
+    // 预算表单：警报收件人列表的移除按钮（Remove <用户名>）
+    ['li[class*="listItem__"] > button', 'aria-label', /^Remove (.+)$/, (_, name: string) => joinCjk('移除', name)],
+    // 使用情况图表（Highcharts）图例的切换按钮（读屏）：Show <系列名>；系列名是存储库名、产品名或 All other
+    [
+      '.highcharts-a11y-proxy-group-legend button',
+      'aria-label',
+      /^(Show|Hide) (.+)$/,
+      (_, action: string, name: string) =>
+        joinCjk(
+          action === 'Show' ? '顯示' : '隱藏',
+          name === 'All other' ? '其他' : Object.hasOwn(BUDGET_PRODUCTS, name) ? BUDGET_PRODUCTS[name]! : name
+        )
     ]
   ]
 } satisfies PageDictionary

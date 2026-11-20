@@ -344,6 +344,9 @@ export const IGNORE_SELECTORS: readonly string[] = [
  *   未选择时是 Select tag、Auto，选择后是标签名。
  * - 赞助结账页所选等级的说明（PLACEHOLDER_SELECTOR）：自定义金额时 .markdown-body 里只有 GitHub 写入的一句说明，
  *   维护者编写的等级说明渲染后总有段落元素。
+ * - 赞助页等级卡片、结账页所选等级的说明（PLACEHOLDER_LIST_SELECTOR）：等级说明是 GitHub 给的默认回报时，
+ *   .markdown-body 里只有一个不带属性的列表，列表里只有一个不带属性的列表项（其余子节点只有空白文字），
+ *   列表项里只有一个文本节点。
  * 其他忽略区域（标题、描述、标签名等）里同样的文字是用户内容，保持原文
  */
 export const PLACEHOLDER_TEXTS: ReadonlySet<string> = new Set([
@@ -353,7 +356,8 @@ export const PLACEHOLDER_TEXTS: ReadonlySet<string> = new Set([
   'Error rendering preview',
   'Select tag',
   'Auto',
-  'Custom amount. A Public Sponsor achievement will be added to your profile.'
+  'Custom amount. A Public Sponsor achievement will be added to your profile.',
+  'Get a Sponsor badge on your profile'
 ])
 
 /**
@@ -366,6 +370,12 @@ export const PLACEHOLDER_SELECTOR = [
   '[aria-live="polite"] > .markdown-body',
   '[id^="ref-picker-releases-"] [class*="RefSelectorText__"] > span:not(.fgColor-muted)',
   '[id^="ref-picker-releases-"] [class*="_RefSelectorText"] > span:not(.fgColor-muted)',
+  '.border.rounded-2 > .markdown-body.comment-body.p-0'
+].join(', ')
+
+/** 占位列表项所在的区域根：赞助页（/sponsors/<名称>）的等级卡片、结账页所选等级卡片里的说明 */
+export const PLACEHOLDER_LIST_SELECTOR = [
+  '.Box-row > .markdown-body.comment-body.p-0',
   '.border.rounded-2 > .markdown-body.comment-body.p-0'
 ].join(', ')
 

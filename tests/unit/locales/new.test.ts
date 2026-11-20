@@ -978,12 +978,13 @@ describe('new 计划比较表（new/plans.ts）', () => {
     }
   })
 
-  it('自造品牌词、技术缩写与货币代码保留原文', () => {
-    for (const key of ['CodeQL', 'LDAP', 'USD']) {
+  it('自造品牌词、技术缩写保留原文；价格后的货币代码 USD 译作美元', () => {
+    for (const key of ['CodeQL', 'LDAP']) {
       expect(plans.scoped?.[key]).toBeUndefined()
       // common 可能为保留词收录原样词条，只要求显示文字不变
       expect(fullMatcher.translate(key, NEW_SCOPE) ?? key).toBe(key)
     }
+    expect(fullMatcher.translate('USD', NEW_SCOPE)).toBe('美元')
     // 分组名 Code Security、Secret Protection 由 common 的全局 static 负责，此处不重复
     expect(plans.scoped?.['Code Security']).toBeUndefined()
     expect(plans.scoped?.['Secret Protection']).toBeUndefined()

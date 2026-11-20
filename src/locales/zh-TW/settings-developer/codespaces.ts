@@ -13,20 +13,21 @@ import type { PageDictionary } from '../../../core/types'
 export default {
   static: {
     // Dotfiles
-    'Automatically install dotfiles': '自動安裝 dotfiles',
+    Dotfiles: '點檔案',
+    'Automatically install dotfiles': '自動安裝點檔案',
     'Codespaces can automatically install your dotfiles into every codespace you create.':
-      '程式碼空間可以自動將你的 dotfiles 安裝到你建立的每個程式碼空間中。',
-    'Learn how to set up your dotfiles for Codespaces.': '瞭解如何為程式碼空間設定 dotfiles。',
-    'Learn how to set up your dotfiles.': '瞭解如何設定 dotfiles。',
+      '程式碼空間可以自動將你的點檔案安裝到你建立的每個程式碼空間中。',
+    'Learn how to set up your dotfiles for Codespaces.': '瞭解如何為程式碼空間設定點檔案。',
+    'Learn how to set up your dotfiles.': '瞭解如何設定點檔案。',
     'This setting installs your dotfiles in environments created by Copilot in the cloud and Codespaces.':
-      '此設定會將你的 dotfiles 安裝到雲端 Copilot 和程式碼空間建立的環境中。',
+      '此設定會將你的點檔案安裝到雲端 Copilot 和程式碼空間建立的環境中。',
     'This setting installs your dotfiles in environments created by Copilot in the cloud.':
-      '此設定會將你的 dotfiles 安裝到雲端 Copilot 建立的環境中。',
+      '此設定會將你的點檔案安裝到雲端 Copilot 建立的環境中。',
     'This setting automatically installs your dotfiles in environments created by Codespaces and Copilot cloud agent.':
-      '此設定會自動將你的 dotfiles 安裝到程式碼空間和 Copilot 雲端代理建立的環境中。',
-    'Dotfiles repository': 'Dotfiles 儲存庫',
-    'Select a repository you own to use as your dotfiles repository.': '選擇一個你擁有的儲存庫作為 dotfiles 儲存庫。',
-    'Failed to update your dotfiles settings. Please try again.': '無法更新 dotfiles 設定。請再試一次。',
+      '此設定會自動將你的點檔案安裝到程式碼空間和 Copilot 雲端代理建立的環境中。',
+    'Dotfiles repository': '點檔案儲存庫',
+    'Select a repository you own to use as your dotfiles repository.': '選擇一個你擁有的儲存庫作為點檔案儲存庫。',
+    'Failed to update your dotfiles settings. Please try again.': '無法更新點檔案設定。請再試一次。',
 
     // 代码空间机密
     'Codespace user secrets': '程式碼空間使用者機密',

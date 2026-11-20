@@ -85,6 +85,13 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     ],
     misses: ['5 items available']
   },
+  {
+    hits: [
+      ['List updated, Focused item: Target date, not selected, 1 of 1', '列表已更新，当前条目：Target date，未选择，第 1 个，共 1 个'],
+      ['List updated, Focused item: bug, selected, 2 of 5', '列表已更新，当前条目：bug，已选择，第 2 个，共 5 个']
+    ],
+    misses: ['List updated, Focused item: bug']
+  },
   { hits: [['Focused item: bug', '当前条目：bug']], misses: ['Focused item'] },
   {
     hits: [['Labels, filter text box and list of items', 'Labels，筛选文本框和条目列表']],

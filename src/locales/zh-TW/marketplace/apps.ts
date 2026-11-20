@@ -31,7 +31,7 @@ export default {
     'Free Key Value (Redis-compatible) caches': '免費鍵值（相容 Redis）快取',
     // 上架页「<计划名> plan available.」：Render 的计划名是一句说明，整句收录（不加原文没有的引号，按语义拆成两句）
     'Free. Sign up to auto-deploy web apps for free plan available.': '提供免費方案。註冊即可免費自動部署 Web 應用程式。',
-    // Codecov 上架项的计划说明（第三方内容，按用户要求收录；计划名 Umbrella 是专名，保留）
+    // Codecov 上架项的计划说明（第三方内容，按用户要求收录；计划名 Umbrella 见 listing 的 PLAN_NAMES）
     'Unlimited public repositories': '無限公開儲存庫',
     "Use Codecov's standard plan with all features and unlimited private repositories":
       '使用包含全部功能和無限私人儲存庫的 Codecov 標準方案',

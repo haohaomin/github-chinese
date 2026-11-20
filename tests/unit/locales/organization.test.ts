@@ -647,7 +647,11 @@ describe('organization 静态词条', () => {
     ['Propose and collaborate on changes to a repository.', '对存储库提出更改并共同协作。'],
     ['Enforce certain workflows for one or more branches.', '为一个或多个分支强制实施特定工作流。'],
     ['Try automatically assigning work with GitHub Actions.', '试试使用 GitHub 操作自动分配工作。'],
-    ['Validate your code using a CI workflow.', '使用 CI 工作流验证代码。']
+    ['Validate your code using a CI workflow.', '使用 CI 工作流验证代码。'],
+    // 团队页：新建团队的名称校验、页内导航标题、存储库搜索框
+    ['Name must be unique for this org', '名称在此组织中必须唯一'],
+    ['Local navigation', '本页导航'],
+    ['Find a repository', '查找存储库']
   ])('%s → %s', (input, expected) => {
     expect(translate(input)).toBe(expected)
   })

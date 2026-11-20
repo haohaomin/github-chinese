@@ -62,7 +62,7 @@
 | 英文 | 中文 | 备注 |
 | --- | --- | --- |
 | Actions / GitHub Actions | 操作 / GitHub 操作 | 存储库标签页、设置侧栏、计费项、权限名都用；可复用的单个 action 同样 → 操作；Actions minutes → 操作分钟数 |
-| Codespaces / GitHub Codespaces / codespace | 代码空间 / GitHub 代码空间 / 代码空间 | Create codespace → 创建代码空间；Your codespaces → 你的代码空间；core hours → 核心小时数 |
+| Codespaces / GitHub Codespaces / codespace | 代码空间 / GitHub 代码空间 / 代码空间 | Create codespace → 创建代码空间；Your codespaces → 你的代码空间；core hours → 核心小时数；dotfiles → 点文件（繁体 點檔案） |
 | Pages / GitHub Pages | 页面 / GitHub 页面 | Pages 设置 Build and deployment → 生成和部署；Page build → 页面构建；Pages site → 页面站点 |
 | Packages / GitHub Packages | 软件包 / GitHub 软件包 | 用户规定（2026-10-28）。Container registry → 容器注册表 |
 | Marketplace / GitHub Marketplace | 市场 / GitHub 市场 | Search Marketplace → 搜索市场；Marketplace apps → 市场应用；其中的 action / app → 操作 / 应用 |
@@ -77,7 +77,7 @@
 | Code Quality / GitHub Stars | 代码质量 / GitHub 之星 | GitHub Stars 是社区计划，与星标无关；GitHub Universe（活动名）保留 |
 | 第三方产品名 | 原文 | Microsoft Teams、Gemini Pro、Team Foundation Version Control、Visual Studio Code 等不属于 GitHub 的产品名保留 |
 
-方案名一律译成「X 版」：GitHub Free / Pro / Team / Enterprise → GitHub 免费版 / 专业版 / 团队版 / 企业版；Copilot Free / Pro / Pro+ / Business / Enterprise → Copilot 免费版 / 专业版 / 专业增强版 / 商业版 / 企业版；Copilot for Business → Copilot 商业版；Copilot Student → Copilot 学生版；GitHub Teams（教育页）→ GitHub 团队版。单独出现的 Free / Pro / Pro+ / Team / Enterprise / Business 指方案时同样 → 免费版 / 专业版 / 专业增强版 / 团队版 / 企业版 / 商业版（Try Enterprise → 试用企业版；Upgrade to Business → 升级到商业版）。价格义 Free 仍 → 免费（Install it for free → 免费安装）；全局导航的 Enterprise 栏目 → 企业；team 概念 → 团队。第三方 Marketplace 应用自己起的计划名按常见英文词照译（Open Source → 开源，Free → 免费版），译不了的保留原文。
+方案名一律译成「X 版」：GitHub Free / Pro / Team / Enterprise → GitHub 免费版 / 专业版 / 团队版 / 企业版；Copilot Free / Pro / Pro+ / Business / Enterprise → Copilot 免费版 / 专业版 / 专业增强版 / 商业版 / 企业版；Copilot for Business → Copilot 商业版；Copilot Student → Copilot 学生版；GitHub Teams（教育页）→ GitHub 团队版。单独出现的 Free / Pro / Pro+ / Team / Enterprise / Business 指方案时同样 → 免费版 / 专业版 / 专业增强版 / 团队版 / 企业版 / 商业版（Try Enterprise → 试用企业版；Upgrade to Business → 升级到商业版）。价格义 Free 仍 → 免费（Install it for free → 免费安装）；全局导航的 Enterprise 栏目 → 企业；team 概念 → 团队。第三方 Marketplace 应用自己起的计划名按常见英文词照译（Open Source → 开源，Free → 免费版，Umbrella → 全包版），译不了的保留原文。
 
 GitHub App、OAuth app 按官方词汇表译「GitHub 应用」「OAuth 应用」。
 

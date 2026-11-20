@@ -112,7 +112,8 @@ const PLAN_NAMES: Readonly<Record<string, string>> = {
   Starter: '入门版',
   Basic: '基础版',
   Standard: '标准版',
-  Premium: '高级版'
+  Premium: '高级版',
+  Umbrella: '全包版'
 }
 
 /**
@@ -128,7 +129,7 @@ function planName(name: string): string {
   return PLAN_NAMES[name] ?? name
 }
 
-/** 多个计划名：「Open Source and Umbrella」→「开源和 Umbrella」；计划名本身含逗号时会被拆开，只用于复数句式 */
+/** 多个计划名：「Open Source and Umbrella」→「开源和全包版」；计划名本身含逗号时会被拆开，只用于复数句式 */
 function planNames(list: string): string {
   return joinList(splitList(list).map(planName))
 }
