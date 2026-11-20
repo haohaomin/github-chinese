@@ -12,6 +12,8 @@ const TIME_ZONES: Readonly<Record<string, string>> = {
   Arizona: '亚利桑那',
   Mazatlan: '马萨特兰',
   'Mountain Time (US & Canada)': '山地时间（美国和加拿大）',
+  'Pacific Time (Canada)': '太平洋时间（加拿大）',
+  Alberta: '艾伯塔',
   'Central America': '中美洲',
   'Central Time (US & Canada)': '中部时间（美国和加拿大）',
   Chihuahua: '奇瓦瓦',

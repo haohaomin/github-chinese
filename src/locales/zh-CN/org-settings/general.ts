@@ -158,6 +158,8 @@ export default {
     'Delete organization': '删除组织'
   },
   scoped: {
+    // 签署客户条款区域的取消按钮（小写原文）
+    cancel: '取消',
     // 开关的状态文字（Primer ToggleSwitch）
     On: '开',
     Off: '关',

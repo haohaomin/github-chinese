@@ -54,6 +54,27 @@ export default {
     'Codespace templates': '程式碼空間範本',
     'Start a codespace from a template and get to developing with the power of a virtual machine in the cloud.':
       '從範本啟動程式碼空間並藉助雲端虛擬機器開始開發。',
+    // 快速启动模板卡片的说明（模板名是产品名，保留原文）
+    'Start with a blank canvas or import any packages you need.': '從空白畫布開始或匯入所需的任何套件。',
+    'A popular JavaScript library for building user interfaces based on UI components.':
+      '以 UI 元件建構使用者介面的熱門 JavaScript 程式庫。',
+    'A full-stack web application template written in C#.': '以 C# 撰寫的全端 Web 應用程式範本。',
+    'A full-stack web framework for building dynamic websites that deliver a rich user experience.':
+      '用於建構可提供豐富使用者體驗的動態網站的全端 Web 框架。',
+    'JupyterLab is the latest web-based interactive development environment for notebooks, code, and data.':
+      'JupyterLab 是最新的 Web 型筆記本、程式碼和資料互動式開發環境。',
+    'Express is a minimal and flexible Node.js web application framework.': 'Express 是精簡而靈活的 Node.js Web 應用程式框架。',
+    'Next.js is a React framework that gives you building blocks to create web applications.':
+      'Next.js 是為建立 Web 應用程式提供建構元件的 React 框架。',
+    'Django is a high-level Python web framework that encourages rapid development and clean, pragmatic design.':
+      'Django 是鼓勵快速開發和簡潔、務實設計的高階 Python Web 框架。',
+    'Flask is a lightweight web application framework.': 'Flask 是輕量級 Web 應用程式框架。',
+    'A fast 3kB alternative to React with the same modern API.': '具有相同現代 API 的快速 3kB React 替代方案。',
+    'Examples running via semihosting output on an Arm FVP simulation model.': '在 Arm FVP 模擬模型上透過半主機輸出執行的範例。',
+    // 页头导航：窄屏左侧按钮的提示、侧栏的无障碍名称
+    'Open Codespaces navigation': '開啟程式碼空間導覽',
+    'Codespaces navigation': '程式碼空間導覽',
+    'Codespaces navigation links': '程式碼空間導覽連結',
 
     // 新建表单
     'Create new codespace': '建立新的程式碼空間',

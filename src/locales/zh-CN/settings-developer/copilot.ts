@@ -492,6 +492,7 @@ export default {
     [/^(\d+) repositor(?:y|ies) matching$/, '匹配 $1 个存储库'],
     [/^(\d+) repositories matching, showing first (\d+)$/, '匹配 $1 个存储库，显示前 $2 个'],
     [/^(\d+) of ([\d,.]+[kKmM]?) items shown\.$/, '显示 $2 个项中的 $1 个。'],
+    [/^Buy Copilot Business for (.+)$/, '为 $1 购买 Copilot 商业版'],
 
     // 代码审查力度：「Default (Balanced)」等选项标签、上限来源、受上限影响的提示
     [

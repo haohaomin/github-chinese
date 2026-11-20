@@ -503,6 +503,7 @@ export default {
     [/^(\d+) repositor(?:y|ies) matching$/, '$1 個相符的儲存庫'],
     [/^(\d+) repositories matching, showing first (\d+)$/, '$1 個相符的儲存庫，顯示前 $2 個'],
     [/^(\d+) of ([\d,.]+[kKmM]?) items shown\.$/, '已顯示 $2 個項目中的 $1 個。'],
+    [/^Buy Copilot Business for (.+)$/, '為 $1 購買 Copilot 商務版'],
 
     // 代码审查力度：「Default (Balanced)」等选项标签、上限来源、受上限影响的提示
     [

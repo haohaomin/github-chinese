@@ -15,6 +15,8 @@ const TIME_ZONES: Readonly<Record<string, string>> = {
   Arizona: '亞利桑那州',
   Mazatlan: '馬薩特蘭',
   'Mountain Time (US & Canada)': '山區時間（美國和加拿大）',
+  'Pacific Time (Canada)': '太平洋時間（加拿大）',
+  Alberta: '亞伯達',
   // CLDR 繁中作「中美」，易读成中国与美国，取「中美洲」
   'Central America': '中美洲',
   'Central Time (US & Canada)': '中部時間（美國和加拿大）',

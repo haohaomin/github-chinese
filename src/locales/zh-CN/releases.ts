@@ -87,6 +87,8 @@ export default {
     'Releases and Tags': '发行版和标签',
     'Releases and tags': '发行版和标签',
     'Releases and tags navigation': '发行版和标签导航',
+    // 窄屏页头左侧按钮的提示
+    'Open Releases and tags navigation': '打开发行版和标签导航',
     'Releases results': '发行版结果',
     'Tags results': '标签结果',
     'On this page': '本页内容',
@@ -333,6 +335,10 @@ export default {
   },
   scoped: {
     'Pre-release': '预发行版',
+    // 经典反应选择器的 aria-label（与拉取请求页同译）
+    heart: '爱心',
+    rocket: '火箭',
+    eyes: '眼睛',
     'Source code': '源代码',
     Notes: '说明',
     // 自动生成的发行说明末尾的链接文字（位于 Markdown 正文内时不翻译）

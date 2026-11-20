@@ -366,6 +366,8 @@ export default {
     'Issue comment': '议题评论',
     Scheduled: '计划运行',
     'Manually run by': '手动运行者',
+    // 「Manually run」与「by」分在两个元素里时
+    'Manually run': '手动运行',
     'Merge group': '合并组',
     Discussion: '讨论',
     'Discussion comment': '讨论评论',

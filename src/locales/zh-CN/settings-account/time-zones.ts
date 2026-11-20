@@ -14,6 +14,8 @@ export const TIME_ZONES: Readonly<Record<string, string>> = {
   'Pacific Time (US & Canada)': '太平洋时间（美国和加拿大）',
   Tijuana: '蒂华纳',
   'Mountain Time (US & Canada)': '山地时间（美国和加拿大）',
+  'Pacific Time (Canada)': '太平洋时间（加拿大）',
+  Alberta: '艾伯塔',
   Arizona: '亚利桑那',
   Chihuahua: '奇瓦瓦',
   Mazatlan: '马萨特兰',

@@ -240,7 +240,18 @@ export default {
     'Allowlist settings saved successfully!': '已成功儲存允許清單設定！',
     'Allow repository custom rules': '允許儲存庫自訂規則',
     'Let repositories decide': '由儲存庫決定',
-    'Organization custom allowlist': '組織自訂允許清單'
+    'Organization custom allowlist': '組織自訂允許清單',
+
+    // Copilot 梦境（/settings/copilot/dreaming；功能名与个人 Copilot 设置同译，见 settings-developer/copilot）；
+    // 「<strong>Repository skills … pull requests.</strong> Dreaming proposes …」
+    'Copilot Dreaming': 'Copilot 夢境',
+    'Manage Dreaming for this repository. Only repository administrators can change this setting.':
+      '管理此儲存庫的夢境。只有儲存庫管理員可以變更此設定。',
+    'Repository skills and custom instructions are managed through pull requests.': '儲存庫技能和自訂指示透過拉取請求管理。',
+    'Dreaming proposes changes to files checked into your repository for review.': '夢境會對儲存庫中已簽入的檔案提出變更，以供審查。',
+    'Dreaming runs only where repository Memory and other required policies and features are enabled. Session-based Dreams also require session upload.':
+      '夢境只會在儲存庫記憶及其他必要的政策和功能都已啟用時執行。以工作階段為基礎的夢境還需要上傳工作階段。',
+    'Repository Dreaming requires a Copilot Pro, Pro+ or Max plan.': '儲存庫夢境需要 Copilot 專業版、專業增強版或 Max 方案。'
   },
   scoped: {
     Adaptive: '自適應',
@@ -266,6 +277,8 @@ export default {
     'MCP configuration': 'MCP 設定',
     'pre-release terms': '發行前版本條款',
     Approvals: '核准',
+    // Copilot 梦境的功能名：侧栏导航项、设置项标题（旁边是「預覽」标记）
+    Dreaming: '夢境',
     // 审查力度（与组织设置、个人 Copilot 设置同译）
     Lite: '輕量',
     Balanced: '平衡',

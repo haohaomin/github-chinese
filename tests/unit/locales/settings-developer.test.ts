@@ -407,6 +407,10 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['120 repositories matching, showing first few']
   },
   { hits: [['5 of 20 items shown.', '显示 20 个项中的 5 个。']], misses: ['5 of 20 items'] },
+  {
+    hits: [['Buy Copilot Business for setube-organization', '为 setube-organization 购买 Copilot 商业版']],
+    misses: ['Buy Copilot Business for']
+  },
 
   // Copilot：代码审查力度
   {
