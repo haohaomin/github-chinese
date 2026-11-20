@@ -575,6 +575,7 @@ describe('停用、换词典、切换语言、排除页面', () => {
       timeFormat: 'default',
       customTimeFormat: 'YYYY-MM-DD HH:mm',
       translateTitle: true,
+      paymentForm: true,
       excludedPaths: [],
       language: 'auto',
       uiLanguage: 'auto',

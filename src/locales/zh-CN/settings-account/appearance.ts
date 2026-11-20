@@ -107,6 +107,9 @@ export default {
     'that don’t use modifier keys in their activation. For example, the': '中无需修饰键即可触发的快捷方式。例如',
     'shortcut to navigate notifications, or': '快捷方式用于前往通知，或',
     'to view context relevant shortcuts.': '用于查看与当前上下文相关的快捷方式。',
+    // 说明里 <kbd> 前的读屏文字（kbd 本身 aria-hidden）：<span class=sr-only>question mark</span><kbd>?</kbd>、alt up + <kbd>Alt</kbd><kbd>↑</kbd>
+    'question mark': '问号',
+    'alt up': 'Alt+向上键',
     'Learn more about character key shortcuts': '了解字符键快捷方式',
     'Save keyboard shortcut preferences': '保存键盘快捷方式首选项',
     'Keyboard shortcut preference successfully saved.': '键盘快捷方式首选项已保存。',

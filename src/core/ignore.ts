@@ -119,6 +119,15 @@ export const ISSUE_TYPE_NAME_SELECTORS: readonly string[] = [
 ]
 
 /**
+ * 页面脚本把选中项的文字写进表单字段：[选中项, 字段]。点击后字段值仍是选中项当前文字（译文）时写回原文，
+ * 保存的仍是原文（选中项照常翻译）
+ */
+export const PICKED_TEXT_FIELDS: readonly (readonly [item: string, field: string])[] = [
+  // 组织资料的位置：选中国家/地区后，页面把选项文字写进隐藏字段 organization[profile_location]
+  ['.js-org-country-item', '.js-org-location-input-hidden']
+]
+
+/**
  * 标签区域（名称区域与说明区域）、星标列表名称区域与议题类型名称区域：其中的默认标签、预置列表名、默认类型名照常翻译
  */
 export const LABEL_SELECTORS: readonly string[] = [

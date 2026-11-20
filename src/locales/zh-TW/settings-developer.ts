@@ -7,6 +7,7 @@ import codespaces from './settings-developer/codespaces'
 import copilot from './settings-developer/copilot'
 import keys from './settings-developer/keys'
 import logs from './settings-developer/logs'
+import auditEvents from './org-settings/audit-events'
 import moderation from './settings-developer/moderation'
 import permissions from './settings-developer/permissions'
 import repositories from './settings-developer/repositories'
@@ -27,6 +28,7 @@ export default mergeDictionaries(
   codespaces,
   copilot,
   logs,
+  auditEvents,
   applications,
   apps,
   tokens,

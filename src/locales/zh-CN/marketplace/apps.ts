@@ -109,6 +109,8 @@ export default {
   },
   scoped: {
     Website: '网站',
+    // 订单页「已安装」对话框里的链接文字（整句见 inline）
+    'current installation': '当前安装',
     Request: '申请',
     request: '申请',
     Installing: '安装中',
@@ -181,9 +183,16 @@ export default {
       /^(.+) can also request users['’] permission to the following resources\. These permissions will be requested and authorized on an individual-user basis\.$/,
       '$1 还可以请求用户对以下资源的权限。这些权限将按单个用户请求和授权。'
     ],
+    // 订单页「已安装」对话框的标题（读屏可见）
+    [/^You already have (.+) installed\.$/, '你已安装 $1。'],
     [/^Install (.+)$/, '安装 $1']
   ],
   inline: [
+    // 订单页「已安装」对话框：「… You can view your <a>current installation</a> or continue with setting up this plan.」
+    [
+      /^It looks like (.+) has already been installed on your account\. You can view your \{\} or continue with setting up this plan\.$/,
+      '$1 似乎已安装在你的帐户上。可以查看{}或继续设置此计划。'
+    ],
     // 订单完成后的跳转说明：「… please visit this <a>setup page</a> to continue.」
     ['If your browser does not redirect you automatically, please visit this {} to continue.', '如果浏览器没有自动跳转，请访问此{}继续。'],
     // 订单页同意条款：「By clicking "…", you are agreeing to Render’s <a>服务条款</a> and the <a>隐私政策</a>. You previously agreed to the <details>市场服务条款。</details>」

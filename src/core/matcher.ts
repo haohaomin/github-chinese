@@ -2,7 +2,7 @@ import { generalizeKey, keyMatches, NUM_SLOT, patternKey, patternRegExp } from '
 import { createRegExpIndex, type RegExpIndex } from './regexp-index'
 import { addEntries, type Table } from './table'
 import { FULL_PUNCT_END_RE, FULL_PUNCT_START_RE, hasLatin, normalizeText } from './text'
-import type { AttributeRule, InlineRule, LabelPart, LocaleBundle, PageKey, RegExpReplacer, RegExpRule } from './types'
+import type { AttributeRule, ContextualRule, InlineRule, LabelPart, LocaleBundle, PageKey, RegExpReplacer, RegExpRule } from './types'
 
 export { hasLatin, normalizeText }
 
@@ -54,6 +54,13 @@ export interface Matcher {
   translateLabel(raw: string, part: LabelPart): string | undefined
   /** 有无名称表、说明表、预置列表名、默认类型名条目或标签正则 */
   hasLabels(): boolean
+  /**
+   * 区域词条（见 ContextualRule）：原始文本规范化后在各区域词条表中的译文（首尾空白同 translateRaw），
+   * 返回 [选择器, 译文]，越具体的页面类型越靠前，同一页面类型按收录顺序；没有时返回空数组
+   */
+  contextual(raw: string, pages: readonly PageKey[]): readonly (readonly [selector: string, translation: string])[]
+  /** 指定页面范围内有无区域词条 */
+  hasContextual(pages: readonly PageKey[]): boolean
 }
 
 /** 行内句的字符串句型 */
@@ -81,8 +88,25 @@ interface CompiledPage {
   /** 行内句：正则句型（槽位已换成槽位字符） */
   readonly inlineRules: RegExpRule[]
   readonly mergeText: string[]
+  /** 区域词条：选择器与规范化原文 → 译文的表，按收录顺序 */
+  readonly contextual: ContextualEntry[]
   /** 正则索引：第一次用到时建立（同一页面类型的多个词典此时已合并） */
   index?: RegExpIndex
+}
+
+/** 区域词条（见 ContextualRule） */
+interface ContextualEntry {
+  readonly selector: string
+  readonly table: ReadonlyMap<string, string>
+}
+
+function compileContextual([selector, table]: ContextualRule): ContextualEntry {
+  const map = new Map<string, string>()
+  for (const [key, value] of Object.entries(table)) {
+    const normalized = normalizeText(key)
+    if (normalized && !map.has(normalized)) map.set(normalized, value)
+  }
+  return { selector, table: map }
 }
 
 /** 页面类型的 scoped 查找表：第一次用到时按收录顺序合并（压缩串此时才解开） */
@@ -162,7 +186,8 @@ function emptyPage(): CompiledPage {
     attributeRules: [],
     inlineStrings: new Map(),
     inlineRules: [],
-    mergeText: []
+    mergeText: [],
+    contextual: []
   }
 }
 
@@ -194,6 +219,7 @@ export function createMatcher(bundle: LocaleBundle, options: MatcherOptions = {}
     page.attributeRules.push(...(dict.attributeRules ?? []))
     for (const rule of dict.inline ?? []) addInline(page, rule)
     page.mergeText.push(...(dict.mergeText ?? []))
+    page.contextual.push(...(dict.contextual ?? []).map(compileContextual))
   }
   const custom = compileCustom(options.custom)
   const maxCacheSize = options.maxCacheSize ?? DEFAULT_MAX_CACHE_SIZE
@@ -348,6 +374,22 @@ export function createMatcher(bundle: LocaleBundle, options: MatcherOptions = {}
     }
   }
 
+  function contextual(raw: string, scope: readonly PageKey[]): readonly (readonly [string, string])[] {
+    const text = normalizeText(raw)
+    const hits: [string, string][] = []
+    for (let i = scope.length - 1; i >= 0; i--) {
+      for (const { selector, table } of pages.get(scope[i]!)?.contextual ?? []) {
+        const hit = table.get(text)
+        if (hit !== undefined) hits.push([selector, withTrailing(raw, withLeading(raw, hit))])
+      }
+    }
+    return hits
+  }
+
+  function hasContextual(scope: readonly PageKey[]): boolean {
+    return scope.some(key => (pages.get(key)?.contextual.length ?? 0) > 0)
+  }
+
   function translateLabel(raw: string, part: LabelPart): string | undefined {
     if (!hasLabels) return undefined
     const label = lookupLabel(normalizeText(raw), part)
@@ -363,6 +405,8 @@ export function createMatcher(bundle: LocaleBundle, options: MatcherOptions = {}
     hasInline,
     mergeSelectors,
     translateLabel,
-    hasLabels: () => hasLabels
+    hasLabels: () => hasLabels,
+    contextual,
+    hasContextual
   }
 }

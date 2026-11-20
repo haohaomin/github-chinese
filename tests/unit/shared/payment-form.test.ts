@@ -77,7 +77,7 @@ describe('付款表单脚本的注册', () => {
     vi.restoreAllMocks()
   })
 
-  it('已授权：注册到所有框架，document_start，跨会话保留；再次同步不改动', async () => {
+  it('生效：注册到所有框架，document_start，跨会话保留；再次同步不改动', async () => {
     await syncPaymentFormScript(true)
     await syncPaymentFormScript(true)
     expect(scripts.registered).toEqual([registration])
@@ -92,7 +92,7 @@ describe('付款表单脚本的注册', () => {
     expect(scripts.registered).toEqual([registration])
   })
 
-  it('未授权：注销；未注册时不报错', async () => {
+  it('不生效：注销；未注册时不报错', async () => {
     await syncPaymentFormScript(false)
     expect(fakeBrowser.scripting.unregisterContentScripts).not.toHaveBeenCalled()
     await syncPaymentFormScript(true)
@@ -100,11 +100,19 @@ describe('付款表单脚本的注册', () => {
     expect(scripts.registered).toEqual([])
   })
 
-  it('是否已授权：按托管页的主机权限；读取失败时按未授权', async () => {
+  it('有无权限：按托管页的主机权限（随清单授予，可被撤销）；读取失败时按没有', async () => {
+    expect(await isPaymentFormGranted()).toBe(true)
+    await fakePermissions.revoke(PAYMENT_FORM_ORIGINS)
     expect(await isPaymentFormGranted()).toBe(false)
-    fakePermissions.granted.push(...PAYMENT_FORM_ORIGINS)
+    await fakePermissions.grant(PAYMENT_FORM_ORIGINS)
     expect(await isPaymentFormGranted()).toBe(true)
     vi.spyOn(fakeBrowser.permissions, 'contains').mockRejectedValue(new Error('不支持'))
     expect(await isPaymentFormGranted()).toBe(false)
+  })
+
+  it('托管页的主机权限与清单（wxt.config.ts）一致', async () => {
+    expect(PAYMENT_FORM_ORIGINS).toEqual(['https://www.zuora.com/*'])
+    const config = await import('../../../wxt.config')
+    expect(config.PAYMENT_FORM_ORIGINS).toEqual(PAYMENT_FORM_ORIGINS)
   })
 })

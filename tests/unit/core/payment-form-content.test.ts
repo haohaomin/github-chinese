@@ -93,7 +93,7 @@ afterEach(() => {
 })
 
 describe('付款表单脚本', () => {
-  it('运行时注册（不写进清单），document_start；不声明匹配地址（避免成为安装时申请的主机权限）', async () => {
+  it('运行时注册（不写进清单，由后台按设置与权限注册），document_start；不声明匹配地址', async () => {
     const definition = (await import('../../../src/entrypoints/payment-form.content')).default
     expect(definition.registration).toBe('runtime')
     expect(definition.runAt).toBe('document_start')
@@ -132,6 +132,17 @@ describe('付款表单脚本', () => {
     await updateSettings({ enabled: false })
     await settle()
     expect(text('#submit')).toBe('Save payment information')
+  })
+
+  it('关闭「汉化付款表单」：还原；再开启：翻译', async () => {
+    context = await start()
+    await updateSettings({ paymentForm: false })
+    await settle()
+    expect(text('#card')).toBe('Card Number *')
+    expect(text('#submit')).toBe('Save payment information')
+    await updateSettings({ paymentForm: true })
+    await settle()
+    expect(text('#card')).toBe('卡号 *')
   })
 
   it('总开关关闭时启动：不翻译，开启后翻译', async () => {

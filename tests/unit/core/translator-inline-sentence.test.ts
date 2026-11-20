@@ -22,6 +22,9 @@ function sentenceBundle(tip = true): LocaleBundle {
           'Type / to search': '按 / 搜索',
           'Press / to search': '按下 / 搜索',
           'Use the app': '使用应用',
+          // 句中一段在解析分块前后都能单独命中（见「文档解析中」）
+          versus: '对比',
+          'versus the': '对比',
           ...(tip ? { 'Tip:': '提示：' } : {})
         },
         inline: [
@@ -36,6 +39,7 @@ function sentenceBundle(tip = true): LocaleBundle {
           ['{} Use the app now', '{} 立即使用应用'],
           ['Note {} Use the app now', '注意 {} 立即使用应用'],
           ['Type {} to search', '按 {} 搜索'],
+          ['Compare {} versus the {}', '比较 {} 与 {}'],
           // 译文把槽位放在句首，首段写成空串
           ['Sample {} text', '{} 的示例文本'],
           // 末段只写成一个全角句号
@@ -492,6 +496,20 @@ describe('行内句：文档解析中', () => {
     t.stop()
     translator = undefined
     expect(text('#p')).toBe(`${UNBLOCK}octocat from Sample?…`)
+  })
+
+  it('句中一段先到并单独译出，解析器追加其余文字、插入后续槽位：按原文加追加部分预判，整句译出；停止后还原', async () => {
+    Object.defineProperty(document, 'readyState', { configurable: true, get: () => 'loading' })
+    // 解析器分块：第一块止于「 versus」（static 单独命中），下一块追加「 the 」并插入第二个槽位
+    const t = start('<div id="p">Compare <b>A</b> versus</div>')
+    expect(text('#p')).toBe('Compare A 对比')
+    ;($('#p').lastChild as Text).appendData(' the ')
+    $('#p').append(element('b', 'B'))
+    await settle()
+    expect(text('#p')).toBe('比较 A 与 B')
+    t.stop()
+    translator = undefined
+    expect(text('#p')).toBe('Compare A versus the B')
   })
 })
 

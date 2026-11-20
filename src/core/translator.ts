@@ -37,6 +37,7 @@ import {
   LIST_NAME_SELECTORS,
   MIRROR_ATTRIBUTES,
   MIRROR_SELECTOR,
+  PICKED_TEXT_FIELDS,
   PLACEHOLDER_SELECTOR,
   PLACEHOLDER_TEXTS,
   REENTRY_CONTAINER_CLASS,
@@ -449,6 +450,49 @@ export function createTranslator(options: TranslatorOptions): Translator {
     return LATIN_RE.test(source) ? matcher.translateRaw(source, pages) : undefined
   }
 
+  /** 文本节点的译文：词典未命中时再按所在区域查区域词条（见 ContextualRule） */
+  function translateNode(node: Text, source: string): string | undefined {
+    const translated = translate(source)
+    if (translated !== undefined || !LATIN_RE.test(source) || !matcher.hasContextual(pages)) return translated
+    const parent = node.parentElement
+    if (parent === null) return undefined
+    for (const [selector, hit] of matcher.contextual(source, pages)) {
+      if (parent.closest(selector) !== null) return hit
+    }
+    return undefined
+  }
+
+  // ---------- 选中项写回原文 ----------
+
+  /** 元素内的原文：自身写入的文本节点取写入前的原文 */
+  function sourceTextOf(element: Element): string {
+    let text = ''
+    const walker = doc.createTreeWalker(element, SHOW_TEXT)
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+      const textNode = node as Text
+      text += records.ownText(textNode) ? records.peekText(textNode) : textNode.data
+    }
+    return text
+  }
+
+  /**
+   * 页面脚本把选中项的文字写进表单字段（见 PICKED_TEXT_FIELDS）：字段值是选中项当前文字（译文）时写回原文。
+   * 在 window 上冒泡阶段监听，晚于页面在 document 上委托的点击处理
+   */
+  function onPickedClick(event: Event): void {
+    const target = event.target as Node | null
+    const element = target?.nodeType === ELEMENT_NODE ? (target as Element) : (target?.parentElement ?? null)
+    if (element === null) return
+    for (const [itemSelector, fieldSelector] of PICKED_TEXT_FIELDS) {
+      const item = element.closest(itemSelector)
+      if (item === null) continue
+      const field = doc.querySelector(fieldSelector)
+      const shown = item.textContent ?? ''
+      const source = sourceTextOf(item)
+      if (field !== null && source !== shown && field.getAttribute('value') === shown) field.setAttribute('value', source)
+    }
+  }
+
   // ---------- 未翻译收集 ----------
 
   /** 最具体的页面类型 */
@@ -547,7 +591,7 @@ export function createTranslator(options: TranslatorOptions): Translator {
   /** 按已取得的原文处理单个文本节点；collect 为 false 时不记未翻译 */
   function applyText(node: Text, source: string | Contested, collect: boolean): void {
     if (source === CONTESTED) return
-    const translated = translate(source)
+    const translated = translateNode(node, source)
     if (translated !== undefined) {
       records.writeText(node, source, fitting.fit(node, translated))
       return
@@ -584,7 +628,7 @@ export function createTranslator(options: TranslatorOptions): Translator {
     run.forEach((node, i) => {
       const source = sources[i]!
       if (source === CONTESTED) return
-      const translated = translate(source)
+      const translated = translateNode(node, source)
       if (translated === undefined) {
         restoreSource(node, source)
         misses.push([node, source])
@@ -1769,6 +1813,7 @@ export function createTranslator(options: TranslatorOptions): Translator {
       observer = new host.MutationObserver(onMutations)
       observer.observe(doc, OBSERVE_OPTIONS)
       if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', restoreParsed)
+      doc.defaultView?.addEventListener('click', onPickedClick)
     },
 
     stop() {
@@ -1777,6 +1822,7 @@ export function createTranslator(options: TranslatorOptions): Translator {
       observer?.disconnect()
       observer = null
       doc.removeEventListener('DOMContentLoaded', restoreParsed)
+      doc.defaultView?.removeEventListener('click', onPickedClick)
       timeText.detach()
       const root = doc.documentElement
       if (root) restoreSubtree(root)

@@ -193,5 +193,9 @@ export default {
     [/^(\d+) GitHub Apps?$/, '$1 個 GitHub 應用程式'],
     [/^(\d+) SSH keys?$/, '$1 個 SSH 金鑰'],
     [/^(\d+) keys?$/, '$1 個金鑰']
+  ],
+  attributeRules: [
+    // SSH 密钥、GPG 密钥列表里删除按钮的无障碍名称「Delete <密钥标题>」：密钥标题是用户内容，照录
+    ['li[id^="ssh-key-"] button[aria-label], li[id^="gpg-key-"] button[aria-label]', 'aria-label', /^Delete (.+)$/, '刪除 $1']
   ]
 } satisfies PageDictionary

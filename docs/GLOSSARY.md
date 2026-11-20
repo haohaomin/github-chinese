@@ -278,6 +278,7 @@ export default {
 
 - `labels`、`labelDescriptions`、`labelRegexp` 只收 GitHub、Dependabot 预置的默认标签（第 4 节默认标签行）与名称区域里 GitHub 写入的占位文字，目前只在 `issues/labels.ts`：全站生效，同一原文先注册的生效；区域只有一段文字且整段区分大小写命中时翻译，名称区域（`core/ignore` 的 `LABEL_NAME_SELECTORS`）只查 `labels`，说明区域（`LABEL_DESCRIPTION_SELECTORS`）只查 `labelDescriptions`、再试 `labelRegexp`；static、scoped、regexp 与自定义词条都不参与。区域外同样的文字照常查 static / scoped / regexp：区域外也要译出的说明另收进 static、全站 regexp，译文相同。
 - `listNames` 只收星标列表的预置名称（第 1 节），目前只在 `profile/tabs.ts`（`STAR_LIST_NAMES`）：全站生效，同一原文先注册的生效；星标列表名称区域（`core/ignore` 的 `LIST_NAME_SELECTORS`：星标页卡片标题、列表页标题、星标菜单的列表名与建议项）只有一段文字且整段区分大小写命中时翻译，其余保持原文、不记未翻译；static、scoped、regexp 与自定义词条都不参与，标签区域不查 `listNames`。区域外同样的文字照常查词典，由 `common-ui/actions.ts` 的 static 兜底，译文相同。
+- `contextual`（区域词条，[选择器, 词条表]）只收需要按所在区域决定译不译、怎么译的同形词，目前只在 `common/regions.ts`：国家/地区下拉框与组织资料的位置选择器里的 Chad、Georgia、Jordan，美国州下拉框里的 Georgia。文本节点没有词条时才查，父元素在选择器命中的元素内、整段规范化原文命中时翻译；区域外同样的文字（用户显示名等）保持原文。
 - 同一原文只在一个文件的 `static` 出现。多处页面共用的文字归 `common.ts`；其它文件不要重复收录 common 已有的词条。确需不同译法时用 `scoped`。
 - 含变量（数字、名称、日期）的文字用 `regexp`，变量部分用捕获组原样保留。正则要具体，避免开头就是 `.*`、避免嵌套量词。
 - 时间、日期一律用 `helpers.ts`：`TIME_SOURCE` / `DATE_SOURCE` / `RELATIVE_SOURCE` 拼规则，`translateTime()` 输出。

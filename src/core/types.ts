@@ -10,6 +10,7 @@
  * - attributeRules：按选择器限定的属性规则，仅所属页面类型生效（common 的全局生效）
  * - inline：被行内元素拆开的句子，仅所属页面类型生效（common 的全局生效）
  * - mergeText：整段合并文字的元素选择器，仅所属页面类型生效（common 的全局生效）
+ * - contextual：按所在区域选用的词条表，仅所属页面类型生效（common 的全局生效），词典未命中时再查
  * - labels：默认标签的名称，所有页面生效（全局合并），只用于标签名称区域（core/ignore 的 LABEL_NAME_SELECTORS）
  * - labelDescriptions：默认标签的说明，所有页面生效（全局合并），只用于标签说明区域（LABEL_DESCRIPTION_SELECTORS）
  * - labelRegexp：标签说明区域里说明表未命中时再试的正则，所有页面生效（全局合并），只用于标签说明区域
@@ -50,6 +51,14 @@ export type AttributeRule = readonly [selector: string, attribute: string, patte
  */
 export type InlineRule = readonly [pattern: string | RegExp, translation: string | RegExpReplacer]
 
+/**
+ * 区域词条：[选择器, 词条表]。文本节点没有词条（static / scoped / regexp 与自定义词条都未命中）时再查：
+ * 父元素在选择器命中的元素内（自身或祖先）、整段规范化原文是表中的原文时写入译文（首尾空白同 static）。
+ * 用于只在特定区域翻译的同形词：国家/地区下拉框里的 Chad、Jordan（也是常见人名），Georgia（国家与美国州同名）。
+ * 越具体的页面类型越优先，同一页面类型先收录的优先；只用于文本节点（属性、行内句、整段合并不查）
+ */
+export type ContextualRule = readonly [selector: string, table: Readonly<Record<string, string>>]
+
 export interface PageDictionary {
   /**
    * 全局精确匹配词条：规范化原文 → 译文。
@@ -70,6 +79,8 @@ export interface PageDictionary {
    * （对上的 {#} 越多越优先，同样多时先收录的生效），再按顺序试正则句型
    */
   readonly inline?: readonly InlineRule[]
+  /** 仅所属页面类型生效的区域词条（见 ContextualRule） */
+  readonly contextual?: readonly ContextualRule[]
   /**
    * 仅所属页面类型生效的整段合并选择器：元素内（含后代）的全部文字连成一段匹配，命中时译文写入第一个文本节点、
    * 其余置空；未命中时照常处理（与不声明时相同）。元素内有链接、按钮、表单控件、kbd、时间元素、跳过标签或忽略区域时照常处理。

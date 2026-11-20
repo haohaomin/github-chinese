@@ -2,6 +2,7 @@ import type { PageDictionary } from '../../core/types'
 import { mergeDictionaries } from './helpers'
 import actions from './org-settings/actions'
 import archive from './org-settings/archive'
+import auditEvents from './org-settings/audit-events'
 import billing from './org-settings/billing'
 import code from './org-settings/code'
 import copilot from './org-settings/copilot'
@@ -44,6 +45,7 @@ export default mergeDictionaries(
   thirdParty,
   developer,
   archive,
+  auditEvents,
   people,
   teams,
   rulesets,

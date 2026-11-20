@@ -4,7 +4,7 @@ import { relativeTime } from '../helpers'
 /**
  * 快捷键提示的无障碍文本（Primer KeybindingHint）：按键名小写、以空格连接，多个和弦以 “ then ” 连接，
  * 如 “g then d”“alt shift r”“control shift right angle bracket”；工具提示里另有括号包裹。
- * 按键名原样保留，只译 then 与括号。
+ * 按键名按 KEY_NAMES 译出（字母、数字、功能键大写），和弦内用 + 连接，then 译作“再按”。
  */
 const HINT_MODIFIER = '(?:control|alt|option|command|shift|meta|Windows)'
 const HINT_KEY =
@@ -16,14 +16,84 @@ const HINT_CHORD = `(?:${HINT_MODIFIER} )*${HINT_KEY}`
 /** 至少两个和弦，或带修饰键的单个和弦；单个裸键（enter、tab 等）不收 */
 const HINT_SOURCE = `${HINT_CHORD}(?: then ${HINT_CHORD})+|(?:${HINT_MODIFIER} )+${HINT_KEY}`
 
-function hintLabel(hint: string): string {
-  return hint.replaceAll(' then ', ' 再按 ')
+/** 按键名的译名；不在表中的（字母、数字、f1～f12）大写 */
+const KEY_NAMES: Readonly<Record<string, string>> = {
+  control: 'Ctrl',
+  alt: 'Alt',
+  option: 'Option',
+  command: 'Command',
+  shift: 'Shift',
+  meta: 'Meta',
+  Windows: 'Windows',
+  enter: 'Enter',
+  escape: 'Esc',
+  tab: 'Tab',
+  backspace: 'Backspace',
+  delete: 'Delete',
+  space: '空格键',
+  home: 'Home',
+  end: 'End',
+  insert: 'Insert',
+  'page up': 'Page Up',
+  'page down': 'Page Down',
+  'up arrow': '向上键',
+  'down arrow': '向下键',
+  'left arrow': '向左键',
+  'right arrow': '向右键',
+  'caps lock': 'Caps Lock',
+  'print screen': 'Print Screen',
+  backtick: '反引号',
+  tilde: '波浪号',
+  'exclamation point': '感叹号',
+  at: 'at 符号',
+  hash: '井号',
+  'dollar sign': '美元符号',
+  percent: '百分号',
+  caret: '脱字符',
+  ampersand: '和号',
+  asterisk: '星号',
+  'left parenthesis': '左圆括号',
+  'right parenthesis': '右圆括号',
+  'left bracket': '左方括号',
+  'right bracket': '右方括号',
+  'left curly brace': '左花括号',
+  'right curly brace': '右花括号',
+  'left angle bracket': '左尖括号',
+  'right angle bracket': '右尖括号',
+  underscore: '下划线',
+  dash: '短横线',
+  plus: '加号',
+  equals: '等号',
+  backslash: '反斜杠',
+  pipe: '竖线',
+  semicolon: '分号',
+  colon: '冒号',
+  'single quote': '单引号',
+  'double quote': '双引号',
+  comma: '逗号',
+  period: '句点',
+  'forward slash': '斜杠',
+  'question mark': '问号'
 }
 
-/** 括号包裹的快捷键提示：含“再按”时用全角括号，只有按键名时保留半角 */
+/** 和弦里的一个按键名（多词的 page up、right angle bracket 等整体算一个） */
+const HINT_TOKEN_RE = new RegExp(`(${HINT_MODIFIER}|${HINT_KEY})(?= |$)`, 'g')
+
+function keyName(name: string): string {
+  return (Object.hasOwn(KEY_NAMES, name) ? KEY_NAMES[name] : undefined) ?? name.toUpperCase()
+}
+
+function hintLabel(hint: string): string {
+  return hint
+    .split(' then ')
+    .map(chord => Array.from(chord.matchAll(HINT_TOKEN_RE), ([name]) => keyName(name)).join('+'))
+    .join(' 再按 ')
+}
+
+/** 括号包裹的快捷键提示：含中文时用全角括号，只有英文按键名时用半角 */
 function hintParens(hint: string): string {
   const label = hintLabel(hint)
-  return label === hint ? `(${hint})` : `（${label}）`
+  return /\p{Script=Han}/u.test(label) ? `（${label}）` : `(${label})`
 }
 
 /** 用户状态、功能预览、外观（对比度）、键盘快捷方式对话框、sudo 确认；Never / Today 等通用时间词归 common-ui */

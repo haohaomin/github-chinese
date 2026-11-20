@@ -1,8 +1,21 @@
 import type { PageDictionary } from '../../../core/types'
 
+/** 只在国家/地区选择区域里译的国名（见 contextual）：Chad、Jordan 也是常见人名，Georgia 与美国州同名 */
+export const AMBIGUOUS_COUNTRIES: Readonly<Record<string, string>> = { Chad: '查德', Georgia: '喬治亞', Jordan: '約旦' }
+
+/** 只在美国州选择区域里译的州名：Georgia 与国名同名 */
+export const AMBIGUOUS_US_STATES: Readonly<Record<string, string>> = { Georgia: '喬治亞州' }
+
+/** 国家/地区选择区域：账单地址等表单的国家/地区下拉框、组织资料的位置选择器 */
+const COUNTRY_SELECTOR = 'select[name*="country"] option, .js-org-country-item'
+
+/** 美国州选择区域：账单地址的州下拉框 */
+const US_STATE_SELECTOR = '#region_us_states option'
+
 /**
  * 国家/地区、美国州与属地、加拿大省与地区：联系销售、企业试用、账单地址等表单的下拉选项（页面类型 common，全站生效）。
- * 不收录：有歧义的同名地名（Georgia 既是国家又是美国州）；常见人名同形的国名（Chad、Jordan），避免误译用户显示名。
+ * 有歧义的同名地名（Georgia 既是国家又是美国州）、常见人名同形的国名（Chad、Jordan）不进 static，避免误译用户显示名：
+ * 只在国家/地区、美国州选择区域里译（contextual）。
  * 国家/地区用 Unicode CLDR 繁体中文（zh-Hant）名称，与 Chrome、Android、iOS 繁中界面同源；
  * 两个刚果用 CLDR 的变体名「剛果共和國」「剛果民主共和國」：标准名「剛果（布拉薩）」带括号，原文 Congo - Brazzaville 没有标点。
  * 账单地址表单的另一套英文名有对应 CLDR 名称的用 CLDR 名称（Czech Republic、Swaziland 用 CLDR 的变体名「捷克共和國」「史瓦濟蘭」），
@@ -306,7 +319,7 @@ export default {
     'Wallis and Futuna Islands': '瓦利斯群島和富圖那群島',
     Åland: '奧蘭群島',
 
-    // 美国州与属地（Georgia 有歧义，不收）
+    // 美国州与属地（Georgia 有歧义，见 contextual）
     Alabama: '阿拉巴馬州',
     Alaska: '阿拉斯加州',
     Arizona: '亞利桑那州',
@@ -377,5 +390,9 @@ export default {
     Quebec: '魁北克省',
     Saskatchewan: '薩克其萬省',
     Yukon: '育空地區'
-  }
+  },
+  contextual: [
+    [COUNTRY_SELECTOR, AMBIGUOUS_COUNTRIES],
+    [US_STATE_SELECTOR, AMBIGUOUS_US_STATES]
+  ]
 } satisfies PageDictionary

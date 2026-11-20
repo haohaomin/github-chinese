@@ -45,6 +45,7 @@ const zhCN = {
   general: '常规',
   translation: '汉化',
   paymentForm: '汉化付款表单',
+  paymentFormHelp: '仅翻译表单文字。不读取、不发送付款信息。',
   translateTime: '时间本地化',
   translateTitle: '翻译标题',
   languageSection: '语言',

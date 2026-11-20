@@ -18,6 +18,12 @@ export const GITHUB_ORIGINS = [
   'https://support.github.com/*'
 ]
 
+/**
+ * 付款表单的托管页（信用卡表单，以跨源 iframe 嵌在 github.com 页面里），安装时申请；
+ * 与 src/shared/payment-form.ts 保持一致（tests/unit/shared/payment-form.test.ts 核对）
+ */
+export const PAYMENT_FORM_ORIGINS = ['https://www.zuora.com/*']
+
 /** 企业版站点（自有域名）按需申请的主机权限：用户在弹出页、设置页启用某个站点时只申请该站点（见 src/shared/enterprise.ts） */
 export const OPTIONAL_ORIGINS = ['*://*/*']
 
@@ -108,9 +114,9 @@ export default defineConfig({
     // scripting：按当前语言注册词典内容脚本（页面开始解析前就绪），动态导入失败（Firefox、Safari 不动态导入）时注入词典脚本；
     // Chromium、Safari 安装、更新后向已打开的 GitHub 标签页注入脚本（Firefox 自动注入）；为已授权的企业版站点注册内容脚本。
     // activeTab：打开弹出页时读取当前页的地址、识别是否是企业版站点。scripting、activeTab 均无安装、更新提示。
-    // 可选主机权限不在安装、更新时申请，也无提示
+    // 可选主机权限不在安装、更新时申请，也无提示。付款表单的托管页随 GitHub 的站点在安装时申请（「汉化付款表单」默认开启）
     permissions: ['storage', 'scripting', 'activeTab'],
-    host_permissions: GITHUB_ORIGINS,
+    host_permissions: [...GITHUB_ORIGINS, ...PAYMENT_FORM_ORIGINS],
     optional_host_permissions: OPTIONAL_ORIGINS,
     action: {
       default_title: '__MSG_extName__'

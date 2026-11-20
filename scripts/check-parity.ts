@@ -2,7 +2,7 @@
  * 校验繁体词典与简体词典结构一致。
  * 同名文件；具名导出相同；static / scoped / labels / labelDescriptions / listNames / issueTypes 键集合相同；
  * 正则（regexp、labelRegexp）数量、顺序、source、flags 相同；ignore、mergeText 相同；
- * 属性规则的选择器、属性名、正则相同；行内句的句型相同；语言包注册顺序与页面类型相同。
+ * 属性规则的选择器、属性名、正则相同；行内句的句型相同；区域词条的选择器与词条表键集合相同；语言包注册顺序与页面类型相同。
  * 选择器里含中文的引号属性值（按译文匹配的选择器，简繁各用各的译文）不比。
  * 用法：bun run check:parity [文件...]
  *   指定文件（简体或繁体目录下的路径均可）时只对照这些文件；index.ts 对照语言包注册顺序
@@ -74,6 +74,19 @@ function selectorShape(selector: unknown): unknown {
 function diffSelectors(label: string, cn: readonly string[] | undefined, tw: readonly string[] | undefined): string[] {
   const shape = (list: readonly string[] | undefined): string => JSON.stringify((list ?? []).map(selectorShape))
   return shape(cn) === shape(tw) ? [] : [`${label} 不同：${JSON.stringify(cn ?? [])} ≠ ${JSON.stringify(tw ?? [])}`]
+}
+
+/** 区域词条：选择器逐条相同，各词条表的键集合相同 */
+function diffContextual(cn: PageDictionary, tw: PageDictionary): string[] {
+  const cnRules = cn.contextual ?? []
+  const twRules = tw.contextual ?? []
+  const problems = diffSelectors(
+    'contextual 选择器',
+    cnRules.map(([selector]) => selector),
+    twRules.map(([selector]) => selector)
+  )
+  cnRules.forEach(([, table], index) => problems.push(...diffKeys(`contextual[${index}]`, table, twRules[index]?.[1])))
+  return problems
 }
 
 function describePattern(pattern: string | RegExp | undefined): string {
@@ -151,7 +164,8 @@ async function compareFile(file: string): Promise<string[]> {
     ...diffSelectors('ignore', cn.ignore, tw.ignore),
     ...diffAttributeRules(cn, tw),
     ...diffInline(cn, tw),
-    ...diffSelectors('mergeText', cn.mergeText, tw.mergeText)
+    ...diffSelectors('mergeText', cn.mergeText, tw.mergeText),
+    ...diffContextual(cn, tw)
   ]
 }
 

@@ -1647,6 +1647,7 @@ describe('与控制器一起：排除路径', () => {
         timeFormat: 'default',
         customTimeFormat: 'YYYY-MM-DD HH:mm',
         translateTitle: true,
+        paymentForm: true,
         excludedPaths,
         language: 'auto',
         uiLanguage: 'auto',

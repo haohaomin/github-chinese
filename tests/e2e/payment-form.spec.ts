@@ -1,16 +1,12 @@
-import { cp, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
 import { test as base, chromium, expect, type BrowserContext, type FrameLocator, type Worker } from '@playwright/test'
 import { EXTENSION_PATH } from './fixtures'
 
 /**
  * 付款表单：github.com 页面里的 Zuora 托管页（www.zuora.com 的跨源 iframe）。
- * 浏览器的授权询问无法自动点击：加载清单预授 www.zuora.com 的扩展副本，等同在设置页开启「汉化付款表单」后的状态
- * （授权即由后台注册付款表单脚本，见 src/shared/payment-form.ts）。两个站点的请求都由本地页面应答
+ * 托管页的主机权限随清单授予，「汉化付款表单」默认开启：后台启动即注册付款表单脚本（见 src/shared/payment-form.ts）。
+ * 两个站点的请求都由本地页面应答
  */
 
-const ZUORA_ORIGIN = 'https://www.zuora.com/*'
 const FORM_URL =
   'https://www.zuora.com/apps/PublicHostedPageLite.do?method=requestPage&host=https%3A%2F%2Fgithub.com%2Fsponsors%2Foctocat%2Fsponsorships&id=fixture&style=inline'
 const CHECKOUT_URL = 'https://github.com/sponsors/octocat/sponsorships'
@@ -45,25 +41,13 @@ interface ChromeScripting {
   readonly scripting: { getRegisteredContentScripts(): Promise<{ id: string; allFrames?: boolean }[]> }
 }
 
-/** 扩展副本：清单预授 www.zuora.com */
-async function grantedCopy(): Promise<string> {
-  const dir = await mkdtemp(join(tmpdir(), 'gcn-payment-form-'))
-  await cp(EXTENSION_PATH, dir, { recursive: true })
-  const path = join(dir, 'manifest.json')
-  const manifest = JSON.parse(await readFile(path, 'utf8')) as { host_permissions?: string[] }
-  manifest.host_permissions = [...(manifest.host_permissions ?? []), ZUORA_ORIGIN]
-  await writeFile(path, JSON.stringify(manifest))
-  return dir
-}
-
 const test = base.extend<{ context: BrowserContext; worker: Worker }>({
   context: async ({ headless }, use) => {
-    const dir = await grantedCopy()
     const context = await chromium.launchPersistentContext('', {
       channel: 'chromium',
       headless,
       locale: 'en-US',
-      args: [`--disable-extensions-except=${dir}`, `--load-extension=${dir}`, '--lang=zh-CN']
+      args: [`--disable-extensions-except=${EXTENSION_PATH}`, `--load-extension=${EXTENSION_PATH}`, '--lang=zh-CN']
     })
     await context.route('https://github.com/**', route => route.fulfill({ contentType: 'text/html; charset=utf-8', body: embedding }))
     await context.route('https://shop.example.com/**', route => route.fulfill({ contentType: 'text/html; charset=utf-8', body: embedding }))
@@ -72,7 +56,6 @@ const test = base.extend<{ context: BrowserContext; worker: Worker }>({
       await use(context)
     } finally {
       await context.close()
-      await rm(dir, { recursive: true, force: true })
     }
   },
   worker: async ({ context }, use) => {

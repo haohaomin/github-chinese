@@ -1,6 +1,6 @@
 /**
  * 内置词库的浏览（设置页）：语言包展开成「原文 → 译文」的行。
- * 全局词条（static）、名称区域的词条（标签、星标列表、议题类型）为全局；页面词条（scoped）、正则、行内句规则注明页面类型。
+ * 全局词条（static）、名称区域的词条（标签、星标列表、议题类型）为全局；页面词条（scoped）、正则、行内句规则、区域词条注明页面类型。
  * 同一原文的全局词条先收录的生效，只列生效的一条；译文是函数（按匹配结果生成）的显示为「—」
  */
 import { tableEntries } from '../core/table'
@@ -52,6 +52,8 @@ export function dictionaryRows(bundle: LocaleBundle): DictionaryRow[] {
     for (const [source, target] of tableEntries(dictionary.scoped)) rows.push(row(source, target, page))
     rows.push(...ruleRows(dictionary.regexp, page))
     for (const [pattern, target] of dictionary.inline ?? []) rows.push(row(String(pattern), targetText(target), page))
+    for (const [, table] of dictionary.contextual ?? [])
+      for (const [source, target] of Object.entries(table)) rows.push(row(source, target, page))
     addGlobal('labels', tableEntries(dictionary.labels))
     addGlobal('labelDescriptions', tableEntries(dictionary.labelDescriptions))
     rows.push(...ruleRows(dictionary.labelRegexp))

@@ -96,12 +96,12 @@ describe('构建标识（wxt.config.ts）', () => {
 
 describe('清单权限', () => {
   it.each(['chrome', 'edge', 'firefox', 'safari'])(
-    '%s：申请 storage、scripting、activeTab，主机权限只有 GitHub 的站点，企业版站点为可选；不声明快捷键命令',
+    '%s：申请 storage、scripting、activeTab，主机权限只有 GitHub 的站点与付款表单的托管页，企业版站点为可选；不声明快捷键命令',
     async browser => {
-      const { default: config, GITHUB_ORIGINS, OPTIONAL_ORIGINS } = await loadConfig()
+      const { default: config, GITHUB_ORIGINS, OPTIONAL_ORIGINS, PAYMENT_FORM_ORIGINS } = await loadConfig()
       const manifest = (await (config.manifest as UserManifestFn)({ ...ENV, browser })) as UserManifest
       expect(manifest.permissions).toEqual(['storage', 'scripting', 'activeTab'])
-      expect(manifest.host_permissions).toEqual(GITHUB_ORIGINS)
+      expect(manifest.host_permissions).toEqual([...GITHUB_ORIGINS, ...PAYMENT_FORM_ORIGINS])
       expect(manifest.optional_host_permissions).toEqual(OPTIONAL_ORIGINS)
       expect(OPTIONAL_ORIGINS).toEqual(['*://*/*'])
       expect(manifest.commands).toBeUndefined()

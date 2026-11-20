@@ -30,6 +30,11 @@ export interface Settings extends AccelerateSettings {
   /** 翻译标签页标题 */
   readonly translateTitle: boolean
   /**
+   * 汉化付款表单：翻译 github.com 页面里的信用卡表单（www.zuora.com 的托管页），随汉化开关启停；
+   * 还须有托管页的主机权限（安装时申请，可在浏览器里撤销，见 shared/payment-form）
+   */
+  readonly paymentForm: boolean
+  /**
    * 排除路径。以 / 开头；* 匹配单段，** 匹配任意多段；
    * 命中路径本身及其下级路径。例：/settings、/*\/*\/wiki
    */
@@ -96,6 +101,7 @@ export const DEFAULT_SETTINGS: Settings = {
   timeFormat: 'default',
   customTimeFormat: DEFAULT_CUSTOM_TIME_FORMAT,
   translateTitle: true,
+  paymentForm: true,
   excludedPaths: [],
   language: 'auto',
   uiLanguage: 'auto',
@@ -174,6 +180,7 @@ export function mergeSettings(stored: unknown): Settings {
     timeFormat: isTimeFormatMode(value.timeFormat) ? value.timeFormat : DEFAULT_SETTINGS.timeFormat,
     customTimeFormat: sanitizeTimeFormat(value.customTimeFormat),
     translateTitle: pickBoolean('translateTitle', DEFAULT_SETTINGS.translateTitle),
+    paymentForm: pickBoolean('paymentForm', DEFAULT_SETTINGS.paymentForm),
     excludedPaths: isStringArray(value.excludedPaths) ? value.excludedPaths : DEFAULT_SETTINGS.excludedPaths,
     language: isPageLocalePreference(value.language) ? value.language : DEFAULT_SETTINGS.language,
     uiLanguage: isUiLanguagePreference(value.uiLanguage) ? value.uiLanguage : DEFAULT_SETTINGS.uiLanguage,
@@ -227,8 +234,9 @@ export async function updateSettings(patch: SettingsPatch): Promise<Settings> {
   return next
 }
 
-export function watchSettings(callback: (settings: Settings) => void): () => void {
-  return settingsItem.watch(value => callback(mergeSettings(value)))
+/** 设置变化时回调合并后的新设置与变化前的设置 */
+export function watchSettings(callback: (settings: Settings, previous: Settings) => void): () => void {
+  return settingsItem.watch((value, previous) => callback(mergeSettings(value), mergeSettings(previous)))
 }
 
 export async function getCustomEntries(): Promise<CustomEntries> {

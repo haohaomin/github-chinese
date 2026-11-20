@@ -508,18 +508,28 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     misses: ['Changed GitHub Pages visibility to private']
   },
   {
-    hits: [
-      ['Set policy to default workflow token permission to read for', '为以下存储库将默认工作流令牌权限策略设为只读'],
-      ['Set policy to default workflow token permission to write for', '为以下存储库将默认工作流令牌权限策略设为读写']
-    ],
-    misses: ['Set policy to default workflow token permission to admin for']
+    hits: [['Logged in via social identity octocat@example.com', '通过社交身份 octocat@example.com 登录']],
+    misses: ['Logged in via social identity']
   },
   {
     hits: [
-      ['Set policy to default workflow token can create or approve PR to true for', '为以下存储库允许默认工作流令牌创建或批准拉取请求'],
-      ['Set policy to default workflow token can create or approve PR to false for', '为以下存储库禁止默认工作流令牌创建或批准拉取请求']
+      // 名称全是英文时用半角括号，含汉字时用全角括号
+      ['Removed personal access token (deploy)', '移除了个人访问令牌 (deploy)'],
+      ['Removed personal access token (部署)', '移除了个人访问令牌（部署）']
     ],
-    misses: ['Set policy to default workflow token can create or approve PR to maybe for']
+    misses: ['Removed personal access token']
+  },
+  {
+    hits: [['Created personal access token (deploy) with no permissions', '创建了无权限的个人访问令牌 (deploy)']],
+    misses: ['Created personal access token (deploy) with all permissions']
+  },
+  {
+    hits: [['All user tokens for octo-app have been requested to be revoked', '已请求撤销 octo-app 的所有用户令牌']],
+    misses: ['All user tokens for have been requested to be revoked']
+  },
+  {
+    hits: [['All tokens for octo-app have been requested to be revoked', '已请求撤销 octo-app 的所有令牌']],
+    misses: ['All tokens for octo-app have been revoked']
   },
   { hits: [['Updated profile picture for octo-org/octo-team', '更新了 octo-org/octo-team 的头像']], misses: ['Updated profile picture'] },
   {
@@ -527,10 +537,19 @@ const REGEXP_CASES: readonly RegExpCase[] = [
       // 国家/地区在前，去掉空项与重名；城市、地区没有收录时照录
       ['Hong Kong, , Hong Kong', '中国香港'],
       ['Tokyo, Tokyo, Japan', '日本 Tokyo'],
-      ['Austin, Texas, United States', '美国 得克萨斯州 Austin']
+      ['Austin, Texas, United States', '美国 得克萨斯州 Austin'],
+      // 有歧义的国名按所在一段译：国家/地区一段是国名，美国的地区一段是州名
+      ['Tbilisi, , Georgia', '格鲁吉亚 Tbilisi'],
+      ['Atlanta, Georgia, United States', '美国 佐治亚州 Atlanta'],
+      ['Amman, , Jordan', '约旦 Amman'],
+      ['N’Djamena, , Chad', '乍得 N’Djamena'],
+      // 中国：省级行政区用简称，直辖市作城市时同样译出，其余城市照录
+      ['Wuxi, Jiangsu, China', '中国 江苏 Wuxi'],
+      ['Shanghai, , China', '中国 上海'],
+      ['Beijing, Beijing, China', '中国 北京']
     ],
     // 国家/地区名未收录、不是三段时不改写
-    misses: ['Springfield, Somewhere, Atlantis', 'Hong Kong, Hong Kong']
+    misses: ['Springfield, Somewhere, Atlantis', 'Hong Kong, Hong Kong', 'Springfield, Georgia, Constructor']
   },
 
   // 已授权的应用
@@ -1448,6 +1467,39 @@ describe('settings-developer 被链接拆开的句子（DOM）', () => {
     expect(document.getElementById('blocked')?.textContent).toBe('阻止了用户 octocat')
     expect(document.getElementById('owner')?.textContent).toBe('将 octocat 添加为 acme 企业的所有者')
     expect(document.getElementById('payment')?.textContent).toBe('octocat 向 acme 企业添加了付款详细信息')
+  })
+
+  it('安全日志：与组织审核日志共用的事件说明（Web 钩子、复刻策略、工作流令牌、Copilot 审查强度）', () => {
+    const org = '<span class="context"><a href="/octo-org">octo-org</a></span>'
+    start(
+      [
+        '<div id="hook">Installed <span class="context"><a href="/organizations/octo-org/settings/hooks/1">webhook</a></span> for <a href="/octo-org">octo-org</a> with <span class="context">push</span> events</div>',
+        '<div id="rename">Renamed the repository <span class="context">octo-org/old</span> to <a href="/octo-org/new">octo-org/new</a></div>',
+        `<div id="fork">Set policy to require approval for fork pull request workflows from <span class="context">first-time contributors</span> for ${org}.</div>`,
+        // 页面的说明前后有换行缩进；句尾槽位后的译文写进其后的空白文本
+        '<div id="token">\n  Set policy to default workflow token can create or approve PR to false for <span class="context"><a href="/enterprises/acme">acme</a></span>\n</div>',
+        `<div id="effort">Copilot review effort default changed from <span class="context">Adaptive</span> to <span class="context">not set</span> for the ${org} organization</div>`
+      ].join('')
+    )
+    const text = (id: string): string | undefined => document.getElementById(id)?.textContent?.replace(/\s+/g, ' ')
+    expect(text('hook')).toBe('安装了 Web 钩子 于 octo-org 并订阅 push 事件')
+    expect(text('rename')).toBe('将存储库 octo-org/old 重命名为 octo-org/new')
+    expect(text('fork')).toBe('将策略设为来自 首次贡献者 的复刻拉取请求工作流需经批准，适用于 octo-org。')
+    expect(text('token')?.trim()).toBe('为 acme 禁止默认工作流令牌创建或批准拉取请求')
+    expect(text('effort')).toBe('Copilot 审查强度默认值从 自适应 更改为 未设置 于 octo-org 组织')
+  })
+
+  it('SSH 密钥列表：删除按钮的无障碍名称译出，密钥标题照录；列表外同样的名称不改', () => {
+    start(
+      [
+        '<ul><li class="Box-row" id="ssh-key-1"><strong>工作电脑</strong>',
+        '<button type="button" class="Button--danger" aria-label="Delete 工作电脑"><span class="Button-label">Delete</span></button></li></ul>',
+        '<button id="outside" type="button" aria-label="Delete octocat">x</button>'
+      ].join('')
+    )
+    const button = document.querySelector('#ssh-key-1 button')
+    expect(button?.getAttribute('aria-label')).toBe('删除 工作电脑')
+    expect(document.getElementById('outside')?.getAttribute('aria-label')).toBe('Delete octocat')
   })
 })
 

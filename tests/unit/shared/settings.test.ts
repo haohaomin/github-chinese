@@ -420,12 +420,23 @@ describe('存储读写', () => {
     }
   )
 
-  it('watchSettings 回调合并后的设置', async () => {
+  it('watchSettings 回调合并后的设置与变化前的设置', async () => {
     const callback = vi.fn()
     const stop = watchSettings(callback)
     await settingsItem.setValue({ enabled: false, excludedPaths: 'bad' as never })
-    expect(callback).toHaveBeenLastCalledWith({ ...DEFAULT_SETTINGS, enabled: false })
+    expect(callback).toHaveBeenLastCalledWith({ ...DEFAULT_SETTINGS, enabled: false }, DEFAULT_SETTINGS)
+    await settingsItem.setValue({ enabled: false, paymentForm: false })
+    expect(callback).toHaveBeenLastCalledWith(
+      { ...DEFAULT_SETTINGS, enabled: false, paymentForm: false },
+      { ...DEFAULT_SETTINGS, enabled: false }
+    )
     stop()
+  })
+
+  it('汉化付款表单默认开启；类型不符时按默认', () => {
+    expect(DEFAULT_SETTINGS.paymentForm).toBe(true)
+    expect(mergeSettings({ paymentForm: false }).paymentForm).toBe(false)
+    expect(mergeSettings({ paymentForm: 'no' }).paymentForm).toBe(true)
   })
 
   it('setCustomEntries 过滤后写入', async () => {

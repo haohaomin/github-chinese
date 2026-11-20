@@ -10,6 +10,7 @@ import {
   normalizeEnterpriseHost
 } from '../../../src/shared/enterprise'
 import { GITHUB_ORIGINS } from '../../../src/shared/github'
+import { PAYMENT_FORM_ORIGINS } from '../../../src/shared/payment-form'
 import { fakePermissions } from './fake-permissions'
 
 afterEach(() => {
@@ -115,9 +116,9 @@ describe('已授权的企业版站点', () => {
 })
 
 describe('grantedOrigins', () => {
-  it('读取已授予的主机权限（含清单里的 GitHub 站点）', async () => {
+  it('读取已授予的主机权限（含清单里的 GitHub 站点与付款表单的托管页）', async () => {
     fakePermissions.granted.push('*://github.example.com/*')
-    expect(await grantedOrigins()).toEqual([...GITHUB_ORIGINS, '*://github.example.com/*'])
+    expect(await grantedOrigins()).toEqual([...GITHUB_ORIGINS, ...PAYMENT_FORM_ORIGINS, '*://github.example.com/*'])
   })
 
   it('读取失败、没有 origins 时为空', async () => {

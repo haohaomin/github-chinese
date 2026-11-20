@@ -147,6 +147,32 @@ describe('textSource：文档解析中，解析器追加到已写入节点', () 
   })
 })
 
+describe('peekText：只读预判', () => {
+  it('自身写入时返回原文；没有记录、外部改写时返回当前文字', () => {
+    const [node, other] = textsIn('Edit', 'Close') as [Text, Text]
+    records.writeText(node, 'Edit', '编辑')
+    expect(records.peekText(node)).toBe('Edit')
+    expect(records.peekText(other)).toBe('Close')
+    setReadyState('complete')
+    node.appendData(' file')
+    expect(records.peekText(node)).toBe('编辑 file')
+  })
+
+  it('文档解析中被解析器追加：与 textSource 一致返回原文加追加部分，不改记录', () => {
+    setReadyState('loading')
+    const [node] = textsIn(' and') as [Text]
+    records.writeText(node, ' and', '和')
+    node.appendData(' the ')
+    expect(records.peekText(node)).toBe(' and the ')
+    expect(records.hasText(node)).toBe(true)
+    expect(records.textSource(node)).toBe(' and the ')
+    const [, last] = textsIn('Opened by ', 'octo') as [Text, Text]
+    records.writeText(last, 'octo', '')
+    last.appendData('cat')
+    expect(records.peekText(last)).toBe('octocat')
+  })
+})
+
 describe('textSource：解析结束后', () => {
   it.each(['interactive', 'complete'] as const)('%s：追加也按外部改写处理，当前值成为新原文', state => {
     setReadyState(state)

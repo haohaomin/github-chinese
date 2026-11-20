@@ -78,7 +78,14 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
+/** 付款表单另测（见「付款表单」）：撤销托管页的权限，不注册付款表单脚本、不注入 */
+function withoutPaymentForm(): void {
+  fakePermissions.withheld.push(...PAYMENT_FORM_ORIGINS)
+}
+
 describe('background', () => {
+  beforeEach(withoutPaymentForm)
+
   it('启动时按设置同步徽标', async () => {
     await settingsItem.setValue({ ...DEFAULT_SETTINGS, enabled: false, uiLanguage: 'zh-CN' })
     background.main()
@@ -440,6 +447,8 @@ describe('自定义词条、屏蔽规则转发', () => {
 })
 
 describe('扩展安装、更新后向已打开的 GitHub 页面注入桥接与内容脚本', () => {
+  beforeEach(withoutPaymentForm)
+
   const BRIDGE = { files: ['/content-scripts/turbo-bridge.js'], world: 'MAIN' }
   const CONTENT = { files: ['/content-scripts/content.js'] }
   const STATUS = { active: true, excluded: false, pages: ['repository'], translatedCount: 3 }
@@ -906,6 +915,8 @@ describe('下载次数', () => {
 })
 
 describe('企业版站点', () => {
+  beforeEach(withoutPaymentForm)
+
   const BRIDGE = { files: ['/content-scripts/turbo-bridge.js'], world: 'MAIN' }
   const CONTENT = { files: ['/content-scripts/content.js'] }
 
@@ -1122,9 +1133,18 @@ describe('付款表单', () => {
       .map(({ target, files }) => [target.tabId, files])
   }
 
-  /** 等待权限事件触发的同步、注入完成 */
+  /** 等待权限、设置事件触发的同步、注入完成 */
   async function settleAll(): Promise<void> {
     for (let i = 0; i < 5; i++) await settle()
+  }
+
+  /** 已打开的标签页：结账页、代码片段页、其他站点；返回结账页 */
+  async function openTabs(): Promise<Browser.tabs.Tab> {
+    const page = await fakeBrowser.tabs.create({ url: CHECKOUT })
+    await fakeBrowser.tabs.create({ url: 'https://gist.github.com/octocat' })
+    await fakeBrowser.tabs.create({ url: 'https://example.com/' })
+    vi.mocked(fakeBrowser.scripting.executeScript).mockClear()
+    return page
   }
 
   beforeEach(() => {
@@ -1132,8 +1152,7 @@ describe('付款表单', () => {
     vi.spyOn(fakeBrowser.tabs, 'sendMessage').mockRejectedValue(new Error('Could not establish connection. Receiving end does not exist.'))
   })
 
-  it('启动时已授权：注册付款表单脚本（托管页，所有框架），不当作企业版站点', async () => {
-    fakePermissions.granted.push(...PAYMENT_FORM_ORIGINS)
+  it('默认（设置开启，权限随清单授予）：注册付款表单脚本（托管页，所有框架），不当作企业版站点', async () => {
     background.main()
     await settleAll()
     expect(registeredIds()).toEqual([LOCALE_SCRIPT_ID, PAYMENT_FORM_SCRIPT_ID])
@@ -1148,46 +1167,90 @@ describe('付款表单', () => {
     expect(scripts.registered.find(script => script.id === LOCALE_SCRIPT_ID)?.matches).toEqual([...GITHUB_ORIGINS])
   })
 
-  it('未授权：不注册', async () => {
+  it('设置关闭：不注册', async () => {
+    await updateSettings({ paymentForm: false })
     background.main()
     await settleAll()
     expect(registeredIds()).toEqual([LOCALE_SCRIPT_ID])
   })
 
-  it('授权后注册，并向已打开的 github.com 页面的所有框架注入；其他站点的标签页不注入', async () => {
+  it('权限被撤销：不注册', async () => {
+    fakePermissions.withheld.push(...PAYMENT_FORM_ORIGINS)
     background.main()
     await settleAll()
-    const page = await fakeBrowser.tabs.create({ url: CHECKOUT })
-    await fakeBrowser.tabs.create({ url: 'https://gist.github.com/octocat' })
-    await fakeBrowser.tabs.create({ url: 'https://example.com/' })
-    vi.mocked(fakeBrowser.scripting.executeScript).mockClear()
+    expect(registeredIds()).toEqual([LOCALE_SCRIPT_ID])
+  })
+
+  it('关闭设置：注销，不注入；再开启：注册，并向已打开的 github.com 页面的所有框架注入，其他站点的标签页不注入', async () => {
+    background.main()
+    await settleAll()
+    const page = await openTabs()
+    await updateSettings({ paymentForm: false })
+    await settleAll()
+    expect(registeredIds()).toEqual([LOCALE_SCRIPT_ID])
+    expect(frameInjections()).toEqual([])
+    await updateSettings({ paymentForm: true })
+    await settleAll()
+    expect(registeredIds()).toEqual([LOCALE_SCRIPT_ID, PAYMENT_FORM_SCRIPT_ID])
+    expect(frameInjections()).toEqual([[page.id, FILES]])
+  })
+
+  it('改其他设置：不注入', async () => {
+    background.main()
+    await settleAll()
+    await openTabs()
+    await updateSettings({ language: 'zh-TW' })
+    await settleAll()
+    expect(frameInjections()).toEqual([])
+  })
+
+  it('设置开启时开启但权限被撤销：不注入', async () => {
+    fakePermissions.withheld.push(...PAYMENT_FORM_ORIGINS)
+    await updateSettings({ paymentForm: false })
+    background.main()
+    await settleAll()
+    await openTabs()
+    await updateSettings({ paymentForm: true })
+    await settleAll()
+    expect(registeredIds()).toEqual([LOCALE_SCRIPT_ID])
+    expect(frameInjections()).toEqual([])
+  })
+
+  it('撤销权限：注销；重新授权：注册并向已打开的 github.com 页面注入', async () => {
+    background.main()
+    await settleAll()
+    const page = await openTabs()
+    await fakePermissions.revoke(PAYMENT_FORM_ORIGINS)
+    await settleAll()
+    expect(registeredIds()).toEqual([LOCALE_SCRIPT_ID])
     await fakePermissions.grant(PAYMENT_FORM_ORIGINS)
     await settleAll()
     expect(registeredIds()).toEqual([LOCALE_SCRIPT_ID, PAYMENT_FORM_SCRIPT_ID])
     expect(frameInjections()).toEqual([[page.id, FILES]])
   })
 
+  it('设置关闭时重新授权：不注册、不注入', async () => {
+    fakePermissions.withheld.push(...PAYMENT_FORM_ORIGINS)
+    await updateSettings({ paymentForm: false })
+    background.main()
+    await settleAll()
+    await openTabs()
+    await fakePermissions.grant(PAYMENT_FORM_ORIGINS)
+    await settleAll()
+    expect(registeredIds()).toEqual([LOCALE_SCRIPT_ID])
+    expect(frameInjections()).toEqual([])
+  })
+
   it('授权企业版站点：不注入付款表单脚本', async () => {
     background.main()
     await settleAll()
-    await fakeBrowser.tabs.create({ url: CHECKOUT })
-    vi.mocked(fakeBrowser.scripting.executeScript).mockClear()
+    await openTabs()
     await fakePermissions.grant(enterpriseOrigins(ENTERPRISE_HOST))
     await settleAll()
     expect(frameInjections()).toEqual([])
   })
 
-  it('撤销后注销', async () => {
-    fakePermissions.granted.push(...PAYMENT_FORM_ORIGINS)
-    background.main()
-    await settleAll()
-    await fakePermissions.revoke(PAYMENT_FORM_ORIGINS)
-    await settleAll()
-    expect(registeredIds()).toEqual([LOCALE_SCRIPT_ID])
-  })
-
   it('关闭总开关：付款表单脚本保留（脚本随设置停止翻译）', async () => {
-    fakePermissions.granted.push(...PAYMENT_FORM_ORIGINS)
     background.main()
     await settleAll()
     await updateSettings({ enabled: false })
@@ -1196,10 +1259,12 @@ describe('付款表单', () => {
   })
 
   it.each([
-    ['已授权', true, [[1, FILES]]],
-    ['未授权', false, []]
-  ] as const)('%s时更新扩展：补回注册；已授权时向已打开的 github.com 页面注入', async (_name, granted, expected) => {
-    if (granted) fakePermissions.granted.push(...PAYMENT_FORM_ORIGINS)
+    ['生效', {}, [], [[1, FILES]]],
+    ['设置关闭', { paymentForm: false }, [], []],
+    ['权限被撤销', {}, PAYMENT_FORM_ORIGINS, []]
+  ] as const)('%s时更新扩展：补回注册；生效时向已打开的 github.com 页面注入', async (_name, patch, withheld, expected) => {
+    await updateSettings(patch)
+    fakePermissions.withheld.push(...withheld)
     const tabs = [
       { id: 1, url: CHECKOUT },
       { id: 2, url: 'https://example.com/' }
@@ -1211,12 +1276,11 @@ describe('付款表单', () => {
     vi.mocked(fakeBrowser.scripting.executeScript).mockClear()
     await fakeBrowser.runtime.onInstalled.trigger({ reason: 'update' } as never)
     await settleAll()
-    expect(registeredIds()).toEqual(granted ? [LOCALE_SCRIPT_ID, PAYMENT_FORM_SCRIPT_ID] : [LOCALE_SCRIPT_ID])
+    expect(registeredIds()).toEqual(expected.length > 0 ? [LOCALE_SCRIPT_ID, PAYMENT_FORM_SCRIPT_ID] : [LOCALE_SCRIPT_ID])
     expect(frameInjections()).toEqual(expected)
   })
 
   it('注册失败：记录错误，不影响词典脚本', async () => {
-    fakePermissions.granted.push(...PAYMENT_FORM_ORIGINS)
     const error = vi.spyOn(console, 'error').mockImplementation(() => undefined)
     vi.mocked(fakeBrowser.scripting.registerContentScripts).mockImplementation((async (items: { id: string }[]) => {
       if (items.some(item => item.id === PAYMENT_FORM_SCRIPT_ID)) throw new Error('注册失败')

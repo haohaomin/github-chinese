@@ -35,7 +35,10 @@ type AttributeRecord = WriteRecord<string | null>
 export interface RecordStore {
   /** 文本节点的原文；与页面脚本互相覆盖、或已译节点刚被解析器追加标点或符号（本次保持现状）时返回 CONTESTED */
   textSource(node: Text): string | Contested
-  /** 只读预判原文：当前为自身写入时返回写入前的原文，否则返回当前文字；不计改回次数、不改记录 */
+  /**
+   * 只读预判原文：当前为自身写入时返回写入前的原文；文档解析中被解析器追加时返回原文加追加部分（同 textSource）；
+   * 否则返回当前文字。不计改回次数、不改记录
+   */
   peekText(node: Text): string
   /** 写入期望值；期望值等于原文时清除记录 */
   writeText(node: Text, source: string, desired: string): void
@@ -139,7 +142,12 @@ export function createRecordStore(clock: () => number): RecordStore {
 
     peekText(node) {
       const record = texts.get(node)
-      return record !== undefined && node.data === record.written ? record.original : node.data
+      const data = node.data
+      if (record === undefined) return data
+      if (data === record.written) return record.original
+      // 解析器追加到已写入节点的文字：与 textSource 一致按原文加追加部分（行内句按它预判，见 inline.ts）
+      const appended = appendedPart(node, record, data)
+      return appended === undefined ? data : record.original + appended
     },
 
     writeText(node, source, desired) {

@@ -1,47 +1,52 @@
-import { onScopeDispose, readonly, ref, type Ref } from 'vue'
+import { computed, onScopeDispose, ref, type ComputedRef } from 'vue'
 import { browser } from 'wxt/browser'
 import { createToastSource } from '../../components/toast'
 import { isPaymentFormGranted, PAYMENT_FORM_ORIGINS } from '../../shared/payment-form'
+import { useSettingsSave } from './useSettingsSave'
 
 export interface UsePaymentForm {
-  /** 已授予托管页的主机权限（含覆盖它的通配授权） */
-  readonly enabled: Readonly<Ref<boolean>>
-  /** 已读到授权状态 */
-  readonly ready: Readonly<Ref<boolean>>
-  /** 开启时申请、关闭时移除托管页的主机权限（在点击中调用） */
+  /** 生效：设置「汉化付款表单」开启，且有托管页的主机权限 */
+  readonly enabled: ComputedRef<boolean>
+  /** 已读到设置与权限 */
+  readonly ready: ComputedRef<boolean>
+  /** 开启：没有权限时先申请（在点击中调用），再保存设置；关闭：只保存设置 */
   toggle(on: boolean): Promise<void>
 }
 
 /**
- * 汉化付款表单：以 www.zuora.com 的主机权限为准（见 shared/payment-form）。开启时申请，关闭时移除；
- * 在别处授权、撤销（浏览器的扩展管理）时随之刷新。授权后的注册、注入由后台处理（见 background.ts）。
- * 须在组件 setup 内调用
+ * 汉化付款表单（见 shared/payment-form）：设置默认开启，托管页的主机权限在安装时授予。
+ * 权限被撤销（浏览器的扩展管理）时显示为关闭，开启时重新申请；关闭不移除权限（清单申请的权限移除不了）。
+ * 权限在别处授予、撤销时随之刷新。注册、注入由后台处理（见 background.ts）。须在组件 setup 内调用
  */
 export function usePaymentForm(): UsePaymentForm {
-  const enabled = ref(false)
-  const ready = ref(false)
+  const { settings, ready: settingsReady, save } = useSettingsSave()
+  const granted = ref(false)
+  const grantedReady = ref(false)
   const toast = createToastSource()
 
   async function refresh(): Promise<void> {
-    enabled.value = await isPaymentFormGranted()
-    ready.value = true
+    granted.value = await isPaymentFormGranted()
+    grantedReady.value = true
   }
 
-  /** permissions.request 须在用户手势内调用：位于首个 await 之前，点击事件中同步执行 */
-  async function toggle(on: boolean): Promise<void> {
-    const origins = [...PAYMENT_FORM_ORIGINS]
+  /** 申请托管页的主机权限；拒绝、出错时提示授权失败。permissions.request 位于首个 await 之前，点击事件中同步执行 */
+  async function request(): Promise<boolean> {
     try {
-      if (on) {
-        if (await browser.permissions.request({ origins })) toast.clear()
-        else toast.show('danger', 'authorizeFailed')
-      } else {
-        await browser.permissions.remove({ origins })
-      }
+      const ok = await browser.permissions.request({ origins: [...PAYMENT_FORM_ORIGINS] })
+      if (ok) toast.clear()
+      else toast.show('danger', 'authorizeFailed')
+      return ok
     } catch {
-      if (on) toast.show('danger', 'authorizeFailed')
+      toast.show('danger', 'authorizeFailed')
+      return false
     } finally {
       await refresh()
     }
+  }
+
+  async function toggle(on: boolean): Promise<void> {
+    if (on && !granted.value && !(await request())) return
+    await save({ paymentForm: on })
   }
 
   const onChange = (): void => void refresh()
@@ -52,5 +57,9 @@ export function usePaymentForm(): UsePaymentForm {
   })
   void refresh()
 
-  return { enabled: readonly(enabled), ready: readonly(ready), toggle }
+  return {
+    enabled: computed(() => settings.value.paymentForm && granted.value),
+    ready: computed(() => settingsReady.value && grantedReady.value),
+    toggle
+  }
 }

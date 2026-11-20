@@ -148,20 +148,26 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     ],
     misses: ['Limit of many saved searches reached. Please delete an existing saved search before creating a new one.']
   },
-  // 快捷键提示：含“再按”时用全角括号，只有按键名时保留半角
+  // 快捷键提示：按键名译出，和弦内用 + 连接；含中文时用全角括号，只有英文按键名时用半角
   {
     hits: [
-      ['(g then d)', '（g 再按 d）'],
-      ['(alt shift r)', '(alt shift r)'],
-      ['(control shift right angle bracket)', '(control shift right angle bracket)']
+      ['(g then d)', '（G 再按 D）'],
+      ['(alt shift r)', '(Alt+Shift+R)'],
+      ['(control b)', '(Ctrl+B)'],
+      ['(control shift right angle bracket)', '（Ctrl+Shift+右尖括号）'],
+      ['(control shift ampersand)', '（Ctrl+Shift+和号）'],
+      ['(command page up)', '(Command+Page Up)'],
+      ['(control f12)', '(Ctrl+F12)']
     ],
     misses: ['(then)', '(enter)', '(G then D)', '(a then)']
   },
   {
     hits: [
-      ['g then n', 'g 再按 n'],
-      ['control k then shift question mark', 'control k 再按 shift question mark'],
-      ['alt shift r', 'alt shift r']
+      ['g then n', 'G 再按 N'],
+      ['control k then shift question mark', 'Ctrl+K 再按 Shift+问号'],
+      ['alt shift r', 'Alt+Shift+R'],
+      ['alt up arrow', 'Alt+向上键'],
+      ['shift space then forward slash', 'Shift+空格键 再按 斜杠']
     ],
     misses: ['enter', 'Go then do', 'shift', 'cats then dogs', 'g then d then']
   },
@@ -328,7 +334,7 @@ describe('common 正则词条', () => {
       '已达到 50 个已保存搜索的上限。请先删除现有的已保存搜索再创建新的。'
     )
     expect(join(['Start a task with ', 'Copilot cloud agent'])).toBe('使用 Copilot 云端智能体开始任务')
-    expect(join(['(', 'g then d', ')'])).toBe('（g 再按 d）')
+    expect(join(['(', 'g then d', ')'])).toBe('（G 再按 D）')
     expect(join(['Requested ', '3 days', ' ago'])).toBe('3天前申请')
     // Copilot 预算横幅：<strong> 前后的文字各自拼接
     expect(join([' Your ', 'org admins', ' will be notified that you need additional', ' ', 'AI credits', '.'])).toBe(

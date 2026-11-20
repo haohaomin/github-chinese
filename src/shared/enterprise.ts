@@ -2,7 +2,7 @@
  * 企业版站点（GitHub Enterprise Server 的自有域名、GHE.com 的子域名）：页面与 github.com 相同，只是域名不同。
  * 以已授予的可选主机权限为准：授权即启用，撤销即停用（内容脚本的动态注册见 enterprise-scripts.ts）。
  * 每个站点授权主站与代码片段子域名两项：GHES 开启子域名隔离时代码片段在 gist.<主机名>。
- * 付款表单的托管页（www.zuora.com，见 payment-form.ts）同样是可选主机权限，不算企业版站点
+ * 付款表单的托管页（www.zuora.com，见 payment-form.ts）的主机权限在清单里，不算企业版站点
  */
 import { browser } from 'wxt/browser'
 import { isGitHubSite } from './github'

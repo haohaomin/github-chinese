@@ -1,8 +1,21 @@
 import type { PageDictionary } from '../../../core/types'
 
+/** 只在国家/地区选择区域里译的国名（见 contextual）：Chad、Jordan 也是常见人名，Georgia 与美国州同名 */
+export const AMBIGUOUS_COUNTRIES: Readonly<Record<string, string>> = { Chad: '乍得', Georgia: '格鲁吉亚', Jordan: '约旦' }
+
+/** 只在美国州选择区域里译的州名：Georgia 与国名同名 */
+export const AMBIGUOUS_US_STATES: Readonly<Record<string, string>> = { Georgia: '佐治亚州' }
+
+/** 国家/地区选择区域：账单地址等表单的国家/地区下拉框、组织资料的位置选择器 */
+const COUNTRY_SELECTOR = 'select[name*="country"] option, .js-org-country-item'
+
+/** 美国州选择区域：账单地址的州下拉框 */
+const US_STATE_SELECTOR = '#region_us_states option'
+
 /**
  * 国家/地区、美国州与属地、加拿大省与地区：联系销售、企业试用、账单地址等表单的下拉选项（页面类型 common，全站生效）。
- * 不收录：有歧义的同名地名（Georgia 既是国家又是美国州）；常见人名同形的国名（Chad、Jordan），避免误译用户显示名。
+ * 有歧义的同名地名（Georgia 既是国家又是美国州）、常见人名同形的国名（Chad、Jordan）不进 static，避免误译用户显示名：
+ * 只在国家/地区、美国州选择区域里译（contextual）。
  * 港澳台按国内规范写作“中国香港”“中国澳门”“中国台湾”。
  */
 export default {
@@ -300,7 +313,7 @@ export default {
     'Wallis and Futuna Islands': '瓦利斯和富图纳',
     Åland: '奥兰群岛',
 
-    // 美国州与属地（Georgia 有歧义，不收）
+    // 美国州与属地（Georgia 有歧义，见 contextual）
     Alabama: '亚拉巴马州',
     Alaska: '阿拉斯加州',
     Arizona: '亚利桑那州',
@@ -371,5 +384,9 @@ export default {
     Quebec: '魁北克省',
     Saskatchewan: '萨斯喀彻温省',
     Yukon: '育空地区'
-  }
+  },
+  contextual: [
+    [COUNTRY_SELECTOR, AMBIGUOUS_COUNTRIES],
+    [US_STATE_SELECTOR, AMBIGUOUS_US_STATES]
+  ]
 } satisfies PageDictionary

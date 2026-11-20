@@ -47,6 +47,7 @@ export default {
   general: 'General',
   translation: 'Translate pages',
   paymentForm: 'Translate payment form',
+  paymentFormHelp: 'Only translates the form text. Payment details are never read or sent.',
   translateTime: 'Localize times',
   translateTitle: 'Translate titles',
   languageSection: 'Language',

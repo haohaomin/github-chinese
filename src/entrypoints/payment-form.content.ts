@@ -23,15 +23,15 @@ const INVALIDATION_CHECK_MS = 3000
 
 /**
  * 付款表单脚本：翻译嵌在 github.com 页面里的 Zuora 托管页（信用卡表单）。
- * 不写进清单：授予 www.zuora.com 的主机权限后由后台注册到所有框架（见 shared/payment-form.ts）。
- * 不写 matches：WXT 会把运行时注册的脚本的 matches 加进安装时申请的主机权限。
- * 随设置启停（总开关、汉化开关）、切换语言；不用自定义词条、排除路径
+ * 不写进清单：「汉化付款表单」开启且有 www.zuora.com 的主机权限时由后台注册到所有框架（见 shared/payment-form.ts）。
+ * 不写 matches：匹配地址见 shared/payment-form.ts 的 PAYMENT_FORM_MATCHES。
+ * 随设置启停（总开关、汉化开关、汉化付款表单）、切换语言；不用自定义词条、排除路径
  */
 export default defineContentScript({
   registration: 'runtime',
   runAt: 'document_start',
   async main(ctx) {
-    // 授权后后台向已打开的 GitHub 标签页的所有框架注入：GitHub 自己的框架也会执行到这里
+    // 后台向已打开的 GitHub 标签页的所有框架注入：GitHub 自己的框架也会执行到这里
     if (!isPaymentFormFrame(currentFrame(window))) return
     const [settings, languages] = await Promise.all([getSettings().catch(() => DEFAULT_SETTINGS), pageLanguageEnvironment()])
     if (ctx.isInvalid) return
@@ -45,7 +45,7 @@ export default defineContentScript({
       translateTitle: false
     })
     const apply = (next: Settings): void => {
-      if (!isTranslationOn(next)) {
+      if (!isTranslationOn(next) || !next.paymentForm) {
         if (translator.active) translator.stop()
         return
       }

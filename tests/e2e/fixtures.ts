@@ -42,6 +42,7 @@ export const DEFAULT_SETTINGS: Settings = {
   timeFormat: 'default',
   customTimeFormat: 'YYYY-MM-DD HH:mm',
   translateTitle: true,
+  paymentForm: true,
   excludedPaths: [],
   language: 'auto',
   uiLanguage: 'auto',

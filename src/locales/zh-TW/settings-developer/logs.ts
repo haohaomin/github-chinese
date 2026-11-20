@@ -1,19 +1,79 @@
 import { lookupTable } from '../../../core/table'
 import type { PageDictionary } from '../../../core/types'
-import regions from '../common/regions'
+import regions, { AMBIGUOUS_COUNTRIES, AMBIGUOUS_US_STATES } from '../common/regions'
 import { joinCjk } from '../helpers'
 
 const regionText = lookupTable(regions.static)
 
+/** 中国的省级行政区（用简称）：地点的地区一段与直辖市；其余城市照录原文 */
+const CHINA_PROVINCES: Readonly<Record<string, string>> = {
+  Beijing: '北京',
+  Tianjin: '天津',
+  Hebei: '河北',
+  Shanxi: '山西',
+  'Inner Mongolia': '內蒙古',
+  'Inner Mongolia Autonomous Region': '內蒙古',
+  Liaoning: '遼寧',
+  Jilin: '吉林',
+  Heilongjiang: '黑龍江',
+  Shanghai: '上海',
+  Jiangsu: '江蘇',
+  Zhejiang: '浙江',
+  Anhui: '安徽',
+  Fujian: '福建',
+  Jiangxi: '江西',
+  Shandong: '山東',
+  Henan: '河南',
+  Hubei: '湖北',
+  Hunan: '湖南',
+  Guangdong: '廣東',
+  Guangxi: '廣西',
+  'Guangxi Zhuang Autonomous Region': '廣西',
+  Hainan: '海南',
+  Chongqing: '重慶',
+  Sichuan: '四川',
+  Guizhou: '貴州',
+  Yunnan: '雲南',
+  Tibet: '西藏',
+  'Tibet Autonomous Region': '西藏',
+  Xizang: '西藏',
+  Shaanxi: '陝西',
+  Gansu: '甘肅',
+  Qinghai: '青海',
+  Ningxia: '寧夏',
+  'Ningxia Hui Autonomous Region': '寧夏',
+  Xinjiang: '新疆',
+  'Xinjiang Uyghur Autonomous Region': '新疆'
+}
+
+/** 表中的地名；不在表中时 undefined（只认自有属性） */
+function ownName(table: Readonly<Record<string, string>>, name: string): string | undefined {
+  return Object.hasOwn(table, name) ? table[name] : undefined
+}
+
 /**
  * 安全日志事件的地点「城市, 地区, 国家/地区」（地区常为空）：国家/地区名在 common/regions 中时才改写，
  * 按国家/地区、地区、城市排列，去掉空项与重名，收录的地名译出，其余保留原文。
+ * 有歧义的国名（Chad、Georgia、Jordan）在国家/地区一段译出，美国的 Georgia 在地区一段译作州名，
+ * 中国的地区（与直辖市同名的城市）译作省级行政区简称（见 common/regions 的 AMBIGUOUS_COUNTRIES、AMBIGUOUS_US_STATES 与 CHINA_PROVINCES）。
  * 国家/地区名不在其中时抛错（引擎按未命中处理，后面的规则照常匹配：日期、权限列表等同样是逗号分隔的三段）
  */
 function eventLocation(_: string, city: string, region: string, country: string): string {
-  if (regionText(country) === undefined) throw new Error(`非地点：${country}`)
+  const countryName = regionText(country) ?? ownName(AMBIGUOUS_COUNTRIES, country)
+  if (countryName === undefined) throw new Error(`非地点：${country}`)
   const parts = [country, region, city].filter((part, index, all) => part !== '' && all.indexOf(part) === index)
-  return parts.map(part => regionText(part) ?? part).join(' ')
+  return parts
+    .map(part => {
+      if (part === country) return countryName
+      const local =
+        country === 'China'
+          ? ownName(CHINA_PROVINCES, part)
+          : country === 'United States' && part === region
+            ? ownName(AMBIGUOUS_US_STATES, part)
+            : undefined
+      return local ?? regionText(part) ?? part
+    })
+    .join(' ')
 }
 
 /** 地点中的一段（不含捕获组）：以大写字母（含带变音符号的拉丁字母）开头，不含逗号、数字、冒号 */
@@ -55,12 +115,14 @@ const FILTER_TARGET_SOURCE = '(action|actor|country|created date|operation|organ
 /** 令牌事件中的应用类型 */
 const APP_KIND: Readonly<Record<string, string>> = { 'GitHub App': 'GitHub 應用程式', 'OAuth app': 'OAuth 應用程式' }
 
-/** 工作流令牌默认权限：read → 唯讀，write → 讀寫 */
-const WORKFLOW_PERMISSION: Readonly<Record<string, string>> = { read: '唯讀', write: '讀寫' }
+/** 括号里的名称：含汉字用全角括号，否则用半角括号并与前面的中文隔一个空格 */
+function parenName(name: string): string {
+  return /\p{Script=Han}/u.test(name) ? `（${name}）` : ` (${name})`
+}
 
 /**
  * 安全日志（/settings/security-log）、赞助日志（/settings/sponsors-log）、预定提醒（/settings/reminders）。
- * 安全日志事件描述被用户、存储库、应用链接拆开，按片段收录；整句未被拆开时由正则匹配。
+ * 安全日志事件描述被链接拆开的整句与组织审核日志共用（org-settings/audit-events）；其余按片段收录，未被拆开的整句由正则匹配。
  * 事件代码（user.login 等）和原始字段保留英文。
  * 术语：audit log → 稽核記錄，security log → 安全性記錄，sponsors log → 贊助記錄，
  * scheduled reminders → 排定的提醒，challenge（双重验证）→ 挑戰。
@@ -128,6 +190,10 @@ export default {
     'Revoked a token for': '撤銷了以下使用者的權杖',
     'Created a Pages verified domain': '建立了頁面的已驗證網域',
     'Deleted a Pages verified domain': '刪除了頁面的已驗證網域',
+    'Failed to login': '登入失敗',
+    'Removed authorization for personal access token': '移除了個人存取權杖的授權',
+    // 应用名为空时的同一事件（「All tokens for <应用> …」见正则）
+    'All tokens for have been requested to be revoked': '已要求撤銷所有權杖',
 
     // 赞助日志
     'Sponsors log': '贊助記錄',
@@ -205,6 +271,11 @@ export default {
     'Logged in': '已登入',
     integration: '整合',
     'integration:': '整合：',
+    // Copilot 审查强度事件「… changed from <span>Adaptive</span> to …」的取值（组织设置由 org-settings/copilot 收录）
+    Adaptive: '自適應',
+    // 公钥事件的指纹段落「<strong>Fingerprint</strong> SHA256:…」、市场上架项事件的类别
+    Fingerprint: '指紋',
+    'Agent apps': '代理應用程式',
     // 预定提醒：星期全称 → 星期X，与组织预定提醒一致（缩写 Mon 等 → 週X）
     Days: '星期',
     Monday: '星期一',
@@ -240,29 +311,15 @@ export default {
       '為 $1 建立了部署分支保護規則。該環境只能部署到與分支政策模式相符的分支。'
     ],
     [/^Changed GitHub Pages visibility to public (.+)$/, '將 $1 的 GitHub 頁面可見度變更為公開'],
-    // 工作流令牌策略：句尾的存储库是链接
-    [
-      /^Set policy to default workflow token permission to (read|write) for$/,
-      (_, level: string) => `為以下儲存庫將預設工作流程權杖權限政策設為${WORKFLOW_PERMISSION[level] ?? level}`
-    ],
-    // 原文用缩写 PR，按术语表保留
-    [
-      /^Set policy to default workflow token can create or approve PR to (true|false) for$/,
-      (_, value: string) => `為以下儲存庫${value === 'true' ? '允許' : '禁止'}預設工作流程權杖建立或核准 PR`
-    ],
+    // 登录方式、经典令牌、应用令牌的撤销请求
+    [/^Logged in via social identity (\S+)$/, '透過社群身分 $1 登入'],
+    [/^Removed personal access token \((.+)\)$/, (_, name: string) => `移除了個人存取權杖${parenName(name)}`],
+    [/^Created personal access token \((.+)\) with no permissions$/, (_, name: string) => `建立了無權限的個人存取權杖${parenName(name)}`],
+    [/^All user tokens for (.+) have been requested to be revoked$/, '已要求撤銷 $1 的所有使用者權杖'],
+    [/^All tokens for (.+) have been requested to be revoked$/, '已要求撤銷 $1 的所有權杖'],
     // 头像事件（团队头像等）：「Updated profile picture for octo-org/team」
     [/^Updated profile picture for (.+)$/, '更新了 $1 的頭像'],
     // 事件地点：Hong Kong, , Hong Kong → 香港
     [new RegExp(`^(${PLACE_SOURCE}?), (${PLACE_SOURCE}?), (${PLACE_SOURCE})$`), eventLocation]
-  ],
-  // 事件描述被用户、应用、企业链接拆开的句子
-  inline: [
-    ['Blocked user {}', '封鎖了使用者 {}'],
-    ['Unblocked user {}', '解除封鎖了使用者 {}'],
-    ['Removed authorization for OAuth application {}', '移除了 OAuth 應用程式 {} 的授權'],
-    ['Added {} as an owner of the {} enterprise', '將 {} 新增為 {} 企業的擁有者'],
-    ['{} added payment details to the {} enterprise', '{} 為 {} 企業新增了付款詳細資料'],
-    ['Marketplace listing {} was sent back to draft state', '市集上架資訊 {} 已退回草稿狀態'],
-    ['Installed the {} integration.', '安裝了 {} 整合。']
   ]
 } satisfies PageDictionary

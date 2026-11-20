@@ -1,11 +1,11 @@
 /**
  * 词典文件的组织规则：子文件 <组>/<名>.ts 由 <组>.ts（或其他词典）用 mergeDictionaries 合并，
  * 顶层主文件在 index.ts 注册。check:locale、coverage:locale 与接线测试共用。
- * 合并关系按内容判断：子文件的全部词条都出现在某个词典里（正则、属性规则、行内句规则、标签正则按同一对象），就算被它合并。
+ * 合并关系按内容判断：子文件的全部词条都出现在某个词典里（正则、属性规则、行内句规则、区域词条、标签正则按同一对象），就算被它合并。
  */
 import { readdirSync, statSync } from 'node:fs'
 import { basename, dirname, isAbsolute, relative, resolve } from 'node:path'
-import type { AttributeRule, InlineRule, LocaleBundle, PageDictionary, PageKey, RegExpRule } from '../src/core/types'
+import type { AttributeRule, ContextualRule, InlineRule, LocaleBundle, PageDictionary, PageKey, RegExpRule } from '../src/core/types'
 
 export const LOCALE_DIR = resolve('src/locales/zh-CN')
 const NON_DICTIONARY_FILES = new Set(['index.ts', 'helpers.ts'])
@@ -17,6 +17,7 @@ const DICTIONARY_FIELDS = new Set([
   'attributeRules',
   'inline',
   'mergeText',
+  'contextual',
   'labels',
   'labelDescriptions',
   'labelRegexp',
@@ -57,7 +58,7 @@ export function parentOf(file: string, root = LOCALE_DIR): string | undefined {
 }
 
 /**
- * 只含词典字段（static、scoped、regexp、ignore、attributeRules、inline、mergeText、labels、labelDescriptions、
+ * 只含词典字段（static、scoped、regexp、ignore、attributeRules、inline、mergeText、contextual、labels、labelDescriptions、
  * labelRegexp、listNames、issueTypes，至少一个）的对象
  */
 export function isDictionaryLike(value: unknown): value is PageDictionary {
@@ -97,6 +98,7 @@ export function isEmptyDictionary(dict: PageDictionary): boolean {
     arrayOf(dict.attributeRules).length === 0 &&
     arrayOf(dict.inline).length === 0 &&
     arrayOf(dict.mergeText).length === 0 &&
+    arrayOf(dict.contextual).length === 0 &&
     arrayOf(dict.labelRegexp).length === 0
   )
 }
@@ -107,6 +109,7 @@ interface Index {
   readonly attributeRules: ReadonlySet<AttributeRule>
   readonly inline: ReadonlySet<InlineRule>
   readonly mergeText: ReadonlySet<string>
+  readonly contextual: ReadonlySet<ContextualRule>
   readonly labelRules: ReadonlySet<RegExpRule>
 }
 
@@ -121,6 +124,7 @@ function indexOf(dict: PageDictionary): Index {
       attributeRules: new Set(arrayOf(dict.attributeRules)),
       inline: new Set(arrayOf(dict.inline)),
       mergeText: new Set(arrayOf(dict.mergeText)),
+      contextual: new Set(arrayOf(dict.contextual)),
       labelRules: new Set(arrayOf(dict.labelRegexp))
     }
     indexes.set(dict, index)
@@ -128,9 +132,9 @@ function indexOf(dict: PageDictionary): Index {
   return index
 }
 
-/** 子文件的全部词条都出现在 parent 中才算已合并（正则、属性规则、行内句规则、标签正则按同一对象判断）；结构不对的字段按空处理 */
+/** 子文件的全部词条都出现在 parent 中才算已合并（正则、属性规则、行内句规则、区域词条、标签正则按同一对象判断）；结构不对的字段按空处理 */
 export function isMerged(child: PageDictionary, parent: PageDictionary): boolean {
-  const { rules, selectors, attributeRules, inline, mergeText, labelRules } = indexOf(parent)
+  const { rules, selectors, attributeRules, inline, mergeText, contextual, labelRules } = indexOf(parent)
   return (
     TABLE_FIELDS.every(field => {
       const target = recordOf(parent[field])
@@ -141,6 +145,7 @@ export function isMerged(child: PageDictionary, parent: PageDictionary): boolean
     arrayOf(child.attributeRules).every(rule => attributeRules.has(rule)) &&
     arrayOf(child.inline).every(rule => inline.has(rule)) &&
     arrayOf(child.mergeText).every(selector => mergeText.has(selector)) &&
+    arrayOf(child.contextual).every(rule => contextual.has(rule)) &&
     arrayOf(child.labelRegexp).every(rule => labelRules.has(rule))
   )
 }
@@ -164,8 +169,8 @@ export function mergedFiles(dicts: ReadonlyMap<string, PageDictionary>, root = L
 }
 
 /**
- * 词典自己的词条：去掉键与译文都和某个被合并文件相同的表条目，以及被合并文件的正则、选择器、属性规则、行内句规则
- * 与标签正则
+ * 词典自己的词条：去掉键与译文都和某个被合并文件相同的表条目，以及被合并文件的正则、选择器、属性规则、行内句规则、
+ * 区域词条与标签正则
  */
 export function ownEntries(dict: PageDictionary, children: readonly PageDictionary[]): PageDictionary {
   if (children.length === 0) return dict
@@ -174,6 +179,7 @@ export function ownEntries(dict: PageDictionary, children: readonly PageDictiona
   const childAttributeRules = new Set(children.flatMap(child => arrayOf(child.attributeRules)))
   const childInline = new Set(children.flatMap(child => arrayOf(child.inline)))
   const childMergeText = new Set(children.flatMap(child => arrayOf(child.mergeText)))
+  const childContextual = new Set(children.flatMap(child => arrayOf(child.contextual)))
   const childLabelRules = new Set(children.flatMap(child => arrayOf(child.labelRegexp)))
   const own = (field: TableField): Record<string, string> =>
     Object.fromEntries(
@@ -187,6 +193,7 @@ export function ownEntries(dict: PageDictionary, children: readonly PageDictiona
     attributeRules: arrayOf(dict.attributeRules).filter(rule => !childAttributeRules.has(rule)),
     inline: arrayOf(dict.inline).filter(rule => !childInline.has(rule)),
     mergeText: arrayOf(dict.mergeText).filter(selector => !childMergeText.has(selector)),
+    contextual: arrayOf(dict.contextual).filter(rule => !childContextual.has(rule)),
     labels: own('labels'),
     labelDescriptions: own('labelDescriptions'),
     labelRegexp: arrayOf(dict.labelRegexp).filter(rule => !childLabelRules.has(rule)),

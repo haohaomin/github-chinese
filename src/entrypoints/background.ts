@@ -39,7 +39,7 @@ function scheduleScriptSync(settings?: Settings): Promise<void> {
       const matches = enterpriseMatches(origins)
       await syncLocaleScript(current, matches).catch(reportError)
       await syncEnterpriseScripts(matches).catch(reportError)
-      await syncPaymentFormScript(paymentForm)
+      await syncPaymentFormScript(current.paymentForm && paymentForm)
     })
     .catch(reportError)
   return scriptSync
@@ -186,9 +186,13 @@ async function injectPaymentForm(): Promise<void> {
   )
 }
 
-/** 已授权付款表单时注入（扩展安装、更新后：旧脚本失效，表单还原为英文） */
-async function injectPaymentFormIfGranted(): Promise<void> {
-  if (await isPaymentFormGranted()) await injectPaymentForm()
+/**
+ * 付款表单生效（设置开启且有权限）时注入：扩展安装、更新后（旧脚本失效，表单还原为英文），
+ * 开启「汉化付款表单」或重新授权后（已打开的页面里没有脚本）。不传设置时读存储
+ */
+async function injectPaymentFormIfActive(settings?: Settings): Promise<void> {
+  const [current, granted] = await Promise.all([settings ?? getSettings(), isPaymentFormGranted()])
+  if (current.paymentForm && granted) await injectPaymentForm()
 }
 
 export default defineBackground(() => {
@@ -246,12 +250,12 @@ export default defineBackground(() => {
     }
   })
   // 企业版站点、付款表单的授权、撤销（弹出页、设置页、浏览器的扩展管理）：同步注册；新授权的站点注入已打开的页面，
-  // 新授权付款表单时注入已打开的 github.com 页面里的托管页
+  // 重新授权付款表单（设置开启时）注入已打开的 github.com 页面里的托管页
   browser.permissions?.onAdded?.addListener(({ origins }) => {
     if (!origins?.length) return
     scheduleScriptSync()
       .then(() => injectIntoGrantedTabs(origins))
-      .then(() => (origins.some(origin => PAYMENT_FORM_ORIGINS.includes(origin)) ? injectPaymentForm() : undefined))
+      .then(() => (origins.some(origin => PAYMENT_FORM_ORIGINS.includes(origin)) ? injectPaymentFormIfActive() : undefined))
       .catch(reportError)
   })
   browser.permissions?.onRemoved?.addListener(({ origins }) => {
@@ -268,7 +272,7 @@ export default defineBackground(() => {
     void scheduleScriptSync()
     if (reason === 'install' || reason === 'update') {
       injectIntoOpenTabs().catch(reportError)
-      injectPaymentFormIfGranted().catch(reportError)
+      injectPaymentFormIfActive().catch(reportError)
     }
     if (reason === 'update') {
       removeLegacyUntranslated().catch(reportError)
@@ -276,9 +280,11 @@ export default defineBackground(() => {
       applyLegacySettingValues().catch(reportError)
     }
   })
-  watchSettings(settings => {
+  // 开启「汉化付款表单」：注册后注入已打开的 github.com 页面里的托管页
+  watchSettings((settings, previous) => {
     syncBadge(settings).catch(reportError)
-    void scheduleScriptSync(settings)
+    const sync = scheduleScriptSync(settings)
+    if (settings.paymentForm && !previous.paymentForm) sync.then(() => injectPaymentFormIfActive(settings)).catch(reportError)
   })
   // 浏览器语言变化：自动识别的翻译语言随之变化，按新语言注册
   globalThis.addEventListener('languagechange', () => void scheduleScriptSync())

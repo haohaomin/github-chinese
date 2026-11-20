@@ -277,6 +277,10 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     ],
     misses: ['Codecov can also request users permission to the following resources.']
   },
+  {
+    hits: [['You already have Codecov | Code Coverage installed.', '你已安装 Codecov | Code Coverage。']],
+    misses: ['You already have Codecov installed']
+  },
   { hits: [['Install Codecov', '安装 Codecov']], misses: ['install Codecov'] },
   // 上架项的创建与编辑：标题、页头、交易页标题段
   {
@@ -971,6 +975,46 @@ describe('marketplace 开发人员协议弹窗（真实结构）', () => {
       .replace(/\s+/g, ' ')
       .trim()
     expect(shown).toBe('单击“提交计划变更并开始安装”即表示你同意 Render 的服务条款和隐私政策。你之前已同意市场服务条款。')
+  })
+
+  it('文档解析中同意条款句被分块到达（句中一段先单独译出）：整句照常翻译', async () => {
+    Object.defineProperty(document, 'readyState', { configurable: true, get: () => 'loading' })
+    try {
+      // 解析器的第一块止于「 and」：前面各段先到，「 and」先由 static 单独译出
+      start(
+        '<div class="text-small color-fg-muted text-center mb-0 lh-condensed"> By clicking "Complete order", you are agreeing to ' +
+          'Codecov | Code Coverage’s <a class="Link--inTextBlock" href="https://about.codecov.io/terms-of-service/">Terms of Service</a> and</div>'
+      )
+      const host = document.querySelector('.text-small')!
+      ;(host.lastChild as Text).appendData(' the ')
+      host.insertAdjacentHTML(
+        'beforeend',
+        '<a class="Link--inTextBlock" href="https://about.codecov.io/privacy/">Privacy Policy</a>. You previously agreed to the ' +
+          '<details class="details-reset details-overlay details-overlay-dark d-inline-block text-left">' +
+          '<summary class="btn-link ws-normal" role="button"> Marketplace Terms of Service. </summary>' +
+          '<details-dialog aria-label="GitHub Marketplace Terms of Service v1.11" class="Box Box--overlay d-flex flex-column" role="dialog">' +
+          '<div class="Box-body markdown-body overflow-auto"><h2 class="tos">1. DEFINITIONS</h2></div></details-dialog></details> '
+      )
+      await new Promise(resolve => setTimeout(resolve, 0))
+      const shown = [...host.childNodes]
+        .map(node => (node instanceof HTMLDetailsElement ? (node.querySelector('summary')?.textContent ?? '').trim() : node.textContent))
+        .join('')
+        .replace(/\s+/g, ' ')
+        .trim()
+      expect(shown).toBe('单击“完成订单”即表示你同意 Codecov | Code Coverage 的服务条款和隐私政策。你之前已同意市场服务条款。')
+    } finally {
+      Reflect.deleteProperty(document, 'readyState')
+    }
+  })
+
+  it('订单页「已安装」对话框：标题与含链接的整句译出', () => {
+    start(
+      '<div class="Overlay-titleWrap"><h1 class="Overlay-title sr-only" id="title"> You already have Codecov | Code Coverage installed. </h1></div>' +
+        '<p id="installed">It looks like Codecov | Code Coverage has already been installed on your account. You can view your ' +
+        '<a class="Link--inTextBlock" href="/settings/installations">current installation</a> or continue with setting up this plan.</p>'
+    )
+    expect(text('#title')).toBe('你已安装 Codecov | Code Coverage。')
+    expect(text('#installed')).toBe('Codecov | Code Coverage 似乎已安装在你的帐户上。可以查看当前安装或继续设置此计划。')
   })
 
   it('非协议正文不被末条正则误译', () => {

@@ -120,6 +120,7 @@ const ALLOWED_KEYS = new Set([
   'attributeRules',
   'inline',
   'mergeText',
+  'contextual',
   'labels',
   'labelDescriptions',
   'labelRegexp',
@@ -475,6 +476,18 @@ function checkShape(dict: unknown, report: Report): dict is PageDictionary {
   return true
 }
 
+/** 区域词条：[非空选择器, 词条表]；词条表的检查同 static */
+function checkContextualRule(where: string, rule: unknown, report: Report): void {
+  if (!Array.isArray(rule) || rule.length !== 2) {
+    report.errors.push(`${where}：必须是 [选择器, 词条表]`)
+    return
+  }
+  const [selector, table] = rule as unknown[]
+  if (typeof selector !== 'string' || !selector.trim()) report.errors.push(`${where}：选择器为空`)
+  if (typeof table !== 'object' || table === null || Array.isArray(table)) report.errors.push(`${where}：词条表必须是对象`)
+  else checkEntries(`${where} 词条表`, table as Record<string, string>, report)
+}
+
 function checkDictionary(value: PageDictionary, report: Report, redos: RedosTask[]): void {
   checkEntries('static', value.static, report)
   checkEntries('scoped', value.scoped, report)
@@ -503,6 +516,8 @@ function checkDictionary(value: PageDictionary, report: Report, redos: RedosTask
     value.mergeText?.forEach((selector, index) => {
       if (typeof selector !== 'string' || !selector.trim()) report.errors.push(`mergeText[${index}]：选择器为空`)
     })
+  if (value.contextual !== undefined && !Array.isArray(value.contextual)) report.errors.push('contextual 必须是数组')
+  else value.contextual?.forEach((rule, index) => checkContextualRule(`contextual[${index}]`, rule, report))
   const statics = recordOf(value.static)
   for (const key of Object.keys(recordOf(value.scoped))) {
     if (Object.hasOwn(statics, key)) report.warnings.push(`scoped 与 static 重复：${JSON.stringify(key)}`)

@@ -1,9 +1,9 @@
 /**
  * 付款表单：GitHub 的信用卡表单是 Zuora 托管页（www.zuora.com），以跨源 iframe 嵌在 GitHub 页面里，
- * GitHub 页面上的内容脚本进不去。以 www.zuora.com 的可选主机权限为准：授权即启用，撤销即停用
- * （设置页的「汉化付款表单」开关申请、移除；安装、更新时不申请）。
- * 授权后后台为托管页注册付款表单脚本（所有框架，document_start），脚本只在嵌在 github.com 页面里的托管页翻译
- * （见 entrypoints/payment-form.content.ts）
+ * GitHub 页面上的内容脚本进不去。托管页的主机权限随 GitHub 的站点在安装时申请，用户可在浏览器里撤销
+ * （Chrome 的网站访问权限、Firefox 的附加组件管理器），设置页的「汉化付款表单」开启时可重新申请。
+ * 设置「汉化付款表单」（默认开启）且有权限时，后台为托管页注册付款表单脚本（所有框架，document_start），
+ * 脚本只在嵌在 github.com 页面里的托管页翻译，只替换文字（见 entrypoints/payment-form.content.ts）
  */
 import { browser } from 'wxt/browser'
 import type { ScriptPublicPath } from 'wxt/utils/inject-script'
@@ -13,7 +13,7 @@ import { syncRegisteredScript } from './script-registration'
 export const PAYMENT_FORM_HOST = 'www.zuora.com'
 export const PAYMENT_FORM_PATH = '/apps/PublicHostedPageLite.do'
 
-/** 申请的主机权限 */
+/** 托管页的主机权限（同 wxt.config.ts 的 PAYMENT_FORM_ORIGINS，在清单的 host_permissions 里） */
 export const PAYMENT_FORM_ORIGINS: readonly string[] = [`https://${PAYMENT_FORM_HOST}/*`]
 
 /** 付款表单脚本的匹配模式：只匹配托管页（路径之后的查询串由 * 匹配） */
@@ -28,7 +28,7 @@ export const PAYMENT_FORM_SCRIPT_FILE: ScriptPublicPath = '/content-scripts/paym
 /** 付款表单脚本的注册 ID */
 export const PAYMENT_FORM_SCRIPT_ID = 'gcn-payment-form'
 
-/** 已授予托管页的主机权限（含覆盖它的通配授权）；读取失败时按未授权 */
+/** 有托管页的主机权限（安装时授予，未被用户撤销）；读取失败时按没有 */
 export async function isPaymentFormGranted(): Promise<boolean> {
   try {
     return await browser.permissions.contains({ origins: [...PAYMENT_FORM_ORIGINS] })
@@ -37,11 +37,11 @@ export async function isPaymentFormGranted(): Promise<boolean> {
   }
 }
 
-/** 已授权时注册（所有框架：托管页是 GitHub 页面里的 iframe），未授权时注销 */
-export async function syncPaymentFormScript(granted: boolean): Promise<void> {
+/** 生效（设置开启且有权限）时注册（所有框架：托管页是 GitHub 页面里的 iframe），否则注销 */
+export async function syncPaymentFormScript(active: boolean): Promise<void> {
   await syncRegisteredScript(
     PAYMENT_FORM_SCRIPT_ID,
-    granted ? { js: [PAYMENT_FORM_SCRIPT_FILE], matches: PAYMENT_FORM_MATCHES, allFrames: true } : undefined
+    active ? { js: [PAYMENT_FORM_SCRIPT_FILE], matches: PAYMENT_FORM_MATCHES, allFrames: true } : undefined
   )
 }
 

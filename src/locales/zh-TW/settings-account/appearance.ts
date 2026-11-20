@@ -109,6 +109,9 @@ export default {
     'that don’t use modifier keys in their activation. For example, the': '中不使用輔助按鍵觸發的快速鍵。例如',
     'shortcut to navigate notifications, or': '快速鍵可前往通知，或按',
     'to view context relevant shortcuts.': '查看與目前情境相關的快速鍵。',
+    // 说明里 <kbd> 前的读屏文字（kbd 本身 aria-hidden）：<span class=sr-only>question mark</span><kbd>?</kbd>、alt up + <kbd>Alt</kbd><kbd>↑</kbd>
+    'question mark': '問號',
+    'alt up': 'Alt+向上鍵',
     'Learn more about character key shortcuts': '瞭解字元鍵快速鍵',
     'Save keyboard shortcut preferences': '儲存鍵盤快速鍵偏好設定',
     'Keyboard shortcut preference successfully saved.': '已儲存鍵盤快速鍵偏好設定。',
