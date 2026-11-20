@@ -74,4 +74,29 @@ describe.skipIf(!UiSwitch)('UiSwitch', () => {
     expect(toggle.get('.ui-ripple').attributes('aria-hidden')).toBe('true')
     expect(toggle.text()).toBe('')
   })
+
+  it('默认插槽跟在标签文字末尾：开关只按文字命名；点插槽内容不切换', async () => {
+    const wrapper = mount(required(UiSwitch), {
+      props: { checked: false, label: '中文版自述', compact: true },
+      slots: { default: '<button type="button" aria-label="说明" class="extra-button"></button>' },
+      attachTo: document.body
+    })
+    const toggle = wrapper.get('[role="switch"]')
+    const named = document.getElementById(toggle.attributes('aria-labelledby') ?? '')
+    expect(named?.textContent).toBe('中文版自述')
+    expect(wrapper.get('.ui-switch-text').element.lastElementChild?.classList.contains('ui-switch-extra')).toBe(true)
+    await wrapper.get('.extra-button').trigger('click')
+    expect(wrapper.emitted('change')).toBeUndefined()
+    await wrapper.get('.ui-switch-extra').trigger('click')
+    expect(wrapper.emitted('change')).toBeUndefined()
+    // 点文字照常切换
+    await wrapper.get('label').trigger('click')
+    expect(wrapper.emitted('change')).toEqual([[true]])
+  })
+
+  it('没有插槽时不渲染附加内容，开关由标签命名（不带 aria-labelledby）', () => {
+    const wrapper = mount(required(UiSwitch), { props: { checked: false, label: '启用' } })
+    expect(wrapper.find('.ui-switch-extra').exists()).toBe(false)
+    expect(wrapper.get('[role="switch"]').attributes('aria-labelledby')).toBeUndefined()
+  })
 })

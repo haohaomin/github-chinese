@@ -14,7 +14,11 @@
           :checked="settings[option.key]"
           :disabled="!ready || blocked(option)"
           @change="setOption(option.key, $event)"
-        />
+        >
+          <template v-if="option.help" #default>
+            <UiHelpTip :label="t('helpAbout', { name: t(option.label) })" :text="t(option.help)" />
+          </template>
+        </UiSwitch>
       </li>
     </ul>
   </section>
@@ -22,6 +26,7 @@
 
 <script setup lang="ts">
   import { createToastSource } from '../../components/toast'
+  import UiHelpTip from '../../components/ui/UiHelpTip.vue'
   import UiSwitch from '../../components/ui/UiSwitch.vue'
   import { useI18n } from '../../components/ui-preferences'
   import { useSettings } from '../../components/useSettings'
@@ -33,6 +38,8 @@
     readonly label: MessageKey
     /** 所依赖的开关：它关闭时本开关不生效，显示为不可用 */
     readonly requires?: BooleanSettingKey
+    /** 标签旁问号按钮的说明：名称容易误解的开关才加 */
+    readonly help?: MessageKey
   }
 
   /** 总开关在弹出页顶部，这里不重复；时间本地化、翻译标题随汉化 */
@@ -47,7 +54,8 @@
     { key: 'downloadCount', label: 'downloadCount' },
     { key: 'folderDownload', label: 'downloadFolder' },
     { key: 'newTab', label: 'newTab' },
-    { key: 'chineseReadme', label: 'chineseReadme' },
+    // 只换成存储库自带的中文版，不翻译：名称旁加说明
+    { key: 'chineseReadme', label: 'chineseReadme', help: 'chineseReadmeHelp' },
     { key: 'freshness', label: 'freshness' }
   ]
 

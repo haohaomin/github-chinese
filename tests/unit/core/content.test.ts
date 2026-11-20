@@ -1937,7 +1937,7 @@ describe('增强功能', () => {
     })
   })
 
-  describe('中文自述文件', () => {
+  describe('中文版自述', () => {
     const README_ZH = 'https://github.com/vuejs/core/blob/main/README.zh-CN.md'
     /** 中文版文件页的页面数据 */
     const BLOB_DATA = JSON.stringify({

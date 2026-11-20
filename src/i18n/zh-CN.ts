@@ -37,6 +37,7 @@ const zhCN = {
   openFailed: '打开失败',
 
   appearanceCurrent: '外观：{mode}',
+  helpAbout: '{name}说明',
   themeAuto: '自动',
   themeLight: '浅色',
   themeDark: '深色',
@@ -215,7 +216,9 @@ const zhCN = {
   newTabProfiles: '个人与组织主页',
   newTabExplore: '探索',
   newTabPaths: '自定义页面',
-  chineseReadme: '中文自述文件',
+  // 零宽空格：弹出页格子放不下时只在此处折行
+  chineseReadme: '中文版\u200b自述',
+  chineseReadmeHelp: '显示存储库自带的中文版自述文件（如 README.zh-CN.md）。不翻译原文。',
   freshness: '更新时间着色',
   freshnessRange: '时段范围',
   freshnessDays: '天数',

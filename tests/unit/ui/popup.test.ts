@@ -419,7 +419,7 @@ describe.skipIf(!App)('弹出页组件', () => {
   })
 
   describe('常规', () => {
-    it('只有汉化、时间本地化、翻译标题、加速下载、净化搜索、自动加载、图片预览、下载次数、下载文件夹、新标签页打开、中文自述文件、更新时间着色', async () => {
+    it('只有汉化、时间本地化、翻译标题、加速下载、净化搜索、自动加载、图片预览、下载次数、下载文件夹、新标签页打开、中文版自述、更新时间着色', async () => {
       mockContent(contentWith())
       const wrapper = await render()
       expect(
@@ -437,7 +437,7 @@ describe.skipIf(!App)('弹出页组件', () => {
         '下载次数',
         '下载文件夹',
         '新标签页打开',
-        '中文自述文件',
+        '中文版\u200b自述',
         '更新时间着色'
       ])
     })
@@ -453,15 +453,36 @@ describe.skipIf(!App)('弹出页组件', () => {
       expect(toggle.attributes('aria-checked')).toBe('true')
     })
 
-    it('中文自述文件默认关闭，开关即时保存', async () => {
+    it('中文版自述默认关闭，开关即时保存', async () => {
       mockContent(contentWith())
       const wrapper = await render()
-      const toggle = switchOf(section(wrapper, '常规'), '中文自述文件')
+      const toggle = switchOf(section(wrapper, '常规'), '中文版\u200b自述')
       expect(toggle.attributes('aria-checked')).toBe('false')
       await toggle.trigger('click')
       await settle()
       expect((await getSettings()).chineseReadme).toBe(true)
       expect(toggle.attributes('aria-checked')).toBe('true')
+    })
+
+    it('中文版自述旁有说明按钮：点开显示说明，不切换开关；Esc 收起', async () => {
+      mockContent(contentWith())
+      const wrapper = await render(true)
+      const general = section(wrapper, '常规')
+      const helps = general.findAll('[data-test="help-tip"]')
+      expect(helps).toHaveLength(1)
+      const help = helps[0]!
+      expect(help.attributes('aria-label')).toBe('中文版\u200b自述说明')
+      const toggle = switchOf(general, '中文版\u200b自述')
+      await help.trigger('click')
+      await settle()
+      const text = document.querySelector('[data-test="help-tip-text"]')
+      expect(text?.textContent?.trim()).toBe('显示存储库自带的中文版自述文件（如 README.zh-CN.md）。不翻译原文。')
+      expect(toggle.attributes('aria-checked')).toBe('false')
+      expect((await getSettings()).chineseReadme).toBe(false)
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
+      await settle()
+      expect(document.querySelector('[data-test="help-tip-text"]')).toBeNull()
+      expect(help.attributes('aria-expanded')).toBe('false')
     })
 
     it('更新时间着色默认关闭，开关即时保存', async () => {

@@ -6,7 +6,7 @@ import type { FetchLike } from './folder-files'
 import { pageSite, repositoryName } from './page'
 
 /**
- * 中文自述文件：开启后，存储库首页（文件标签页选中自述文件时）与目录页显示的自述文件有中文版时，换成中文版。
+ * 中文版自述：开启后，存储库首页（文件标签页选中自述文件时）与目录页显示的自述文件有中文版时，换成中文版。
  * - 中文版按路径认：文件名带中文的语言标记（README.zh-CN.md、README_CN.md、README-zh_Hant.md 等），
  *   或是中文语言目录里不带标记的自述文件（docs/zh-CN/README.md）；有简体、繁体两种时按翻译语言选。
  * - 从自述文件里的链接与目录的文件列表里找。链接指向别的目录时，链接文字（含提示、图片的替代文字）要是语言名
@@ -21,7 +21,7 @@ import { pageSite, repositoryName } from './page'
  * 页面数据与当前地址对得上时记下，软导航后同一引用下的目录照样认得出，没记下的引用按一段算
  */
 export interface ChineseReadmeOptions {
-  /** 是否换成中文版：总开关与「中文自述文件」都开启 */
+  /** 是否换成中文版：总开关与「中文版自述」都开启 */
   readonly active: () => boolean
   /** 翻译语言：有简体、繁体两种中文版时取与它相同的 */
   readonly locale: () => PageLocale

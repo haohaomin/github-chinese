@@ -39,6 +39,7 @@ export default {
   openFailed: '開啟失敗',
 
   appearanceCurrent: '外觀：{mode}',
+  helpAbout: '{name}說明',
   themeAuto: '自動',
   themeLight: '淺色',
   themeDark: '深色',
@@ -217,7 +218,9 @@ export default {
   newTabProfiles: '個人檔案與組織',
   newTabExplore: '探索',
   newTabPaths: '自訂頁面',
-  chineseReadme: '中文讀我檔案',
+  // 零宽空格：弹出页格子放不下时只在此处折行
+  chineseReadme: '中文版\u200b讀我檔案',
+  chineseReadmeHelp: '顯示儲存庫自帶的中文版讀我檔案（如 README.zh-TW.md）。不翻譯原文。',
   freshness: '更新時間著色',
   freshnessRange: '時段範圍',
   freshnessDays: '天數',

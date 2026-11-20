@@ -214,7 +214,7 @@ export default defineContentScript({
       active: () => current.enabled && current.purifySearch,
       rules: () => blockList
     })
-    // 中文自述文件：存储库首页、目录页的自述文件有中文版时换成中文版（见 core/chinese-readme）。
+    // 中文版自述：存储库首页、目录页的自述文件有中文版时换成中文版（见 core/chinese-readme）。
     // 不等语言包：自述文件出现时就隐藏原文、开始取中文版，不先显示原文再换
     const readme = createChineseReadme(document, {
       active: () => current.enabled && current.chineseReadme,

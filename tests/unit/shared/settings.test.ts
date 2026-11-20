@@ -248,7 +248,7 @@ describe('汉化', () => {
   })
 })
 
-describe('中文自述文件', () => {
+describe('中文版自述', () => {
   it('默认关闭；保留布尔值，其余用默认值', () => {
     expect(DEFAULT_SETTINGS.chineseReadme).toBe(false)
     expect(mergeSettings({ chineseReadme: true })).toEqual({ ...DEFAULT_SETTINGS, chineseReadme: true })

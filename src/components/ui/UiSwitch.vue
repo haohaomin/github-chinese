@@ -1,12 +1,19 @@
 <template>
   <div class="ui-switch" :class="{ 'ui-switch-compact': compact }">
-    <label :for="id" class="ui-switch-label">{{ label }}</label>
+    <label :for="id" class="ui-switch-label">
+      <!-- 附加内容（如说明按钮）跟在文字末尾：点击不切换开关（取消默认动作），不算进开关名称（开关按文字命名） -->
+      <span class="ui-switch-text">
+        <span :id="textId">{{ label }}</span>
+        <span v-if="$slots.default" class="ui-switch-extra" @click.prevent><slot /></span>
+      </span>
+    </label>
     <button
       :id="id"
       type="button"
       role="switch"
       class="ui-switch-track"
       :aria-checked="checked"
+      :aria-labelledby="$slots.default ? textId : undefined"
       :disabled="disabled"
       @click="emit('change', !checked)"
     >
@@ -20,7 +27,10 @@
   import { useId } from 'vue'
   import UiRipple from './UiRipple.vue'
 
-  /** 开关：标签在左、开关在右。状态由父组件持有，点击只发出相反状态 */
+  /**
+   * 开关：标签在左、开关在右。状态由父组件持有，点击只发出相反状态。
+   * 默认插槽放在标签文字之后（如说明按钮 UiHelpTip）
+   */
   defineProps<{
     /** 当前状态 */
     checked: boolean
@@ -34,6 +44,7 @@
   const emit = defineEmits<{ change: [checked: boolean] }>()
 
   const id = useId()
+  const textId = useId()
 </script>
 
 <style scoped>
@@ -50,6 +61,20 @@
     user-select: none;
   }
 
+  .ui-switch-text {
+    min-width: 0;
+  }
+
+  /* 附加内容紧跟文字末尾（文字折行时在末行），在行内上下居中 */
+  .ui-switch-extra {
+    display: inline-flex;
+    align-items: center;
+    height: 1lh;
+    margin-left: 2px;
+    vertical-align: top;
+    cursor: default;
+  }
+
   .ui-switch-track {
     position: relative;
     flex: none;
@@ -64,9 +89,9 @@
     transition: background-color var(--gcn-duration-base) var(--gcn-ease);
   }
 
-  /* 标签也能切换：悬停标签时开关同样显示悬停色 */
+  /* 标签也能切换：悬停标签时开关同样显示悬停色（悬停在附加内容上时不算） */
   .ui-switch-track:hover:not(:disabled),
-  .ui-switch-label:hover + .ui-switch-track:not(:disabled) {
+  .ui-switch-label:hover:not(:has(.ui-switch-extra:hover)) + .ui-switch-track:not(:disabled) {
     background: var(--gcn-switch-off-hover);
   }
 
@@ -75,7 +100,7 @@
   }
 
   .ui-switch-track[aria-checked='true']:hover:not(:disabled),
-  .ui-switch-label:hover + .ui-switch-track[aria-checked='true']:not(:disabled) {
+  .ui-switch-label:hover:not(:has(.ui-switch-extra:hover)) + .ui-switch-track[aria-checked='true']:not(:disabled) {
     background: var(--gcn-switch-on-hover);
   }
 
@@ -141,6 +166,8 @@
     padding: 4px 6px 4px 8px;
     overflow-wrap: anywhere;
     text-wrap: balance;
+    /* 中文标签只在零宽空格处折行（放不下时仍可任意断开，见 overflow-wrap） */
+    word-break: keep-all;
   }
 
   .ui-switch-compact .ui-switch-track {

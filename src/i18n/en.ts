@@ -39,6 +39,7 @@ export default {
   openFailed: 'Open failed',
 
   appearanceCurrent: 'Appearance: {mode}',
+  helpAbout: 'About {name}',
   themeAuto: 'Auto',
   themeLight: 'Light',
   themeDark: 'Dark',
@@ -219,6 +220,7 @@ export default {
   newTabExplore: 'Explore',
   newTabPaths: 'Custom pages',
   chineseReadme: 'Chinese README',
+  chineseReadmeHelp: "Shows the repository's own Chinese README (e.g. README.zh-CN.md). Does not translate the original.",
   freshness: 'Color commit dates',
   freshnessRange: 'Date ranges',
   freshnessDays: 'Days',

@@ -69,7 +69,7 @@ export interface Settings extends AccelerateSettings {
   readonly newTabScopes: readonly NewTabScope[]
   /** 新标签页打开的自定义页面：这些页面上的链接都在新标签页打开，写法同排除路径 */
   readonly newTabPaths: readonly string[]
-  /** 中文自述文件：存储库首页、目录页的自述文件有中文版时换成中文版（见 core/chinese-readme） */
+  /** 中文版自述：存储库首页、目录页的自述文件有中文版时换成中文版（见 core/chinese-readme） */
   readonly chineseReadme: boolean
   /** 更新时间着色：文件列表与最近提交的时间按距今远近改颜色（见 core/freshness） */
   readonly freshness: boolean
