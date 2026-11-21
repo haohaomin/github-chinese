@@ -1536,3 +1536,41 @@ describe('common-ui 繁体词条', () => {
     expect(twMatcher.translate(input, ['common'])).toBe(expected)
   })
 })
+
+describe('删除组织后的横幅（DOM）', () => {
+  const tw = createMatcher(zhTW)
+  let translator: Translator | undefined
+
+  afterEach(() => {
+    translator?.stop()
+    translator = undefined
+    document.body.innerHTML = ''
+  })
+
+  function render(html: string, using: Matcher): string | undefined {
+    document.body.innerHTML = html
+    translator = createTranslator({ matcher: using, host: window, resolvePages: () => ['common', 'dashboard'] })
+    translator.start()
+    return document.querySelector('.js-flash-alert')?.textContent?.replace(/\s+/g, ' ').trim()
+  }
+
+  // 服务器渲染的横幅：名称前有换行空白
+  const RAILS = `
+    <div class="flash flash-full flash-notice">
+      <button class="flash-close js-flash-close" type="button" aria-label="Dismiss this message"><svg></svg></button>
+      <div aria-atomic="true" role="alert" class="js-flash-alert">
+        <strong>setube-organization</strong> is being deleted.
+      </div>
+    </div>`
+  // 名称前没有文本节点：整句写不进去，只译后一段
+  const COMPACT = '<div class="js-flash-alert"><strong>setube-organization</strong> is being deleted.</div>'
+
+  it.each([
+    ['简体', createMatcher(zhCN), '正在删除 setube-organization。', 'setube-organization 正在删除。'],
+    ['繁体', tw, '正在刪除 setube-organization。', 'setube-organization 正在刪除。']
+  ])('%s', (_, using, sentence, fragment) => {
+    expect(render(RAILS, using)).toBe(sentence)
+    translator?.stop()
+    expect(render(COMPACT, using)).toBe(fragment)
+  })
+})

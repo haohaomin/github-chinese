@@ -76,10 +76,17 @@ export default {
     'This cannot be undone': '此操作无法撤销',
 
     // 登录提示
-    'Sign in to view': '登录后查看'
+    'Sign in to view': '登录后查看',
+
+    // 删除组织后仪表板的横幅「<strong>名称</strong> is being deleted.」：名称前没有文本节点、整句写不进去时只译这一段
+    'is being deleted.': '正在删除。'
   },
   regexp: [
     // 赞助按钮的未登录提示：You must be logged in to sponsor octocat
     [/^You must be logged in to sponsor ([\w-]+)$/, '登录后才能赞助 $1']
+  ],
+  inline: [
+    // 删除组织后仪表板的横幅（名称在 <strong> 中）
+    ['{} is being deleted.', '正在删除 {}。']
   ]
 } satisfies PageDictionary
