@@ -238,6 +238,23 @@ export default {
     // 团队页：页内导航的标题（读屏）、存储库列表的搜索框
     'Local navigation': '本页导航',
     'Find a repository': '查找存储库',
+    // 组织的产物注册表（/orgs/<组织>/artifacts）：页面标题、侧栏、空状态
+    'Artifact Registry': '产物注册表',
+    'Linked artifacts': '链接的产物',
+    'Track artifacts from build through deployment': '从构建到部署全程跟踪产物',
+    'Link artifacts built on GitHub Actions to external registries and environments with the artifact metadata API':
+      '通过产物元数据 API 将在 GitHub 操作中构建的产物链接到外部注册表和环境',
+    'Learn more about the artifact metadata API': '了解产物元数据 API',
+    // 成员：邀请对话框的搜索建议、成员详情页（/orgs/<组织>/people/<用户>）
+    'Already in this organization': '已在此组织中',
+    'Two-factor security': '双因素安全',
+    'admin access to all repositories': '所有存储库的管理员权限',
+    'You can’t manage an owner’s access': '无法管理所有者的访问权限',
+    "You can't manage an owner's access": '无法管理所有者的访问权限',
+    'Find a repository they have access to…': '查找其有权访问的存储库…',
+    'Find a repository they have access to...': '查找其有权访问的存储库...',
+    'No repository access': '无存储库访问权限',
+    'adding them to teams': '将其添加到团队',
     'You’ve successfully updated the team.': '已更新团队。',
     "You've successfully updated the team.": '已更新团队。',
     'You’ve successfully deleted the team. Updated permissions may take a few minutes to take effect.':
@@ -554,6 +571,20 @@ export default {
       '创建名为 {} 的公共存储库。创建后添加 {}。自述文件将显示在组织的个人资料中，所有人可见。'
     ],
     // 新建团队：名称检查结果「Mention this team in conversations as <strong>@组织/团队</strong>.」
-    ['Mention this team in conversations as {}.', '在对话中提及此团队时使用 {}。']
+    ['Mention this team in conversations as {}.', '在对话中提及此团队时使用 {}。'],
+    // 成员详情页：所有者的访问权限、直接访问的存储库数、各存储库的角色、无存储库时的空状态（成员名、组织名在 <strong> 中）
+    [/^\{\} has \{\} that belong to the ([\w.-]+) organization because ([\w-]+) is an \{\}\.$/, '{} 拥有 $1 组织{}，因为 $2 是{}。'],
+    [/^\{\} has direct access to (\d[\d,]*) repositor(?:y|ies)$/, '{} 可直接访问 $1 个存储库'],
+    ['{} on this repository', '在此存储库中为{}'],
+    [
+      /^It doesn[’']t look like \{\} has access to any \{\} repositories yet\. You can grant access by \{\} with repository access, or by adding them as a repository collaborator directly\.$/,
+      '{} 似乎还无权访问 {} 的任何存储库。你可以通过{}来授予访问权限（团队须有存储库访问权限），也可以直接将其添加为存储库协作者。'
+    ]
+  ],
+  contextual: [
+    // 成员详情页侧栏：成员身份（Membership <strong>private</strong>，与下拉选项 Public / Private 同译）、双因素安全状态
+    ['.manage-member-meta-item', { public: '公共', private: '专用', enabled: '已启用', disabled: '已禁用' }],
+    // 成员详情页：所有者说明句末的 owner 链接
+    ['a[href$="/people?query=role%3Aowner"]', { owner: '所有者' }]
   ]
 } satisfies PageDictionary

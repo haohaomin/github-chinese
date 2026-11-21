@@ -207,6 +207,10 @@ export default {
       '確定要離開 $1 嗎？你將失去其所有儲存庫的存取權。'
     ],
     [/^You left (\S+)\. It may take a few minutes to process\.$/, '你已離開 $1。處理可能需要幾分鐘。'],
+    [
+      /^Can[’']t leave (\S+)\. If you[’']re the last owner, delete the organization\.$/,
+      '無法離開 $1。如果你是最後一位擁有者，請刪除該組織。'
+    ],
     [/^Outside collaborator on (\d+) repositor(?:y|ies)$/, '$1 個儲存庫的外部協作者'],
     [/^Member and collaborator on (\d+) repositor(?:y|ies)$/, '$1 個儲存庫的成員和協作者'],
     // 组织：帐户转换警告

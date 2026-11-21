@@ -1115,6 +1115,18 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     ],
     misses: ['Many templates']
   },
+  // 组织项目列表的「最近查看」：列表标题（计数）、读屏标题
+  {
+    hits: [
+      ['4 recently viewed', '最近查看的 4 个'],
+      ['1,024 recently viewed', '最近查看的 1,024 个']
+    ],
+    misses: ['recently viewed', 'Many recently viewed']
+  },
+  {
+    hits: [['setube-organization recently viewed projects', 'setube-organization 中最近查看的项目']],
+    misses: ['recently viewed projects', 'My recently viewed projects list']
+  },
   {
     hits: [
       ['No projects matched your search', '没有匹配的项目'],

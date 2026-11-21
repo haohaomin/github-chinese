@@ -144,6 +144,9 @@ export default {
     [/^#(\d+) updated$/, '#$1 更新於'],
     [/^(\d[\d,]*) projects?$/, '$1 個專案'],
     [/^(\d[\d,]*) templates?$/, '$1 個範本'],
+    // 「最近查看」列表：列表标题（计数）、读屏标题「<所有者> recently viewed projects」
+    [/^(\d[\d,]*) recently viewed$/, '最近查看的 $1 個'],
+    [/^([\w.-]+) recently viewed projects$/, '$1 中最近查看的專案'],
     [/^No (projects|project templates) matched your search$/, (_, noun: string) => `沒有相符的${LIST_NOUNS[noun] ?? noun}`],
     [
       /^Try a different search term or clear the search to see all (projects|project templates)\.$/,

@@ -1989,6 +1989,8 @@ describe('org-settings 正则词条', () => {
 describe('org-settings 静态词条', () => {
   it.each([
     ['Organization account', '组织帐户'],
+    // 组织资料页：企业信息保存失败的提示
+    ['An error occurred while saving business information.', '保存企业信息时出错。'],
     ['Member privileges', '成员权限'],
     ['Authentication security', '身份验证安全'],
     ['Organization display name', '组织显示名称'],

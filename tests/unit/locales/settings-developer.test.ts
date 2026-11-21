@@ -114,6 +114,13 @@ const REGEXP_CASES: readonly RegExpCase[] = [
     hits: [['You left acme. It may take a few minutes to process.', '你已退出 acme。处理可能需要几分钟。']],
     misses: ['You left acme.']
   },
+  {
+    hits: [
+      ['Can’t leave acme. If you’re the last owner, delete the organization.', '无法退出 acme。如果你是最后一位所有者，请删除该组织。'],
+      ["Can't leave acme. If you're the last owner, delete the organization.", '无法退出 acme。如果你是最后一位所有者，请删除该组织。']
+    ],
+    misses: ['Can’t leave acme.', 'Can’t leave. If you’re the last owner, delete the organization.']
+  },
   { hits: [['Outside collaborator on 3 repositories', '3 个存储库的外部协作者']], misses: ['Outside collaborator'] },
   {
     hits: [['Member and collaborator on 1 repository', '1 个存储库的成员和协作者']],

@@ -1369,3 +1369,123 @@ describe('组织概述与邀请页', () => {
     }
   })
 })
+
+describe('组织产物页与成员详情页', () => {
+  const ORG: readonly PageKey[] = ['common', 'organization']
+  const tw = createMatcher(zhTW)
+  let translator: Translator | undefined
+
+  afterEach(() => {
+    translator?.stop()
+    translator = undefined
+    document.body.innerHTML = ''
+  })
+
+  function render(html: string, using: typeof full): void {
+    document.body.innerHTML = html
+    translator = createTranslator({ matcher: using, host: window, resolvePages: () => ORG })
+    translator.start()
+  }
+
+  function text(selector: string): string | undefined {
+    return document.querySelector(selector)?.textContent?.replace(/\s+/g, ' ').trim()
+  }
+
+  it.each([
+    ['Artifact Registry', '产物注册表', '成品登錄庫'],
+    ['Linked artifacts', '链接的产物', '已連結的成品'],
+    ['Track artifacts from build through deployment', '从构建到部署全程跟踪产物', '從建置到部署全程追蹤成品'],
+    [
+      'Link artifacts built on GitHub Actions to external registries and environments with the artifact metadata API',
+      '通过产物元数据 API 将在 GitHub 操作中构建的产物链接到外部注册表和环境',
+      '透過成品中繼資料 API 將在 GitHub 動作中建置的成品連結到外部登錄庫和環境'
+    ],
+    ['Learn more about the artifact metadata API', '了解产物元数据 API', '瞭解成品中繼資料 API'],
+    ['Already in this organization', '已在此组织中', '已在此組織中'],
+    ['Two-factor security', '双因素安全', '雙重驗證安全性'],
+    ['No repository access', '无存储库访问权限', '無儲存庫存取權'],
+    ['Find a repository they have access to…', '查找其有权访问的存储库…', '尋找其有權存取的儲存庫…'],
+    ['Find a repository they have access to...', '查找其有权访问的存储库...', '尋找其有權存取的儲存庫...'],
+    ['You can’t manage an owner’s access', '无法管理所有者的访问权限', '無法管理擁有者的存取權'],
+    ["You can't manage an owner's access", '无法管理所有者的访问权限', '無法管理擁有者的存取權']
+  ])('%s', (input, cn, twText) => {
+    expect(full.translate(input, ORG)).toBe(cn)
+    expect(tw.translate(input, ORG)).toBe(twText)
+  })
+
+  it('小写的 public、private、enabled、disabled、owner 不按整段词条翻译', () => {
+    for (const word of ['public', 'private', 'enabled', 'disabled', 'owner']) {
+      expect(full.translate(word, ORG)).toBeUndefined()
+      expect(tw.translate(word, ORG)).toBeUndefined()
+    }
+  })
+
+  // 成员详情页（/orgs/<组织>/people/<用户>）：侧栏、所有者说明、直接访问的存储库、空状态
+  const MEMBER_HTML = `
+    <ul>
+      <li class="manage-member-meta-item" id="membership"><svg></svg> Membership
+        <details class="details-reset details-overlay select-menu d-inline position-relative">
+          <summary class="select-menu-button btn-link" role="button"><strong> private </strong></summary>
+          <details-menu class="select-menu-modal position-absolute" role="menu">
+            <div class="select-menu-list">
+              <button class="select-menu-item" role="menuitemradio"><span class="select-menu-item-heading">Public</span></button>
+              <button class="select-menu-item" role="menuitemradio"><span class="select-menu-item-heading">Private</span></button>
+            </div>
+          </details-menu>
+        </details>
+      </li>
+      <li class="manage-member-meta-item" id="tfa"><svg></svg> Two-factor security <strong>enabled</strong></li>
+    </ul>
+    <div id="owner"><strong>setube</strong> has <strong>admin access to all repositories</strong> that belong to the setube-organization organization because setube is an <a class="Link--inTextBlock" href="/orgs/setube-organization/people?query=role%3Aowner">owner</a>.</div>
+    <span id="direct"> <strong>setube</strong> has direct access to 1 repository </span>
+    <div id="role"> <strong>Admin</strong> on this repository </div>
+    <p id="empty">It doesn’t look like <strong>setube</strong> has access to any <strong>setube-organization</strong> repositories yet. You can grant access by <a href="/orgs/setube-organization/teams">adding them to teams</a> with repository access, or by adding them as a repository collaborator directly.</p>
+    <input id="find" placeholder="Find a repository they have access to..." aria-label="Find a repository they have access to...">
+    <p id="elsewhere"><strong>private</strong> <a href="/orgs/setube-organization/people">owner</a></p>`
+
+  it.each([
+    [
+      '简体',
+      full,
+      {
+        summary: '专用',
+        options: ['公共', '专用'],
+        tfa: '双因素安全 已启用',
+        owner: 'setube 拥有 setube-organization 组织所有存储库的管理员权限，因为 setube 是所有者。',
+        direct: 'setube 可直接访问 1 个存储库',
+        role: '在此存储库中为管理员',
+        empty:
+          'setube 似乎还无权访问 setube-organization 的任何存储库。你可以通过将其添加到团队来授予访问权限（团队须有存储库访问权限），也可以直接将其添加为存储库协作者。',
+        find: '查找其有权访问的存储库...'
+      }
+    ],
+    [
+      '繁体',
+      tw,
+      {
+        summary: '私人',
+        options: ['公開', '私人'],
+        tfa: '雙重驗證安全性 已啟用',
+        owner: 'setube 擁有 setube-organization 組織所有儲存庫的管理員存取權，因為 setube 是擁有者。',
+        direct: 'setube 可直接存取 1 個儲存庫',
+        role: '在此儲存庫中為管理員',
+        empty:
+          'setube 似乎還無權存取 setube-organization 的任何儲存庫。你可以透過將其新增至團隊來授予存取權（團隊須有儲存庫存取權），也可以直接將其新增為儲存庫協作者。',
+        find: '尋找其有權存取的儲存庫...'
+      }
+    ]
+  ])('%s：行内句、区域词条与属性', (_, using, expected) => {
+    render(MEMBER_HTML, using)
+    expect(text('#membership summary')).toBe(expected.summary)
+    expect([...document.querySelectorAll('.select-menu-item-heading')].map(el => el.textContent)).toEqual(expected.options)
+    expect(text('#tfa')).toBe(expected.tfa)
+    expect(text('#owner')).toBe(expected.owner)
+    expect(text('#direct')).toBe(expected.direct)
+    expect(text('#role')).toBe(expected.role)
+    expect(text('#empty')).toBe(expected.empty)
+    expect(document.querySelector('#find')?.getAttribute('placeholder')).toBe(expected.find)
+    expect(document.querySelector('#find')?.getAttribute('aria-label')).toBe(expected.find)
+    // 区域外的同形小写词保持原文
+    expect(text('#elsewhere')).toBe('private owner')
+  })
+})

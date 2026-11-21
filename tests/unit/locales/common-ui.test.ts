@@ -403,7 +403,22 @@ const REGEXP_CASES: readonly RegExpCase[] = [
   { hits: [['8 pull requests', '8 个拉取请求']], misses: ['pull requests'] },
   { hits: [['6 discussions', '6 个讨论']], misses: ['discussions'] },
   { hits: [['15 results', '15 个结果']], misses: ['15 results found'] },
+  // 读屏播报的结果数（带句号）
+  {
+    hits: [
+      ['4 results.', '4 个结果。'],
+      ['1 result.', '1 个结果。']
+    ],
+    misses: ['results.', '4 results..']
+  },
   { hits: [['73 members', '73 个成员']], misses: ['members'] },
+  {
+    hits: [
+      ['0 invitations', '0 个邀请'],
+      ['1 invitation', '1 个邀请']
+    ],
+    misses: ['invitations']
+  },
   { hits: [['2.5k followers', '2.5k 个关注者']], misses: ['followers only'] },
   { hits: [['412 contributors', '412 个贡献者']], misses: ['Top contributors'] },
   { hits: [['1 participant', '1 个参与者']], misses: ['participants'] },
@@ -864,6 +879,8 @@ describe('common-ui 正则词条', () => {
       '名称不能为空。描述过长（最多 350 个字符）。'
     )
     expect(translate("Name can't be blank. Name is invalid")).toBe('名称不能为空。名称无效')
+    // Pages 已验证域名：两条错误拼在同一文本节点
+    expect(translate("Domain name can't be blank. Domain is not properly formatted.")).toBe('域名不能为空。域格式不正确。')
     expect(translate("Name can't be blank. Nickname is invalid.")).toBeUndefined()
     expect(translate('Loading... Try again.')).toBe('加载中... 请重试。')
     expect(translate('Saved!. Domain is not properly formatted.')).toBe('已保存！域格式不正确。')

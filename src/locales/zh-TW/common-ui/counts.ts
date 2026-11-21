@@ -31,6 +31,7 @@ const NOUNS: readonly (readonly [string, string])[] = [
   ['discussions?', '個討論'],
   ['results?', '項結果'],
   ['members?', '位成員'],
+  ['invitations?', '個邀請'],
   ['followers?', '位追蹤者'],
   ['contributors?', '位貢獻者'],
   ['participants?', '位參與者'],
@@ -43,6 +44,8 @@ const NOUNS: readonly (readonly [string, string])[] = [
 export default {
   regexp: [
     ...NOUNS.map(([noun, unit]) => [new RegExp(`^${COUNT} ${noun}$`), `$1 ${unit}`] as const),
+    // 读屏播报的结果数（带句号）：4 results.
+    [/^(\d[\d,]*) results?\.$/, '$1 項結果。'],
     // 字数余量：160 remaining
     [/^(\d[\d,]*) remaining$/, '剩餘 $1'],
     // 列表省略：Member of Vue, Vite, and 2 more

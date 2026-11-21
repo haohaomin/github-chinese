@@ -28,6 +28,7 @@ export default {
     "GitHub's customer agreement requires you to transfer the ownership of your organization to your business. Enter your business details below to continue. You can change these at any time by accessing your organization’s billing information.":
       'GitHub 客戶合約要求你將組織的擁有權轉讓給你的企業。請在下方輸入企業詳細資料以繼續。你可以隨時在組織的帳單資訊中變更這些資料。',
     'Business/Institution name': '企業/機構名稱',
+    'An error occurred while saving business information.': '儲存企業資訊時發生錯誤。',
     // 重命名、存档
     'Rename your organization?': '重新命名組織？',
     'Type in the name of the organization to confirm that you want to archive this organization.': '輸入組織名稱以確認封存此組織。',

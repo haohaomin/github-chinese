@@ -24,6 +24,7 @@ const FIELDS: Readonly<Record<string, string>> = {
   'Country/Region': '国家/地区',
   Description: '描述',
   Domain: '域',
+  'Domain name': '域名',
   Email: '电子邮件',
   'Enterprise name': '企业名称',
   'Enterprise URL slug': '企业 URL 标识',
